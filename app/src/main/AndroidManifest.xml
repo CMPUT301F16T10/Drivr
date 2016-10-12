@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  Copyright 2016 CMPUT301F16T10
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +13,7 @@
   ~    See the License for the specific language governing permissions and
   ~    limitations under the License.
   ~
-  -->
-
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.ualberta.cs.drivr">
 
@@ -35,6 +33,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".RequestActivity" />
+        <activity android:name=".RequestHistoryActivity" />
+        <activity android:name=".RequestsListActivity"></activity>
     </application>
 
 </manifest>
