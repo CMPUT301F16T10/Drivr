@@ -66,4 +66,18 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void viewSettings() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void viewUserProfile() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void viewRequests() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void viewRequestHistory() { throw new UnsupportedOperationException(); }
 }
