@@ -45,12 +45,4 @@ public class User {
     public void setPublicInfo(PublicUserInfo publicInfo) {
         this.publicInfo = publicInfo;
     }
-
-    public PrivateUserInfo getPrivateInfo() {
-        return privateInfo;
-    }
-
-    public void setPrivateInfo(PrivateUserInfo privateInfo) {
-        this.privateInfo = privateInfo;
-    }
 }
