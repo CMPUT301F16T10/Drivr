@@ -23,7 +23,9 @@ package ca.ualberta.cs.drivr;
 
 public class ProfileController {
 
-    public ProfileController() { throw new UnsupportedOperationException(); }
+    private UserManager userManager;
+
+    public ProfileController(UserManager userManager) { throw new UnsupportedOperationException(); }
 
     public String getName() {
         throw new UnsupportedOperationException();

@@ -23,7 +23,9 @@ package ca.ualberta.cs.drivr;
 
 public class RequestsListController {
 
-    public RequestsListController() { throw new UnsupportedOperationException(); }
+    private UserManager userManager;
+
+    public RequestsListController(UserManager userManager) { throw new UnsupportedOperationException(); }
 
     public void acceptRequest(Request request) { throw new UnsupportedOperationException(); }
 
