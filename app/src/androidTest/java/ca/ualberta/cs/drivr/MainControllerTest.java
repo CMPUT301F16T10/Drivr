@@ -26,8 +26,7 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class MainControllerTest {
-    @Test
-    public void thisAlwaysPasses() {
-        assertEquals(12, 4 * 3);
-    }
+
+    // There is nothing to test right now
+
 }

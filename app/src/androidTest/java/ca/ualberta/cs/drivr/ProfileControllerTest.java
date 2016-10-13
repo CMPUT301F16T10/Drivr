@@ -30,4 +30,37 @@ public class ProfileControllerTest {
     public void thisAlwaysPasses() {
         assertEquals(12, 4 * 3);
     }
+
+    @Test
+    public void getName_and_setName() {
+        UserManager userManager = new UserManager();
+        ProfileController profileController = new ProfileController(userManager);
+        profileController.setName("Adam Christiansen");
+        assertEquals("Adam Christiansen", profileController.getName());
+    }
+
+    @Test
+    public void getPhoneNumber_and_setPhoneNumber() {
+        UserManager userManager = new UserManager();
+        ProfileController profileController = new ProfileController(userManager);
+        profileController.setPhoneNumber("7801234567");
+        assertEquals("7801234567", profileController.getPhoneNumber());
+    }
+
+    @Test
+    public void getEmail_and_setEmail() {
+        UserManager userManager = new UserManager();
+        ProfileController profileController = new ProfileController(userManager);
+        profileController.setEmail("somebody@somedomain.sometld");
+        assertEquals("somebody@somedomain.sometld", profileController.getEmail());
+    }
+
+    @Test
+    public void getAddress_and_setAddress() {
+        UserManager userManager = new UserManager();
+        ProfileController profileController = new ProfileController(userManager);
+        profileController.setAddress("123 Some Road, Some City, Some Province, Some Country");
+        assertEquals("123 Some Road, Some City, Some Province, Some Country", profileController.getAddress());
+    }
+
 }

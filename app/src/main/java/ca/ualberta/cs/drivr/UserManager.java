@@ -34,4 +34,7 @@ public class UserManager implements IUserManager {
     public MapUnits getMapUnits() { throw new UnsupportedOperationException(); }
 
     public RequestsList getRequests() { throw new UnsupportedOperationException(); }
+
+    public UserMode getUserMode() { throw new UnsupportedOperationException(); }
+
 }

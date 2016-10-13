@@ -26,29 +26,25 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class SettingsControllerTest {
-    @Test
-    public void thisAlwaysPasses() {
-        assertEquals(12, 4 * 3);
-    }
-
-
-
-
 
     @Test
-    public void testDriverSwitch(){
-
+    public void setUserMode(UserMode userMode) {
+        UserManager userManager = new UserManager();
+        SettingsController settingsController = new SettingsController(userManager);
+        settingsController.setUserMode(UserMode.DRIVER);
+        assertEquals(UserMode.DRIVER, userManager.getUserMode());
+        settingsController.setUserMode(UserMode.RIDER);
+        assertEquals(UserMode.RIDER, userManager.getUserMode());
     }
 
     @Test
-    public void testRiderSwitch() {
-
+    public void changeUnits(MapUnits unitType) {
+        UserManager userManager = new UserManager();
+        SettingsController settingsController = new SettingsController(userManager);
+        settingsController.setMapUnits(MapUnits.METRIC);
+        assertEquals(MapUnits.METRIC, userManager.getMapUnits());
+        settingsController.setMapUnits(MapUnits.IMPERIAL);
+        assertEquals(MapUnits.IMPERIAL, userManager.getMapUnits());
     }
-
-    @Test
-    public void testMetricSwitch() {
-
-    }
-
 
 }

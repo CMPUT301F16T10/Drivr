@@ -27,8 +27,8 @@ public class SettingsController {
 
     public SettingsController(UserManager userManager) { throw new UnsupportedOperationException(); }
 
-    public void changeUserMode(UserMode userMode) { throw new UnsupportedOperationException(); }
+    public void setUserMode(UserMode userMode) { throw new UnsupportedOperationException(); }
 
-    public void changeUnits(MapUnits unitType) { throw new UnsupportedOperationException(); }
+    public void setMapUnits(MapUnits unitType) { throw new UnsupportedOperationException(); }
 
 }
