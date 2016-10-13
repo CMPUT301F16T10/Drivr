@@ -30,4 +30,34 @@ public class RequestHistoryActivityTest {
     public void thisAlwaysPasses() {
         assertEquals(12, 4 * 3);
     }
+
+
+    // Test the Request History Activity can be created
+    @Test
+    public void testRequestHistroyActivityCreated(){
+
+    }
+
+
+    // Test the Request History Activity is killed after exiting
+    @Test
+    public void testRequestHistroyActivityKilled(){
+
+    }
+
+    // Test the Request History contains Driver
+    @Test
+    public void testRequestDriverInfo(){}
+
+    // Test the Request History Driver Info is updated upon Driver Profile Update
+    @Test
+    public void testHistoryDriverNameUpdated(){}
+
+
+    // Test the Price is reflected in Country Currency
+    @Test
+    public void testHistoryCountryCurrency(){
+
+    }
+
 }

@@ -29,9 +29,9 @@ public class PrivateUserInfo {
 
     public PrivateUserInfo() { throw new UnsupportedOperationException(); }
 
-    public String getAdddress() { return address; }
+    public String getAddress() { return address; }
 
-    public void setAdddress(String address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 

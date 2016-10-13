@@ -30,4 +30,27 @@ public class RequestsListActivityTest {
     public void thisAlwaysPasses() {
         assertEquals(12, 4 * 3);
     }
+
+
+
+    // Test the Request List Activity can be created
+    @Test
+    public void testRequestListActivityCreated(){
+
+    }
+
+
+    // Test the Request List Activity is killed after exiting
+    @Test
+    public void testRequestListActivityKilled(){
+
+    }
+
+
+    // Test the RequestActivity is updated upon Controller Data Change
+    @Test
+    public void testRequestControllerUpdate(){
+    }
+
 }
+
