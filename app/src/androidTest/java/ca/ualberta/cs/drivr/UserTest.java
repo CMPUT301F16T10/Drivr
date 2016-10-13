@@ -30,4 +30,62 @@ public class UserTest {
     public void thisAlwaysPasses() {
         assertEquals(12, 4 * 3);
     }
+
+
+    @Test
+    public void testUsernameLength(){
+        User user = new User();
+        user.setUserName("");
+        assert (user.getUserName().length() < 40);
+    }
+
+
+    @Test
+    public void testHashedPassword(){
+        char [] password =  {};
+        User user = new User();
+        user.setPassword(password);
+        assert(user.getPassword() != password);
+    }
+
+    @Test
+    public void testEmailExists(){
+        char [] email = {};
+        User user = new User();
+        user.setEmail(email);
+        assert(false);
+    }
+
+    @Test
+    public void testUserInDatabase(){
+        User user = new User();
+        assert(false);
+    }
+
+    @Test
+    public void testOfflineUserRequest(){
+
+    }
+
+    @Test
+    public void testOfflineDriverAcceptance(){
+
+    }
+
+    @Test
+    public void userHasLocation(){
+
+    }
+
+    @Test
+    public void userSearchLocation(){
+
+    }
+
+
+
+
+
+
+
 }

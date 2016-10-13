@@ -25,8 +25,35 @@ public class User {
 
     private PrivateUserInfo privateInfo;
     private PublicUserInfo publicInfo;
+    private String userName;
+    private char[] password;
+    private char[] email;
 
     public User() { throw new UnsupportedOperationException(); }
 
     public User(String userName, String email, String phoneNumber) { throw new UnsupportedOperationException(); }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public char[] getPassword() {
+        return password;
+    }
+
+    public void setPassword(char[] password) {
+        this.password = password;
+    }
+
+    public char[] getEmail() {
+        return email;
+    }
+
+    public void setEmail(char[] email) {
+        this.email = email;
+    }
 }
