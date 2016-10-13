@@ -19,6 +19,7 @@ package ca.ualberta.cs.drivr;
 
 import org.junit.Test;
 
+import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -27,7 +28,52 @@ import static org.junit.Assert.assertEquals;
 
 public class RequestsListControllerTest {
     @Test
-    public void thisAlwaysPasses() {
-        assertEquals(12, 4 * 3);
+    public void acceptRequest() {
+        UserManager userManager = new UserManager();
+        Request request = new Request();
+        userManager.getRequests().add(request);
+        RequestsListController requestsListController = new RequestsListController(userManager);
+        requestsListController.acceptRequest(request);
+        assertEquals(RequestState.ACCEPTED, request.getRequestState());
+    }
+
+    @Test
+    public void confirmRequest() {
+        UserManager userManager = new UserManager();
+        Request request = new Request();
+        userManager.getRequests().add(request);
+        RequestsListController requestsListController = new RequestsListController(userManager);
+        requestsListController.confirmRequest(request);
+        assertEquals(RequestState.CONFIRMED, request.getRequestState());
+    }
+
+    @Test
+    public void declineRequest() {
+        UserManager userManager = new UserManager();
+        Request request = new Request();
+        userManager.getRequests().add(request);
+        RequestsListController requestsListController = new RequestsListController(userManager);
+        requestsListController.declineRequest(request);
+        assertEquals(RequestState.DECLINED, request.getRequestState());
+    }
+
+    @Test
+    public void cancelRequest() {
+        UserManager userManager = new UserManager();
+        Request request = new Request();
+        userManager.getRequests().add(request);
+        RequestsListController requestsListController = new RequestsListController(userManager);
+        requestsListController.cancelRequest(request);
+        assertEquals(RequestState.CANCELLED, request.getRequestState());
+    }
+
+    @Test
+    public void completeRequest() {
+        UserManager userManager = new UserManager();
+        Request request = new Request();
+        userManager.getRequests().add(request);
+        RequestsListController requestsListController = new RequestsListController(userManager);
+        requestsListController.completeRequest(request);
+        assertEquals(RequestState.COMPLETED, request.getRequestState());
     }
 }
