@@ -30,4 +30,40 @@ public class ProfileControllerTest {
     public void thisAlwaysPasses() {
         assertEquals(12, 4 * 3);
     }
+
+
+    // Test the Profile Is Deleted when a User deletes his Account
+    @Test
+    public void testProfileDeleted(){
+
+    }
+
+    // Test the Drivers Rating are updated RealTime
+    @Test
+    public void testProfileRatingsUpdated() {
+
+    }
+
+
+    //Test the Profile Phonenumber is updated RealTime
+    @Test
+    public void testProfilePhonenumberUpdate(){
+
+    }
+
+
+    //Test the Profile has Access to the User Public Info
+    @Test
+    public void testProfilePublicInfo(){
+
+    }
+
+    //Test the Profile has Access to the User Private Info
+    @Test
+    public void testProfilePrivateInfo(){
+
+    }
+
+
+
 }

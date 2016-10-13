@@ -30,4 +30,19 @@ public class RequestActivityTest {
     public void thisAlwaysPasses() {
         assertEquals(12, 4 * 3);
     }
+
+
+
+    // Test the Request Activity can be created
+    @Test
+    public void testRequestActivityCreated(){
+
+    }
+
+
+    // Test the Profile Activity is killed after exiting
+    @Test
+    public void testRequestActivityKilled(){
+
+    }
 }

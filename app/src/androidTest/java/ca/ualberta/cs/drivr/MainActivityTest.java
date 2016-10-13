@@ -30,4 +30,31 @@ public class MainActivityTest {
     public void thisAlwaysPasses() {
         assertEquals(12, 4 * 3);
     }
+
+
+    // Test Main Activity can be created
+    @Test
+    public void testMainActivity(){
+
+    }
+
+    // Test Setting Activity can be created
+    @Test
+    public void testSettingActivityCreated(){
+
+    }
+
+    // Test Google Maps view is working
+    @Test
+    public void testGoogleMapsApi(){
+
+    }
+
+    // Test Main Activity can be paused,etc..
+    @Test
+    public void testMainActivityOnResume(){
+
+    }
+
+
 }

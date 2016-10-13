@@ -56,4 +56,12 @@ public class User {
     public void setEmail(char[] email) {
         this.email = email;
     }
+
+    public PrivateUserInfo getPrivateInfo() {
+        return privateInfo;
+    }
+
+    public void setPrivateInfo(PrivateUserInfo privateInfo) {
+        this.privateInfo = privateInfo;
+    }
 }
