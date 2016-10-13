@@ -17,7 +17,10 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.location.Location;
+
 import org.junit.Test;
+import org.xmlpull.v1.sax2.Driver;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,4 +33,56 @@ public class RequestTest {
     public void thisAlwaysPasses() {
         assertEquals(12, 4 * 3);
     }
+
+
+
+
+    @Test
+    public void testRequestDestinationLocationExists(){
+        Location location = new Location("City");
+        Request request = new Request();
+        request.setDestination(location);
+        assert (false);
+
+    }
+
+    @Test
+    public void testRequestSourceLocationExists(){
+        Location location = new Location("City");
+        Request request = new Request();
+        request.setSource(location);
+        assert (false);
+
+    }
+
+
+    @Test
+    public void testRequestCanceled(){
+        Request request = new Request();
+
+    }
+
+    @Test
+    public void testRequestSingleDriver(){
+        User driver = new User();
+        User driver2 = new User();
+        Request request = new Request();
+        request.setDriver(driver);
+        request.setDriver(driver2);
+        assert(false);
+
+    }
+
+
+    @Test
+    public void testRequestSingleRider(){
+        User rider= new User();
+        User rider2 = new User();
+        Request request = new Request();
+        request.setDriver(rider);
+        request.setDriver(rider2);
+        assert(false);
+
+    }
+
 }

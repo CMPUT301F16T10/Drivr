@@ -30,4 +30,6 @@ public class SettingsActivityTest {
     public void thisAlwaysPasses() {
         assertEquals(12, 4 * 3);
     }
+
+
 }

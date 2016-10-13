@@ -30,4 +30,25 @@ public class SettingsControllerTest {
     public void thisAlwaysPasses() {
         assertEquals(12, 4 * 3);
     }
+
+
+
+
+
+    @Test
+    public void testDriverSwitch(){
+
+    }
+
+    @Test
+    public void testRiderSwitch() {
+
+    }
+
+    @Test
+    public void testMetricSwitch() {
+
+    }
+
+
 }

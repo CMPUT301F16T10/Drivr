@@ -42,5 +42,27 @@ public class Request {
 
     public Request(User rider, User driver, Location source, Location destination) { throw new UnsupportedOperationException(); }
 
+    public Location getSource() {
+        return source;
+    }
 
+    public void setSource(Location source) {
+        this.source = source;
+    }
+
+    public Location getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Location destination) {
+        this.destination = destination;
+    }
+
+    public User getDriver() {
+        return driver;
+    }
+
+    public void setDriver(User driver) {
+        this.driver = driver;
+    }
 }
