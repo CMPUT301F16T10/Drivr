@@ -17,11 +17,17 @@
 
 package ca.ualberta.cs.drivr;
 
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Created by adam on 2016-10-12.
  */
 
-public enum MapUnits {
-    METRIC,
-    IMPERIAL
+public class SettingsControllerTest {
+    @Test
+    public void thisAlwaysPasses() {
+        assertEquals(12, 4 * 3);
+    }
 }
