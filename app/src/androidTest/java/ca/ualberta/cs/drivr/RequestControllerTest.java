@@ -19,6 +19,7 @@ package ca.ualberta.cs.drivr;
 
 import org.junit.Test;
 
+import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -27,7 +28,11 @@ import static org.junit.Assert.assertEquals;
 
 public class RequestControllerTest {
     @Test
-    public void thisAlwaysPasses() {
-        assertEquals(12, 4 * 3);
+    public void deleteRequest() {
+        UserManager userManager = new UserManager();
+        Request request = new Request();
+        RequestController requestController = new RequestController(userManager);
+        requestController.deleteRequest(request);
+        assertFalse(userManager.getRequests().has(request));
     }
 }

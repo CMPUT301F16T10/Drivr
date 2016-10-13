@@ -33,7 +33,11 @@ public class RequestsList {
 
     public void remove(Request request) { throw new UnsupportedOperationException(); }
 
+    public void remove(int index) { throw new UnsupportedOperationException(); }
+
     public Boolean has(Request request) { throw new UnsupportedOperationException(); }
+
+    public int size() { throw new UnsupportedOperationException(); }
 
     public ArrayList<Request> getRequestsList() { throw new UnsupportedOperationException(); }
 

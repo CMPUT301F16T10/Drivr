@@ -27,7 +27,9 @@ import java.util.ArrayList;
 
 public class MainController {
 
-    public MainController() {
+    private UserManager userManager;
+
+    public MainController(UserManager userManager) {
         throw new UnsupportedOperationException();
     }
 

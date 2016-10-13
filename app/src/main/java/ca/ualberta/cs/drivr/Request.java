@@ -65,4 +65,12 @@ public class Request {
     public void setDriver(User driver) {
         this.driver = driver;
     }
+
+    public RequestState getRequestState() {
+        return requestState;
+    }
+
+    public void setRequestState(RequestState requestState) {
+        this.requestState = requestState;
+    }
 }

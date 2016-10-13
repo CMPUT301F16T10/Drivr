@@ -23,7 +23,9 @@ package ca.ualberta.cs.drivr;
 
 public class SettingsController {
 
-    public SettingsController() { throw new UnsupportedOperationException(); }
+    private UserManager userManager;
+
+    public SettingsController(UserManager userManager) { throw new UnsupportedOperationException(); }
 
     public void changeUserMode(UserMode userMode) { throw new UnsupportedOperationException(); }
 
