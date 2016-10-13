@@ -30,4 +30,29 @@ public class MainControllerTest {
     public void thisAlwaysPasses() {
         assertEquals(12, 4 * 3);
     }
+
+
+
+
+    //Test a known location can be searched
+    @Test
+    public void testLocationSearch(){
+
+    }
+
+
+    //Test a location is within reasonable Limit
+    @Test
+    public void testLocationMaxDistance(){
+
+    }
+
+    //Test Data can be passed to Main Activity from MainController
+    @Test
+    public void testMainControllerLocationPass(){
+
+    }
+
+
+
 }

@@ -30,4 +30,19 @@ public class ProfileActivityTest {
     public void thisAlwaysPasses() {
         assertEquals(12, 4 * 3);
     }
+
+
+    // Test the Profile Activity can be created
+    @Test
+    public void testProfileActivityCreated(){
+
+    }
+
+
+    // Test the Profile Activity is killed after exiting
+    @Test
+    public void testProfileActivityKilled(){
+
+    }
+
 }
