@@ -31,56 +31,8 @@ public class UserTest {
         assertEquals(12, 4 * 3);
     }
 
-
-    @Test
-    public void testUsernameLength(){
-        User user = new User();
-        user.setUserName("");
-        assert (user.getUserName().length() < 40);
-    }
-
-
-    @Test
-    public void testHashedPassword(){
-        char [] password =  {};
-        User user = new User();
-        user.setPassword(password);
-        assert(user.getPassword() != password);
-    }
-
-    @Test
-    public void testEmailExists(){
-        char [] email = {};
-        User user = new User();
-        user.setEmail(email);
-        assert(false);
-    }
-
-    @Test
-    public void testUserInDatabase(){
-        User user = new User();
-        assert(false);
-    }
-
-    @Test
-    public void testOfflineUserRequest(){
-
-    }
-
-    @Test
-    public void testOfflineDriverAcceptance(){
-
-    }
-
-    @Test
-    public void userHasLocation(){
-
-    }
-
-    @Test
-    public void userSearchLocation(){
-
-    }
+//    Currently the User class is a storage class for our separated private and public data.
+//    There are no tests need as there are only getters and setters. If Methods are added so shall the tests.
 
 
 

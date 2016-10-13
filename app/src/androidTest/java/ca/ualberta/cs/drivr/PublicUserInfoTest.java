@@ -31,21 +31,6 @@ public class PublicUserInfoTest {
         assertEquals(12, 4 * 3);
     }
 
-    @Test
-    public void testUserNameExists(){}
-
-    @Test
-    public void testNameExists(){}
-
-    @Test
-    public void testEmailExists(){}
-
-    @Test
-    public void testRatingExists(){}
-
-    // Test Users Driver and Rider Ratings are Different
-    @Test
-    public void testRatingDriverAndRider(){}
-
-
+//    This class is a storage class for the data on a user that should be shown on the public profile
+//    It is only getters and setters so no tests are needed at this time
 }
