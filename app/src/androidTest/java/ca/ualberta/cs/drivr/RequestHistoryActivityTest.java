@@ -36,6 +36,11 @@ public class RequestHistoryActivityTest extends ActivityInstrumentationTestCase2
 
     private Solo solo;
 
+    /**
+     * Testing for our Request History Activity
+     *
+     */
+
     public RequestHistoryActivityTest() {
         super(ca.ualberta.cs.drivr.RequestHistoryActivity.class);
     }

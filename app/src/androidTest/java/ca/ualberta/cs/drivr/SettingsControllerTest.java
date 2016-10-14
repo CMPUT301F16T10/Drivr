@@ -27,6 +27,13 @@ import static org.junit.Assert.assertEquals;
 
 public class SettingsControllerTest {
 
+    /**
+     * Testing for swaps in Modes
+     * Rider to Driver.
+     * Metric to Imperial.
+     *
+     */
+
     @Test
     public void setUserMode(UserMode userMode) {
         UserManager userManager = new UserManager();

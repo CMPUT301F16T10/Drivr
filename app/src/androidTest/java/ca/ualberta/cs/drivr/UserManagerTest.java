@@ -28,6 +28,16 @@ import static org.junit.Assert.assertTrue;
 
 public class UserManagerTest {
 
+    /*
+    * Testing our Manager Class
+    *
+    * For:
+    * Our attributes such as password, name, username, email, and phonenumber
+    * all meet requirements.
+    *
+     */
+
+
     @Test
     public void get_set_Name() {
         UserManager userManager = new UserManager();

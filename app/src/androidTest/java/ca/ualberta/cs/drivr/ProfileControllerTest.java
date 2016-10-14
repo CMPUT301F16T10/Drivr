@@ -32,7 +32,13 @@ public class ProfileControllerTest {
      * UC 10 Create User Profile
      * US 03.01.01 As a User,
      * I want a profile with a unique username and my contact information.
+     *
+     * UC 12 Show Information For Another User
+     * US 03.03.01 As a User,
+     * I want to, when a username is presented for a thing, retrieve and show its contact information
+     *
      */
+
 
     @Test
     public void getName_and_setName() {

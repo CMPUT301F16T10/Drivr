@@ -29,7 +29,10 @@ import static org.junit.Assert.assertEquals;
 public class RequestsListControllerTest {
 
 
-
+    /**
+     * UC 18 Driver Offer Accepted
+     * US 05.04.01 As a Driver, I want to be notified if my ride offer was Confirmed.
+     */
 
     @Test
     public void acceptRequest() {
@@ -85,6 +88,12 @@ public class RequestsListControllerTest {
         requestsListController.cancelRequest(request);
         assertEquals(RequestState.CANCELLED, request.getRequestState());
     }
+
+    /**
+     * UC 7 Rider Confirms And Pays
+     * US 01.07.01 As a Rider, I want to Confirm the completion of a Request and enable payment.
+     * Testing for Completed request
+     */
 
     @Test
     public void completeRequest() {
