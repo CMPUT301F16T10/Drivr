@@ -24,7 +24,6 @@ package ca.ualberta.cs.drivr;
 public class PrivateUserInfo {
 
     private String address;
-    private String creditCard;
     private String password;
 
     public PrivateUserInfo() { throw new UnsupportedOperationException(); }
@@ -33,14 +32,6 @@ public class PrivateUserInfo {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getCreditCard() {
-        return creditCard;
-    }
-
-    public void setCreditCard(String creditCard) {
-        this.creditCard = creditCard;
     }
 
     public String getPassword() {

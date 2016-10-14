@@ -37,4 +37,28 @@ public class UserManager implements IUserManager {
 
     public UserMode getUserMode() { throw new UnsupportedOperationException(); }
 
+    public String getPassword() { throw new UnsupportedOperationException(); }
+
+    public void setPassword(String password) { throw new UnsupportedOperationException(); }
+
+    public String getName() { throw new UnsupportedOperationException(); }
+
+    public void setName(String name) { throw new UnsupportedOperationException(); }
+
+    public String getUsername() { throw new UnsupportedOperationException(); }
+
+    public void setUsername(String userName) { throw new UnsupportedOperationException(); }
+
+    public String getPhoneNumber() { throw new UnsupportedOperationException(); }
+
+    public void setPhoneNumber(String phoneNumber) { throw new UnsupportedOperationException(); }
+
+    public String getEmail() { throw new UnsupportedOperationException(); }
+
+    public void setEmail(String email) { throw new UnsupportedOperationException(); }
+
+    public int getRating(UserMode userMode) { throw new UnsupportedOperationException(); }
+
+    public void setRating(UserMode userMode, int rating) { throw new UnsupportedOperationException(); }
+
 }
