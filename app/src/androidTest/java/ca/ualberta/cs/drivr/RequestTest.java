@@ -114,5 +114,20 @@ public class RequestTest {
 
     }
 
+    // Test for a Driver Username
+    @Test
+    public void getDriverUserName(){
+        PublicUserInfo publicUserInfo = new PublicUserInfo();
+        publicUserInfo.setUserName("Driver1");
+        User rider = new User();
+        User driver = new User();
+        Location source = new Location("street123");
+        Location destination = new Location("street124");
+
+        Request request = new Request(rider,driver,source,destination);
+
+        assertEquals(request.getDriver().getPublicInfo().getUserName(),"Driver1");
+
+    }
 
 }
