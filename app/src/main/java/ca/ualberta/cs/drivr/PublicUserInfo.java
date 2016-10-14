@@ -24,7 +24,7 @@ package ca.ualberta.cs.drivr;
 public class PublicUserInfo {
 
     private String name;
-    private String userName;
+    private String username;
     private String phoneNumber;
     private String email;
     private int rating;
@@ -39,12 +39,12 @@ public class PublicUserInfo {
         this.name = name;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String userName) {
+        this.username = userName;
     }
 
     public String getPhoneNumber() {
@@ -63,11 +63,11 @@ public class PublicUserInfo {
         this.email = email;
     }
 
-    public int getRating() {
+    public int getRating(UserMode userMode) {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(UserMode userMode, int rating) {
         this.rating = rating;
     }
 }

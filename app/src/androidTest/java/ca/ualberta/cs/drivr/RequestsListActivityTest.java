@@ -35,10 +35,6 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class RequestsListActivityTest extends ActivityInstrumentationTestCase2<RequestsListActivity> {
-    @Test
-    public void thisAlwaysPasses() {
-        assertEquals(12, 4 * 3);
-    }
 
     private Solo solo;
 
