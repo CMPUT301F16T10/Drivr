@@ -30,10 +30,12 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class SettingsActivityTest extends ActivityInstrumentationTestCase2<SettingsActivity> {
-    @Test
-    public void thisAlwaysPasses() {
-        assertEquals(12, 4 * 3);
-    }
+
+
+    /**
+     * Testing for our Settings Activity
+     * 
+     */
 
     private Solo solo;
 

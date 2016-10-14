@@ -33,6 +33,11 @@ public class RequestActivityTest extends ActivityInstrumentationTestCase2<Reques
 
     private Solo solo;
 
+    /**
+     * Testing for our Request Activity Class
+     */
+
+
     public RequestActivityTest() {
         super(ca.ualberta.cs.drivr.RequestActivity.class);
     }

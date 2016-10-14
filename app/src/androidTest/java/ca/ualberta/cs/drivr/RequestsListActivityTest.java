@@ -52,6 +52,12 @@ public class RequestsListActivityTest extends ActivityInstrumentationTestCase2<R
         solo.finishOpenedActivities();
     }
 
+    /**
+     * UC 9 User Request Status
+     * US 02.01.01 As a User, I want to see the status of a Request that I am involved in
+     */
+
+
     public void testClickOnRequest() {
         solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
         final Request request = getActivity().getRequest(0);

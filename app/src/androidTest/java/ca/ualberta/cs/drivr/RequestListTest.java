@@ -28,6 +28,13 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class RequestListTest {
+
+
+    /**
+     * Basic Tests for List Functions
+     *
+     */
+
     @Test
     public void add() {
         RequestsList requestsList = new RequestsList();
@@ -73,6 +80,13 @@ public class RequestListTest {
         requestsList.add(request);
         assertEquals(1, requestsList.getRequestsList().size());
     }
+
+    /**
+     *  UC 9 User Request Status
+     *  US 02.01.01 As a User, I want to see the status of a Request that I am involved in
+     *
+     */
+
 
     @Test
     public void getRequests() {

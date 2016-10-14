@@ -26,6 +26,12 @@ import static org.junit.Assert.assertTrue;
  */
 
 public class PrivateUserInfoTest {
+
+    /**
+     * UC 10 Create User Profile
+     * US 03.01.01 As a User, I want a profile with a unique username and my contact information.
+     */
+
     @Test
     public void setPassword() {
         PrivateUserInfo privateUserInfo = new PrivateUserInfo();
