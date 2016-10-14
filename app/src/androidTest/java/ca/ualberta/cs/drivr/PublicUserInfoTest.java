@@ -28,42 +28,61 @@ import static org.junit.Assert.assertTrue;
  */
 
 public class PublicUserInfoTest {
-    // Test all methods work for PublicInfo
+
     @Test
-    public void editPublicUserInfo(){
-        User user = new User();
+    public void get_set_Name() {
         PublicUserInfo publicUserInfo = new PublicUserInfo();
-
-        publicUserInfo.setName("ABC");
-        publicUserInfo.setUserName("CAB");
-        publicUserInfo.setEmail("ABC@CAB.com");
-        publicUserInfo.setPhoneNumber("780-111-1111");
-
-
-        assertTrue(user.getPublicInfo().getName().equals("ABC"));
-        assertTrue(user.getPublicInfo().getUserName().equals("CAB"));
-        assertTrue(user.getPublicInfo().getEmail().equals("ABC@CAB.com"));
-        assertTrue(user.getPublicInfo().getPhoneNumber().equals("780-111-1111"));
-
+        publicUserInfo.setName("Adam Christiansen");
+        assertEquals("Adam Christiansen", publicUserInfo.getName());
+        try {
+            publicUserInfo.setName("Some super long name that is way too long and will throw an "
+                    + "exception because the software can't handle how long it is");
+            assertTrue(false);
+        }
+        catch (Exception e) {}
     }
 
-    // Test the Rating is Different for the Driver vs. Rider
+    @Test
+    public void get_set_Username() {
+        PublicUserInfo publicUserInfo = new PublicUserInfo();
+        publicUserInfo.setUsername("validusername");
+        assertEquals("validusername", publicUserInfo.getUsername());
+        try {
+            publicUserInfo.setUsername("#@**invalidusername");
+            assertTrue(false);
+        }
+        catch (Exception e) {}
+    }
+
+    @Test
+    public void get_set_Email() {
+        PublicUserInfo publicUserInfo = new PublicUserInfo();
+        publicUserInfo.setEmail("valid@valid.valid");
+        assertEquals("valid@valid.valid", publicUserInfo.getEmail());
+        try {
+            publicUserInfo.setEmail("invalid email@@invalid.invalid");
+            assertTrue(false);
+        }
+        catch (Exception e) {}
+    }
+
+    @Test
+    public void get_set_PhoneNumber() {
+        PublicUserInfo publicUserInfo = new PublicUserInfo();
+        publicUserInfo.setPhoneNumber("7801234567");
+        assertEquals("valid@valid.valid", publicUserInfo.getPhoneNumber());
+        try {
+            publicUserInfo.setPhoneNumber("780123a67");
+            assertTrue(false);
+        }
+        catch (Exception e) {}
+    }
+
     @Test
     public void ratingForUser(){
-        User user = new User();
-
-
         PublicUserInfo publicUserInfo = new PublicUserInfo();
-        UserManager userManager = new UserManager();
-        SettingsController settingsController = new SettingsController(userManager);
-
-        settingsController.setUserMode(UserMode.RIDER);
-        int Rating = user.getPublicInfo().getRating();
-
-        settingsController.setUserMode(UserMode.DRIVER);
-        int Rating2 = user.getPublicInfo().getRating();
-
-        assertNotEquals(Rating, Rating2);
-
+        publicUserInfo.setRating(UserMode.DRIVER, 5);
+        publicUserInfo.setRating(UserMode.RIDER, 0);
+        assertNotEquals(publicUserInfo.getRating(UserMode.DRIVER), publicUserInfo.getRating(UserMode.RIDER));
     }
 }

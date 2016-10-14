@@ -28,8 +28,8 @@ import java.util.Date;
 
 public class Request {
 
-    private User rider;
-    private User driver;
+    private PublicUserInfo rider;
+    private PublicUserInfo driver;
     private Date date;
     private Currency cost;
     private RequestState requestState;
@@ -58,11 +58,11 @@ public class Request {
         this.destination = destination;
     }
 
-    public User getDriver() {
+    public PublicUserInfo getDriver() {
         return driver;
     }
 
-    public void setDriver(User driver) {
+    public void setDriver(PublicUserInfo driver) {
         this.driver = driver;
     }
 
@@ -74,11 +74,11 @@ public class Request {
         this.requestState = requestState;
     }
 
-    public User getRider() {
+    public PublicUserInfo getRider() {
         return rider;
     }
 
-    public void setRider(User rider) {
+    public void setRider(PublicUserInfo rider) {
         this.rider = rider;
     }
 }

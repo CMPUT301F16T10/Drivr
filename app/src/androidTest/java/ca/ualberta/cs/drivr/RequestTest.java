@@ -31,134 +31,40 @@ import static org.junit.Assert.assertTrue;
 
 public class RequestTest {
 
-
-    // Test a Request can be created with a rider and locations
     @Test
-    public void createRequestRider() throws Exception{
-        User rider = new User();
-        Location source = new Location("street123");
-        Location destination = new Location("street124");
-
-        Request request = new Request(rider ,source, destination);
-
-        assertTrue(new Request(rider,source,destination) instanceof Request);
-    }
-
-
-    // Test a Request can be created with a driver, rider, and locations
-    @Test
-    public void createRequestRiderwithDriver() throws Exception{
+    public void getDriver() {
         User rider = new User();
         User driver = new User();
-        Location source = new Location("street123");
-        Location destination = new Location("street124");
-
-
-        assertTrue(new Request(rider,driver,source,destination) instanceof Request);
+        Request request = new Request(rider, driver, null, null);
+        assertEquals(driver, request.getDriver());
     }
 
-
-    // Test a Request returns a Driver
     @Test
-    public void returnDriver(){
+    public void getRider(){
         User rider = new User();
         User driver = new User();
-        Location source = new Location("street123");
-        Location destination = new Location("street124");
-
-        Request request = new Request(rider,driver,source,destination);
-        assertEquals(request.getDriver(), driver);
+        Request request = new Request(rider, driver, null, null);
+        assertEquals(rider, request.getRider());
     }
 
-    // Test a Request returns a Rider
-    @Test
-    public void returnRider(){
-        User rider = new User();
-        User driver = new User();
-        Location source = new Location("street123");
-        Location destination = new Location("street124");
-
-        Request request = new Request(rider,driver,source,destination);
-        assertEquals(request.getRider(), rider);
-    }
-
-
-    // Test the Request can be Accepted
     @Test
     public void driverAcceptedRequest(){
         User rider = new User();
         User driver = new User();
-        Location source = new Location("street123");
-        Location destination = new Location("street124");
-
-        Request request = new Request(rider,driver,source,destination);
+        Request request = new Request(rider, driver, null, null);
         request.setRequestState(RequestState.ACCEPTED);
-        assertEquals(request.getRequestState(), RequestState.ACCEPTED);
+        assertEquals(RequestState.ACCEPTED, request.getRequestState());
 
     }
 
-
-    // Test All Accepted Requests have drivers
     @Test
-    public void driverExistsAcceptedRequest(){
+    public void getRider_Source_and_Destination(){
         User rider = new User();
-        User driver = new User();
-        Location source = new Location("street123");
-        Location destination = new Location("street124");
-
-        Request request = new Request(rider,driver,source,destination);
-        request.setRequestState(RequestState.ACCEPTED);
-
-        assertEquals(request.getDriver(),null);
-
-
-    }
-
-    // Test for a Driver Username
-    @Test
-    public void getDriverUserName(){
-        PublicUserInfo publicUserInfo = new PublicUserInfo();
-        publicUserInfo.setUserName("Driver1");
-        User rider = new User();
-        User driver = new User();
-        Location source = new Location("street123");
-        Location destination = new Location("street124");
-
-        driver.setPublicInfo(publicUserInfo);
-        Request request = new Request(rider,driver,source,destination);
-
-        assertEquals(request.getDriver().getPublicInfo().getUserName(),"Driver1");
-
-    }
-
-    // Test for a Rider Username
-    @Test
-    public void getRiderUserName(){
-        PublicUserInfo publicUserInfo = new PublicUserInfo();
-        publicUserInfo.setUserName("Rider1");
-        User rider = new User();
-        User driver = new User();
-        Location source = new Location("street123");
-        Location destination = new Location("street124");
-        rider.setPublicInfo(publicUserInfo);
-
-        Request request = new Request(rider,driver,source,destination);
-
-        assertEquals(request.getRider().getPublicInfo().getUserName(),"Rider1");
-
-    }
-
-
-    // Test Driver can Check Destination Location
-    @Test
-    public void getRiderDestination(){
-        User rider = new User();
-        Location source = new Location("street123");
-        Location destination = new Location("street124");
-
-        Request request = new Request(rider,source,destination);
-
-        assertEquals(request.getDestination(), destination);
+        Location source = new Location("Some street");
+        Location destination = new Location("Some avenue");
+        Request request = new Request(rider, source, destination);
+        assertEquals(source, request.getSource());
+        assertEquals(destination, request.getDestination());
     }
 
 }

@@ -36,7 +36,6 @@ public class UserManagerTest {
         // Test UserManager can be created
         @Test
         public void createUserManager() throws Exception {
-
             assertTrue(new UserManager() instanceof UserManager);
         }
 
