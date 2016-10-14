@@ -20,14 +20,45 @@ package ca.ualberta.cs.drivr;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by adam on 2016-10-12.
  */
 
 public class UserManagerTest {
-    /*
-    This class is a storage class for the data on a user that should not be shown on the public
-    profile. It is only getters and setters so no tests are needed at this time.
-    */
+        @Test
+        public void thisAlwaysPasses() {
+            assertEquals(12, 4 * 3);
+        }
+
+
+        // Test UserManager can be created
+        @Test
+        public void createUserManager() throws Exception {
+
+            assertTrue(new UserManager() instanceof UserManager);
+        }
+
+
+        // Test UserManager can get PublicInfo
+        @Test
+        public void publicInfoWithUserManager(){
+            User user = new User();
+            PublicUserInfo publicUserInfo = new PublicUserInfo();
+            PrivateUserInfo privateUserInfo = new PrivateUserInfo();
+
+            UserManager userManager = new UserManager();
+
+            user.setPublicInfo(publicUserInfo);
+            user.setPrivateInfo(privateUserInfo);
+
+            assertEquals(userManager.getPublicUserInfo(), publicUserInfo);
+            assertEquals(userManager.getPrivateUserInfo(), privateUserInfo);
+        }
+
+
+
+
+
 }
