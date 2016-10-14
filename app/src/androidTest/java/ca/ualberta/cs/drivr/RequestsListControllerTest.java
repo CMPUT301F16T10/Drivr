@@ -27,6 +27,10 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class RequestsListControllerTest {
+
+
+
+
     @Test
     public void acceptRequest() {
         UserManager userManager = new UserManager();
@@ -36,6 +40,14 @@ public class RequestsListControllerTest {
         requestsListController.acceptRequest(request);
         assertEquals(RequestState.ACCEPTED, request.getRequestState());
     }
+
+
+    /**
+     * UC 8 Rider Confirms Driver Acceptance
+     * US 01.08.01 As a Rider, I want to Confirm a Driver's Acceptance.
+     * This allows us to choose from a list of Acceptances if more than one Driver Accepts simultaneously.
+     *
+     */
 
     @Test
     public void confirmRequest() {

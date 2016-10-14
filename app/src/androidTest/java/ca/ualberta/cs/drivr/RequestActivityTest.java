@@ -47,6 +47,11 @@ public class RequestActivityTest extends ActivityInstrumentationTestCase2<Reques
         solo.finishOpenedActivities();
     }
 
+    /**
+     * UC 24 Driver View Locations
+     * US 10.02.01 As a Driver, I want to view start and end Geo-locations on a map for a Request.
+     */
+
     public void testViewSourceLocationOnMap() {
         solo.assertCurrentActivity("Expected RequestActivity", RequestActivity.class);
         solo.clickOnText("Source");
