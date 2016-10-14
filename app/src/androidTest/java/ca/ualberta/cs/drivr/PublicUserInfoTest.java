@@ -32,10 +32,17 @@ public class PublicUserInfoTest {
     @Test
 
     /**
+     * For:
+     *
      * UC 12 Show Information For Another User
      * US 03.03.01 As a User, I want to, when a username is presented for a thing,
      * retrieve and show its contact information.
+     *
+     * Testing:
+     * Public User Info meets guidelines for each attribute
+     *
      */
+
     public void get_set_Name() {
         PublicUserInfo publicUserInfo = new PublicUserInfo();
         publicUserInfo.setName("Adam Christiansen");
@@ -84,6 +91,8 @@ public class PublicUserInfoTest {
         catch (Exception e) {}
     }
 
+
+    // Assume a Rider and Driver will have different Ratings
     @Test
     public void ratingForUser(){
         PublicUserInfo publicUserInfo = new PublicUserInfo();

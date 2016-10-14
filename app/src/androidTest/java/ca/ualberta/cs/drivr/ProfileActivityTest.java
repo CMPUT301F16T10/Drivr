@@ -47,6 +47,11 @@ public class ProfileActivityTest extends ActivityInstrumentationTestCase2<Profil
         solo.finishOpenedActivities();
     }
 
+    /**
+     * UC 11 Edit Profile Contact Information
+     * US 03.02.01 As a User, I want to edit the contact information in my profile
+     */
+
     public void testEditName() {
         solo.assertCurrentActivity("Expected ProfileActivity", ProfileActivity.class);
         solo.clickOnButton("Edit button");
