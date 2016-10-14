@@ -34,7 +34,7 @@ public class SettingsActivityTest extends ActivityInstrumentationTestCase2<Setti
 
     /**
      * Testing for our Settings Activity
-     * 
+     *
      */
 
     private Solo solo;
