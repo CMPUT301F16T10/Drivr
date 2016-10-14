@@ -17,6 +17,10 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.test.ActivityInstrumentationTestCase2;
+
+import com.robotium.solo.Solo;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -25,24 +29,37 @@ import static org.junit.Assert.assertEquals;
  * Created by adam on 2016-10-12.
  */
 
-public class RequestActivityTest {
-    @Test
-    public void thisAlwaysPasses() {
-        assertEquals(12, 4 * 3);
+public class RequestActivityTest extends ActivityInstrumentationTestCase2<RequestActivity> {
+
+    private Solo solo;
+
+    public RequestActivityTest() {
+        super(ca.ualberta.cs.drivr.RequestActivity.class);
     }
 
-
-
-    // Test the Request Activity can be created
-    @Test
-    public void testRequestActivityCreated(){
-
+    @Override
+    public void setUp() throws Exception {
+        solo = new Solo(getInstrumentation(), getActivity());
     }
 
+    @Override
+    public void tearDown() throws Exception {
+        solo.finishOpenedActivities();
+    }
 
-    // Test the Profile Activity is killed after exiting
-    @Test
-    public void testRequestActivityKilled(){
+    public void testViewSourceLocationOnMap() {
+        solo.assertCurrentActivity("Expected RequestActivity", RequestActivity.class);
+        solo.clickOnText("Source");
+        final String source = solo.getText("Source").getText().toString();
+        // We want 2 occurrences: one in the text view and one on the map
+        assertTrue(solo.waitForText(source, 2, 3000));
+    }
 
+    public void testViewDestinationLocationOnMap() {
+        solo.assertCurrentActivity("Expected RequestActivity", RequestActivity.class);
+        solo.clickOnText("Destination Location");
+        final String destination = solo.getText("Destination Location").getText().toString();
+        // We want 2 occurrences: one in the text view and one on the map
+        assertTrue(solo.waitForText(destination, 2, 3000));
     }
 }

@@ -26,11 +26,8 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class PrivateUserInfoTest {
-    @Test
-    public void thisAlwaysPasses() {
-        assertEquals(12, 4 * 3);
-    }
-
-//    This class is a storage class for the data on a user that should not be shown on the public profile
-//    It is only getters and setters so no tests are needed at this time
+    /*
+    This class is a storage class for the data on a user that should not be shown on the public
+    profile. It is only getters and setters so no tests are needed at this time.
+    */
 }

@@ -17,44 +17,69 @@
 
 package ca.ualberta.cs.drivr;
 
-import org.junit.Test;
+import android.test.ActivityInstrumentationTestCase2;
 
-import static org.junit.Assert.assertEquals;
+import com.robotium.solo.Solo;
 
 /**
  * Created by adam on 2016-10-12.
  */
 
-public class MainActivityTest {
-    @Test
-    public void thisAlwaysPasses() {
-        assertEquals(12, 4 * 3);
+public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
+
+    private Solo solo;
+
+    public MainActivityTest() {
+        super(ca.ualberta.cs.drivr.MainActivity.class);
     }
 
-
-    // Test Main Activity can be created
-    @Test
-    public void testMainActivity(){
-
+    @Override
+    public void setUp() throws Exception {
+        solo = new Solo(getInstrumentation(), getActivity());
     }
 
-    // Test Setting Activity can be created
-    @Test
-    public void testSettingActivityCreated(){
-
+    @Override
+    public void tearDown() throws Exception {
+        solo.finishOpenedActivities();
     }
 
-    // Test Google Maps view is working
-    @Test
-    public void testGoogleMapsApi(){
-
+    public void testOpenSettingsActivity() {
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+        solo.clickOnButton("Plus button");
+        solo.clickOnButton("Settings");
+        solo.assertCurrentActivity("Expected SettingsActivity", SettingsActivity.class);
+        solo.goBack();
     }
 
-    // Test Main Activity can be paused,etc..
-    @Test
-    public void testMainActivityOnResume(){
-
+    public void testOpenProfileActivity() {
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+        solo.clickOnButton("Plus button");
+        solo.clickOnButton("Profile");
+        solo.assertCurrentActivity("Expected ProfileActivity", ProfileActivity.class);
+        solo.goBack();
     }
 
+    public void testOpenRequestHistoryActivity() {
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+        solo.clickOnButton("Plus button");
+        solo.clickOnButton("Request History");
+        solo.assertCurrentActivity("Expected RequestHistoryActivity", RequestHistoryActivity.class);
+        solo.goBack();
+    }
+
+    public void testOpenRequestsListActivity() {
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+        solo.clickOnButton("Plus button");
+        solo.clickOnButton("Requests");
+        solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
+        solo.goBack();
+    }
+
+    public void testSearchDestination() {
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+        solo.enterText(solo.getEditText("Search bar"), "West Edmonton Mall");
+        solo.clickOnButton("Search button");
+        assertTrue(solo.waitForText("West Edmonton Mall"));
+    }
 
 }

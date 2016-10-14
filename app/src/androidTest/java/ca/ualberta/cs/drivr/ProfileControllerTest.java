@@ -27,11 +27,6 @@ import static org.junit.Assert.assertEquals;
 
 public class ProfileControllerTest {
     @Test
-    public void thisAlwaysPasses() {
-        assertEquals(12, 4 * 3);
-    }
-
-    @Test
     public void getName_and_setName() {
         UserManager userManager = new UserManager();
         ProfileController profileController = new ProfileController(userManager);

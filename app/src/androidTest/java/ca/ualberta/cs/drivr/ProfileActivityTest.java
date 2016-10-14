@@ -17,6 +17,10 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.test.ActivityInstrumentationTestCase2;
+
+import com.robotium.solo.Solo;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -25,24 +29,58 @@ import static org.junit.Assert.assertEquals;
  * Created by adam on 2016-10-12.
  */
 
-public class ProfileActivityTest {
-    @Test
-    public void thisAlwaysPasses() {
-        assertEquals(12, 4 * 3);
+public class ProfileActivityTest extends ActivityInstrumentationTestCase2<ProfileActivity> {
+
+    private Solo solo;
+
+    public ProfileActivityTest() {
+        super(ca.ualberta.cs.drivr.ProfileActivity.class);
     }
 
-
-    // Test the Profile Activity can be created
-    @Test
-    public void testProfileActivityCreated(){
-
+    @Override
+    public void setUp() throws Exception {
+        solo = new Solo(getInstrumentation(), getActivity());
     }
 
+    @Override
+    public void tearDown() throws Exception {
+        solo.finishOpenedActivities();
+    }
 
-    // Test the Profile Activity is killed after exiting
-    @Test
-    public void testProfileActivityKilled(){
+    public void testEditName() {
+        solo.assertCurrentActivity("Expected ProfileActivity", ProfileActivity.class);
+        solo.clickOnButton("Edit button");
+        final String newName = "New Name McNewNamerson";
+        solo.enterText(solo.getEditText("Edit name"), newName);
+        solo.clickOnButton("Save button");
+        assertTrue(solo.waitForText(newName));
+    }
 
+    public void testEditPhoneNumber() {
+        solo.assertCurrentActivity("Expected ProfileActivity", ProfileActivity.class);
+        solo.clickOnButton("Edit button");
+        final String newPhoneNumber = "780-123-9876";
+        solo.enterText(solo.getEditText("Edit email"), newPhoneNumber);
+        solo.clickOnButton("Save button");
+        assertTrue(solo.waitForText(newPhoneNumber));
+    }
+
+    public void testEditEmail() {
+        solo.assertCurrentActivity("Expected ProfileActivity", ProfileActivity.class);
+        solo.clickOnButton("Edit button");
+        final String newEmail = "newemail@newdomain.newtld";
+        solo.enterText(solo.getEditText("Edit email"), newEmail);
+        solo.clickOnButton("Save button");
+        assertTrue(solo.waitForText(newEmail));
+    }
+
+    public void testEditAddress() {
+        solo.assertCurrentActivity("Expected ProfileActivity", ProfileActivity.class);
+        solo.clickOnButton("Edit button");
+        final String newAddress = "1234 New Address, New City, New Province";
+        solo.enterText(solo.getEditText("Edit address"), newAddress);
+        solo.clickOnButton("Save button");
+        assertTrue(solo.waitForText(newAddress));
     }
 
 }

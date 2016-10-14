@@ -17,6 +17,13 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
+
+import com.robotium.solo.Solo;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -25,39 +32,41 @@ import static org.junit.Assert.assertEquals;
  * Created by adam on 2016-10-12.
  */
 
-public class RequestHistoryActivityTest {
-    @Test
-    public void thisAlwaysPasses() {
-        assertEquals(12, 4 * 3);
+public class RequestHistoryActivityTest extends ActivityInstrumentationTestCase2<RequestHistoryActivity> {
+
+    private Solo solo;
+
+    public RequestHistoryActivityTest() {
+        super(ca.ualberta.cs.drivr.RequestHistoryActivity.class);
     }
 
-
-    // Test the Request History Activity can be created
-    @Test
-    public void testRequestHistroyActivityCreated(){
-
+    @Override
+    public void setUp() throws Exception {
+        solo = new Solo(getInstrumentation(), getActivity());
     }
 
-
-    // Test the Request History Activity is killed after exiting
-    @Test
-    public void testRequestHistroyActivityKilled(){
-
+    @Override
+    public void tearDown() throws Exception {
+        solo.finishOpenedActivities();
     }
 
-    // Test the Request History contains Driver
-    @Test
-    public void testRequestDriverInfo(){}
+    public void testClickOnRequest() {
+        solo.assertCurrentActivity("Expected RequestHistoryActivity", RequestHistoryActivity.class);
+        final Request request = getActivity().getRequest(0);
+        solo.clickInList(0);
+        solo.assertCurrentActivity("Expected RequestActivity", RequestActivity.class);
+        assertTrue(solo.waitForText(request.getDestination().toString()));
+        solo.goBack();
+    }
 
-    // Test the Request History Driver Info is updated upon Driver Profile Update
-    @Test
-    public void testHistoryDriverNameUpdated(){}
-
-
-    // Test the Price is reflected in Country Currency
-    @Test
-    public void testHistoryCountryCurrency(){
-
+    public void testDeleteRequest() {
+        solo.assertCurrentActivity("Expected RequestHistoryActivity", RequestHistoryActivity.class);
+        final RequestsList requestsList = getActivity().getRequestsList();
+        final int initialRequestsListSize = requestsList.size();
+        Request request = getActivity().getRequest(0);
+        View listItem = ((ListView) solo.getView("Requests list")).getChildAt(0);
+        solo.clickOnButton(0 /* ID of delete button */);
+        assertEquals(initialRequestsListSize - 1, requestsList.size());
     }
 
 }
