@@ -73,4 +73,12 @@ public class Request {
     public void setRequestState(RequestState requestState) {
         this.requestState = requestState;
     }
+
+    public User getRider() {
+        return rider;
+    }
+
+    public void setRider(User rider) {
+        this.rider = rider;
+    }
 }

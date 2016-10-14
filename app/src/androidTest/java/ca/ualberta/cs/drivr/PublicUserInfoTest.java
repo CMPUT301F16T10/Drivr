@@ -20,14 +20,50 @@ package ca.ualberta.cs.drivr;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by adam on 2016-10-12.
  */
 
 public class PublicUserInfoTest {
-    /*
-    This class is a storage class for the data on a user that should not be shown on the public
-    profile. It is only getters and setters so no tests are needed at this time.
-    */
+    // Test all methods work for PublicInfo
+    @Test
+    public void editPublicUserInfo(){
+        User user = new User();
+        PublicUserInfo publicUserInfo = new PublicUserInfo();
+
+        publicUserInfo.setName("ABC");
+        publicUserInfo.setUserName("CAB");
+        publicUserInfo.setEmail("ABC@CAB.com");
+        publicUserInfo.setPhoneNumber("780-111-1111");
+
+
+        assertTrue(user.getPublicInfo().getName().equals("ABC"));
+        assertTrue(user.getPublicInfo().getUserName().equals("CAB"));
+        assertTrue(user.getPublicInfo().getEmail().equals("ABC@CAB.com"));
+        assertTrue(user.getPublicInfo().getPhoneNumber().equals("780-111-1111"));
+
+    }
+
+    // Test the Rating is Different for the Driver vs. Rider
+    @Test
+    public void ratingForUser(){
+        User user = new User();
+
+
+        PublicUserInfo publicUserInfo = new PublicUserInfo();
+        UserManager userManager = new UserManager();
+        SettingsController settingsController = new SettingsController(userManager);
+
+        settingsController.setUserMode(UserMode.RIDER);
+        int Rating = user.getPublicInfo().getRating();
+
+        settingsController.setUserMode(UserMode.DRIVER);
+        int Rating2 = user.getPublicInfo().getRating();
+
+        assertNotEquals(Rating, Rating2);
+
+    }
 }

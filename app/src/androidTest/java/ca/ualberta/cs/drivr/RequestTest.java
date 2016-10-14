@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.xmlpull.v1.sax2.Driver;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by adam on 2016-10-12.
@@ -30,6 +31,88 @@ import static org.junit.Assert.assertEquals;
 
 public class RequestTest {
 
-    // There are no tests for this right now
+
+    // Test a Request can be created with a rider and locations
+    @Test
+    public void createRequestRider() throws Exception{
+        User rider = new User();
+        Location source = new Location("street123");
+        Location destination = new Location("street124");
+
+        Request request = new Request(rider ,source, destination);
+
+        assertTrue(new Request(rider,source,destination) instanceof Request);
+    }
+
+
+    // Test a Request can be created with a driver, rider, and locations
+    @Test
+    public void createRequestRiderwithDriver() throws Exception{
+        User rider = new User();
+        User driver = new User();
+        Location source = new Location("street123");
+        Location destination = new Location("street124");
+
+
+        assertTrue(new Request(rider,driver,source,destination) instanceof Request);
+    }
+
+
+    // Test a Request returns a Driver
+    @Test
+    public void returnDriver(){
+        User rider = new User();
+        User driver = new User();
+        Location source = new Location("street123");
+        Location destination = new Location("street124");
+
+        Request request = new Request(rider,driver,source,destination);
+        assertEquals(request.getDriver(), driver);
+    }
+
+    // Test a Request returns a Rider
+    @Test
+    public void returnRider(){
+        User rider = new User();
+        User driver = new User();
+        Location source = new Location("street123");
+        Location destination = new Location("street124");
+
+        Request request = new Request(rider,driver,source,destination);
+        assertEquals(request.getRider(), rider);
+    }
+
+
+    // Test the Request can be Accepted
+    @Test
+    public void driverAcceptedRequest(){
+        User rider = new User();
+        User driver = new User();
+        Location source = new Location("street123");
+        Location destination = new Location("street124");
+
+        Request request = new Request(rider,driver,source,destination);
+        request.setRequestState(RequestState.ACCEPTED);
+        assertEquals(request.getRequestState(), RequestState.ACCEPTED);
+
+    }
+
+
+    // Test All Accepted Requests have drivers
+    @Test
+    public void driverExistsAcceptedRequest(){
+        User rider = new User();
+        User driver = new User();
+        Location source = new Location("street123");
+        Location destination = new Location("street124");
+
+        Request request = new Request(rider,driver,source,destination);
+        request.setRequestState(RequestState.ACCEPTED);
+
+        assertEquals(request.getDriver(),null);
+
+
+    }
+
 
 }
