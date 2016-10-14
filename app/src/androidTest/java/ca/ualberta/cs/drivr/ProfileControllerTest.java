@@ -26,6 +26,14 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class ProfileControllerTest {
+
+
+    /**
+     * UC 10 Create User Profile
+     * US 03.01.01 As a User,
+     * I want a profile with a unique username and my contact information.
+     */
+
     @Test
     public void getName_and_setName() {
         UserManager userManager = new UserManager();

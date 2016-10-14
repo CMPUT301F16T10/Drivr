@@ -71,6 +71,12 @@ public class RequestsListActivityTest extends ActivityInstrumentationTestCase2<R
         assertEquals(initialRequestsListSize - 1, requestsList.size());
     }
 
+    /**
+     * UC 5 Rider Contacts Driver
+     * US 01.05.01 As a Rider, I want to be able to phone or email the Driver who Accepted a Request.
+     */
+
+
     public void testCallDriver() {
         solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
         ListView listView = (ListView)solo.getView("pending requests");

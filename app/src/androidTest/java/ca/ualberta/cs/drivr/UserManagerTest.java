@@ -52,8 +52,8 @@ public class UserManagerTest {
             user.setPublicInfo(publicUserInfo);
             user.setPrivateInfo(privateUserInfo);
 
-            assertEquals(userManager.getPublicUserInfo(), publicUserInfo);
-            assertEquals(userManager.getPrivateUserInfo(), privateUserInfo);
+            assertEquals(publicUserInfo, userManager.getPublicUserInfo());
+            assertEquals(privateUserInfo, userManager.getPrivateUserInfo());
         }
 
 

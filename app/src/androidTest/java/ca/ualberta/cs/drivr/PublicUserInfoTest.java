@@ -30,6 +30,13 @@ import static org.junit.Assert.assertTrue;
 public class PublicUserInfoTest {
 
     @Test
+
+    /**
+     * UC 12 Show Information For Another User
+     * US 03.03.01 As a User, I want to, when a username is presented for a thing,
+     * retrieve and show its contact information.
+     */
+
     public void get_set_Name() {
         PublicUserInfo publicUserInfo = new PublicUserInfo();
         publicUserInfo.setName("Adam Christiansen");
