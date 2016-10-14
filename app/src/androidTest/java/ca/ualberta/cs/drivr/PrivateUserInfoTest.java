@@ -19,15 +19,22 @@ package ca.ualberta.cs.drivr;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by adam on 2016-10-12.
  */
 
 public class PrivateUserInfoTest {
-    /*
-    This class is a storage class for the data on a user that should not be shown on the public
-    profile. It is only getters and setters so no tests are needed at this time.
-    */
+    @Test
+    public void setPassword() {
+        PrivateUserInfo privateUserInfo = new PrivateUserInfo();
+        privateUserInfo.setPassword("my password");
+        try {
+            privateUserInfo.setPassword("Some password that is way too long to be a valid password "
+                    + "and will cause an exception to be thrown");
+            assertTrue(false);
+        }
+        catch (Exception e) {}
+    }
 }
