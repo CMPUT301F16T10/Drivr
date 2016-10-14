@@ -27,37 +27,65 @@ import static org.junit.Assert.assertTrue;
  */
 
 public class UserManagerTest {
-        @Test
-        public void thisAlwaysPasses() {
-            assertEquals(12, 4 * 3);
+
+    @Test
+    public void get_set_Name() {
+        UserManager userManager = new UserManager();
+        userManager.setName("Adam Christiansen");
+        assertEquals("Adam Christiansen", userManager.getName());
+        try {
+            userManager.setName("Some super long name that is way too long and will throw an "
+                    + "exception because the software can't handle how long it is");
+            assertTrue(false);
         }
+        catch (Exception e) {}
+    }
 
-
-        // Test UserManager can be created
-        @Test
-        public void createUserManager() throws Exception {
-            assertTrue(new UserManager() instanceof UserManager);
+    @Test
+    public void get_set_Username() {
+        UserManager userManager = new UserManager();
+        userManager.setUsername("validusername");
+        assertEquals("validusername", userManager.getUsername());
+        try {
+            userManager.setUsername("#@**invalidusername");
+            assertTrue(false);
         }
+        catch (Exception e) {}
+    }
 
-
-        // Test UserManager can get PublicInfo
-        @Test
-        public void publicInfoWithUserManager(){
-            User user = new User();
-            PublicUserInfo publicUserInfo = new PublicUserInfo();
-            PrivateUserInfo privateUserInfo = new PrivateUserInfo();
-
-            UserManager userManager = new UserManager();
-
-            user.setPublicInfo(publicUserInfo);
-            user.setPrivateInfo(privateUserInfo);
-
-            assertEquals(publicUserInfo, userManager.getPublicUserInfo());
-            assertEquals(privateUserInfo, userManager.getPrivateUserInfo());
+    @Test
+    public void get_set_Email() {
+        UserManager userManager = new UserManager();
+        userManager.setEmail("valid@valid.valid");
+        assertEquals("valid@valid.valid", userManager.getEmail());
+        try {
+            userManager.setEmail("invalid email@@invalid.invalid");
+            assertTrue(false);
         }
+        catch (Exception e) {}
+    }
 
+    @Test
+    public void get_set_PhoneNumber() {
+        UserManager userManager = new UserManager();
+        userManager.setPhoneNumber("7801234567");
+        assertEquals("valid@valid.valid", userManager.getPhoneNumber());
+        try {
+            userManager.setPhoneNumber("780123a67");
+            assertTrue(false);
+        }
+        catch (Exception e) {}
+    }
 
-
-
-
+    @Test
+    public void setPassword() {
+        UserManager userManager = new UserManager();
+        userManager.setPassword("my_password");
+        try {
+            userManager.setPassword("a password that is way too long to be a valid password and"
+                    + "should cause an exception");
+            assertTrue(false);
+        }
+        catch (Exception e) {}
+    }
 }

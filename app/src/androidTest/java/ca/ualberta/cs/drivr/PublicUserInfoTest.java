@@ -36,7 +36,6 @@ public class PublicUserInfoTest {
      * US 03.03.01 As a User, I want to, when a username is presented for a thing,
      * retrieve and show its contact information.
      */
-
     public void get_set_Name() {
         PublicUserInfo publicUserInfo = new PublicUserInfo();
         publicUserInfo.setName("Adam Christiansen");
