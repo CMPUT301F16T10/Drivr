@@ -69,6 +69,13 @@ public class RequestsListControllerTest {
         assertEquals(RequestState.DECLINED, request.getRequestState());
     }
 
+
+    /**
+     * UC 4 Rider Cancels Requests
+     * US 01.04.01 As a Rider, I want to cancel Requests.
+     */
+
+
     @Test
     public void cancelRequest() {
         UserManager userManager = new UserManager();
