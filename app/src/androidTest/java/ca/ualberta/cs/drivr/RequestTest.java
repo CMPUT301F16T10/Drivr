@@ -124,10 +124,41 @@ public class RequestTest {
         Location source = new Location("street123");
         Location destination = new Location("street124");
 
+        driver.setPublicInfo(publicUserInfo);
         Request request = new Request(rider,driver,source,destination);
 
         assertEquals(request.getDriver().getPublicInfo().getUserName(),"Driver1");
 
+    }
+
+    // Test for a Rider Username
+    @Test
+    public void getRiderUserName(){
+        PublicUserInfo publicUserInfo = new PublicUserInfo();
+        publicUserInfo.setUserName("Rider1");
+        User rider = new User();
+        User driver = new User();
+        Location source = new Location("street123");
+        Location destination = new Location("street124");
+        rider.setPublicInfo(publicUserInfo);
+
+        Request request = new Request(rider,driver,source,destination);
+
+        assertEquals(request.getRider().getPublicInfo().getUserName(),"Rider1");
+
+    }
+
+
+    // Test Driver can Check Destination Location
+    @Test
+    public void getRiderDestination(){
+        User rider = new User();
+        Location source = new Location("street123");
+        Location destination = new Location("street124");
+
+        Request request = new Request(rider,source,destination);
+
+        assertEquals(request.getDestination(), destination);
     }
 
 }
