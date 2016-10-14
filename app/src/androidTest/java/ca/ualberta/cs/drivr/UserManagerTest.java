@@ -28,6 +28,21 @@ import static org.junit.Assert.assertTrue;
 
 public class UserManagerTest {
 
+    /*
+    * Testing our Manager Class
+    *
+    * For:
+    * UC 12 Show Information For Another User
+    * US 03.03.01 As a User,
+    * I want to, when a username is presented for a thing,
+    * retrieve and show its contact information.
+    *
+    * Testing:
+    * The ability to get and set Info our a User in our UserManager class
+    *
+     */
+
+
     @Test
     public void get_set_Name() {
         UserManager userManager = new UserManager();
