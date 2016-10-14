@@ -26,18 +26,8 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class UserTest {
-    @Test
-    public void thisAlwaysPasses() {
-        assertEquals(12, 4 * 3);
-    }
-
-//    Currently the User class is a storage class for our separated private and public data.
-//    There are no tests need as there are only getters and setters. If Methods are added so shall the tests.
-
-
-
-
-
-
-
+    /*
+    This class is a storage class for the data on a user that should not be shown on the public
+    profile. It is only getters and setters so no tests are needed at this time.
+    */
 }

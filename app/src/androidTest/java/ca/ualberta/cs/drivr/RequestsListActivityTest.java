@@ -17,7 +17,16 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.test.InstrumentationTestCase;
+
+import com.robotium.solo.Solo;
+
 import org.junit.Test;
+
+import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,31 +34,65 @@ import static org.junit.Assert.assertEquals;
  * Created by adam on 2016-10-12.
  */
 
-public class RequestsListActivityTest {
+public class RequestsListActivityTest extends ActivityInstrumentationTestCase2<RequestsListActivity> {
     @Test
     public void thisAlwaysPasses() {
         assertEquals(12, 4 * 3);
     }
 
+    private Solo solo;
 
-
-    // Test the Request List Activity can be created
-    @Test
-    public void testRequestListActivityCreated(){
-
+    public RequestsListActivityTest() {
+        super(ca.ualberta.cs.drivr.RequestsListActivity.class);
     }
 
-
-    // Test the Request List Activity is killed after exiting
-    @Test
-    public void testRequestListActivityKilled(){
-
+    @Override
+    public void setUp() throws Exception {
+        solo = new Solo(getInstrumentation(), getActivity());
     }
 
+    @Override
+    public void tearDown() throws Exception {
+        solo.finishOpenedActivities();
+    }
 
-    // Test the RequestActivity is updated upon Controller Data Change
-    @Test
-    public void testRequestControllerUpdate(){
+    public void testClickOnRequest() {
+        solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
+        final Request request = getActivity().getRequest(0);
+        solo.clickInList(0);
+        solo.assertCurrentActivity("Expected RequestActivity", RequestActivity.class);
+        assertTrue(solo.waitForText(request.getDestination().toString()));
+        solo.goBack();
+    }
+
+    public void testDeleteRequest() {
+        solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
+        final RequestsList requestsList = getActivity().getRequestsList();
+        final int initialRequestsListSize = requestsList.size();
+        Request request = getActivity().getRequest(0);
+        View listItem = ((ListView) solo.getView("Requests list")).getChildAt(0);
+        solo.clickOnButton(0 /* ID of delete button */);
+        assertEquals(initialRequestsListSize - 1, requestsList.size());
+    }
+
+    public void testCallDriver() {
+        solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
+        ListView listView = (ListView)solo.getView("pending requests");
+        View view = listView.getChildAt(0);
+        Button callButton = (Button) view.findViewById(0 /* Call driver button */);
+        solo.clickOnView(callButton);
+        assertFalse(solo.getCurrentActivity() instanceof RequestsListActivity);
+        solo.goBack();
+    }
+
+    public void testEmaiDriver() {
+        solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
+        ListView listView = (ListView)solo.getView("pending requests");
+        View view = listView.getChildAt(0);
+        Button emailButton = (Button) view.findViewById(0 /* Email driver button */);
+        solo.clickOnView(emailButton);
+        assertFalse(solo.getCurrentActivity() instanceof RequestsListActivity);
+        solo.goBack();
     }
 
 }

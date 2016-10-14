@@ -31,4 +31,8 @@ public class RequestHistoryActivity extends AppCompatActivity {
     public void viewRequest(Request request) {
         throw new UnsupportedOperationException();
     }
+
+    public Request getRequest(int position) { throw new UnsupportedOperationException(); }
+
+    public RequestsList getRequestsList() { throw new UnsupportedOperationException(); }
 }
