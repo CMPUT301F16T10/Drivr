@@ -43,7 +43,7 @@ public class PublicUserInfoTest {
      *
      */
 
-    public void get_set_Name() {
+    public void getSetName() {
         PublicUserInfo publicUserInfo = new PublicUserInfo();
         publicUserInfo.setName("Adam Christiansen");
         assertEquals("Adam Christiansen", publicUserInfo.getName());
@@ -56,7 +56,7 @@ public class PublicUserInfoTest {
     }
 
     @Test
-    public void get_set_Username() {
+    public void getSetUsername() {
         PublicUserInfo publicUserInfo = new PublicUserInfo();
         publicUserInfo.setUsername("validusername");
         assertEquals("validusername", publicUserInfo.getUsername());
@@ -68,7 +68,7 @@ public class PublicUserInfoTest {
     }
 
     @Test
-    public void get_set_Email() {
+    public void getSetEmail() {
         PublicUserInfo publicUserInfo = new PublicUserInfo();
         publicUserInfo.setEmail("valid@valid.valid");
         assertEquals("valid@valid.valid", publicUserInfo.getEmail());
@@ -80,7 +80,7 @@ public class PublicUserInfoTest {
     }
 
     @Test
-    public void get_set_PhoneNumber() {
+    public void getSetPhoneNumber() {
         PublicUserInfo publicUserInfo = new PublicUserInfo();
         publicUserInfo.setPhoneNumber("7801234567");
         assertEquals("valid@valid.valid", publicUserInfo.getPhoneNumber());

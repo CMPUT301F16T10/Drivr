@@ -32,6 +32,9 @@ public class PrivateUserInfoTest {
      * US 03.01.01 As a User, I want a profile with a unique username and my contact information.
      */
 
+    // Test for passwords was here but will be removed.
+    // Add username test and contact info test in its place?
+
     @Test
     public void setPassword() {
         PrivateUserInfo privateUserInfo = new PrivateUserInfo();

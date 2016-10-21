@@ -93,7 +93,7 @@ public class RequestsListActivityTest extends ActivityInstrumentationTestCase2<R
         solo.goBack();
     }
 
-    public void testEmaiDriver() {
+    public void testEmailDriver() {
         solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
         ListView listView = (ListView)solo.getView("pending requests");
         View view = listView.getChildAt(0);
