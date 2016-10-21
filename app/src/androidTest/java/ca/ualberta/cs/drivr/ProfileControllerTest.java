@@ -41,7 +41,7 @@ public class ProfileControllerTest {
 
 
     @Test
-    public void getName_and_setName() {
+    public void getNameAndSetName() {
         UserManager userManager = new UserManager();
         ProfileController profileController = new ProfileController(userManager);
         profileController.setName("Adam Christiansen");
@@ -49,7 +49,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void getPhoneNumber_and_setPhoneNumber() {
+    public void getPhoneNumberAndSetPhoneNumber() {
         UserManager userManager = new UserManager();
         ProfileController profileController = new ProfileController(userManager);
         profileController.setPhoneNumber("7801234567");
@@ -57,7 +57,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void getEmail_and_setEmail() {
+    public void getEmailAndSetEmail() {
         UserManager userManager = new UserManager();
         ProfileController profileController = new ProfileController(userManager);
         profileController.setEmail("somebody@somedomain.sometld");
@@ -65,7 +65,7 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void getAddress_and_setAddress() {
+    public void getAddressAndSetAddress() {
         UserManager userManager = new UserManager();
         ProfileController profileController = new ProfileController(userManager);
         profileController.setAddress("123 Some Road, Some City, Some Province, Some Country");

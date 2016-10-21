@@ -81,7 +81,7 @@ public class RequestTest {
      */
 
     @Test
-    public void getRider_Source_and_Destination(){
+    public void getRiderSourceAndDestination(){
         User rider = new User();
         Location source = new Location("Some street");
         Location destination = new Location("Some avenue");

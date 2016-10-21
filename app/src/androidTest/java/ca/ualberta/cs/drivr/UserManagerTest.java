@@ -32,14 +32,14 @@ public class UserManagerTest {
     * Testing our Manager Class
     *
     * For:
-    * Our attributes such as password, name, username, email, and phonenumber
+    * Our attributes such as name, username, email, and phonenumber
     * all meet requirements.
     *
      */
 
 
     @Test
-    public void get_set_Name() {
+    public void getSetName() {
         UserManager userManager = new UserManager();
         userManager.setName("Adam Christiansen");
         assertEquals("Adam Christiansen", userManager.getName());
@@ -52,7 +52,7 @@ public class UserManagerTest {
     }
 
     @Test
-    public void get_set_Username() {
+    public void getSetUsername() {
         UserManager userManager = new UserManager();
         userManager.setUsername("validusername");
         assertEquals("validusername", userManager.getUsername());
@@ -64,7 +64,7 @@ public class UserManagerTest {
     }
 
     @Test
-    public void get_set_Email() {
+    public void getSetEmail() {
         UserManager userManager = new UserManager();
         userManager.setEmail("valid@valid.valid");
         assertEquals("valid@valid.valid", userManager.getEmail());
@@ -76,7 +76,7 @@ public class UserManagerTest {
     }
 
     @Test
-    public void get_set_PhoneNumber() {
+    public void getSetPhoneNumber() {
         UserManager userManager = new UserManager();
         userManager.setPhoneNumber("7801234567");
         assertEquals("valid@valid.valid", userManager.getPhoneNumber());
@@ -87,15 +87,5 @@ public class UserManagerTest {
         catch (Exception e) {}
     }
 
-    @Test
-    public void setPassword() {
-        UserManager userManager = new UserManager();
-        userManager.setPassword("my_password");
-        try {
-            userManager.setPassword("a password that is way too long to be a valid password and"
-                    + "should cause an exception");
-            assertTrue(false);
-        }
-        catch (Exception e) {}
-    }
+    //Test for setPassword was here but now it has been removed.
 }
