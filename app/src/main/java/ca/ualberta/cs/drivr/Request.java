@@ -28,8 +28,8 @@ import java.util.Date;
 
 public class Request {
 
-    private PublicUserInfo rider;
-    private PublicUserInfo driver;
+    private User rider;
+    private User driver;
     private Date date;
     private Currency cost;
     private RequestState requestState;
