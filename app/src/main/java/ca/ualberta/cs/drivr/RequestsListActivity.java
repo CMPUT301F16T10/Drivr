@@ -20,6 +20,10 @@ package ca.ualberta.cs.drivr;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+/**
+ * Setting this up for JavaDocs.
+ */
+
 public class RequestsListActivity extends AppCompatActivity {
 
     @Override

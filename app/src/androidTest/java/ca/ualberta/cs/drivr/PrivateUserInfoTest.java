@@ -32,16 +32,29 @@ public class PrivateUserInfoTest {
      * US 03.01.01 As a User, I want a profile with a unique username and my contact information.
      */
 
-    // Test for passwords was here but will be removed.
-    // Add username test and contact info test in its place?
+    /** Removed passwords (the test is saved, though, so we can get it back at a later date
+     * if necessary)
+     * Add address test and credit card info test in its place.
+     */
 
     @Test
-    public void setPassword() {
+    public void setAddress() {
         PrivateUserInfo privateUserInfo = new PrivateUserInfo();
-        privateUserInfo.setPassword("my password");
+        privateUserInfo.setAddress("Rogers Place");
         try {
-            privateUserInfo.setPassword("Some password that is way too long to be a valid password "
-                    + "and will cause an exception to be thrown");
+            privateUserInfo.setAddress("Some address which is invalid and causes an exception" +
+                    "to be thrown");
+            assertTrue(false);
+        }
+        catch (Exception e) {}
+    }
+
+    @Test
+    public void setCreditCard() {
+        PrivateUserInfo privateUserInfo = new PrivateUserInfo();
+        privateUserInfo.setCreditCard("0000-0000-0000-0000");
+        try {
+            privateUserInfo.setCreditCard("Some fake credit card number + identification");
             assertTrue(false);
         }
         catch (Exception e) {}

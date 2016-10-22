@@ -37,4 +37,20 @@ public class RequestControllerTest {
         requestController.deleteRequest(request);
         assertFalse(userManager.getRequests().has(request));
     }
+
+    /**
+     * UC 15 Driver Receives Payment
+     * US 05.01.01 As a Driver, I want to Accept a Request I agree with and Accept that
+     * offered payment upon completion.
+     */
+
+    @Test
+    public void acceptRequest() {
+        UserManager userManager = new UserManager();
+        Request request = new Request();
+        RequestController requestController = new RequestController(userManager);
+        requestController.acceptRequest(request);
+        assertFalse(userManager.getRequests().has(request));
+    }
+
 }

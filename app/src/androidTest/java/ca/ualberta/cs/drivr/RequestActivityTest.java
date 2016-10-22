@@ -72,4 +72,5 @@ public class RequestActivityTest extends ActivityInstrumentationTestCase2<Reques
         // We want 2 occurrences: one in the text view and one on the map
         assertTrue(solo.waitForText(destination, 2, 3000));
     }
+
 }

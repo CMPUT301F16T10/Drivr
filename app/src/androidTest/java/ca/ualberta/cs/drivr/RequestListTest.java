@@ -104,4 +104,71 @@ public class RequestListTest {
         assertEquals(1, requestsList.getRequests(RequestState.ACCEPTED).size());
         assertEquals(2, requestsList.getRequests(RequestState.DECLINED).size());
     }
+
+    /**
+     * UC 16 Driver Views Requests
+     * US 05.02.01 As a Driver, I want to view a list of things I have Accepted that are Pending,
+     * each Request with its description, and locations.
+     */
+
+    @Test
+    public void getRequestsForDriver() {
+        RequestsList requestsList = new RequestsList();
+        Request request1 = new Request();
+        Request request2 = new Request();
+        Request request3 = new Request();
+        request1.setRequestState(RequestState.COMPLETED);
+        request2.setRequestState(RequestState.CONFIRMED);
+        request3.setRequestState(RequestState.PENDING);
+        requestsList.add(request1);
+        requestsList.add(request2);
+        requestsList.add(request3);
+        assertEquals(0, requestsList.getRequests(RequestState.COMPLETED).size());
+        assertEquals(1, requestsList.getRequests(RequestState.PENDING).size());
+        assertEquals(2, requestsList.getRequests(RequestState.DECLINED).size());
+    }
+
+    /**
+     * UC 19 View Confirmed Requests Offline
+     * US 08.01.01 As a Driver, I want to see Requests that I already Accepted while Offline.
+     */
+
+    @Test
+    public void getRequestsForDriverOffline() {
+        RequestsList requestsList = new RequestsList();
+        Request request1 = new Request();
+        Request request2 = new Request();
+        Request request3 = new Request();
+        request1.setRequestState(RequestState.COMPLETED);
+        request2.setRequestState(RequestState.CONFIRMED);
+        request3.setRequestState(RequestState.PENDING);
+        requestsList.add(request1);
+        requestsList.add(request2);
+        requestsList.add(request3);
+        assertEquals(0, requestsList.getRequests(RequestState.COMPLETED).size());
+        assertEquals(1, requestsList.getRequests(RequestState.PENDING).size());
+        assertEquals(2, requestsList.getRequests(RequestState.DECLINED).size());
+    }
+
+    /**
+     * UC 20 Rider View Requests Offline
+     * US 08.02.01 As a Rider, I want to see Requests that I have made while Offline.
+     */
+
+    @Test
+    public void getRequestsForRiderOffline() {
+        RequestsList requestsList = new RequestsList();
+        Request request1 = new Request();
+        Request request2 = new Request();
+        Request request3 = new Request();
+        request1.setRequestState(RequestState.COMPLETED);
+        request2.setRequestState(RequestState.DECLINED);
+        request3.setRequestState(RequestState.ACCEPTED);
+        requestsList.add(request1);
+        requestsList.add(request2);
+        requestsList.add(request3);
+        assertEquals(0, requestsList.getRequests(RequestState.COMPLETED).size());
+        assertEquals(1, requestsList.getRequests(RequestState.PENDING).size());
+        assertEquals(2, requestsList.getRequests(RequestState.DECLINED).size());
+    }
 }

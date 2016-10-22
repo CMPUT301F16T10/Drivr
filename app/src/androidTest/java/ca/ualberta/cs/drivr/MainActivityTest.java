@@ -86,4 +86,17 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         assertTrue(solo.waitForText("West Edmonton Mall"));
     }
 
+    /**
+     * UC 13 Browse And Search Open Requests
+     * US 04.01.01 US 04.01.01 As a Driver, I want to browse and search for open
+     * Requests by Geo-location.
+     */
+
+    public void searchRequestsByGeolocation() {
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+        solo.clickOnText("Source");
+        final String source = solo.getText("Source").getText().toString();
+        // We want 2 occurrences: one in the text view and one on the map
+        assertTrue(solo.waitForText(source, 2, 3000));
+    }
 }
