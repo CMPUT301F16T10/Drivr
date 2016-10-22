@@ -30,4 +30,9 @@ public class RequestController {
     public void deleteRequest(Request request) {
         throw new UnsupportedOperationException();
     }
+
+    public void acceptRequest(Request request) {
+        throw new UnsupportedOperationException();
+    }
+
 }

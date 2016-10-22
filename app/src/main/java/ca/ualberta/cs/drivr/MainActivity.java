@@ -26,6 +26,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/**
+ * Setting this up for JavaDocs.
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

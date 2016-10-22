@@ -73,8 +73,6 @@ public class RequestTest {
         assertEquals("Street2", request.getDestination());
     }
 
-
-
     /*
     * UC 24 Driver View Locations
     * US 10.02.01 As a Driver, I want to view start and end Geo-locations on a map for a Request.

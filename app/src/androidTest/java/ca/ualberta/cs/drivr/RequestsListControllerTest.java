@@ -104,4 +104,24 @@ public class RequestsListControllerTest {
         requestsListController.completeRequest(request);
         assertEquals(RequestState.COMPLETED, request.getRequestState());
     }
+
+    /**
+     * UC 22 Driver Accepts Requests Offline
+     * US 08.04.01 As a Driver, I want to Accept Requests that will be sent once I
+     * get connectivity again.
+     */
+
+    @Test
+    public void acceptRequestOffline() {
+        UserManager userManager = new UserManager();
+        Request request = new Request();
+        userManager.getRequests().add(request);
+        RequestsListController requestsListController = new RequestsListController(userManager);
+        try {
+            requestsListController.acceptRequest(request);
+            assertEquals(RequestState.ACCEPTED, request.getRequestState());
+        } catch (Exception e) {
+
+        }
+    }
 }
