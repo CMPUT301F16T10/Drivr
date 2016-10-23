@@ -28,7 +28,6 @@ import static org.junit.Assert.assertEquals;
 
 public class RequestControllerTest {
 
-
     @Test
     public void deleteRequest() {
         UserManager userManager = new UserManager();
@@ -43,7 +42,6 @@ public class RequestControllerTest {
      * US 05.01.01 As a Driver, I want to Accept a Request I agree with and Accept that
      * offered payment upon completion.
      */
-
     @Test
     public void acceptRequest() {
         UserManager userManager = new UserManager();

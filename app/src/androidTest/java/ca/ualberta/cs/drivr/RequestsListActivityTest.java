@@ -56,8 +56,6 @@ public class RequestsListActivityTest extends ActivityInstrumentationTestCase2<R
      * UC 9 User Request Status
      * US 02.01.01 As a User, I want to see the status of a Request that I am involved in
      */
-
-
     public void testClickOnRequest() {
         solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
         final Request request = getActivity().getRequest(0);
@@ -81,8 +79,6 @@ public class RequestsListActivityTest extends ActivityInstrumentationTestCase2<R
      * UC 5 Rider Contacts Driver
      * US 01.05.01 As a Rider, I want to be able to phone or email the Driver who Accepted a Request.
      */
-
-
     public void testCallDriver() {
         solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
         ListView listView = (ListView)solo.getView("pending requests");

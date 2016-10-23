@@ -86,6 +86,4 @@ public class UserManagerTest {
         }
         catch (Exception e) {}
     }
-
-    //Test for setPassword was here but now it has been removed.
 }

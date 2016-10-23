@@ -25,17 +25,15 @@ import static org.junit.Assert.assertEquals;
  * Created by adam on 2016-10-12.
  */
 
+/**
+ * Testing for swaps in Modes
+ * Rider to Driver.
+ * Metric to Imperial.
+ */
 public class SettingsControllerTest {
 
-    /**
-     * Testing for swaps in Modes
-     * Rider to Driver.
-     * Metric to Imperial.
-     *
-     */
-
     @Test
-    public void setUserMode(UserMode userMode) {
+    public void setUserMode() {
         UserManager userManager = new UserManager();
         SettingsController settingsController = new SettingsController(userManager);
         settingsController.setUserMode(UserMode.DRIVER);
@@ -45,7 +43,7 @@ public class SettingsControllerTest {
     }
 
     @Test
-    public void changeUnits(MapUnits unitType) {
+    public void changeUnits() {
         UserManager userManager = new UserManager();
         SettingsController settingsController = new SettingsController(userManager);
         settingsController.setMapUnits(MapUnits.METRIC);
