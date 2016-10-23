@@ -29,12 +29,6 @@ import static org.junit.Assert.assertEquals;
 
 public class RequestListTest {
 
-
-    /**
-     * Basic Tests for List Functions
-     *
-     */
-
     @Test
     public void add() {
         RequestsList requestsList = new RequestsList();
@@ -86,8 +80,6 @@ public class RequestListTest {
      *  US 02.01.01 As a User, I want to see the status of a Request that I am involved in
      *
      */
-
-
     @Test
     public void getRequests() {
         RequestsList requestsList = new RequestsList();
@@ -110,7 +102,6 @@ public class RequestListTest {
      * US 05.02.01 As a Driver, I want to view a list of things I have Accepted that are Pending,
      * each Request with its description, and locations.
      */
-
     @Test
     public void getRequestsForDriver() {
         RequestsList requestsList = new RequestsList();
@@ -132,7 +123,6 @@ public class RequestListTest {
      * UC 19 View Confirmed Requests Offline
      * US 08.01.01 As a Driver, I want to see Requests that I already Accepted while Offline.
      */
-
     @Test
     public void getRequestsForDriverOffline() {
         RequestsList requestsList = new RequestsList();
@@ -154,7 +144,6 @@ public class RequestListTest {
      * UC 20 Rider View Requests Offline
      * US 08.02.01 As a Rider, I want to see Requests that I have made while Offline.
      */
-
     @Test
     public void getRequestsForRiderOffline() {
         RequestsList requestsList = new RequestsList();

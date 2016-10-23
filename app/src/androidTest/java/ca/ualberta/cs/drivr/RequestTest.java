@@ -40,7 +40,7 @@ public class RequestTest {
     }
 
     @Test
-    public void getRider(){
+    public void getRider() {
         User rider = new User();
         User driver = new User();
         Request request = new Request(rider, driver, null, null);
@@ -48,7 +48,7 @@ public class RequestTest {
     }
 
     @Test
-    public void driverAcceptedRequest(){
+    public void driverAcceptedRequest() {
         User rider = new User();
         User driver = new User();
         Request request = new Request(rider, driver, null, null);
@@ -60,11 +60,9 @@ public class RequestTest {
     /**
      * UC 1 Rider Specifies Request Locations
      * US 01.01.01 As a Rider, I want to request rides between two locations.
-     *
      */
-
     @Test
-    public void riderSpecifyLocation(){
+    public void riderSpecifyLocation() {
         User rider = new User();
         Location source = new Location("Street");
         Location destination = new Location("Street2");
@@ -73,13 +71,12 @@ public class RequestTest {
         assertEquals("Street2", request.getDestination());
     }
 
-    /*
-    * UC 24 Driver View Locations
-    * US 10.02.01 As a Driver, I want to view start and end Geo-locations on a map for a Request.
+    /**
+     * UC 24 Driver View Locations
+     * US 10.02.01 As a Driver, I want to view start and end Geo-locations on a map for a Request.
      */
-
     @Test
-    public void getRiderSourceAndDestination(){
+    public void getRiderSourceAndDestination() {
         User rider = new User();
         Location source = new Location("Some street");
         Location destination = new Location("Some avenue");

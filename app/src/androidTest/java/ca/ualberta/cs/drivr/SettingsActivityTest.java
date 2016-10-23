@@ -31,12 +31,6 @@ import static org.junit.Assert.assertEquals;
 
 public class SettingsActivityTest extends ActivityInstrumentationTestCase2<SettingsActivity> {
 
-
-    /**
-     * Testing for our Settings Activity
-     *
-     */
-
     private Solo solo;
 
     public SettingsActivityTest() {

@@ -28,12 +28,10 @@ import static org.junit.Assert.assertEquals;
 
 public class RequestsListControllerTest {
 
-
     /**
      * UC 18 Driver Offer Accepted
      * US 05.04.01 As a Driver, I want to be notified if my ride offer was Confirmed.
      */
-
     @Test
     public void acceptRequest() {
         UserManager userManager = new UserManager();
@@ -51,7 +49,6 @@ public class RequestsListControllerTest {
      * This allows us to choose from a list of Acceptances if more than one Driver Accepts simultaneously.
      *
      */
-
     @Test
     public void confirmRequest() {
         UserManager userManager = new UserManager();
@@ -77,8 +74,6 @@ public class RequestsListControllerTest {
      * UC 4 Rider Cancels Requests
      * US 01.04.01 As a Rider, I want to cancel Requests.
      */
-
-
     @Test
     public void cancelRequest() {
         UserManager userManager = new UserManager();
@@ -94,7 +89,6 @@ public class RequestsListControllerTest {
      * US 01.07.01 As a Rider, I want to Confirm the completion of a Request and enable payment.
      * Testing for Completed request
      */
-
     @Test
     public void completeRequest() {
         UserManager userManager = new UserManager();
@@ -110,18 +104,13 @@ public class RequestsListControllerTest {
      * US 08.04.01 As a Driver, I want to Accept Requests that will be sent once I
      * get connectivity again.
      */
-
     @Test
     public void acceptRequestOffline() {
         UserManager userManager = new UserManager();
         Request request = new Request();
         userManager.getRequests().add(request);
         RequestsListController requestsListController = new RequestsListController(userManager);
-        try {
-            requestsListController.acceptRequest(request);
-            assertEquals(RequestState.ACCEPTED, request.getRequestState());
-        } catch (Exception e) {
-
-        }
+        requestsListController.acceptRequest(request);
+        assertEquals(RequestState.ACCEPTED, request.getRequestState());
     }
 }
