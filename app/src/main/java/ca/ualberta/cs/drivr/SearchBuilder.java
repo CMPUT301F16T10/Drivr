@@ -9,7 +9,7 @@ package ca.ualberta.cs.drivr;
 public class SearchBuilder {
 
 //    search near a string
-    public String searchString(String searterm){
+    public String searchString(String searchterm){
         throw new UnsupportedOperationException();
     }
 

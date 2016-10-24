@@ -4,6 +4,8 @@ import android.net.ConnectivityManager;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotSame;
@@ -18,7 +20,6 @@ public class ElasticSearchTest {
         Request request = new Request();
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.requestPost(request);
-//        request.setRequestId(requestId);
         Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
         assertEquals(request, loadedRequest);
     }
@@ -53,11 +54,11 @@ public class ElasticSearchTest {
         User user = new User();
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.saveUser(user);
-//        elastic search will only update the userId if it successfully posts to the database
+        //        elastic search will only update the userId if it successfully posts to the database
         assertFalse(user.getUserId().isEmpty());
     }
 
-//    This tests both the load and save functions
+    //    This tests both the load and save functions
     @Test
     public void testLoadUser(){
         User user = new User("John", "email@email", "123-456-7890");
@@ -71,7 +72,19 @@ public class ElasticSearchTest {
 
     @Test
     public void testOnNetworkStateChanged(){
-        //this needs some work
+        Request request = new Request();
+
+        ElasticSearch elasticSearch = new ElasticSearch();
+        ArrayList<Request> requestArrayList = elasticSearch.getOfflineRequests();
+        requestArrayList.add(request);
+        elasticSearch.onNetworkStateChanged();
+        Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
+        assertEquals(request, loadedRequest);
+
+
+//        elasticSearch.setOfflineRequests();
+
+
 
     }
 }
