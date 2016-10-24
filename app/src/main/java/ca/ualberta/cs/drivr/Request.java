@@ -28,13 +28,15 @@ import java.util.Date;
 
 public class Request {
 
-    private User rider;
-    private User driver;
+    private PublicUserInfo rider;
+    private PublicUserInfo driver;
     private Date date;
     private Currency cost;
     private RequestState requestState;
     private Location source;
     private Location destination;
+    private String requestId;
+    private String synced;
 
     public Request() { throw new UnsupportedOperationException(); }
 
@@ -80,5 +82,21 @@ public class Request {
 
     public void setRider(PublicUserInfo rider) {
         this.rider = rider;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public String getSynced() {
+        return synced;
+    }
+
+    public void setSynced(String synced) {
+        this.synced = synced;
     }
 }

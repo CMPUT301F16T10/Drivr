@@ -25,6 +25,7 @@ public class User {
 
     private PrivateUserInfo privateInfo;
     private PublicUserInfo publicInfo;
+    private String userId;
 
     public User() { throw new UnsupportedOperationException(); }
 
@@ -44,5 +45,13 @@ public class User {
 
     public void setPublicInfo(PublicUserInfo publicInfo) {
         this.publicInfo = publicInfo;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
