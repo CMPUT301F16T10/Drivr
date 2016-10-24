@@ -16,7 +16,7 @@ import static junit.framework.Assert.assertNotSame;
 
 public class ElasticSearchTest {
     @Test
-    public void testRequestPost(){
+    public void requestPost(){
         Request request = new Request();
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.requestPost(request);
@@ -25,7 +25,7 @@ public class ElasticSearchTest {
     }
 
     @Test
-    public void testRequestUpdate(){
+    public void requestUpdate(){
         Request request = new Request();
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.requestPost(request);
@@ -41,7 +41,7 @@ public class ElasticSearchTest {
     }
 
     @Test
-    public void testLoadRequest(){
+    public void loadRequest(){
         Request request = new Request();
         ElasticSearch elasticSearch =  new ElasticSearch();
         elasticSearch.requestPost(request);
@@ -50,7 +50,7 @@ public class ElasticSearchTest {
     }
 
     @Test
-    public void testSaveUser(){
+    public void saveUser(){
         User user = new User();
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.saveUser(user);
@@ -71,7 +71,7 @@ public class ElasticSearchTest {
     }
 
     @Test
-    public void testOnNetworkStateChanged(){
+    public void onNetworkStateChanged(){
         Request request = new Request();
 
         ElasticSearch elasticSearch = new ElasticSearch();

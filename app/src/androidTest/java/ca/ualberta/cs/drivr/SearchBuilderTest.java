@@ -13,7 +13,7 @@ import static junit.framework.Assert.assertEquals;
 public class SearchBuilderTest {
 
     @Test
-    public void testSearchString(){
+    public void searchString(){
         SearchBuilder searchBuilder = new SearchBuilder();
 
         String searchTerm = searchBuilder.searchString("icecream");
@@ -23,7 +23,7 @@ public class SearchBuilderTest {
 
 
     @Test
-    public void testSearchLocation(){
+    public void searchLocation(){
         SearchBuilder searchBuilder = new SearchBuilder();
         android.location.Location location = new android.location.Location("Universtiy of Alberta");
 //        location.set(new Location("U"));
