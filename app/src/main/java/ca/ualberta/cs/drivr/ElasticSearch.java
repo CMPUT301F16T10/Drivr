@@ -10,17 +10,74 @@ import java.util.ArrayList;
 
 /**
  * Created by colton on 2016-10-23.
- * This is the class that interacts with the elastic search databse through RESTFUL commands
+ * Edited by tiegan on 2016-10-30.
+ * This is the class that interacts with the elastic search database through RESTFUL commands
+ * (so isn't it a controller? Or uses a controller?)
  */
 
-//THis is the class that interacts with the elastic search database
+/**
+ * For location (by geo):
+ * "geo_distance": {
+ *    "distance": "50km",
+ *    "location": [lat, lon] - gotten from given geo-distance
+ * }
+ *
+ * For location (by search):
+ * get lat/lon from something - Google? another function?
+ * "geo_distance": {
+ *     "distance": "50km"
+ *     "location": [lat, lon]
+ * }
+ * (It's literally the same as above. You just need to do one extra step to see if it's a valid location)
+ *
+ * For user profile:
+ * "username": (given username)
+ * (usernames should be unique, should be fine)
+ *
+ * For requests:
+ * "username": (given username)
+ * (we're searching for rider/driver's requests, not requests near them, so identifier is just
+ * their username)
+ * (difference between this and user profile is just where we're getting the info from/what we're returning)
+ *
+ * Requests:
+ * ID - id of request in ES
+ * Rider - Name of user who made the request
+ * Driver - Name of user who accepted request (initially NULL)
+ * Status - status of the request (initially pending)
+ * Source Location - Lat/Lon of location rider wants to be picked up from
+ * Destination Location - Lat/Lon of location
+ * Payment - Amount request will pay out (driver)/be paid (rider)
+ * Approx. time - Amount of time request will take
+ * Pick-up time - Time of pick-up (NULL if not specified - will just be given as "pick me
+ * up right fucking now")
+ *
+ * User Profile:
+ * Username
+ * Profile image (ummmm, yeah, have fun with that)
+ * Name
+ * E-mail
+ * Phone #
+ * Address
+ * Credit card info (stored, not gotten)
+ *
+ * Offline requests:
+ * -Maybe store in something like JSON? (don't want to have to repeat making the request)
+ * -Update it each time a call to ES is made (when connected) - basically caching it
+ *
+ * Offline/Online behaviour is not to be implemented right now (US 8), but will be worked upon
+ *
+ * Here's just my thinking of how to do this:
+ * Use SearchBuilder as the Controller (maybe change the name to better reflect)
+ * Use ElasticSearch (this) as Model - store info gotten, send info to ES
+ */
 
 public class ElasticSearch {
     private ArrayList<Request> offlineRequests;
     private User user;
 
 
-    public ArrayList<Request> requestSeach(String searchTerm){
+    public ArrayList<Request> requestSearch(String searchTerm){
         throw new UnsupportedOperationException();
     }
 

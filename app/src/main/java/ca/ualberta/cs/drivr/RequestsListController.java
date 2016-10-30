@@ -33,7 +33,10 @@ public class RequestsListController {
 
     public void declineRequest(Request request) { throw new UnsupportedOperationException(); }
 
-    public void cancelRequest(Request request) { throw new UnsupportedOperationException(); }
+    public void cancelRequest(Request request) {
+        int index = 0; // comes from clicking on request
+        userManager.getRequests().remove(index);
+    }
 
     public void completeRequest(Request request) { throw new UnsupportedOperationException(); }
 }
