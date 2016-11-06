@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 /**
  * Created by colton on 2016-10-23.
- * This is the class that interacts with the elastic search databse through RESTFUL commands
  */
 
 //THis is the class that interacts with the elastic search database
