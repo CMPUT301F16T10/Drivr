@@ -49,7 +49,10 @@
         <activity android:name=".RequestsListActivity" />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC7nQ8Bgdbzff9SI0UyXuD9DeY8baDVF38"/>
     </application>
 
 </manifest>
