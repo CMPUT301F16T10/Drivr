@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="divider" type="id">divider</item>
+    <item name="horizontalDivider" type="id">horizontalDivider</item>
+    <item name="verticalDivider" type="id">verticalDivider</item>
+</resources>

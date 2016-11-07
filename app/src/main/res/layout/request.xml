@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_person_black_24dp"
+        android:scaleType="fitXY"
+        android:minHeight="72dp"
+        android:minWidth="72dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/profilePictureImageView"
+        android:layout_alignBottom="@+id/imageView3" />
+
+    <TextView
+        android:text="Driver Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/driverNameTextView"
+        android:layout_toEndOf="@+id/profilePictureImageView"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingTop="4dp"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:text="Eta : 15 minutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/driverNameTextView"
+        android:layout_toEndOf="@+id/profilePictureImageView"
+        android:paddingTop="4dp"
+        android:id="@+id/etaTextView" />
+
+    <TextView
+        android:text="Current Location to Destination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/routeTextView"
+        android:layout_below="@id/etaTextView"
+        android:paddingTop="4dp"
+        android:layout_toEndOf="@+id/profilePictureImageView" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_call_black_24dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:scaleType="fitXY"
+        android:minHeight="36dp"
+        android:minWidth="36dp"
+        android:padding="4dp"
+        android:id="@+id/imageView2" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_email_black_24dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignParentEnd="true"
+        android:scaleType="fitXY"
+        android:minHeight="36dp"
+        android:minWidth="36dp"
+        android:padding="4dp"
+        android:id="@+id/imageView3" />
+
+
+    <View
+        android:id="@id/horizontalDivider"
+        android:layout_alignBottom="@id/profilePictureImageView"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="?android:attr/listDivider"/>
+
+    <TextView
+        android:text="Accept"
+        android:paddingLeft="72dp"
+        android:paddingTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/verticalDivider"
+        android:layout_alignTop="@id/horizontalDivider"
+        android:id="@+id/textView7" />
+
+    <View android:id="@id/verticalDivider"
+        android:layout_below="@id/horizontalDivider"
+        android:layout_width="2dp"
+        android:layout_height="18dp"
+        android:background="?android:attr/listDivider"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:text="Decline"
+        android:paddingRight="72dp"
+        android:paddingTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/verticalDivider"
+        android:layout_alignTop="@id/horizontalDivider"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView8" />
+
+</RelativeLayout>
