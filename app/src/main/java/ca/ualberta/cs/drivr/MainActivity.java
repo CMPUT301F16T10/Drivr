@@ -17,6 +17,10 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.Manifest;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -31,6 +35,9 @@ import android.view.MenuItem;
  */
 
 public class MainActivity extends AppCompatActivity {
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        Intent intent = new Intent(this, MapActivity.class);
+        startActivity(intent);
     }
 
     @Override
