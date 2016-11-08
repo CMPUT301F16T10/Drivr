@@ -1,7 +1,5 @@
 package ca.ualberta.cs.drivr;
 
-import android.location.Location;
-
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -10,13 +8,13 @@ import static junit.framework.Assert.assertEquals;
  * Created by colton on 2016-10-23.
  */
 
-public class SearchBuilderTest {
+public class ElasticSearchControllerTest {
 
     @Test
     public void searchString(){
-        SearchBuilder searchBuilder = new SearchBuilder();
+        ElasticSearchController elasticSearchController = new ElasticSearchController();
 
-        String searchTerm = searchBuilder.searchString("icecream");
+        String searchTerm = elasticSearchController.searchString("icecream");
 
         assertEquals(searchTerm, "{some json}");
     }
@@ -24,11 +22,11 @@ public class SearchBuilderTest {
 
     @Test
     public void searchLocation(){
-        SearchBuilder searchBuilder = new SearchBuilder();
+        ElasticSearchController elasticSearchController = new ElasticSearchController();
         android.location.Location location = new android.location.Location("Universtiy of Alberta");
 //        location.set(new Location("U"));
 
-        String searchTerm = searchBuilder.searchLocation(location);
+        String searchTerm = elasticSearchController.searchLocation(location);
 
         assertEquals(searchTerm, "{some json}");
 
