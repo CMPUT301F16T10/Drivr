@@ -18,6 +18,10 @@
 package ca.ualberta.cs.drivr;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -29,10 +33,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.style.TtsSpan;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -44,10 +54,18 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 //import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 //import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -57,13 +75,28 @@ import com.google.android.gms.maps.model.LatLngBounds;
  * Setting this up for JavaDocs.
  */
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        OnMapReadyCallback {
 
     private static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private LatLng latLng;
     private PlaceAutocompleteFragment autocompleteFragment;
+    private GoogleMap mMap;
+    private SupportMapFragment mFragment;
+    private Activity activity;
+    private MapController mapController;
+    private ArrayList<LatLng> latLngs = new ArrayList<LatLng>();
+    private Context context;
+
+    // Location for User
+    double myLatitude = 0;
+    double myLongitude = 0;
+
+    private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+
 //    private  mLatitudeText;
 //    private Location currentLocation;
 
@@ -71,8 +104,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Looks better without Blue Bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        context = getApplicationContext();
+
         setSupportActionBar(toolbar);
 
         // Create an instance of GoogleAPIClient.
@@ -83,6 +124,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     .addApi(LocationServices.API)
                     .build();
         }
+
+        mFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.map);
+
+
+        // get map
+        mFragment.getMapAsync(this);
+
 
 
         autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
@@ -99,6 +147,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onPlaceSelected(Place place) {
                 Log.i(TAG, "Place: " + place.getName() + ", :" + place.getLatLng());
+                // Checking Button 
+                Toast.makeText(context,"Test For Place",Toast.LENGTH_LONG).show();
+
             }
 
             @Override
@@ -115,6 +166,48 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         .setAction("Action", null).show();
             }
         });
+    }
+
+
+
+    // Map
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        mMap = googleMap;
+        final MapController mapController = new MapController(mMap);
+
+        //googleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+
+        LatLng edmonton = new LatLng(53.631611, -113.323975);
+
+
+
+        mapController.addDestination(edmonton);
+        mapController.zoomToCurrentLocation();
+
+
+    }
+
+     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE){
+            if(resultCode == RESULT_OK){
+                Place place = PlaceAutocomplete.getPlace(this,data);
+
+            } else if(resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this,data);
+            }
+        } else if (resultCode == RESULT_CANCELED){
+            // do nothing
+        }
+    }
+
+    private void updateMap() {
+        for (LatLng places : latLngs) {
+            mMap.clear();
+            mapController.addDestination(places);
+        }
     }
 
     @Override

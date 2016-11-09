@@ -29,6 +29,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     private Solo solo;
 
+
     /**
      * Testing our Main Activity can open and have access to all other Activities
      */
