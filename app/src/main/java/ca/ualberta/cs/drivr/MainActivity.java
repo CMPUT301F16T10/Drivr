@@ -23,6 +23,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -44,6 +45,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.akexorcist.googledirection.DirectionCallback;
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.TransportMode;
+import com.akexorcist.googledirection.model.Direction;
+import com.akexorcist.googledirection.util.DirectionConverter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -77,7 +83,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        OnMapReadyCallback {
+        OnMapReadyCallback,
+        DirectionCallback{
 
     private static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
@@ -90,6 +97,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private MapController mapController;
     private ArrayList<LatLng> latLngs = new ArrayList<LatLng>();
     private Context context;
+    LatLng test = new LatLng(53.5232,-113.5263);
+    LatLng test2 = new LatLng(53.5225,-113.6242);
+    private String serveryKey = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
 
     // Location for User
     double myLatitude = 0;
@@ -132,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mFragment.getMapAsync(this);
 
 
-
         autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 //        LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
@@ -148,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             public void onPlaceSelected(Place place) {
                 Log.i(TAG, "Place: " + place.getName() + ", :" + place.getLatLng());
                 // Checking Button
-                Toast.makeText(context,"Test For Place",Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Test For Place", Toast.LENGTH_LONG).show();
 
             }
 
@@ -169,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
 
-
     // Map
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -182,10 +190,50 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         LatLng edmonton = new LatLng(53.631611, -113.323975);
         mapController.addDestination(edmonton);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        }
+
+        //test
+        requestDirection();
+    }
+
+
+    public void requestDirection(){
+
+
+
+        GoogleDirection.withServerKey(serveryKey)
+                .from(test)
+                .to(test2)
+                .transitMode(TransportMode.DRIVING)
+                .execute(this);
+
 
     }
 
-     @Override
+    //https://github.com/akexorcist/Android-GoogleDirectionLibrary
+    @Override
+    public void onDirectionSuccess(Direction direction, String rawBody) {
+        if (direction.isOK()) {
+            mMap.addMarker(new MarkerOptions().position(test));
+            mMap.addMarker(new MarkerOptions().position(test2));
+
+            ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
+            mMap.addPolyline(DirectionConverter.createPolyline(this,directionPositionList,3, Color.RED));
+
+
+        }
+    }
+
+    @Override
+    public void onDirectionFailure(Throwable t) {
+
+        Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE){
             if(resultCode == RESULT_OK){
