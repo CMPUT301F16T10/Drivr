@@ -3,25 +3,33 @@ package ca.ualberta.cs.drivr;
 import android.*;
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.provider.Settings;
 import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.common.ConnectionResult;
@@ -40,11 +48,25 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleMap.OnMyLocationButtonClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener{
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private boolean mPermissionDenied = false;
@@ -57,6 +79,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     Location location;
     Location myLocation;
     LocationManager locationManager;
+    private LocationListener locationListener;
+
+    Context context;
+
+
+
+    ArrayList<LatLng> markerPoints;
+    double mLatitude = 0;
+    double mLongitude = 0;
+
+
+    private LatLng camera = new LatLng(37.782437, -122.4281893);
+    private LatLng origin = new LatLng(37.7849569, -122.4068855);
+    private LatLng destination = new LatLng(37.7814432, -122.4460177);
+
 
 
 
@@ -64,19 +101,94 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // have map fullscreen
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_map);
 
-        ;
+
+        markerPoints = new ArrayList<LatLng>();
+
+        // Get google play availabitliy
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getBaseContext());
+
+        // check for connection
+        if (status != ConnectionResult.SUCCESS) {
+            int requestCode = 10;
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, this, requestCode);
+            dialog.show();
+        }
 
 
         //checkPlayServices();
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        // create fragment
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
+
+        // get map
+        mapFragment.getMapAsync(this);
+        mMap = mapFragment.getMap();
+        mMap.setMyLocationEnabled(true);
+
+        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener(){
+            @Override
+            public void onMyLocationChange(Location location) {
+                mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(),location.getLongitude())).title("Test"));
+            }
+        });
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        Criteria locationCriteria = new Criteria();
+        locationCriteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        locationCriteria.setAltitudeRequired(false);
+        locationCriteria.setBearingRequired(false);
+        locationCriteria.setCostAllowed(true);
+        locationCriteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
+
+        String providerName = locationManager.getBestProvider(locationCriteria,true);
+
+        // update Location
+        locationListener = new LocationListener() {
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                mLatitude = location.getLatitude();
+                mLongitude = location.getLongitude();
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onLocationChanged(Location location) {
+
+            }
+            @Override
+            public void onProviderDisabled(String s){
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        };
+        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+
+        if(providerName != null &&locationManager.isProviderEnabled(providerName)) {
+            locationManager.requestLocationUpdates(providerName, 1000, 0, locationListener);
+
+        }
+        else{
+            Toast.makeText(context, "GPS OFF", Toast.LENGTH_LONG).show();
+            Intent settings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(settings);
+        }
        /* if( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             AppCompatActivity.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, LocationService.MY_PERMISSION_ACCESS_COURSE_LOCATION);
         }*/
@@ -87,39 +199,199 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
         */
 
+        // map exisits
+        if (mMap != null) {
 
+            /*// enable My Location
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (ContextCompat.checkSelfPermission(this,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    buildGoogleApiClient();
+                    mMap.setMyLocationEnabled(true);
+                }
+            } else {
+                buildGoogleApiClient();
+                mMap.setMyLocationEnabled(true);
+            }*/
+
+
+            // Location Mananager
+           // LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+
+            // Create a criteria object
+           // Criteria criteria = new Criteria();
+
+            // Provider
+           // String provider = locationManager.getBestProvider(criteria, true);
+
+            // Get last know location
+            //Location location = locationManager.getLastKnownLocation(provider);
+
+
+            // location chacnged
+          /*  if (location != null) {
+                onLocationChanged(location);
+            }*/
+
+            // Setting onclick event listener for the map
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+                @Override
+                public void onMapClick(LatLng point) {
+
+                    // Already two locations
+                    if (markerPoints.size() > 1) {
+                        markerPoints.clear();
+                        mMap.clear();
+                        LatLng startPoint = new LatLng(mLatitude, mLongitude);
+                        drawMarker(startPoint);
+                    }
+
+                    drawMarker(point);
+                }
+
+
+            });
+
+
+        }
     }
 
+
+
+
+
+
+    // Used To Create Url to Send to Google Api
+    //http://wptrafficanalyzer.in/blog/drawing-driving-route-directions-between-two-locations-using-google-directions-in-google-map-android-api-v2/
+    private String getDirectionsUrl(LatLng origin,LatLng dest){
+
+        // Origin of route
+        String str_origin = "origin="+origin.latitude+","+origin.longitude;
+
+        // Destination of route
+        String str_dest = "destination="+dest.latitude+","+dest.longitude;
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+
+        // Building the parameters to the web service
+        String parameters = str_origin+"&"+str_dest+"&"+sensor;
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
+
+        return url;
+    }
+
+
+
+
+
+    private void drawMarker(LatLng point){
+        // Adding new item to the ArrayList
+        markerPoints.add(point);
+
+        // Creating MarkerOptions
+        MarkerOptions options = new MarkerOptions();
+
+        // Setting the position of the marker
+        options.position(point);
+
+        /**
+         * For the start location, the color of marker is GREEN and
+         * for the end location, the color of marker is RED.
+         */
+        if(markerPoints.size()==1){
+            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        }else if(markerPoints.size()==2){
+            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        }
+
+        // Add new marker to the Google Map Android API V2
+        mMap.addMarker(options);
+    }
+
+
+
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+
 
 
 
     @Override
     public void onMapReady(GoogleMap map) {
 
+
         mMap = map;
-        Criteria criteria = new Criteria();
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        LatLng edmonton = new LatLng(53.631611, -113.323975);
+        mMap.addMarker(new MarkerOptions().position(edmonton).title("Edmonton"));
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                buildGoogleApiClient();
-                mMap.setMyLocationEnabled(true);
-            }
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        if (location != null) {
+            mLatitude = location.getLatitude();
+            mLongitude = location.getLongitude();
         }
         else {
-            buildGoogleApiClient();
+            mLatitude = 55.631611;
+            mLongitude = -113.323975;
+        }
+
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ){
+            Toast.makeText(context, "Not Working", Toast.LENGTH_LONG).show();
+        }
+
+        else{
             mMap.setMyLocationEnabled(true);
         }
+
+        LatLng testplace = new LatLng(mLatitude, mLongitude);
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testplace, 5));
+
+       /* Criteria locationCriteria = new Criteria();
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        locationCriteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        locationCriteria.setAltitudeRequired(false);
+        locationCriteria.setBearingRequired(false);
+        locationCriteria.setCostAllowed(true);
+        locationCriteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
+
+        String providerName = locationManager.getBestProvider(locationCriteria,true);
+
+        if(providerName != null && locationManager.isProviderEnabled(providerName)) {
+
+        } else {
+            Toast.makeText(context, "turn on GPS", Toast.LENGTH_LONG).show();
+            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(myIntent);
+        }
+        */
+
+
+
+
+
+
+
+        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 13));
+
 
 
         // Add a Line
         //http://stackoverflow.com/questions/16262837/how-to-draw-route-in-google-maps-api-v2-from-my-location
 
-        PolylineOptions options = new PolylineOptions();
+       /* PolylineOptions options = new PolylineOptions();
 
         options.color(Color.parseColor("#CC0000FF"));
         options.width(5);
@@ -131,7 +403,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         options.add(place2);
         options.add(place);
 
-        mMap.addPolyline(options);
+        mMap.addPolyline(options); */
 
 
 
@@ -144,7 +416,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // http://stackoverflow.com/questions/18425141/android-google-maps-api-v2-zoom-to-current-location
 
         //Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-        location = getMyLocation();
+        /*location = getMyLocation();
         if (location != null)
         {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
@@ -158,13 +430,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
 
-        }
+        } */
 
 
 
 
 
-        mMap.setOnMyLocationButtonClickListener(this);
+        // Setting onclick event listener for the map
+
+
 
         // Move the Camera to a Location
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
@@ -172,40 +446,178 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
 
-
+    // http://www.androidtutorialpoint.com/intermediate/google-maps-draw-path-two-points-using-google-directions-google-map-android-api-v2/
 
     }
 
 
-    private Location getMyLocation() {
-        // Get location from GPS if it's available
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Location myLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        // Location wasn't found, check the next most accurate place for the current location
-        if (myLocation == null) {
-            Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-            // Finds a provider that matches the criteria
-            String provider = lm.getBestProvider(criteria, true);
-            // Use the provider to get the last known location
-            myLocation = lm.getLastKnownLocation(provider);
+
+    /*public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> > {
+
+
+        // Parsing the data in non-ui thread
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+            try {
+                jObject = new JSONObject(jsonData[0]);
+                DirectionsJSONParser parser = new DirectionsJSONParser();
+
+                // Starts parsing data
+                routes = parser.parse(jObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return routes;
         }
 
-        return myLocation;
+        // Executes in UI thread, after the parsing process
+        /* @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+
+
+
+            ArrayList<LatLng> points = null;
+            PolylineOptions lineOptions = null;
+            MarkerOptions markerOptions = new MarkerOptions();
+
+            // Traversing through all the routes
+            for (int i = 0; i < result.size(); i++) {
+                points = new ArrayList<LatLng>();
+                lineOptions = new PolylineOptions();
+
+                // Fetching i-th route
+                List<HashMap<String, String>> path = result.get(i);
+
+                // Fetching all the points in i-th route
+                for (int j = 0; j < path.size(); j++) {
+                    HashMap<String, String> point = path.get(j);
+
+                    double lat = Double.parseDouble(point.get("lat"));
+                    double lng = Double.parseDouble(point.get("lng"));
+                    LatLng position = new LatLng(lat, lng);
+
+                    points.add(position);
+                }
+
+                // Adding all the points in the route to LineOptions
+                lineOptions.addAll(points);
+                lineOptions.width(2);
+                lineOptions.color(Color.RED);
+            }
+
+            // Drawing polyline in the Google Map for the i-th route
+            mMap.addPolyline(lineOptions);
+        }
+    } */
+
+   /* public class DownloadTask extends AsyncTask<String, Integer, String> {
+
+
+
+        public DownloadTask() {
+
+        }
+
+        @Override
+        protected String doInBackground(String... url) {
+            // InputStream input = null;
+            //OutputStream output = null;
+            String data = "";
+
+            try {
+                data = downloadUrl(url[0]);
+            }
+            catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return  data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            ParserTask parserTask = new ParserTask();
+            parserTask.execute("result");
+        }
+        private String downloadUrl(String strUrl) throws IOException{
+            String data = "";
+            InputStream iStream = null;
+            HttpURLConnection urlConnection = null;
+
+            try{
+                URL url = new URL(strUrl);
+
+                urlConnection = (HttpURLConnection) url.openConnection();
+
+                urlConnection.connect();
+
+                iStream = urlConnection.getInputStream();
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+                StringBuffer sb = new StringBuffer();
+
+                String line = "";
+                while ( ( line = br.readLine()) != null){
+                    sb.append(line);
+                }
+                data = sb.toString();
+
+                br.close();
+            } catch (Exception e) {
+                Log.d("Exception downloading", e.toString());
+
+            } finally {
+                iStream.close();
+                urlConnection.disconnect();
+            }
+            return data;
+        }
+    } */
+
+
+    private void getMyLocation() {
+
+
+
+
+            mLatitude = location.getLatitude();
+            mLongitude = location.getLongitude();
+            LatLng point = new LatLng(mLatitude, mLongitude);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(point,12));
+            drawMarker(point);
+
+
     }
 
 
+    @Override
+    protected void onStart() {
+        buildGoogleApiClient();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
 
     protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        mGoogleApiClient.connect();
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+            mGoogleApiClient.connect();
+        }
     }
-
 
 
     /**
@@ -299,15 +711,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onConnected(Bundle bundle) {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-       /* if (ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        } */
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if(mLastLocation != null){
+            mLatitude = mLastLocation.getLatitude();
+            mLongitude = mLastLocation.getLongitude();
+
+        }
     }
 
     @Override
