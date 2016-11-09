@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onPlaceSelected(Place place) {
                 Log.i(TAG, "Place: " + place.getName() + ", :" + place.getLatLng());
-                // Checking Button 
+                // Checking Button
                 Toast.makeText(context,"Test For Place",Toast.LENGTH_LONG).show();
 
             }
@@ -175,16 +175,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
-        final MapController mapController = new MapController(mMap);
+        final MapController mapController = new MapController(mMap, context);
 
         //googleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
 
         LatLng edmonton = new LatLng(53.631611, -113.323975);
-
-
-
         mapController.addDestination(edmonton);
-        mapController.zoomToCurrentLocation();
 
 
     }

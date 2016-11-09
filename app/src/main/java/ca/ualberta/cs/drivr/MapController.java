@@ -1,5 +1,6 @@
 package ca.ualberta.cs.drivr;
 
+import android.content.Context;
 import android.location.Location;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,14 +25,22 @@ public class MapController {
     private Double myLatitude;
     private Double myLongitude;
 
+    private GPSTracker gpsTracker;
 
 
-    public MapController(GoogleMap map) {
+    public MapController(GoogleMap map, Context context) {
+        // initialize map
         this.map = map;
+        gpsTracker = new GPSTracker(context);
+        // initialize location
 
-        // Temporary
-        myLatitude = 53.5232;
-        myLongitude = -113.5263;
+        myLocation = gpsTracker.getMyLocation();
+        myLatitude = myLocation.getLatitude();
+        myLongitude = myLocation.getLongitude();
+
+        // Zoom map in to current Location
+        zoomToCurrentLocation();
+
     }
 
     // Call To add A Marker
