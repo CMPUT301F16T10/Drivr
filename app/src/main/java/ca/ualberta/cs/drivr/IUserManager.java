@@ -25,10 +25,6 @@ public interface IUserManager {
 
     User getUser();
 
-    PublicUserInfo getPublicUserInfo();
-
-    PrivateUserInfo getPrivateUserInfo();
-
     RequestsList getRequests();
 
     MapUnits getMapUnits();
