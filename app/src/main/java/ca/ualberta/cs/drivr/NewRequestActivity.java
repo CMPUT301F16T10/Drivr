@@ -5,7 +5,10 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -73,6 +76,15 @@ public class NewRequestActivity extends AppCompatActivity {
                 // Do nothing
             }
         });
+
+        // Setup listener for the create button
+        final Button createButton =  (Button) findViewById(R.id.new_request_create_button);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                generateRequest();
+            }
+        });
     }
 
     /**
@@ -97,5 +109,42 @@ public class NewRequestActivity extends AppCompatActivity {
         name.setText(sourcePlace.getName());
         TextView address = (TextView) findViewById(R.id.new_request_place_source_address);
         address.setText(sourcePlace.getAddress());
+    }
+
+    /**
+     * Gerenates a request from the input data and places it in the requests list. A successful call
+     * to this method will terminate the activity. An unsuccessful call to this method will display
+     * a message on the screen to tell the user what went wrong.
+     */
+    private void generateRequest() {
+        if (!placeHasCompleteInformation(sourcePlace)) {
+            Toast.makeText(this, "The starting location is not set.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (!placeHasCompleteInformation(destinationPlace)) {
+            Toast.makeText(this, "The destination location is not set.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Make the request
+        Request request = new Request(null, sourcePlace, destinationPlace);
+        // TODO: Store the request
+
+        finish();
+    }
+
+    /**
+     * Determines if a place has enough information to be put in a request. To be valid, a place
+     * needs to have at least either an address or a latitude/longitude location. This is so it can
+     * be identified uniquely on a map.
+     * @param place The pace to check
+     * @return True when valid, false otherwise
+     */
+    private static Boolean placeHasCompleteInformation(Place place) {
+        if (place == null)
+            return false;
+        Boolean addressIsValid = place.getAddress() != null && place.getAddress().length() > 0;
+        Boolean latLngIsValid = place.getLatLng() != null;
+        return addressIsValid || latLngIsValid;
     }
 }
