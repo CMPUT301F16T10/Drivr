@@ -24,8 +24,11 @@ package ca.ualberta.cs.drivr;
 public interface IUserManager {
 
     User getUser();
-
-    RequestsList getRequests();
-
+    void setUser(User user);
     MapUnits getMapUnits();
+    void setMapUnits(MapUnits mapUnits);
+    RequestsList getRequestsList();
+    void setRequestsList(RequestsList requestsList);
+    UserMode getUserMode();
+    void setUserMode(UserMode userMode);
 }

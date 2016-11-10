@@ -23,38 +23,37 @@ package ca.ualberta.cs.drivr;
 
 public class UserManager implements IUserManager {
 
-    public UserManager() { throw new UnsupportedOperationException(); }
+    private User user;
+    private MapUnits mapUnits;
+    private UserMode userMode;
+    private RequestsList requestsList;
 
-    public User getUser() { throw new UnsupportedOperationException(); }
+    private static final UserManager instance = new UserManager();
 
-    public MapUnits getMapUnits() { throw new UnsupportedOperationException(); }
+    public static UserManager getInstance() {
+        return instance;
+    }
 
-    public RequestsList getRequests() { throw new UnsupportedOperationException(); }
+    protected UserManager() {
+        user = null;
+        mapUnits = null;
+        userMode = null;
+        requestsList = null;
+    }
 
-    public UserMode getUserMode() { throw new UnsupportedOperationException(); }
+    public User getUser() { return user; }
 
-    public String getPassword() { throw new UnsupportedOperationException(); }
+    public void setUser(User user) { this.user = user; }
 
-    public void setPassword(String password) { throw new UnsupportedOperationException(); }
+    public MapUnits getMapUnits() { return mapUnits; }
 
-    public String getName() { throw new UnsupportedOperationException(); }
+    public void setMapUnits(MapUnits mapUnits) { this.mapUnits = mapUnits; }
 
-    public void setName(String name) { throw new UnsupportedOperationException(); }
+    public RequestsList getRequestsList() { return requestsList; }
 
-    public String getUsername() { throw new UnsupportedOperationException(); }
+    public void setRequestsList(RequestsList requestsList) { this.requestsList = requestsList; }
 
-    public void setUsername(String userName) { throw new UnsupportedOperationException(); }
+    public UserMode getUserMode() { return userMode; }
 
-    public String getPhoneNumber() { throw new UnsupportedOperationException(); }
-
-    public void setPhoneNumber(String phoneNumber) { throw new UnsupportedOperationException(); }
-
-    public String getEmail() { throw new UnsupportedOperationException(); }
-
-    public void setEmail(String email) { throw new UnsupportedOperationException(); }
-
-    public int getRating(UserMode userMode) { throw new UnsupportedOperationException(); }
-
-    public void setRating(UserMode userMode, int rating) { throw new UnsupportedOperationException(); }
-
+    public void setUserMode(UserMode userMode) { this.userMode = userMode; }
 }

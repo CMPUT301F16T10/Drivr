@@ -19,6 +19,8 @@ package ca.ualberta.cs.drivr;
 
 import org.junit.Test;
 
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -35,55 +37,40 @@ public class UserManagerTest {
     * Our attributes such as name, username, email, and phonenumber
     * all meet requirements.
     *
-     */
-
+    */
 
     @Test
-    public void getSetName() {
-        UserManager userManager = new UserManager();
-        userManager.setName("Adam Christiansen");
-        assertEquals("Adam Christiansen", userManager.getName());
-        try {
-            userManager.setName("Some super long name that is way too long and will throw an "
-                    + "exception because the software can't handle how long it is");
-            assertTrue(false);
-        }
-        catch (Exception e) {}
+    public void getAndSetUser() {
+        UserManager userManager = UserManager.getInstance();
+        User user = new User();
+        userManager.setUser(user);
+        assertEquals(user, userManager.getUser());
     }
 
     @Test
-    public void getSetUsername() {
-        UserManager userManager = new UserManager();
-        userManager.setUsername("validusername");
-        assertEquals("validusername", userManager.getUsername());
-        try {
-            userManager.setUsername("#@**invalidusername");
-            assertTrue(false);
-        }
-        catch (Exception e) {}
+    public void getAndSetMapUnits() {
+        UserManager userManager = UserManager.getInstance();
+        userManager.setMapUnits(MapUnits.METRIC);
+        assertEquals(MapUnits.METRIC, userManager.getMapUnits());
+        userManager.setMapUnits(MapUnits.IMPERIAL);
+        assertEquals(MapUnits.IMPERIAL, userManager.getMapUnits());
     }
 
     @Test
-    public void getSetEmail() {
-        UserManager userManager = new UserManager();
-        userManager.setEmail("valid@valid.valid");
-        assertEquals("valid@valid.valid", userManager.getEmail());
-        try {
-            userManager.setEmail("invalid email@@invalid.invalid");
-            assertTrue(false);
-        }
-        catch (Exception e) {}
+    public void getAndSetRequestsList() {
+        UserManager userManager = UserManager.getInstance();
+        RequestsList requestsList = new RequestsList();
+        userManager.setRequestsList(requestsList);
+        assertEquals(requestsList, userManager.getRequestsList());
     }
 
     @Test
-    public void getSetPhoneNumber() {
-        UserManager userManager = new UserManager();
-        userManager.setPhoneNumber("7801234567");
-        assertEquals("valid@valid.valid", userManager.getPhoneNumber());
-        try {
-            userManager.setPhoneNumber("780123a67");
-            assertTrue(false);
-        }
-        catch (Exception e) {}
+    public void getAndSetUserMode() {
+        UserManager userManager = UserManager.getInstance();
+        userManager.setUserMode(UserMode.DRIVER);
+        assertEquals(UserMode.DRIVER, userManager.getUserMode());
+        userManager.setUserMode(UserMode.RIDER);
+        assertEquals(UserMode.RIDER, userManager.getUserMode());
     }
+
 }

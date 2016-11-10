@@ -23,17 +23,29 @@ package ca.ualberta.cs.drivr;
 
 public class RequestsListController {
 
-    private UserManager userManager;
+    private IUserManager userManager;
 
-    public RequestsListController(UserManager userManager) { throw new UnsupportedOperationException(); }
+    public RequestsListController(IUserManager userManager) {
+        this.userManager = userManager;
+    }
 
-    public void acceptRequest(Request request) { throw new UnsupportedOperationException(); }
+    public void acceptRequest(Request request) {
+        request.setRequestState(RequestState.ACCEPTED);
+    }
 
-    public void confirmRequest(Request request) { throw new UnsupportedOperationException(); }
+    public void confirmRequest(Request request) {
+        request.setRequestState(RequestState.CONFIRMED);
+    }
 
-    public void declineRequest(Request request) { throw new UnsupportedOperationException(); }
+    public void declineRequest(Request request) {
+        request.setRequestState(RequestState.DECLINED);
+    }
 
-    public void cancelRequest(Request request) { throw new UnsupportedOperationException(); }
+    public void cancelRequest(Request request) {
+        request.setRequestState(RequestState.CANCELLED);
+    }
 
-    public void completeRequest(Request request) { throw new UnsupportedOperationException(); }
+    public void completeRequest(Request request) {
+        request.setRequestState(RequestState.COMPLETED);
+    }
 }

@@ -23,16 +23,18 @@ package ca.ualberta.cs.drivr;
 
 public class RequestController {
 
-    private UserManager userManager;
+    private IUserManager userManager;
 
-    public RequestController(UserManager userManager) { throw new UnsupportedOperationException(); }
+    public RequestController(IUserManager userManager) {
+        this.userManager = userManager;
+    }
 
     public void deleteRequest(Request request) {
-        throw new UnsupportedOperationException();
+        userManager.getRequestsList().remove(request);
     }
 
     public void acceptRequest(Request request) {
-        throw new UnsupportedOperationException();
+        request.setRequestState(RequestState.ACCEPTED);
     }
 
 }

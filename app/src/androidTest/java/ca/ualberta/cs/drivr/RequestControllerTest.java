@@ -17,6 +17,7 @@
 
 package ca.ualberta.cs.drivr;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertFalse;
@@ -28,13 +29,32 @@ import static org.junit.Assert.assertEquals;
 
 public class RequestControllerTest {
 
+    private MockUserManager mockUserManager;
+    private Request request1;
+    private Request request2;
+    private Request request3;
+
+
+    @Before
+    public void setup() {
+        mockUserManager = new MockUserManager();
+        mockUserManager.setRequestsList(new RequestsList());
+        request1 = new Request();
+        request1.setRequestState(RequestState.PENDING);
+        mockUserManager.getRequestsList().add(request1);
+        request2 = new Request();
+        request2.setRequestState(RequestState.PENDING);
+        mockUserManager.getRequestsList().add(request2);
+        request3 = new Request();
+        request3.setRequestState(RequestState.PENDING);
+        mockUserManager.getRequestsList().add(request3);
+    }
+
     @Test
     public void deleteRequest() {
-        UserManager userManager = new UserManager();
-        Request request = new Request();
-        RequestController requestController = new RequestController(userManager);
-        requestController.deleteRequest(request);
-        assertFalse(userManager.getRequests().has(request));
+        RequestController requestController = new RequestController(mockUserManager);
+        requestController.deleteRequest(request2);
+        assertFalse(mockUserManager.getRequestsList().has(request2));
     }
 
     /**
@@ -44,11 +64,9 @@ public class RequestControllerTest {
      */
     @Test
     public void acceptRequest() {
-        UserManager userManager = new UserManager();
-        Request request = new Request();
-        RequestController requestController = new RequestController(userManager);
-        requestController.acceptRequest(request);
-        assertFalse(userManager.getRequests().has(request));
+        RequestController requestController = new RequestController(mockUserManager);
+        requestController.acceptRequest(request2);
+        assertEquals(RequestState.ACCEPTED, request2.getRequestState());
     }
 
 }

@@ -17,6 +17,7 @@
 
 package ca.ualberta.cs.drivr;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -39,37 +40,39 @@ public class ProfileControllerTest {
      *
      */
 
+    private MockUserManager mockUserManager = null;
+
+    @Before
+    public void setup() {
+        mockUserManager = new MockUserManager();
+        mockUserManager.setUser(new User());
+    }
 
     @Test
     public void getNameAndSetName() {
-        UserManager userManager = new UserManager();
-        ProfileController profileController = new ProfileController(userManager);
+        ProfileController profileController = new ProfileController(mockUserManager);
         profileController.setName("Adam Christiansen");
         assertEquals("Adam Christiansen", profileController.getName());
     }
 
     @Test
     public void getPhoneNumberAndSetPhoneNumber() {
-        UserManager userManager = new UserManager();
-        ProfileController profileController = new ProfileController(userManager);
+        ProfileController profileController = new ProfileController(mockUserManager);
         profileController.setPhoneNumber("7801234567");
         assertEquals("7801234567", profileController.getPhoneNumber());
     }
 
     @Test
     public void getEmailAndSetEmail() {
-        UserManager userManager = new UserManager();
-        ProfileController profileController = new ProfileController(userManager);
+        ProfileController profileController = new ProfileController(mockUserManager);
         profileController.setEmail("somebody@somedomain.sometld");
         assertEquals("somebody@somedomain.sometld", profileController.getEmail());
     }
 
     @Test
     public void getAddressAndSetAddress() {
-        UserManager userManager = new UserManager();
-        ProfileController profileController = new ProfileController(userManager);
+        ProfileController profileController = new ProfileController(mockUserManager);
         profileController.setAddress("123 Some Road, Some City, Some Province, Some Country");
         assertEquals("123 Some Road, Some City, Some Province, Some Country", profileController.getAddress());
     }
-
 }

@@ -23,39 +23,41 @@ package ca.ualberta.cs.drivr;
 
 public class ProfileController {
 
-    private UserManager userManager;
+    private IUserManager userManager;
 
-    public ProfileController(UserManager userManager) { throw new UnsupportedOperationException(); }
+    public ProfileController(IUserManager userManager) {
+        this.userManager = userManager;
+    }
 
     public String getName() {
-        throw new UnsupportedOperationException();
+        return userManager.getUser().getName();
     }
 
     public void setName(String name) {
-        throw new UnsupportedOperationException();
+        userManager.getUser().setName(name);
     }
 
     public String getPhoneNumber() {
-        throw new UnsupportedOperationException();
+        return userManager.getUser().getPhoneNumber();
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        throw new UnsupportedOperationException();
+        userManager.getUser().setPhoneNumber(phoneNumber);
     }
 
     public String getEmail() {
-        throw new UnsupportedOperationException();
+        return userManager.getUser().getEmail();
     }
 
     public void setEmail(String email) {
-        throw new UnsupportedOperationException();
+        userManager.getUser().setEmail(email);
     }
 
     public String getAddress() {
-        throw new UnsupportedOperationException();
+        return userManager.getUser().getAddress();
     }
 
     public void setAddress(String address) {
-        throw new UnsupportedOperationException();
+        userManager.getUser().setAddress(address);
     }
 }
