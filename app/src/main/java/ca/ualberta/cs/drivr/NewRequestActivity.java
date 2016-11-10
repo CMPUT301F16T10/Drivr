@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,8 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+
+import java.math.BigDecimal;
 
 public class NewRequestActivity extends AppCompatActivity {
 
@@ -85,6 +88,10 @@ public class NewRequestActivity extends AppCompatActivity {
                 generateRequest();
             }
         });
+
+        // Setup listeners for changes to the fare
+        final EditText fareEditText = (EditText) findViewById(R.id.new_request_fare_edit_text);
+        fareEditText.addTextChangedListener(new MoneyTextWatcher(fareEditText));
     }
 
     /**
@@ -126,8 +133,14 @@ public class NewRequestActivity extends AppCompatActivity {
             return;
         }
 
+        final EditText fareEditText = (EditText) findViewById(R.id.new_request_fare_edit_text);
+        final String fareString = fareEditText.getText().toString().replaceAll("[$,.]", "");
+        final BigDecimal fare = new BigDecimal(fareString).setScale(2, BigDecimal.ROUND_FLOOR)
+                .divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR); // Divide by 100 to get dollars from cents
+
         // Make the request
         Request request = new Request(null, sourcePlace, destinationPlace);
+        request.setFare(fare);
         // TODO: Store the request
 
         finish();
