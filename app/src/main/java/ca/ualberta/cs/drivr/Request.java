@@ -21,7 +21,6 @@ import com.google.android.gms.location.places.Place;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * A class for storing information about a request.
@@ -30,13 +29,14 @@ public class Request {
 
     private User rider;
     private User driver;
+    private String description;
     private Date date;
     private BigDecimal fare;
     private RequestState requestState;
     private Place source;
     private Place destination;
-    private String requestId;
     private Boolean synced;
+    private String id;
 
     /**
      * Instantiates a new request.
@@ -44,13 +44,14 @@ public class Request {
     public Request() {
         rider = null;
         driver = null;
+        description = "";
         setDate(new Date());
         setFare(new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP));
-        requestState = null;
-        source = null;
-        destination = null;
-        requestId = UUID.randomUUID().toString();
+        requestState = RequestState.PENDING;
+        source = new ConcretePlace();
+        destination = new ConcretePlace();
         synced = false;
+        id = "";
     }
 
     /**
@@ -180,22 +181,6 @@ public class Request {
     }
 
     /**
-     * Get the unique request ID.
-     * @return The request ID.
-     */
-    public String getRequestId() {
-        return requestId;
-    }
-
-    /**
-     * Set the unique request ID.
-     * @param requestId The request ID.
-     */
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
-
-    /**
      * Get whether the request is synced online or not.
      * @return True when synced, false otherwise.
      */
@@ -211,4 +196,35 @@ public class Request {
         this.synced = synced;
     }
 
+    /**
+     * Get the description.
+     * @return The description.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Set the description.
+     * @param description The description.
+     */
+    public void setDescription(String description) {
+        this.description= description;
+    }
+
+    /**
+     * Get the ID.
+     * @return The ID.
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Set the ID.
+     * @param id The ID.
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 }

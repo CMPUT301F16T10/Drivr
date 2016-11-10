@@ -44,6 +44,22 @@ public class ProfileController {
     }
 
     /**
+     * Set the username of the current user.
+     * @param username The username of the user.
+     */
+    public void setUsername(String username) {
+        userManager.getUser().setUsername(username);
+    }
+
+    /**
+     * Get the username of the current user.
+     * @return The username of the user.
+     */
+    public String getUsername() {
+        return userManager.getUser().getUsername();
+    }
+
+    /**
      * Set the name of the current user.
      * @param name The name of the user.
      */
@@ -81,21 +97,5 @@ public class ProfileController {
      */
     public void setEmail(String email) {
         userManager.getUser().setEmail(email);
-    }
-
-    /**
-     * Get the address of the current user.
-     * @return The address of the user.
-     */
-    public String getAddress() {
-        return userManager.getUser().getAddress();
-    }
-
-    /**
-     * Set the address of the current user.
-     * @param address The address of the user.
-     */
-    public void setAddress(String address) {
-        userManager.getUser().setAddress(address);
     }
 }

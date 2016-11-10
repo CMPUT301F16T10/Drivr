@@ -49,30 +49,30 @@ public class ProfileControllerTest {
     }
 
     @Test
-    public void getNameAndSetName() {
+    public void getAndSetName() {
         ProfileController profileController = new ProfileController(mockUserManager);
         profileController.setName("Adam Christiansen");
         assertEquals("Adam Christiansen", profileController.getName());
     }
 
     @Test
-    public void getPhoneNumberAndSetPhoneNumber() {
+    public void getAndSetUsername() {
+        ProfileController profileController = new ProfileController(mockUserManager);
+        profileController.setUsername("some_username");
+        assertEquals("some_username", profileController.getUsername());
+    }
+
+    @Test
+    public void getAndSetPhoneNumber() {
         ProfileController profileController = new ProfileController(mockUserManager);
         profileController.setPhoneNumber("7801234567");
         assertEquals("7801234567", profileController.getPhoneNumber());
     }
 
     @Test
-    public void getEmailAndSetEmail() {
+    public void getAndSetEmail() {
         ProfileController profileController = new ProfileController(mockUserManager);
         profileController.setEmail("somebody@somedomain.sometld");
         assertEquals("somebody@somedomain.sometld", profileController.getEmail());
-    }
-
-    @Test
-    public void getAddressAndSetAddress() {
-        ProfileController profileController = new ProfileController(mockUserManager);
-        profileController.setAddress("123 Some Road, Some City, Some Province, Some Country");
-        assertEquals("123 Some Road, Some City, Some Province, Some Country", profileController.getAddress());
     }
 }

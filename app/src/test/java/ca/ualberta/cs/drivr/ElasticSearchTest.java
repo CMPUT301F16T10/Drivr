@@ -20,7 +20,7 @@ public class ElasticSearchTest {
         Request request = new Request();
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.requestPost(request);
-        Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
+        Request loadedRequest = elasticSearch.loadRequest(request.getId());
         assertEquals(request, loadedRequest);
     }
 
@@ -29,11 +29,11 @@ public class ElasticSearchTest {
         Request request = new Request();
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.requestPost(request);
-        Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
+        Request loadedRequest = elasticSearch.loadRequest(request.getId());
         assertEquals(loadedRequest, request);
         request.setDriver(new User("name", "username"));
         elasticSearch.requestUpdate(request);
-        Request newLoadedRequest = elasticSearch.loadRequest(request.getRequestId());
+        Request newLoadedRequest = elasticSearch.loadRequest(request.getId());
         assertNotSame(newLoadedRequest, loadedRequest);
         assertEquals(newLoadedRequest, request);
     }
@@ -43,7 +43,7 @@ public class ElasticSearchTest {
         Request request = new Request();
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.requestPost(request);
-        Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
+        Request loadedRequest = elasticSearch.loadRequest(request.getId());
         assertEquals(request,loadedRequest);
     }
 
@@ -53,7 +53,7 @@ public class ElasticSearchTest {
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.saveUser(user);
         // elastic search will only update the userId if it successfully posts to the database
-        assertFalse(user.getUserId().isEmpty());
+        assertFalse(user.getUsername().isEmpty());
     }
 
     // This tests both the load and save functions
@@ -62,7 +62,7 @@ public class ElasticSearchTest {
         User user = new User("John", "johns_username");
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.saveUser(user);
-        User loadedUser = elasticSearch.loadUser(user.getUserId());
+        User loadedUser = elasticSearch.loadUser(user.getUsername());
         assertEquals(loadedUser, user);
     }
 
@@ -88,7 +88,7 @@ public class ElasticSearchTest {
         ArrayList<Request> requestArrayList = elasticSearch.getOfflineRequests();
         requestArrayList.add(request);
         elasticSearch.onNetworkStateChanged();
-        Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
+        Request loadedRequest = elasticSearch.loadRequest(request.getId());
         assertEquals(request, loadedRequest);
     }
 }

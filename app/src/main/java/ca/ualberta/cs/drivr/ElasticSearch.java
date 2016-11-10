@@ -19,7 +19,6 @@ public class ElasticSearch {
     private ArrayList<Request> offlineRequests;
     private User user;
 
-
     public ArrayList<Request> requestSeach(String searchTerm){
         throw new UnsupportedOperationException();
     }
@@ -44,26 +43,21 @@ public class ElasticSearch {
 
     public void saveUser(User user) {
         throw new UnsupportedOperationException();
-        //        if network fails, return null, this.user = user
-
+        // if network fails, return null, this.user = user
     }
 
-    //    gets the user from the elastic search database
+    // gets the user from the elastic search database
     public User loadUser(String userID){
         throw new UnsupportedOperationException();
     }
 
-    //    When the user gets network connectivity, all offline cached data will be posted to the data base
+    // When the user gets network connectivity, all offline cached data will be posted to the data base
     public void onNetworkStateChanged(){
 //        ConnectivityManager connectivityManager;
 //        if (connectivityManager.getActiveNetworkInfo().isConnected()){
 //             //       we have network so push update
 //        }
         throw new UnsupportedOperationException();
-
-
-
-
     }
 
     public ArrayList<Request> getOfflineRequests() {
