@@ -33,25 +33,22 @@ public class RequestTest {
 
     @Test
     public void getDriver() {
-        User rider = new User();
         User driver = new User();
-        Request request = new Request(rider, driver, null, null);
+        Request request = new Request(null, null, null);
+        request.setDriver(driver.getPublicInfo());
         assertEquals(driver, request.getDriver());
     }
 
     @Test
     public void getRider() {
         User rider = new User();
-        User driver = new User();
-        Request request = new Request(rider, driver, null, null);
+        Request request = new Request(rider.getPublicInfo(), null, null);
         assertEquals(rider, request.getRider());
     }
 
     @Test
     public void driverAcceptedRequest() {
-        User rider = new User();
-        User driver = new User();
-        Request request = new Request(rider, driver, null, null);
+        Request request = new Request();
         request.setRequestState(RequestState.ACCEPTED);
         assertEquals(RequestState.ACCEPTED, request.getRequestState());
 
@@ -64,11 +61,11 @@ public class RequestTest {
     @Test
     public void riderSpecifyLocation() {
         User rider = new User();
-        Location source = new Location("Street");
-        Location destination = new Location("Street2");
-        Request request = new Request(rider, source,destination);
-        assertEquals("Street", request.getSource());
-        assertEquals("Street2", request.getDestination());
+        ConcretePlace source = new ConcretePlace();
+        ConcretePlace destination = new ConcretePlace();
+        Request request = new Request(rider.getPublicInfo(), source,destination);
+        assertEquals(source, request.getSource());
+        assertEquals(destination, request.getDestination());
     }
 
     /**
@@ -78,9 +75,9 @@ public class RequestTest {
     @Test
     public void getRiderSourceAndDestination() {
         User rider = new User();
-        Location source = new Location("Some street");
-        Location destination = new Location("Some avenue");
-        Request request = new Request(rider, source, destination);
+        ConcretePlace source = new ConcretePlace();
+        ConcretePlace destination = new ConcretePlace();
+        Request request = new Request(rider.getPublicInfo(), source, destination);
         assertEquals(source, request.getSource());
         assertEquals(destination, request.getDestination());
     }

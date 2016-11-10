@@ -19,8 +19,12 @@ package ca.ualberta.cs.drivr;
 
 import android.location.Location;
 
+import com.google.android.gms.location.places.Place;
+
+import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by adam on 2016-10-12.
@@ -31,38 +35,50 @@ public class Request {
     private PublicUserInfo rider;
     private PublicUserInfo driver;
     private Date date;
-    private Currency cost;
+    private BigDecimal cost;
     private RequestState requestState;
-    private Location source;
-    private Location destination;
+    private Place source;
+    private Place destination;
     private String requestId;
     private String synced;
 
-    public Request() { throw new UnsupportedOperationException(); }
-
-    public Request(User rider, Location source, Location destination) { throw new UnsupportedOperationException(); }
-
-    public Request(User rider, User driver, Location source, Location destination) { throw new UnsupportedOperationException(); }
-
-    public Location getSource() {
-        return source;
+    public Request() {
+        rider = null;
+        driver = null;
+        date = new Date();
+        cost = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
+        requestState = null;
+        source = null;
+        destination = null;
+        requestId = UUID.randomUUID().toString();
+        synced = "Not synced";
     }
 
-    public void setSource(Location source) {
+    public Request(PublicUserInfo riderInfo, Place source, Place destination) {
+        this();
+        this.rider = riderInfo;
+        this.date = new Date();
         this.source = source;
-    }
-
-    public Location getDestination() {
-        return destination;
-    }
-
-    public void setDestination(Location destination) {
         this.destination = destination;
     }
 
-    public PublicUserInfo getDriver() {
-        return driver;
+    public Place getSource() {
+        return source;
     }
+
+    public void setSource(Place source) {
+        this.source = source;
+    }
+
+    public Place getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Place destination) {
+        this.destination = destination;
+    }
+
+    public PublicUserInfo getDriver() { return driver; }
 
     public void setDriver(PublicUserInfo driver) {
         this.driver = driver;

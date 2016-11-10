@@ -128,6 +128,12 @@
 
         </android.support.v7.widget.CardView>
 
+        <Button
+            android:text="Create"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/new_request_create_button"/>
+
     </LinearLayout>
 
 </RelativeLayout>

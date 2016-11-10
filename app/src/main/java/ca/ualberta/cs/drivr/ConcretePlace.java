@@ -16,20 +16,36 @@ import java.util.Locale;
 
 public class ConcretePlace implements Place {
 
-    private String address = null;
-    private String attributions = null;
-    private String name = null;
-    private String phoneNumber = null;
-    private float rating = 0;
-    private int priceLevel = 0;
-    private LatLng latLng = null;
-    private LatLngBounds viewport = null;
-    private List<Integer> placeTypes = null;
-    private Locale locale = null;
-    private String id = null;
-    private Uri websiteUri = null;
+    private String address;
+    private String attributions;
+    private String name;
+    private String phoneNumber;
+    private float rating;
+    private int priceLevel;
+    private LatLng latLng;
+    private LatLngBounds viewport;
+    private List<Integer> placeTypes;
+    private Locale locale;
+    private String id;
+    private Uri websiteUri;
+
+    public ConcretePlace() {
+        address = null;
+        attributions = null;
+        name = null;
+        phoneNumber = null;
+        rating = 0;
+        priceLevel = 0;
+        latLng = null;
+        viewport = null;
+        placeTypes = null;
+        locale = null;
+        id = null;
+        websiteUri = null;
+    }
 
     public ConcretePlace(Place place) {
+        this();
         if (place != null) {
             address = place.getAddress() == null ? null : place.getAddress().toString();
             attributions = place.getAttributions() == null ? null : place.getAttributions().toString();
