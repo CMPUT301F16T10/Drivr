@@ -19,7 +19,9 @@ import android.support.v4.app.ActivityCompat;
 
 /**
  * Able to get User Current Location
+ * http://stackoverflow.com/questions/1513485/how-do-i-get-the-current-gps-location-programmatically-in-android
  */
+
 
 public class GPSTracker implements LocationListener {
 
@@ -39,13 +41,21 @@ public class GPSTracker implements LocationListener {
     double myLatitude;
     double myLongitude;
 
-
+    /**
+     * Initiates A GPS Tracker
+     * .
+     */
     public GPSTracker(Context context) {
         this.mContext = context;
         myLocation = getLocation();
     }
 
-    //
+    /**
+     * Gets the User Current Location through GPS or Wifi
+     * @return returns user current Location
+     * .
+     */
+
     public Location getLocation() {
         try {
             locationManger = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
@@ -113,7 +123,9 @@ public class GPSTracker implements LocationListener {
         }
     }
 
-    // end use of GPS
+    /**
+     * End the updating through the GPS
+     */
     public void stopUsingGPS() {
         if (locationManger != null) {
             if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -123,10 +135,19 @@ public class GPSTracker implements LocationListener {
         }
     }
 
+    /**
+     * Get users Location object
+     * @return returns user current Location
+     * .
+     */
     public Location getMyLocation() {
         return myLocation;
     }
 
+    /**
+     * Opens settings Activity to allow user to turn on GPs
+     * .
+     */
     public void enableGPS(){
         AlertDialog.Builder GPSDialog = new AlertDialog.Builder(mContext);
 
