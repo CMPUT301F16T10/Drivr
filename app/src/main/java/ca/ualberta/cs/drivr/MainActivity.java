@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private SupportMapFragment mFragment;
     private Activity activity;
     private MapController mapController;
-    private ArrayList<LatLng> markers = new ArrayList<LatLng>();
     private Context context;
     LatLng test = new LatLng(53.5232, -113.5263);
     LatLng test2 = new LatLng(53.5225, -113.6242);
@@ -237,28 +236,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
 
         //test
-        mapController.addRequestOnMap(test,test2);
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
 
-
-
-                if(markers.size() == 0){
-                    mapController.addPickUp(latLng);
-                    pickup = latLng;
-                    markers.add(latLng);
-                }
-                else if(markers.size() == 1){
-                    mapController.addDestination(latLng);
-                    markers.add(latLng);
-                    mapController.addRequestOnMap(pickup,latLng);
-                }
-                else {
-                    mMap.clear();
-                    markers.clear();
-                }
+                mapController.addPendingRequest(latLng, MainActivity.this);
 
 
             }
