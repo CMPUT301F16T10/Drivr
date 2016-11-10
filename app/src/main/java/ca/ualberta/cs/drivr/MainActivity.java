@@ -185,45 +185,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         mMap = googleMap;
         final MapController mapController = new MapController(mMap, context);
-
-        //googleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
-
-        LatLng edmonton = new LatLng(53.631611, -113.323975);
-        mapController.addDestination(edmonton);
-
+        
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
         }
 
         //test
-        requestDirection();
+        mapController.addRequestOnMap(test,test2);
     }
 
 
-    public void requestDirection() {
-        GoogleDirection.withServerKey(SERVER_KEY)
-                .from(test)
-                .to(test2)
-                .transitMode(TransportMode.DRIVING)
-                .execute(this);
-    }
 
     //https://github.com/akexorcist/Android-GoogleDirectionLibrary
     @Override
     public void onDirectionSuccess(Direction direction, String rawBody) {
-        if (direction.isOK()) {
-            mMap.addMarker(new MarkerOptions().position(test));
-            mMap.addMarker(new MarkerOptions().position(test2));
 
-            ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
-            mMap.addPolyline(DirectionConverter.createPolyline(this,directionPositionList,3, Color.RED));
-        }
     }
 
     @Override
     public void onDirectionFailure(Throwable t) {
-        Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -240,12 +222,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    private void updateMap() {
-        for (LatLng places : latLngs) {
-            mMap.clear();
-            mapController.addDestination(places);
-        }
-    }
 
     @Override
     protected void onStart() {
