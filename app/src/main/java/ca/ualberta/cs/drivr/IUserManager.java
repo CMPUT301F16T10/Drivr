@@ -25,8 +25,6 @@ public interface IUserManager {
 
     User getUser();
     void setUser(User user);
-    MapUnits getMapUnits();
-    void setMapUnits(MapUnits mapUnits);
     RequestsList getRequestsList();
     void setRequestsList(RequestsList requestsList);
     UserMode getUserMode();

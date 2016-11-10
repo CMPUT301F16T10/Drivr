@@ -48,14 +48,4 @@ public class SettingsControllerTest {
         settingsController.setUserMode(UserMode.RIDER);
         assertEquals(UserMode.RIDER, mockUserManager.getUserMode());
     }
-
-    @Test
-    public void changeUnits() {
-        SettingsController settingsController = new SettingsController(mockUserManager);
-        settingsController.setMapUnits(MapUnits.METRIC);
-        assertEquals(MapUnits.METRIC, mockUserManager.getMapUnits());
-        settingsController.setMapUnits(MapUnits.IMPERIAL);
-        assertEquals(MapUnits.IMPERIAL, mockUserManager.getMapUnits());
-    }
-
 }

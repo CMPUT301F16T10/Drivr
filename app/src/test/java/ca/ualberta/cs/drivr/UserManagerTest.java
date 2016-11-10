@@ -48,15 +48,6 @@ public class UserManagerTest {
     }
 
     @Test
-    public void getAndSetMapUnits() {
-        UserManager userManager = UserManager.getInstance();
-        userManager.setMapUnits(MapUnits.METRIC);
-        assertEquals(MapUnits.METRIC, userManager.getMapUnits());
-        userManager.setMapUnits(MapUnits.IMPERIAL);
-        assertEquals(MapUnits.IMPERIAL, userManager.getMapUnits());
-    }
-
-    @Test
     public void getAndSetRequestsList() {
         UserManager userManager = UserManager.getInstance();
         RequestsList requestsList = new RequestsList();

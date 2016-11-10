@@ -24,8 +24,6 @@ package ca.ualberta.cs.drivr;
 public class SettingsController {
 
     private IUserManager userManager;
-    private UserMode userMode;
-    private MapUnits mapUnits;
 
     public SettingsController(IUserManager userManager) {
         this.userManager = userManager;
@@ -34,9 +32,4 @@ public class SettingsController {
     public void setUserMode(UserMode userMode) {
         userManager.setUserMode(userMode);
     }
-
-    public void setMapUnits(MapUnits mapUnits) {
-        userManager.setMapUnits(mapUnits);
-    }
-
 }
