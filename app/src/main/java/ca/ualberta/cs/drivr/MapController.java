@@ -28,6 +28,12 @@ import java.util.List;
 
 /**
  * Created by justin on 09/11/16.
+ *
+ * A class for Modifying the google map
+ *
+ * Uses a open source library to assist with polyline route drawing
+ * https://github.com/akexorcist/Android-GoogleDirectionLibrary
+ *
  */
 public class MapController implements DirectionCallback{
 
@@ -35,7 +41,7 @@ public class MapController implements DirectionCallback{
     private Location myLocation;
     private LatLng destinationLatLng;
     private LatLng pickupLatlng;
-    private Marker passedMarker;
+
     private Double myLatitude;
     private Double myLongitude;
     private Context mContext;
@@ -46,6 +52,13 @@ public class MapController implements DirectionCallback{
     private GPSTracker gpsTracker;
     private String serverKey = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
 
+
+    /**
+     * Instantiates a new map controller.
+     * @param map The google map
+     * @param context The activities context
+     * .
+     */
     public MapController(GoogleMap map, Context context) {
         // initialize map
         this.mContext = context;
@@ -62,7 +75,11 @@ public class MapController implements DirectionCallback{
 
     }
 
-    // Call To add A Marker
+    /**
+     * Adds a Destination Marker to the map
+     * @param latLng a point on the map
+     * .
+     */
     public void addDestination(LatLng latLng){
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
@@ -72,7 +89,10 @@ public class MapController implements DirectionCallback{
         map.addMarker(markerOptions);
 
     }
-    // Call automatically to zoom to currentLocation
+    /**
+     * Zooms the camera angle on the Map to the User Location
+     * .
+     */
     public void zoomToCurrentLocation(){
 
 
@@ -81,22 +101,21 @@ public class MapController implements DirectionCallback{
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(myLatitude, myLongitude))      // Sets the center of the map to location user
-                .zoom(9)                   // Sets the zoom
-                .tilt(20)                   // Sets the tilt of the camera to 30 degrees
+                .zoom(10)                   // Sets the zoom
                 .build();                   // Creates a CameraPosition from the builder
         map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
     }
 
-    public void estimateCost(){
-        //int totalDistance = myLocation.distanceTo()
-        // float cost = totalDistance * 1.75
-    }
 
 
 
 
-    // Call to add A Pick Up Marker
+    /**
+     * Adds a Pickup Marker to the map
+     * @param latLng a point on the map
+     * .
+     */
     public void addPickUp(LatLng latLng){
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
@@ -106,7 +125,12 @@ public class MapController implements DirectionCallback{
         map.addMarker(markerOptions);
     }
 
-    // Send two Locations to Map and draw a route between them
+    /**
+     * Queries a route with google direction api to the map
+     * @param pickup point on the map
+     * @param destination pickup on the map
+     * .
+     */
     public void addRequestOnMap(LatLng pickup, LatLng destination){
 
         this.pickupLatlng = pickup;
@@ -121,7 +145,14 @@ public class MapController implements DirectionCallback{
 
     }
 
-    // Draw A pending Reqest
+    /**
+     * After a click on Map adds a marker to the map
+     * Shows Dialog to confirm pickup and drop off location
+     *
+     * @param mapMarker point on the map
+     * @param context context from activity
+     * .
+     */
     public void addPendingRequest(final LatLng mapMarker, Context context) {
 
         if(markers.size() == 0){
@@ -174,8 +205,20 @@ public class MapController implements DirectionCallback{
     }
 
 
+    /**
+     * Clears the Map
+     */
+    public void clearMap(){
+        map.clear();
+    }
 
 
+
+    /**
+     * Queries a route with google direction api to the map
+     * consult https://github.com/akexorcist/Android-GoogleDirectionLibrary
+     *
+     */
     @Override
     public void onDirectionSuccess(Direction direction, String rawBody) {
         if (direction.isOK()) {
@@ -190,6 +233,7 @@ public class MapController implements DirectionCallback{
         }
     }
 
+    // If marker can't be added to map
     @Override
     public void onDirectionFailure(Throwable t) {
 
