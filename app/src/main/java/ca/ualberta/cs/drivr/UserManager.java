@@ -27,10 +27,6 @@ public class UserManager implements IUserManager {
 
     public User getUser() { throw new UnsupportedOperationException(); }
 
-    public PublicUserInfo getPublicUserInfo() { throw new UnsupportedOperationException(); }
-
-    public PrivateUserInfo getPrivateUserInfo() { throw new UnsupportedOperationException(); }
-
     public MapUnits getMapUnits() { throw new UnsupportedOperationException(); }
 
     public RequestsList getRequests() { throw new UnsupportedOperationException(); }
