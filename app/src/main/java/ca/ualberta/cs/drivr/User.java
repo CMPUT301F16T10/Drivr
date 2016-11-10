@@ -23,35 +23,85 @@ package ca.ualberta.cs.drivr;
 
 public class User {
 
-    private PrivateUserInfo privateInfo;
-    private PublicUserInfo publicInfo;
     private String userId;
+    private String name;
+    private String username;
+    private String phoneNumber;
+    private String email;
+    private String address;
+    private String creditCard;
+    private int rating;
 
-    public User() { throw new UnsupportedOperationException(); }
-
-    public User(String userName, String email, String phoneNumber) { throw new UnsupportedOperationException(); }
-
-    public PrivateUserInfo getPrivateInfo() {
-        return privateInfo;
+    public User() {
+        userId = "";
+        name = "";
+        username = "";
+        phoneNumber = "";
+        email = "";
+        address = "";
+        creditCard = null;
+        rating = 0;
     }
 
-    public void setPrivateInfo(PrivateUserInfo privateInfo) {
-        this.privateInfo = privateInfo;
+    public User(String name, String username) {
+        this();
+        this.name = name;
+        this.username = username;
     }
 
-    public PublicUserInfo getPublicInfo() {
-        return publicInfo;
+    public String getName() { return name; }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setPublicInfo(PublicUserInfo publicInfo) {
-        this.publicInfo = publicInfo;
+    public String getUsername() {
+        return username;
     }
 
-    public String getUserId() {
-        return userId;
+    public void setUsername(String userName) {
+        this.username = userName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getRating(UserMode userMode) {
+        return rating;
+    }
+
+    public String getAddress() { return address; }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(String creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    public void setRating(UserMode userMode, int rating) {
+        this.rating = rating;
+    }
+
+    public String getUserId() { return userId; }
+
+    public void setUserId(String userId) { this.userId = userId; }
 }

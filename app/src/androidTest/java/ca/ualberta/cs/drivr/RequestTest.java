@@ -35,14 +35,14 @@ public class RequestTest {
     public void getDriver() {
         User driver = new User();
         Request request = new Request(null, null, null);
-        request.setDriver(driver.getPublicInfo());
+        request.setDriver(driver);
         assertEquals(driver, request.getDriver());
     }
 
     @Test
     public void getRider() {
         User rider = new User();
-        Request request = new Request(rider.getPublicInfo(), null, null);
+        Request request = new Request(rider, null, null);
         assertEquals(rider, request.getRider());
     }
 
@@ -51,7 +51,6 @@ public class RequestTest {
         Request request = new Request();
         request.setRequestState(RequestState.ACCEPTED);
         assertEquals(RequestState.ACCEPTED, request.getRequestState());
-
     }
 
     /**
@@ -63,7 +62,7 @@ public class RequestTest {
         User rider = new User();
         ConcretePlace source = new ConcretePlace();
         ConcretePlace destination = new ConcretePlace();
-        Request request = new Request(rider.getPublicInfo(), source,destination);
+        Request request = new Request(rider, source,destination);
         assertEquals(source, request.getSource());
         assertEquals(destination, request.getDestination());
     }
@@ -77,7 +76,7 @@ public class RequestTest {
         User rider = new User();
         ConcretePlace source = new ConcretePlace();
         ConcretePlace destination = new ConcretePlace();
-        Request request = new Request(rider.getPublicInfo(), source, destination);
+        Request request = new Request(rider, source, destination);
         assertEquals(source, request.getSource());
         assertEquals(destination, request.getDestination());
     }
