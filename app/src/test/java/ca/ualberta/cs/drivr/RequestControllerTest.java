@@ -50,13 +50,6 @@ public class RequestControllerTest {
         mockUserManager.getRequestsList().add(request3);
     }
 
-    @Test
-    public void deleteRequest() {
-        RequestController requestController = new RequestController(mockUserManager);
-        requestController.deleteRequest(request2);
-        assertFalse(mockUserManager.getRequestsList().has(request2));
-    }
-
     /**
      * UC 15 Driver Receives Payment
      * US 05.01.01 As a Driver, I want to Accept a Request I agree with and Accept that
@@ -67,6 +60,69 @@ public class RequestControllerTest {
         RequestController requestController = new RequestController(mockUserManager);
         requestController.acceptRequest(request2);
         assertEquals(RequestState.ACCEPTED, request2.getRequestState());
+    }
+
+    /**
+     * UC 8 Rider Confirms Driver Acceptance
+     * US 01.08.01 As a Rider, I want to Confirm a Driver's Acceptance.
+     * This allows us to choose from a list of Acceptances if more than one Driver Accepts simultaneously.
+     * UC 18 Driver Offer Accepted
+     * US 05.04.01 As a Driver, I want to be notified if my ride offer was Confirmed.
+     */
+    @Test
+    public void confirmRequest() {
+        RequestController requestController = new RequestController(mockUserManager);
+        requestController.confirmRequest(request2);
+        assertEquals(RequestState.CONFIRMED, request2.getRequestState());
+    }
+
+    /**
+     * UC 4 Rider Cancels Requests
+     * US 01.04.01 As a Rider, I want to cancel Requests.
+     */
+    @Test
+    public void cancelRequest() {
+        RequestController requestController = new RequestController(mockUserManager);
+        requestController.cancelRequest(request2);
+        assertEquals(RequestState.CANCELLED, request2.getRequestState());
+    }
+
+    /**
+     * UC 7 Rider Confirms And Pays
+     * US 01.07.01 As a Rider, I want to Confirm the completion of a Request and enable payment.
+     * Testing for Completed request
+     */
+    @Test
+    public void completeRequest() {
+        RequestController requestController = new RequestController(mockUserManager);
+        requestController.completeRequest(request2);
+        assertEquals(RequestState.COMPLETED, request2.getRequestState());
+    }
+
+    @Test
+    public void declineRequest() {
+        RequestController requestController = new RequestController(mockUserManager);
+        requestController.declineRequest(request2);
+        assertEquals(RequestState.DECLINED, request2.getRequestState());
+    }
+
+    @Test
+    public void deleteRequest() {
+        RequestController requestController = new RequestController(mockUserManager);
+        requestController.deleteRequest(request2);
+        assertFalse(mockUserManager.getRequestsList().has(request2));
+    }
+
+    /**
+     * UC 22 Driver Accepts Requests Offline
+     * US 08.04.01 As a Driver, I want to Accept Requests that will be sent once I
+     * get connectivity again.
+     */
+    @Test
+    public void acceptRequestOffline() {
+        RequestController requestController = new RequestController(mockUserManager);
+        requestController.acceptRequest(request3);
+        assertEquals(RequestState.ACCEPTED, request3.getRequestState());
     }
 
 }

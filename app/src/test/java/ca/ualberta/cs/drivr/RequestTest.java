@@ -63,8 +63,8 @@ public class RequestTest {
         ConcretePlace source = new ConcretePlace();
         ConcretePlace destination = new ConcretePlace();
         Request request = new Request(rider, source,destination);
-        assertEquals(source, request.getSource());
-        assertEquals(destination, request.getDestination());
+        assertEquals(source, request.getSourcePlace());
+        assertEquals(destination, request.getDestinationPlace());
     }
 
     /**
@@ -77,8 +77,8 @@ public class RequestTest {
         ConcretePlace source = new ConcretePlace();
         ConcretePlace destination = new ConcretePlace();
         Request request = new Request(rider, source, destination);
-        assertEquals(source, request.getSource());
-        assertEquals(destination, request.getDestination());
+        assertEquals(source, request.getSourcePlace());
+        assertEquals(destination, request.getDestinationPlace());
     }
 
 }

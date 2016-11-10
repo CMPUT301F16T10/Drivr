@@ -20,33 +20,61 @@ package ca.ualberta.cs.drivr;
 import java.util.ArrayList;
 
 /**
- * Created by adam on 2016-10-12.
+ * Stores a list of requests and provides some useful operations on it.
+ * @see Request
  */
-
 public class RequestsList {
 
+    /**
+     * The list of requests.
+     */
     private ArrayList<Request> requestsList;
 
+    /**
+     * Instantiates a new request list.
+     */
     public RequestsList() {
         requestsList = new ArrayList<Request>();
     }
 
+    /**
+     * Add a request to the list.
+     * @param request The request to add.
+     */
     public void add(Request request) {
         requestsList.add(request);
     }
 
+    /**
+     * Removes a request from the list if it exists.
+     * @param request The request to remove.
+     */
     public void remove(Request request) {
         requestsList.remove(request);
     }
 
+    /**
+     * Test if the list has a request.
+     * @param request The request to check.
+     * @return True if the list has the request, false otherwise.
+     */
     public Boolean has(Request request) {
         return requestsList.contains(request);
     }
 
+    /**
+     * Get the number of requests in the list.
+     * @return The size of the list.
+     */
     public int size() {
         return requestsList.size();
     }
 
+    /**
+     * Get a sub-list of all requests in the list that have agiven state.
+     * @param state The state to find.
+     * @return A list of requests with the state.
+     */
     public ArrayList<Request> getRequests(RequestState state) {
         ArrayList<Request> result = new ArrayList<Request>();
         for (Request request : requestsList)

@@ -18,17 +18,27 @@
 package ca.ualberta.cs.drivr;
 
 /**
- * Created by adam on 2016-10-12.
+ * A controller for modifying apllication settings.
  */
-
 public class SettingsController {
 
+    /**
+     * The user manager that does the operations on settings.
+     */
     private IUserManager userManager;
 
+    /**
+     * Instantiate a new SettingsController.
+     * @param userManager The manager to perform operations with.
+     */
     public SettingsController(IUserManager userManager) {
         this.userManager = userManager;
     }
 
+    /**
+     * Change the user mode.
+     * @param userMode The user mode to for the current user.
+     */
     public void setUserMode(UserMode userMode) {
         userManager.setUserMode(userMode);
     }

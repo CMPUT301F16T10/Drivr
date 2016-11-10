@@ -55,7 +55,7 @@ public class RequestHistoryActivityTest extends ActivityInstrumentationTestCase2
         final Request request = getActivity().getRequest(0);
         solo.clickInList(0);
         solo.assertCurrentActivity("Expected RequestActivity", RequestActivity.class);
-        assertTrue(solo.waitForText(request.getDestination().toString()));
+        assertTrue(solo.waitForText(request.getDestinationPlace().toString()));
         solo.goBack();
     }
 

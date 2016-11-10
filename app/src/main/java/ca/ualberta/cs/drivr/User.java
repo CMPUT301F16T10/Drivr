@@ -18,9 +18,8 @@
 package ca.ualberta.cs.drivr;
 
 /**
- * Created by adam on 2016-10-12.
+ * A data class for storing user information.
  */
-
 public class User {
 
     private String userId;
@@ -29,9 +28,11 @@ public class User {
     private String phoneNumber;
     private String email;
     private String address;
-    private String creditCard;
     private int rating;
 
+    /**
+     * Instantiate a new User.
+     */
     public User() {
         userId = "";
         name = "";
@@ -39,69 +40,129 @@ public class User {
         phoneNumber = "";
         email = "";
         address = "";
-        creditCard = null;
         rating = 0;
     }
 
+    /**
+     * Instantiate a new User.
+     * @param name The name of the user.
+     * @param username The username of the user.
+     */
     public User(String name, String username) {
         this();
         this.name = name;
         this.username = username;
     }
 
-    public String getName() { return name; }
+    /**
+     * Get the name.
+     * @return The name.
+     */
+    public String getName() {
+        return name;
+    }
 
+    /**
+     * Set the name.
+     * @param name The name.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Get the username.
+     * @return The username.
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Set the username.
+     * @param userName The username.
+     */
     public void setUsername(String userName) {
         this.username = userName;
     }
 
+    /**
+     * Get the phone number.
+     * @return The phone number.
+     */
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    /**
+     * Set the phone number.
+     * @param phoneNumber The phone number.
+     */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
+    /**
+     * Set the email address.
+     * @return The email address.
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Get the email address.
+     * @param email The email address.
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public int getRating(UserMode userMode) {
+    /**
+     * Get the rating.
+     * @return The rating.
+     */
+    public int getRating() {
         return rating;
     }
 
-    public String getAddress() { return address; }
+    /**
+     * Set the rating.
+     * @param rating The rating.
+     */
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 
+    /**
+     * Get the address.
+     * @return The addres.
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * Set the address.
+     * @param address The address.
+     */
     public void setAddress(String address) {
         this.address = address;
     }
 
-    public String getCreditCard() {
-        return creditCard;
+    /**
+     * Get the user ID.
+     * @return The user ID.
+     */
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCreditCard(String creditCard) {
-        this.creditCard = creditCard;
+    /**
+     * Set the user ID.
+     * @param userId The user ID.
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
-
-    public void setRating(UserMode userMode, int rating) {
-        this.rating = rating;
-    }
-
-    public String getUserId() { return userId; }
-
-    public void setUserId(String userId) { this.userId = userId; }
 }

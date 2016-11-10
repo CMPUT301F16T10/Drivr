@@ -18,34 +18,21 @@
 package ca.ualberta.cs.drivr;
 
 /**
- * Created by adam on 2016-10-12.
+ * A controller for modifying lists of requests.
+ * @see RequestsList
  */
-
 public class RequestsListController {
 
+    /**
+     * The user manager that does the operations on request lists.
+     */
     private IUserManager userManager;
 
+    /**
+     * Instantiate a new RequestListController.
+     * @param userManager The manager to perform operations with.
+     */
     public RequestsListController(IUserManager userManager) {
         this.userManager = userManager;
-    }
-
-    public void acceptRequest(Request request) {
-        request.setRequestState(RequestState.ACCEPTED);
-    }
-
-    public void confirmRequest(Request request) {
-        request.setRequestState(RequestState.CONFIRMED);
-    }
-
-    public void declineRequest(Request request) {
-        request.setRequestState(RequestState.DECLINED);
-    }
-
-    public void cancelRequest(Request request) {
-        request.setRequestState(RequestState.CANCELLED);
-    }
-
-    public void completeRequest(Request request) {
-        request.setRequestState(RequestState.COMPLETED);
     }
 }
