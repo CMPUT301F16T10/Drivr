@@ -16,7 +16,7 @@ import static junit.framework.Assert.assertNotSame;
 
 public class ElasticSearchTest {
     @Test
-    public void requestPost(){
+    public void requestPost() {
         Request request = new Request();
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.requestPost(request);
@@ -25,7 +25,7 @@ public class ElasticSearchTest {
     }
 
     @Test
-    public void requestUpdate(){
+    public void requestUpdate() {
         Request request = new Request();
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.requestPost(request);
@@ -82,7 +82,7 @@ public class ElasticSearchTest {
      * As a driver, I want to accept requests that will be sent once I get connectivity again.
      */
     @Test
-    public void onNetworkStateChanged(){
+    public void onNetworkStateChanged() {
         Request request = new Request();
         ElasticSearch elasticSearch = new ElasticSearch();
         ArrayList<Request> requestArrayList = elasticSearch.getOfflineRequests();
