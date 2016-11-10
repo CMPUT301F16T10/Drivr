@@ -272,6 +272,4 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public void switchMode() { throw new UnsupportedOperationException(); }
 
     public void updatePaymentInfo(String creditCardNumber) { throw new UnsupportedOperationException(); }
-
-    public void switchUnits(MapUnits mapUnits) { throw new UnsupportedOperationException(); }
 }

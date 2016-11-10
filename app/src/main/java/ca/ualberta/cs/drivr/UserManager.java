@@ -24,7 +24,6 @@ package ca.ualberta.cs.drivr;
 public class UserManager implements IUserManager {
 
     private User user;
-    private MapUnits mapUnits;
     private UserMode userMode;
     private RequestsList requestsList;
 
@@ -36,7 +35,6 @@ public class UserManager implements IUserManager {
 
     protected UserManager() {
         user = null;
-        mapUnits = null;
         userMode = null;
         requestsList = null;
     }
@@ -44,10 +42,6 @@ public class UserManager implements IUserManager {
     public User getUser() { return user; }
 
     public void setUser(User user) { this.user = user; }
-
-    public MapUnits getMapUnits() { return mapUnits; }
-
-    public void setMapUnits(MapUnits mapUnits) { this.mapUnits = mapUnits; }
 
     public RequestsList getRequestsList() { return requestsList; }
 
