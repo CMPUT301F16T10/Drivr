@@ -1,6 +1,9 @@
 package ca.ualberta.cs.drivr;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.location.Location;
 
@@ -36,6 +39,9 @@ public class MapController implements DirectionCallback{
     private Double myLatitude;
     private Double myLongitude;
     private Context mContext;
+    private ArrayList<LatLng> markers = new ArrayList<LatLng>();
+    private LatLng pickup;
+
 
     private GPSTracker gpsTracker;
     private String serverKey = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
@@ -114,6 +120,60 @@ public class MapController implements DirectionCallback{
 
 
     }
+
+    // Draw A pending Reqest
+    public void addPendingRequest(final LatLng mapMarker, Context context) {
+
+        if(markers.size() == 0){
+
+            new AlertDialog.Builder(context)
+                    .setTitle("Confirm Pickup Location")
+                    .setMessage("Is this the Location you want to be picked up from")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            addPickUp(mapMarker);
+                            pickup = mapMarker;
+                            markers.add(mapMarker);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .show();
+
+        }
+        // Pickup Location Already Set Up
+        else if(markers.size() == 1){
+            new AlertDialog.Builder(context)
+                    .setTitle("Confirm Destination Location")
+                    .setMessage("Is this the Location you want to be dropped off at")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            addDestination(mapMarker);
+                            markers.add(mapMarker);
+                            addRequestOnMap(pickup,mapMarker);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .show();
+
+        }
+        else {
+            // Delete
+            //map.clear();
+            //markers.clear();
+        }
+    }
+
+
 
 
     @Override
