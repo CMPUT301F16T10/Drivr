@@ -17,6 +17,7 @@
 
 package ca.ualberta.cs.drivr;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertFalse;
@@ -28,18 +29,33 @@ import static org.junit.Assert.assertEquals;
 
 public class RequestsListControllerTest {
 
+    private MockUserManager mockUserManager;
+    private Request request1;
+    private Request request2;
+    private Request request3;
+
+    @Before
+    public void setup() {
+        mockUserManager = new MockUserManager();
+        RequestsList requestsList = new RequestsList();
+        request1 = new Request();
+        request2 = new Request();
+        request3 = new Request();
+        requestsList.add(request1);
+        requestsList.add(request2);
+        requestsList.add(request3);
+        mockUserManager.setRequestsList(requestsList);
+    }
+
     /**
      * UC 18 Driver Offer Accepted
      * US 05.04.01 As a Driver, I want to be notified if my ride offer was Confirmed.
      */
     @Test
     public void acceptRequest() {
-        UserManager userManager = new UserManager();
-        Request request = new Request();
-        userManager.getRequests().add(request);
-        RequestsListController requestsListController = new RequestsListController(userManager);
-        requestsListController.acceptRequest(request);
-        assertEquals(RequestState.ACCEPTED, request.getRequestState());
+        RequestsListController requestsListController = new RequestsListController(mockUserManager);
+        requestsListController.acceptRequest(request1);
+        assertEquals(RequestState.ACCEPTED, request1.getRequestState());
     }
 
 
@@ -51,22 +67,16 @@ public class RequestsListControllerTest {
      */
     @Test
     public void confirmRequest() {
-        UserManager userManager = new UserManager();
-        Request request = new Request();
-        userManager.getRequests().add(request);
-        RequestsListController requestsListController = new RequestsListController(userManager);
-        requestsListController.confirmRequest(request);
-        assertEquals(RequestState.CONFIRMED, request.getRequestState());
+        RequestsListController requestsListController = new RequestsListController(mockUserManager);
+        requestsListController.confirmRequest(request2);
+        assertEquals(RequestState.CONFIRMED, request2.getRequestState());
     }
 
     @Test
     public void declineRequest() {
-        UserManager userManager = new UserManager();
-        Request request = new Request();
-        userManager.getRequests().add(request);
-        RequestsListController requestsListController = new RequestsListController(userManager);
-        requestsListController.declineRequest(request);
-        assertEquals(RequestState.DECLINED, request.getRequestState());
+        RequestsListController requestsListController = new RequestsListController(mockUserManager);
+        requestsListController.declineRequest(request3);
+        assertEquals(RequestState.DECLINED, request3.getRequestState());
     }
 
 
@@ -76,12 +86,9 @@ public class RequestsListControllerTest {
      */
     @Test
     public void cancelRequest() {
-        UserManager userManager = new UserManager();
-        Request request = new Request();
-        userManager.getRequests().add(request);
-        RequestsListController requestsListController = new RequestsListController(userManager);
-        requestsListController.cancelRequest(request);
-        assertEquals(RequestState.CANCELLED, request.getRequestState());
+        RequestsListController requestsListController = new RequestsListController(mockUserManager);
+        requestsListController.cancelRequest(request1);
+        assertEquals(RequestState.CANCELLED, request1.getRequestState());
     }
 
     /**
@@ -91,12 +98,9 @@ public class RequestsListControllerTest {
      */
     @Test
     public void completeRequest() {
-        UserManager userManager = new UserManager();
-        Request request = new Request();
-        userManager.getRequests().add(request);
-        RequestsListController requestsListController = new RequestsListController(userManager);
-        requestsListController.completeRequest(request);
-        assertEquals(RequestState.COMPLETED, request.getRequestState());
+        RequestsListController requestsListController = new RequestsListController(mockUserManager);
+        requestsListController.completeRequest(request2);
+        assertEquals(RequestState.COMPLETED, request2.getRequestState());
     }
 
     /**
@@ -106,11 +110,8 @@ public class RequestsListControllerTest {
      */
     @Test
     public void acceptRequestOffline() {
-        UserManager userManager = new UserManager();
-        Request request = new Request();
-        userManager.getRequests().add(request);
-        RequestsListController requestsListController = new RequestsListController(userManager);
-        requestsListController.acceptRequest(request);
-        assertEquals(RequestState.ACCEPTED, request.getRequestState());
+        RequestsListController requestsListController = new RequestsListController(mockUserManager);
+        requestsListController.acceptRequest(request3);
+        assertEquals(RequestState.ACCEPTED, request3.getRequestState());
     }
 }

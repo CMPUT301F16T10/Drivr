@@ -27,19 +27,31 @@ public class RequestsList {
 
     private ArrayList<Request> requestsList;
 
-    public RequestsList() { throw new UnsupportedOperationException(); }
+    public RequestsList() {
+        requestsList = new ArrayList<Request>();
+    }
 
-    public void add(Request request) { throw new UnsupportedOperationException(); }
+    public void add(Request request) {
+        requestsList.add(request);
+    }
 
-    public void remove(Request request) { throw new UnsupportedOperationException(); }
+    public void remove(Request request) {
+        requestsList.remove(request);
+    }
 
-    public void remove(int index) { throw new UnsupportedOperationException(); }
+    public Boolean has(Request request) {
+        return requestsList.contains(request);
+    }
 
-    public Boolean has(Request request) { throw new UnsupportedOperationException(); }
+    public int size() {
+        return requestsList.size();
+    }
 
-    public int size() { throw new UnsupportedOperationException(); }
-
-    public ArrayList<Request> getRequestsList() { throw new UnsupportedOperationException(); }
-
-    public ArrayList<Request> getRequests(RequestState state) { throw new UnsupportedOperationException(); }
+    public ArrayList<Request> getRequests(RequestState state) {
+        ArrayList<Request> result = new ArrayList<Request>();
+        for (Request request : requestsList)
+            if (request.getRequestState() == state)
+                result.add(request);
+        return result;
+    }
 }

@@ -19,6 +19,8 @@ package ca.ualberta.cs.drivr;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -48,31 +50,12 @@ public class RequestListTest {
     }
 
     @Test
-    public void removeByIndex() {
-        RequestsList requestsList = new RequestsList();
-        Request request = new Request();
-        requestsList.add(request);
-        assertTrue(requestsList.has(request));
-        requestsList.remove(0);
-        assertFalse(requestsList.has(request));
-    }
-
-    @Test
     public void has() {
         RequestsList requestsList = new RequestsList();
         Request request = new Request();
         assertFalse(requestsList.has(request));
         requestsList.add(request);
         assertTrue(requestsList.has(request));
-    }
-
-    @Test
-    public void getRequestsList() {
-        RequestsList requestsList = new RequestsList();
-        Request request = new Request();
-        assertEquals(0, requestsList.getRequestsList().size());
-        requestsList.add(request);
-        assertEquals(1, requestsList.getRequestsList().size());
     }
 
     /**
@@ -108,15 +91,16 @@ public class RequestListTest {
         Request request1 = new Request();
         Request request2 = new Request();
         Request request3 = new Request();
-        request1.setRequestState(RequestState.COMPLETED);
+        request1.setRequestState(RequestState.PENDING);
         request2.setRequestState(RequestState.CONFIRMED);
         request3.setRequestState(RequestState.PENDING);
         requestsList.add(request1);
         requestsList.add(request2);
         requestsList.add(request3);
-        assertEquals(0, requestsList.getRequests(RequestState.COMPLETED).size());
-        assertEquals(1, requestsList.getRequests(RequestState.PENDING).size());
-        assertEquals(2, requestsList.getRequests(RequestState.DECLINED).size());
+        final ArrayList pending = requestsList.getRequests(RequestState.PENDING);
+        assertEquals(2, pending.size());
+        assertTrue(pending.contains(request1));
+        assertTrue(pending.contains(request3));
     }
 
     /**
@@ -129,15 +113,15 @@ public class RequestListTest {
         Request request1 = new Request();
         Request request2 = new Request();
         Request request3 = new Request();
-        request1.setRequestState(RequestState.COMPLETED);
+        request1.setRequestState(RequestState.CONFIRMED);
         request2.setRequestState(RequestState.CONFIRMED);
         request3.setRequestState(RequestState.PENDING);
         requestsList.add(request1);
         requestsList.add(request2);
         requestsList.add(request3);
-        assertEquals(0, requestsList.getRequests(RequestState.COMPLETED).size());
+        assertEquals(2, requestsList.getRequests(RequestState.CONFIRMED).size());
         assertEquals(1, requestsList.getRequests(RequestState.PENDING).size());
-        assertEquals(2, requestsList.getRequests(RequestState.DECLINED).size());
+        assertEquals(0, requestsList.getRequests(RequestState.DECLINED).size());
     }
 
     /**
@@ -151,13 +135,13 @@ public class RequestListTest {
         Request request2 = new Request();
         Request request3 = new Request();
         request1.setRequestState(RequestState.COMPLETED);
-        request2.setRequestState(RequestState.DECLINED);
-        request3.setRequestState(RequestState.ACCEPTED);
+        request2.setRequestState(RequestState.ACCEPTED);
+        request3.setRequestState(RequestState.COMPLETED);
         requestsList.add(request1);
         requestsList.add(request2);
         requestsList.add(request3);
-        assertEquals(0, requestsList.getRequests(RequestState.COMPLETED).size());
-        assertEquals(1, requestsList.getRequests(RequestState.PENDING).size());
-        assertEquals(2, requestsList.getRequests(RequestState.DECLINED).size());
+        assertEquals(2, requestsList.getRequests(RequestState.COMPLETED).size());
+        assertEquals(1, requestsList.getRequests(RequestState.ACCEPTED).size());
+        assertEquals(0, requestsList.getRequests(RequestState.PENDING).size());
     }
 }

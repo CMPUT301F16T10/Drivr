@@ -23,12 +23,20 @@ package ca.ualberta.cs.drivr;
 
 public class SettingsController {
 
-    private UserManager userManager;
+    private IUserManager userManager;
+    private UserMode userMode;
+    private MapUnits mapUnits;
 
-    public SettingsController(UserManager userManager) { throw new UnsupportedOperationException(); }
+    public SettingsController(IUserManager userManager) {
+        this.userManager = userManager;
+    }
 
-    public void setUserMode(UserMode userMode) { throw new UnsupportedOperationException(); }
+    public void setUserMode(UserMode userMode) {
+        userManager.setUserMode(userMode);
+    }
 
-    public void setMapUnits(MapUnits unitType) { throw new UnsupportedOperationException(); }
+    public void setMapUnits(MapUnits mapUnits) {
+        userManager.setMapUnits(mapUnits);
+    }
 
 }

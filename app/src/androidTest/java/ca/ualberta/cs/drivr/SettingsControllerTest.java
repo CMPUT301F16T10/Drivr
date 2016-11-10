@@ -17,6 +17,7 @@
 
 package ca.ualberta.cs.drivr;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -32,24 +33,29 @@ import static org.junit.Assert.assertEquals;
  */
 public class SettingsControllerTest {
 
+    private MockUserManager mockUserManager;
+
+    @Before
+    public void setup() {
+        mockUserManager = new MockUserManager();
+    }
+
     @Test
     public void setUserMode() {
-        UserManager userManager = new UserManager();
-        SettingsController settingsController = new SettingsController(userManager);
+        SettingsController settingsController = new SettingsController(mockUserManager);
         settingsController.setUserMode(UserMode.DRIVER);
-        assertEquals(UserMode.DRIVER, userManager.getUserMode());
+        assertEquals(UserMode.DRIVER, mockUserManager.getUserMode());
         settingsController.setUserMode(UserMode.RIDER);
-        assertEquals(UserMode.RIDER, userManager.getUserMode());
+        assertEquals(UserMode.RIDER, mockUserManager.getUserMode());
     }
 
     @Test
     public void changeUnits() {
-        UserManager userManager = new UserManager();
-        SettingsController settingsController = new SettingsController(userManager);
+        SettingsController settingsController = new SettingsController(mockUserManager);
         settingsController.setMapUnits(MapUnits.METRIC);
-        assertEquals(MapUnits.METRIC, userManager.getMapUnits());
+        assertEquals(MapUnits.METRIC, mockUserManager.getMapUnits());
         settingsController.setMapUnits(MapUnits.IMPERIAL);
-        assertEquals(MapUnits.IMPERIAL, userManager.getMapUnits());
+        assertEquals(MapUnits.IMPERIAL, mockUserManager.getMapUnits());
     }
 
 }
