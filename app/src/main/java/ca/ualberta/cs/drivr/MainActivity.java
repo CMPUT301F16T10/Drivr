@@ -83,13 +83,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-    private LatLng latLng;
+    private LatLng pickup;
     private PlaceAutocompleteFragment autocompleteFragment;
     private GoogleMap mMap;
     private SupportMapFragment mFragment;
     private Activity activity;
     private MapController mapController;
-    private ArrayList<LatLng> latLngs = new ArrayList<LatLng>();
+    private ArrayList<LatLng> markers = new ArrayList<LatLng>();
     private Context context;
     LatLng test = new LatLng(53.5232, -113.5263);
     LatLng test2 = new LatLng(53.5225, -113.6242);
@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         .setAction("Action", null).show();
             }
         });
+
     }
 
 
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         mMap = googleMap;
         final MapController mapController = new MapController(mMap, context);
-        
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
@@ -193,7 +194,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         //test
         mapController.addRequestOnMap(test,test2);
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+
+
+
+                if(markers.size() == 0){
+                    mapController.addPickUp(latLng);
+                    pickup = latLng;
+                    markers.add(latLng);
+                }
+                else if(markers.size() == 1){
+                    mapController.addDestination(latLng);
+                    markers.add(latLng);
+                    mapController.addRequestOnMap(pickup,latLng);
+                }
+                else {
+                    mMap.clear();
+                    markers.clear();
+                }
+
+
+            }
+        });
     }
+
 
 
 
