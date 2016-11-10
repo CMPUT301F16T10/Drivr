@@ -31,8 +31,8 @@
 
                 <TextView
                     android:text="Go to"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -43,15 +43,15 @@
                     android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment" />
 
                 <TextView
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/new_request_place_dest_name" />
 
                 <TextView
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/new_request_place_dest_address" />
@@ -75,8 +75,8 @@
 
                 <TextView
                     android:text="Starting from"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -87,15 +87,15 @@
                     android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment" />
 
                 <TextView
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/new_request_place_source_name" />
 
                 <TextView
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/new_request_place_source_address" />
@@ -117,12 +117,22 @@
                 android:paddingBottom="8dp">
 
                 <TextView
-                    android:text="The cost for this ride is $12.00."
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:text="The estimated cost for this ride is $12.34. What would you like to play for this ride?"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/new_request_fare" />
+                    android:id="@+id/new_request_fare_message" />
+
+                <EditText
+                    android:text="$12.34"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:id="@+id/new_request_fare_edit_text" />
 
             </LinearLayout>
 

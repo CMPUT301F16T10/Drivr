@@ -17,12 +17,9 @@
 
 package ca.ualberta.cs.drivr;
 
-import android.location.Location;
-
 import com.google.android.gms.location.places.Place;
 
 import java.math.BigDecimal;
-import java.util.Currency;
 import java.util.Date;
 import java.util.UUID;
 
@@ -35,7 +32,7 @@ public class Request {
     private PublicUserInfo rider;
     private PublicUserInfo driver;
     private Date date;
-    private BigDecimal cost;
+    private BigDecimal fare;
     private RequestState requestState;
     private Place source;
     private Place destination;
@@ -45,8 +42,8 @@ public class Request {
     public Request() {
         rider = null;
         driver = null;
-        date = new Date();
-        cost = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
+        setDate(new Date());
+        setFare(new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP));
         requestState = null;
         source = null;
         destination = null;
@@ -57,7 +54,7 @@ public class Request {
     public Request(PublicUserInfo riderInfo, Place source, Place destination) {
         this();
         this.rider = riderInfo;
-        this.date = new Date();
+        this.setDate(new Date());
         this.source = source;
         this.destination = destination;
     }
@@ -79,6 +76,18 @@ public class Request {
     }
 
     public PublicUserInfo getDriver() { return driver; }
+
+    public Date getDate() { return date; }
+
+    public void setDate(Date date) { this.date = date; }
+
+    public BigDecimal getFare() {
+        return fare;
+    }
+
+    public void setFare(BigDecimal fare) {
+        this.fare = fare;
+    }
 
     public void setDriver(PublicUserInfo driver) {
         this.driver = driver;
@@ -115,4 +124,5 @@ public class Request {
     public void setSynced(String synced) {
         this.synced = synced;
     }
+
 }
