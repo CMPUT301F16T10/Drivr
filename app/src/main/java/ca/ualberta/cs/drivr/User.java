@@ -22,25 +22,19 @@ package ca.ualberta.cs.drivr;
  */
 public class User {
 
-    private String userId;
     private String name;
     private String username;
     private String phoneNumber;
     private String email;
-    private String address;
-    private int rating;
 
     /**
      * Instantiate a new User.
      */
     public User() {
-        userId = "";
         name = "";
         username = "";
         phoneNumber = "";
         email = "";
-        address = "";
-        rating = 0;
     }
 
     /**
@@ -116,53 +110,5 @@ public class User {
      */
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    /**
-     * Get the rating.
-     * @return The rating.
-     */
-    public int getRating() {
-        return rating;
-    }
-
-    /**
-     * Set the rating.
-     * @param rating The rating.
-     */
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    /**
-     * Get the address.
-     * @return The addres.
-     */
-    public String getAddress() {
-        return address;
-    }
-
-    /**
-     * Set the address.
-     * @param address The address.
-     */
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    /**
-     * Get the user ID.
-     * @return The user ID.
-     */
-    public String getUserId() {
-        return userId;
-    }
-
-    /**
-     * Set the user ID.
-     * @param userId The user ID.
-     */
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 }
