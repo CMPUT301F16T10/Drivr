@@ -19,12 +19,12 @@ package ca.ualberta.cs.drivr;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,14 +33,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.style.TtsSpan;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -53,11 +49,8 @@ import com.akexorcist.googledirection.util.DirectionConverter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationAvailability;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
@@ -68,8 +61,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
@@ -97,9 +91,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private MapController mapController;
     private ArrayList<LatLng> latLngs = new ArrayList<LatLng>();
     private Context context;
-    LatLng test = new LatLng(53.5232,-113.5263);
-    LatLng test2 = new LatLng(53.5225,-113.6242);
-    private String serveryKey = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
+    LatLng test = new LatLng(53.5232, -113.5263);
+    LatLng test2 = new LatLng(53.5225, -113.6242);
+    private static final String SERVER_KEY = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
 
     // Location for User
     double myLatitude = 0;
@@ -155,19 +149,26 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
+                ConcretePlace concretePlace = new ConcretePlace(place);
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(Uri.class, new UriSerializer())
+                        .create();
+                Intent intent = new Intent(MainActivity.this, NewRequestActivity.class);
+                String concretePlaceJson = gson.toJson(concretePlace);
+                intent.putExtra(NewRequestActivity.EXTRA_PLACE, concretePlaceJson);
                 Log.i(TAG, "Place: " + place.getName() + ", :" + place.getLatLng());
+                startActivity(intent);
                 // Checking Button
-                Toast.makeText(context, "Test For Place", Toast.LENGTH_LONG).show();
-
+                //Toast.makeText(context, "Test For Place", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onError(Status status) {
-
+                // Do nothing
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -200,17 +201,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
 
-    public void requestDirection(){
-
-
-
-        GoogleDirection.withServerKey(serveryKey)
+    public void requestDirection() {
+        GoogleDirection.withServerKey(SERVER_KEY)
                 .from(test)
                 .to(test2)
                 .transitMode(TransportMode.DRIVING)
                 .execute(this);
-
-
     }
 
     //https://github.com/akexorcist/Android-GoogleDirectionLibrary
@@ -222,14 +218,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
             ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
             mMap.addPolyline(DirectionConverter.createPolyline(this,directionPositionList,3, Color.RED));
-
-
         }
     }
 
     @Override
     public void onDirectionFailure(Throwable t) {
-
         Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
     }
 
