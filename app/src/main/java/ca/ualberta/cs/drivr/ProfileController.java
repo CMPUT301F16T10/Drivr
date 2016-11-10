@@ -18,45 +18,83 @@
 package ca.ualberta.cs.drivr;
 
 /**
- * Created by adam on 2016-10-12.
+ * A controller for modifying user profile information.
  */
-
 public class ProfileController {
 
+    /**
+     * The user manager that does the operations on requests.
+     */
     private IUserManager userManager;
 
+    /**
+     * Instantiate a new ProfileController.
+     * @param userManager The manager to perform operations with.
+     */
     public ProfileController(IUserManager userManager) {
         this.userManager = userManager;
     }
 
+    /**
+     * Get the name of the current user.
+     * @return The name of the user.
+     */
     public String getName() {
         return userManager.getUser().getName();
     }
 
+    /**
+     * Set the name of the current user.
+     * @param name The name of the user.
+     */
     public void setName(String name) {
         userManager.getUser().setName(name);
     }
 
+    /**
+     * Get the phone number of the current user.
+     * @return The phone number of the user.
+     */
     public String getPhoneNumber() {
         return userManager.getUser().getPhoneNumber();
     }
 
+    /**
+     * Set the phone number of the current user.
+     * @param phoneNumber The phone number of the user.
+     */
     public void setPhoneNumber(String phoneNumber) {
         userManager.getUser().setPhoneNumber(phoneNumber);
     }
 
+    /**
+     * Get the email of the current user.
+     * @return The email of the user.
+     */
     public String getEmail() {
         return userManager.getUser().getEmail();
     }
 
+    /**
+     * Set the email of the current user.
+     * @param email The email of the user.
+     */
     public void setEmail(String email) {
         userManager.getUser().setEmail(email);
     }
 
+    /**
+     * Get the address of the current user.
+     * @return The address of the user.
+     */
     public String getAddress() {
         return userManager.getUser().getAddress();
     }
 
+    /**
+     * Set the address of the current user.
+     * @param address The address of the user.
+     */
     public void setAddress(String address) {
         userManager.getUser().setAddress(address);
     }

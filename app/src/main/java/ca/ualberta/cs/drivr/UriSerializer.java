@@ -13,13 +13,13 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 
 /**
- * A class to use with Gson for serializing/deserializing Uris
- *
- * From: http://stackoverflow.com/a/27704368
- * Author: Marco Bonechi
- * Accessed: November 9, 2016
+ * A class to use with Gson for serializing/deserializing Uris.
+ * <ul>
+ *     <li>URL: http://stackoverflow.com/a/27704368</li>
+ *     <li>Author: Marco Bonechi</li>
+ *     <li>Accessed: November 9, 2016</li>
+ * </ul>
  */
-
 public class UriSerializer implements JsonSerializer<Uri>, JsonDeserializer<Uri> {
     @Override
     public JsonElement serialize(Uri src, Type typeOfSrc, JsonSerializationContext context) {

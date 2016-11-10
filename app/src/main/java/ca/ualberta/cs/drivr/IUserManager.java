@@ -18,15 +18,43 @@
 package ca.ualberta.cs.drivr;
 
 /**
- * Created by adam on 2016-10-12.
+ * Describes what a user manager should do. This is providing access to data classes.
  */
-
 public interface IUserManager {
 
+    /**
+     * Get the current user.
+     * @return The current user.
+     */
     User getUser();
+
+    /**
+     * Set the current user.
+     * @param user The current user.
+     */
     void setUser(User user);
+
+    /**
+     * Get the list of requests.
+     * @return The requests list.
+     */
     RequestsList getRequestsList();
+
+    /**
+     * Set the list of requests.
+     * @param requestsList The requests list.
+     */
     void setRequestsList(RequestsList requestsList);
+
+    /**
+     * Get the current user mode.
+     * @return The current user mode.
+     */
     UserMode getUserMode();
+
+    /**
+     * Set the user mode.
+     * @param userMode The user mode.
+     */
     void setUserMode(UserMode userMode);
 }

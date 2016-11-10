@@ -18,36 +18,98 @@
 package ca.ualberta.cs.drivr;
 
 /**
- * Created by adam on 2016-10-12.
+ * A (singleton) model class for providing access to application data.
  */
-
 public class UserManager implements IUserManager {
 
+    /**
+     * The current user.
+     */
     private User user;
+
+    /**
+     * The current user mode.
+     */
     private UserMode userMode;
+
+    /**
+     * The user's requests.
+     */
     private RequestsList requestsList;
 
+    /**
+     * A singleton instance.
+     */
     private static final UserManager instance = new UserManager();
 
+    /**
+     * Get access to the singleton instance.
+     * @return The singleton instance.
+     */
     public static UserManager getInstance() {
         return instance;
     }
 
+    /**
+     * Instantiate a new user manager.
+     */
     protected UserManager() {
-        user = null;
-        userMode = null;
-        requestsList = null;
+        user = new User();
+        userMode = UserMode.RIDER;
+        requestsList = new RequestsList();
     }
 
-    public User getUser() { return user; }
+    /**
+     * Get the current user.
+     * @return The current user.
+     */
+    @Override
+    public User getUser() {
+        return user;
+    }
 
-    public void setUser(User user) { this.user = user; }
+    /**
+     * Set the current user.
+     * @param user The current user.
+     */
+    @Override
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-    public RequestsList getRequestsList() { return requestsList; }
+    /**
+     * Get the list of requests.
+     * @return The requests list.
+     */
+    @Override
+    public RequestsList getRequestsList() {
+        return requestsList;
+    }
 
-    public void setRequestsList(RequestsList requestsList) { this.requestsList = requestsList; }
+    /**
+     * Set the list of requests.
+     * @param requestsList The requests list.
+     */
+    @Override
+    public void setRequestsList(RequestsList requestsList) {
+        this.requestsList = requestsList;
+    }
 
-    public UserMode getUserMode() { return userMode; }
+    /**
+     * Get the current user mode.
+     * @return The current user mode.
+     */
+    @Override
+    public UserMode getUserMode() {
+        return userMode;
+    }
 
-    public void setUserMode(UserMode userMode) { this.userMode = userMode; }
+    /**
+     * Set the user mode.
+     * @param userMode The user mode.
+     */
+    @Override
+    public void setUserMode(UserMode userMode) {
+        this.userMode = userMode;
+    }
 }

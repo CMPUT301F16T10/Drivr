@@ -18,23 +18,69 @@
 package ca.ualberta.cs.drivr;
 
 /**
- * Created by adam on 2016-10-12.
+ * A controller for modifying requests.
+ * @see Request
  */
-
 public class RequestController {
 
+    /**
+     * The user manager that does the operations on requests.
+     */
     private IUserManager userManager;
 
+    /**
+     * Instantiate a new RequestController.
+     * @param userManager The manager to perform operations with.
+     */
     public RequestController(IUserManager userManager) {
         this.userManager = userManager;
     }
 
-    public void deleteRequest(Request request) {
-        userManager.getRequestsList().remove(request);
-    }
-
+    /**
+     * Accept a request.
+     * @param request The request to accept.
+     */
     public void acceptRequest(Request request) {
         request.setRequestState(RequestState.ACCEPTED);
     }
 
+    /**
+     * Cancel a request.
+     * @param request The request to cancel.
+     */
+    public void cancelRequest(Request request) {
+        request.setRequestState(RequestState.CANCELLED);
+    }
+
+    /**
+     * Complete a request.
+     * @param request The request to complete.
+     */
+    public void completeRequest(Request request) {
+        request.setRequestState(RequestState.COMPLETED);
+    }
+
+    /**
+     * Confirm a request.
+     * @param request The request to confirm.
+     */
+    public void confirmRequest(Request request) {
+        request.setRequestState(RequestState.CONFIRMED);
+    }
+
+    /**
+     * Decline a request.
+     * @param request The request to decline.
+     */
+    public void declineRequest(Request request) {
+        request.setRequestState(RequestState.DECLINED);
+    }
+
+    /**
+     * Delete a request from from the manager.
+     * @param request The request to delete.
+     */
+    public void deleteRequest(Request request) {
+        userManager.getRequestsList().remove(request);
+    }
 }

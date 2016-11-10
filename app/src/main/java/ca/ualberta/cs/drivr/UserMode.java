@@ -18,9 +18,8 @@
 package ca.ualberta.cs.drivr;
 
 /**
- * Created by adam on 2016-10-12.
+ * An enum that tracks whether a user is in rider or driver mode.
  */
-
 public enum UserMode {
     RIDER,
     DRIVER

@@ -21,6 +21,9 @@ import com.google.gson.JsonSyntaxException;
 
 import java.math.BigDecimal;
 
+/**
+ * An activity that allows users to create a new request.
+ */
 public class NewRequestActivity extends AppCompatActivity {
 
     private static final String TAG = "NewRequestActivity";
@@ -29,6 +32,12 @@ public class NewRequestActivity extends AppCompatActivity {
     private Place destinationPlace;
     private Place sourcePlace;
 
+    /**
+     * This method initializes the activity by deserializing the JSON given to it to get the
+     * selected destination place and shows that place on the screen. Listeners are also setup for
+     * UI elements.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
