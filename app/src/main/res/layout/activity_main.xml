@@ -19,6 +19,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -49,25 +50,43 @@
 
     <include layout="@layout/content_main" />
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
 
     <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fabMenu"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+        <!--//    https://github.com/Clans/FloatingActionButton/issues/273-->
+        <!--//    Author: gwilli on GitHub-->
+        <!--//    Accessed: November 10, 2016-->
+        <!--//    add support for vector drawables in older versions of android-->
+
         <com.github.clans.fab.FloatingActionButton
+            fab:fab_label="Settings"
+            android:src="@drawable/fab_settings"
+            android:id="@+id/fabSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <com.github.clans.fab.FloatingActionButton
+            fab:fab_label="Profile"
+            android:src="@drawable/fab_profile"
+            android:id="@+id/fabProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+        <com.github.clans.fab.FloatingActionButton
+            fab:fab_label="History"
+            android:src="@drawable/fab_history"
+            android:id="@+id/fabHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <com.github.clans.fab.FloatingActionButton
+            fab:fab_label="Requests"
+            android:src="@drawable/fab_requests"
+            android:id="@+id/fabRequests"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
     </com.github.clans.fab.FloatingActionMenu>
 
 

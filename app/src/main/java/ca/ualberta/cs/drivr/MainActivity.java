@@ -28,10 +28,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
+//import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -46,6 +47,7 @@ import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -168,15 +170,57 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-//        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+//      Using the floating action button menu system
 
+        FloatingActionButton fabSettings = (FloatingActionButton) findViewById(R.id.fabSettings);
+        FloatingActionButton fabRequests = (FloatingActionButton) findViewById(R.id.fabRequests);
+        FloatingActionButton fabProfile = (FloatingActionButton) findViewById(R.id.fabProfile);
+        FloatingActionButton fabHistory = (FloatingActionButton) findViewById(R.id.fabHistory);
+
+        fabSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "clicked settings fab");
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        fabProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "clicked profile fab");
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+        fabHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "clicked history fab");
+                Intent intent = new Intent(MainActivity.this, RequestHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        fabRequests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "clicked requests fab");
+                Intent intent = new Intent(MainActivity.this, RequestActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+    }
+
+//    https://github.com/Clans/FloatingActionButton/issues/273
+//    Author: gwilli on GitHub
+//    Accessed: November 10, 2016
+//    add support for vector drawables in older versions of android
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
 
