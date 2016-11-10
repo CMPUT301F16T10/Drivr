@@ -175,6 +175,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         FloatingActionButton fabRequests = (FloatingActionButton) findViewById(R.id.fabRequests);
         FloatingActionButton fabProfile = (FloatingActionButton) findViewById(R.id.fabProfile);
         FloatingActionButton fabHistory = (FloatingActionButton) findViewById(R.id.fabHistory);
+        FloatingActionButton fabLogin = (FloatingActionButton) findViewById(R.id.fabLogin);
+
+        fabLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         fabSettings.setOnClickListener(new View.OnClickListener() {
             @Override
