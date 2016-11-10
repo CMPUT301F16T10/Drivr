@@ -61,6 +61,11 @@
         <!--//    Author: gwilli on GitHub-->
         <!--//    Accessed: November 10, 2016-->
         <!--//    add support for vector drawables in older versions of android-->
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabLogin"
+            fab:fab_label="login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <com.github.clans.fab.FloatingActionButton
             fab:fab_label="Settings"
