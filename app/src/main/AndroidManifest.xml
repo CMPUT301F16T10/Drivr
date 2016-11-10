@@ -22,9 +22,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -53,12 +51,16 @@
         <activity android:name=".RequestsListActivity" />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"/>
+            android:label="@string/title_activity_login" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyC7nQ8Bgdbzff9SI0UyXuD9DeY8baDVF38"/>
-        <meta-data android:name="com.google.android.geo.API_KEY2" android:value="AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE" />
+            android:value="AIzaSyC7nQ8Bgdbzff9SI0UyXuD9DeY8baDVF38" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY2"
+            android:value="AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE" />
 
+        <activity android:name=".NewRequestActivity"></activity>
     </application>
 
 </manifest>
