@@ -31,43 +31,39 @@ public class ElasticSearchTest {
         elasticSearch.requestPost(request);
         Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
         assertEquals(loadedRequest, request);
-        request.setDriver(new User("name", "email", "phonenumer").getPublicInfo());
+        request.setDriver(new User("name", "username"));
         elasticSearch.requestUpdate(request);
         Request newLoadedRequest = elasticSearch.loadRequest(request.getRequestId());
         assertNotSame(newLoadedRequest, loadedRequest);
         assertEquals(newLoadedRequest, request);
-
-
     }
 
     @Test
-    public void loadRequest(){
+    public void loadRequest() {
         Request request = new Request();
-        ElasticSearch elasticSearch =  new ElasticSearch();
+        ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.requestPost(request);
         Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
         assertEquals(request,loadedRequest);
     }
 
     @Test
-    public void saveUser(){
+    public void saveUser() {
         User user = new User();
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.saveUser(user);
-        //        elastic search will only update the userId if it successfully posts to the database
+        // elastic search will only update the userId if it successfully posts to the database
         assertFalse(user.getUserId().isEmpty());
     }
 
-    //    This tests both the load and save functions
+    // This tests both the load and save functions
     @Test
-    public void loadUser(){
-        User user = new User("John", "email@email", "123-456-7890");
+    public void loadUser() {
+        User user = new User("John", "johns_username");
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.saveUser(user);
         User loadedUser = elasticSearch.loadUser(user.getUserId());
         assertEquals(loadedUser, user);
-
-
     }
 
     /**
@@ -84,25 +80,15 @@ public class ElasticSearchTest {
      *
      * US 08.04.01
      * As a driver, I want to accept requests that will be sent once I get connectivity again.
-     *
-     *
      */
-
     @Test
     public void onNetworkStateChanged(){
         Request request = new Request();
-
         ElasticSearch elasticSearch = new ElasticSearch();
         ArrayList<Request> requestArrayList = elasticSearch.getOfflineRequests();
         requestArrayList.add(request);
         elasticSearch.onNetworkStateChanged();
         Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
         assertEquals(request, loadedRequest);
-
-
-//        elasticSearch.setOfflineRequests();
-
-
-
     }
 }

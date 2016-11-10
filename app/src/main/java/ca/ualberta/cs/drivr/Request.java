@@ -29,8 +29,8 @@ import java.util.UUID;
 
 public class Request {
 
-    private PublicUserInfo rider;
-    private PublicUserInfo driver;
+    private User rider;
+    private User driver;
     private Date date;
     private BigDecimal fare;
     private RequestState requestState;
@@ -51,7 +51,7 @@ public class Request {
         synced = "Not synced";
     }
 
-    public Request(PublicUserInfo riderInfo, Place source, Place destination) {
+    public Request(User riderInfo, Place source, Place destination) {
         this();
         this.rider = riderInfo;
         this.setDate(new Date());
@@ -75,7 +75,7 @@ public class Request {
         this.destination = destination;
     }
 
-    public PublicUserInfo getDriver() { return driver; }
+    public User getDriver() { return driver; }
 
     public Date getDate() { return date; }
 
@@ -85,11 +85,9 @@ public class Request {
         return fare;
     }
 
-    public void setFare(BigDecimal fare) {
-        this.fare = fare;
-    }
+    public void setFare(BigDecimal fare) { this.fare = fare; }
 
-    public void setDriver(PublicUserInfo driver) {
+    public void setDriver(User driver) {
         this.driver = driver;
     }
 
@@ -101,11 +99,11 @@ public class Request {
         this.requestState = requestState;
     }
 
-    public PublicUserInfo getRider() {
+    public User getRider() {
         return rider;
     }
 
-    public void setRider(PublicUserInfo rider) {
+    public void setRider(User rider) {
         this.rider = rider;
     }
 
