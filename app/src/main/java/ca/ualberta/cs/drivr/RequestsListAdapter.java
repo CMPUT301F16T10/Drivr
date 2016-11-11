@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.places.Place;
+
 import java.util.ArrayList;
 
 /**
@@ -81,13 +83,16 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         ImageView emailImageView = viewHolder.emailImageView;
 
         // Show the other person's name
-        otherUserNameTextView.setText("Some Driver " + position);
+        final User driver = request.getDriver();
+        otherUserNameTextView.setText(driver != null ? driver.getName() : "No Driver Yet");
 
         // Show the estimated time
         etaTextView.setText("ETA: 15 minutes");
 
         // Show the route text
-        routeTextView.setText("Going from West Edmonton Mall to City Center");
+        final Place source = request.getSourcePlace();
+        final Place destination = request.getDestinationPlace();
+        routeTextView.setText("Going from " + source.getName() + " to " + destination.getName());
 
         // Add a listener to the accept text view
         acceptTextView.setOnClickListener(new View.OnClickListener() {
