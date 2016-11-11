@@ -90,7 +90,7 @@ public class RequestControllerTest {
     /**
      * UC 7 Rider Confirms And Pays
      * US 01.07.01 As a Rider, I want to Confirm the completion of a Request and enable payment.
-     * Testing for Completed request
+     * Testing for Completed item_request
      */
     @Test
     public void completeRequest() {

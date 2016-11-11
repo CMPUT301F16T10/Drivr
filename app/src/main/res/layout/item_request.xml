@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:background="@color/cardview_dark_background"
         android:padding="4dp"
+        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
 
         <RelativeLayout
@@ -18,10 +19,10 @@
             android:padding="4dp">
 
             <ImageView
-                android:id="@+id/profilePictureImageView"
+                android:id="@+id/profile_picture_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/imageView3"
+                android:layout_alignBottom="@+id/email_image"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:minHeight="72dp"
@@ -30,35 +31,35 @@
                 app:srcCompat="@drawable/ic_person_black_24dp" />
 
             <TextView
-                android:id="@+id/driverNameTextView"
+                android:id="@+id/other_user_name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/profilePictureImageView"
+                android:layout_toEndOf="@+id/profile_picture_image"
                 android:paddingTop="4dp"
                 android:text="Driver Name"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/etaTextView"
+                android:id="@+id/eta_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/driverNameTextView"
-                android:layout_toEndOf="@+id/profilePictureImageView"
+                android:layout_below="@+id/other_user_name_text"
+                android:layout_toEndOf="@+id/profile_picture_image"
                 android:paddingTop="4dp"
                 android:text="Eta : 15 minutes" />
 
             <TextView
-                android:id="@+id/routeTextView"
+                android:id="@+id/route_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/etaTextView"
-                android:layout_toEndOf="@+id/profilePictureImageView"
+                android:layout_below="@id/eta_text"
+                android:layout_toEndOf="@+id/profile_picture_image"
                 android:paddingTop="4dp"
                 android:text="Current Location to Destination" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/call_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -70,11 +71,11 @@
                 app:srcCompat="@drawable/ic_call_black_24dp" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/email_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/imageView2"
+                android:layout_below="@+id/call_image"
                 android:minHeight="36dp"
                 android:minWidth="36dp"
                 android:padding="4dp"
@@ -86,11 +87,11 @@
                 android:id="@id/horizontalDivider"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_alignBottom="@id/profilePictureImageView"
+                android:layout_alignBottom="@id/profile_picture_image"
                 android:background="?android:attr/listDivider" />
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/accept_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/verticalDivider"
@@ -108,7 +109,7 @@
                 android:background="?android:attr/listDivider" />
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/decline_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@id/verticalDivider"
