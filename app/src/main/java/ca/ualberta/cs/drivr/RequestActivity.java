@@ -19,15 +19,45 @@ package ca.ualberta.cs.drivr;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
+
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.maps.MapFragment;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import static ca.ualberta.cs.drivr.R.id.map;
 
 /**
  * Setting this up for JavaDocs.
  */
 public class RequestActivity extends AppCompatActivity {
+    private TextView routeText;
+    private TextView fareText;
+    private MapFragment map;
+    public static final String EXTRA_REQUEST = "ca.ualberta.cs.drivr.RequestActivity.EXTRA_REQUEST";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
+        routeText = (TextView) findViewById(R.id.request_route_text);
+        fareText = (TextView) findViewById(R.id.request_fare_text);
+//        map = findViewById(R.id.request_map_fragment);
+
+
+        String requestString = getIntent().getStringExtra(EXTRA_REQUEST);
+        Gson gson = new Gson();
+        Request request = gson.fromJson(requestString, Request.class);
+
+
+//        R.id.request_map_fragment
+//        TODO make a map with these points and the route between them
+        Place sourcePlace = request.getSourcePlace();
+        Place destinationPlace = request.getDestinationPlace();
+
+
+
+
     }
 }
