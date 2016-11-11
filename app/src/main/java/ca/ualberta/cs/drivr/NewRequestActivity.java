@@ -22,7 +22,7 @@ import com.google.gson.JsonSyntaxException;
 import java.math.BigDecimal;
 
 /**
- * An activity that allows users to create a new request.
+ * An activity that allows users to create a new item_request.
  */
 public class NewRequestActivity extends AppCompatActivity {
 
@@ -128,7 +128,7 @@ public class NewRequestActivity extends AppCompatActivity {
     }
 
     /**
-     * Gerenates a request from the input data and places it in the requests list. A successful call
+     * Gerenates a item_request from the input data and places it in the requests list. A successful call
      * to this method will terminate the activity. An unsuccessful call to this method will display
      * a message on the screen to tell the user what went wrong.
      */
@@ -147,16 +147,16 @@ public class NewRequestActivity extends AppCompatActivity {
         final BigDecimal fare = new BigDecimal(fareString).setScale(2, BigDecimal.ROUND_FLOOR)
                 .divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR); // Divide by 100 to get dollars from cents
 
-        // Make the request
+        // Make the item_request
         Request request = new Request(null, sourcePlace, destinationPlace);
         request.setFare(fare);
-        // TODO: Store the request
+        // TODO: Store the item_request
 
         finish();
     }
 
     /**
-     * Determines if a place has enough information to be put in a request. To be valid, a place
+     * Determines if a place has enough information to be put in a item_request. To be valid, a place
      * needs to have at least either an address or a latitude/longitude location. This is so it can
      * be identified uniquely on a map.
      * @param place The pace to check

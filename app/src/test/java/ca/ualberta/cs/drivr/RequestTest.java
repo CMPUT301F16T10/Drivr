@@ -55,7 +55,7 @@ public class RequestTest {
 
     /**
      * UC 1 Rider Specifies Request Locations
-     * US 01.01.01 As a Rider, I want to request rides between two locations.
+     * US 01.01.01 As a Rider, I want to item_request rides between two locations.
      */
     @Test
     public void riderSpecifyLocation() {

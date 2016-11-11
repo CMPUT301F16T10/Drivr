@@ -44,7 +44,7 @@ public class ElasticSearchTest {
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.requestPost(request);
         Request loadedRequest = elasticSearch.loadRequest(request.getId());
-        assertEquals(request,loadedRequest);
+        assertEquals(request, loadedRequest);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class ElasticSearchTest {
     }
 
     /**
-     * The onNetworkStateChanged deals with all offline request modifications by tagging unsynced requests
+     * The onNetworkStateChanged deals with all offline item_request modifications by tagging unsynced requests
      *
      * US 08.01.01
      * As an driver, I want to see requests that I already accepted while offline.

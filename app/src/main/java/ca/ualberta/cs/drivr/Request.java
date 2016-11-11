@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * A class for storing information about a request.
+ * A class for storing information about a item_request.
  */
 public class Request {
 
@@ -39,7 +39,7 @@ public class Request {
     private String id;
 
     /**
-     * Instantiates a new request.
+     * Instantiates a new item_request.
      */
     public Request() {
         rider = null;
@@ -55,8 +55,8 @@ public class Request {
     }
 
     /**
-     * Instantiates a new request.
-     * @param rider The rider for the request.
+     * Instantiates a new item_request.
+     * @param rider The rider for the item_request.
      * @param source The starting location.
      * @param destination The edning location.
      */
@@ -101,7 +101,7 @@ public class Request {
     }
 
     /**
-     * Get the driver for the request.
+     * Get the driver for the item_request.
      * @return The driver.
      */
     public User getDriver() {
@@ -117,7 +117,7 @@ public class Request {
     }
 
     /**
-     * Get the date the request was made.
+     * Get the date the item_request was made.
      * @return The date.
      */
     public Date getDate() {
@@ -125,7 +125,7 @@ public class Request {
     }
 
     /**
-     * Set the date the request was made.
+     * Set the date the item_request was made.
      * @param date The date.
      */
     public void setDate(Date date) {
@@ -149,23 +149,23 @@ public class Request {
     }
 
     /**
-     * Get the request sate.
-     * @return The request state.
+     * Get the item_request sate.
+     * @return The item_request state.
      */
     public RequestState getRequestState() {
         return requestState;
     }
 
     /**
-     * Set the request state.
-     * @param requestState The request state.
+     * Set the item_request state.
+     * @param requestState The item_request state.
      */
     public void setRequestState(RequestState requestState) {
         this.requestState = requestState;
     }
 
     /**
-     * Get the rider for the request.
+     * Get the rider for the item_request.
      * @return The rider.
      */
     public User getRider() {
@@ -173,7 +173,7 @@ public class Request {
     }
 
     /**
-     * Set the rider for the request.
+     * Set the rider for the item_request.
      * @param rider The rider.
      */
     public void setRider(User rider) {
@@ -181,7 +181,7 @@ public class Request {
     }
 
     /**
-     * Get whether the request is synced online or not.
+     * Get whether the item_request is synced online or not.
      * @return True when synced, false otherwise.
      */
     public Boolean getSynced() {
@@ -189,7 +189,7 @@ public class Request {
     }
 
     /**
-     * Set whther the request is synced online or not.
+     * Set whther the item_request is synced online or not.
      * @param synced True when synced, false otherwise.
      */
     public void setSynced(Boolean synced) {

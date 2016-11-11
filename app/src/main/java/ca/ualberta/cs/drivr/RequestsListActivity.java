@@ -19,6 +19,8 @@ package ca.ualberta.cs.drivr;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 /**
  * Setting this up for JavaDocs.
@@ -30,6 +32,18 @@ public class RequestsListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requests_list);
+
+        // Some fake requests
+        RequestsList requestsList = new RequestsList();
+        requestsList.add(new Request());
+        requestsList.add(new Request());
+        requestsList.add(new Request());
+
+        // Setup the RecyclerView
+        RecyclerView requestsListRecyclerView = (RecyclerView) findViewById(R.id.requests_list_recycler);
+        RequestsListAdapter adapter = new RequestsListAdapter(this, requestsList.getRequests());
+        requestsListRecyclerView.setAdapter(adapter);
+        requestsListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     public void viewRequest(Request request) { throw new UnsupportedOperationException(); }
