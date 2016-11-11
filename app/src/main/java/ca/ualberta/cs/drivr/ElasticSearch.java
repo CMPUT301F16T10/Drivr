@@ -27,16 +27,16 @@ public class ElasticSearch {
     //    returns the reqeustId so that it can be found in the database
     public void requestPost(Request request){
         throw new UnsupportedOperationException();
-        //        if post fails add request to offline requests
+        //        if post fails add item_request to offline requests
     }
 
-    //    if the request.requestId is not null then you update instead of post
+    //    if the item_request.requestId is not null then you update instead of post
     public void requestUpdate(Request request){
         throw new UnsupportedOperationException();
         //        if updating fails due to network connection, post data to offlineRequests
     }
 
-    //    load the request for elastic search if the requestid is known
+    //    load the item_request for elastic search if the requestid is known
     public Request loadRequest(String requestId){
         throw new UnsupportedOperationException();
     }

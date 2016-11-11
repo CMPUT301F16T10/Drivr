@@ -37,48 +37,48 @@ public class RequestController {
     }
 
     /**
-     * Accept a request.
-     * @param request The request to accept.
+     * Accept a item_request.
+     * @param request The item_request to accept.
      */
     public void acceptRequest(Request request) {
         request.setRequestState(RequestState.ACCEPTED);
     }
 
     /**
-     * Cancel a request.
-     * @param request The request to cancel.
+     * Cancel a item_request.
+     * @param request The item_request to cancel.
      */
     public void cancelRequest(Request request) {
         request.setRequestState(RequestState.CANCELLED);
     }
 
     /**
-     * Complete a request.
-     * @param request The request to complete.
+     * Complete a item_request.
+     * @param request The item_request to complete.
      */
     public void completeRequest(Request request) {
         request.setRequestState(RequestState.COMPLETED);
     }
 
     /**
-     * Confirm a request.
-     * @param request The request to confirm.
+     * Confirm a item_request.
+     * @param request The item_request to confirm.
      */
     public void confirmRequest(Request request) {
         request.setRequestState(RequestState.CONFIRMED);
     }
 
     /**
-     * Decline a request.
-     * @param request The request to decline.
+     * Decline a item_request.
+     * @param request The item_request to decline.
      */
     public void declineRequest(Request request) {
         request.setRequestState(RequestState.DECLINED);
     }
 
     /**
-     * Delete a request from from the manager.
-     * @param request The request to delete.
+     * Delete a item_request from from the manager.
+     * @param request The item_request to delete.
      */
     public void deleteRequest(Request request) {
         userManager.getRequestsList().remove(request);

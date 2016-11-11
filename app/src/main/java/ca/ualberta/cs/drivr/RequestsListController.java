@@ -24,7 +24,7 @@ package ca.ualberta.cs.drivr;
 public class RequestsListController {
 
     /**
-     * The user manager that does the operations on request lists.
+     * The user manager that does the operations on item_request lists.
      */
     private IUserManager userManager;
 
