@@ -63,6 +63,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -79,8 +80,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        OnMapReadyCallback,
-        DirectionCallback{
+        OnMapReadyCallback, DirectionCallback,
+        GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener{
 
     private static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
@@ -258,7 +259,26 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        return false;
+    }
 
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+        mapController.updateMarker(marker);
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+
+    }
 
     //https://github.com/akexorcist/Android-GoogleDirectionLibrary
     @Override
