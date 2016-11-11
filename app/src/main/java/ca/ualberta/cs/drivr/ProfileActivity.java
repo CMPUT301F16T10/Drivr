@@ -29,7 +29,6 @@ import android.widget.TextView;
 
 public class ProfileActivity extends AppCompatActivity {
 
-
     private TextView usernameTextView;
     private TextView profileNameTextView;
     private TextView emailTextView;
@@ -41,9 +40,6 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView profileBoxImageView;
     private ImageView editProfileImageView;
     private ImageView profilePictureImageView;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Initialize the ImageViews
         profileBoxImageView = (ImageView)findViewById(R.id.profile_box);
-        editProfileImageView = (ImageView)findViewById(R.id.editProfile);
+        editProfileImageView = (ImageView)findViewById(R.id.edit_profile);
         profilePictureImageView = (ImageView)findViewById(R.id.profile_picture_image);
 
         editProfileImageView.setClickable(true);
@@ -79,9 +75,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void setUser(User user) {
-
-            }
+            public void setUser(User user) { }
 
             @Override
             public RequestsList getRequestsList() {
@@ -89,9 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void setRequestsList(RequestsList requestsList) {
-
-            }
+            public void setRequestsList(RequestsList requestsList) { }
 
             @Override
             public UserMode getUserMode() {
@@ -99,37 +91,13 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void setUserMode(UserMode userMode) {
-
-            }
+            public void setUserMode(UserMode userMode) { }
         };
 
         profileController = new ProfileController(iUserManager);
 
-        // get user
-        // Set profile up
+        // TODO get user
+        // TODO Set profile up
 
-    }
-
-    // set the TextViews to the String Returned
-    public void InitializeProfile(){
-        throw new UnsupportedOperationException();
-    }
-
-
-    public String getName() {
-        throw new UnsupportedOperationException();
-    }
-
-    public String getPhoneNumber() {
-        throw new UnsupportedOperationException();
-    }
-
-    public String getEmail() {
-        throw new UnsupportedOperationException();
-    }
-
-    public String getAddress() {
-        throw new UnsupportedOperationException();
     }
 }

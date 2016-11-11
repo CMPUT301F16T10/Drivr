@@ -70,18 +70,13 @@ import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
-//import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-//import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-
-
 /**
  * Setting this up for JavaDocs.
  */
-
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         OnMapReadyCallback, DirectionCallback,
-        GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener{
+        GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener {
 
     private static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
@@ -97,15 +92,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     LatLng test2 = new LatLng(53.5225, -113.6242);
     private static final String SERVER_KEY = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
 
-    // Location for User
-    double myLatitude = 0;
-    double myLongitude = 0;
-
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
-//    private  mLatitudeText;
-//    private Location currentLocation;
+    /*
+    https://github.com/Clans/FloatingActionButton/issues/273
+    Author: gwilli on GitHub
+    Accessed: November 10, 2016
 
+    Add support for vector drawables in older versions of android
+     */
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,22 +130,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
 
         mFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.map);
-
-
-        // get map
         mFragment.getMapAsync(this);
 
-
         autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-//        LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
-//        autocompleteFragment.setBoundsBias(new LatLngBounds(latLng, latLng));
-
-//        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
-//                .setTypeFilter(AutocompleteFilter.TYPE_FILTER_REGIONS)
-//                .build();
-
-//        autocompleteFragment.setFilter(typeFilter);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -160,8 +146,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 intent.putExtra(NewRequestActivity.EXTRA_PLACE, concretePlaceJson);
                 Log.i(TAG, "Place: " + place.getName() + ", :" + place.getLatLng());
                 startActivity(intent);
-                // Checking Button
-                //Toast.makeText(context, "Test For Place", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -170,8 +154,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-//      Using the floating action button menu system
-
+        // Using the floating action button menu system
         FloatingActionButton fabSettings = (FloatingActionButton) findViewById(R.id.fabSettings);
         FloatingActionButton fabRequests = (FloatingActionButton) findViewById(R.id.fabRequests);
         FloatingActionButton fabProfile = (FloatingActionButton) findViewById(R.id.fabProfile);
@@ -224,19 +207,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     }
 
-//    https://github.com/Clans/FloatingActionButton/issues/273
-//    Author: gwilli on GitHub
-//    Accessed: November 10, 2016
-//    add support for vector drawables in older versions of android
-    static {
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
-
-
-    // Map
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
         final MapController mapController = new MapController(mMap, context);
 
@@ -245,19 +217,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             mMap.setMyLocationEnabled(true);
         }
 
-        //test
-
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-
                 mapController.addPendingRequest(latLng, MainActivity.this);
-
-
             }
         });
     }
-
 
     @Override
     public boolean onMarkerClick(Marker marker) {
@@ -266,9 +232,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
     @Override
-    public void onMarkerDragStart(Marker marker) {
-
-    }
+    public void onMarkerDragStart(Marker marker) { }
 
     @Override
     public void onMarkerDrag(Marker marker) {
@@ -276,35 +240,29 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     @Override
-    public void onMarkerDragEnd(Marker marker) {
-
-    }
+    public void onMarkerDragEnd(Marker marker) { }
 
     //https://github.com/akexorcist/Android-GoogleDirectionLibrary
     @Override
-    public void onDirectionSuccess(Direction direction, String rawBody) {
-
-    }
+    public void onDirectionSuccess(Direction direction, String rawBody) { }
 
     @Override
-    public void onDirectionFailure(Throwable t) {
-
-    }
+    public void onDirectionFailure(Throwable t) { }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE){
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE){
             if(resultCode == RESULT_OK){
                 Place place = PlaceAutocomplete.getPlace(this,data);
 
             } else if(resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this,data);
             }
-        } else if (resultCode == RESULT_CANCELED){
-            // do nothing
+        }
+        else if (resultCode == RESULT_CANCELED){
+            // Do nothing
         }
     }
-
 
     @Override
     protected void onStart() {
@@ -356,32 +314,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             ActivityCompat.requestPermissions(this, permissions, 1);
         }
         final LocationRequest locationRequest = new LocationRequest();
-//        locationRequest.snRequest.setInt
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
 
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-//                        mLastLocation = locationResult.getLastLocation();
-
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 autocompleteFragment.setBoundsBias(new LatLngBounds(latLng, latLng));
                 Log.i(TAG, "updated the location bounds in listener" + latLng.toString());
             }
         });
-
     }
-
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i(TAG, "connection failed");
-
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-
-    }
+    public void onConnectionSuspended(int i) { }
 }
