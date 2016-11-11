@@ -44,19 +44,14 @@ public class RequestActivity extends AppCompatActivity {
         fareText = (TextView) findViewById(R.id.request_fare_text);
 //        map = findViewById(R.id.request_map_fragment);
 
-
         String requestString = getIntent().getStringExtra(EXTRA_REQUEST);
         Gson gson = new Gson();
         Request request = gson.fromJson(requestString, Request.class);
-
 
 //        R.id.request_map_fragment
 //        TODO make a map with these points and the route between them
         Place sourcePlace = request.getSourcePlace();
         Place destinationPlace = request.getDestinationPlace();
-
-
-
 
     }
 }

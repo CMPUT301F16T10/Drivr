@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/other_user_name_text"
+                    android:id="@+id/item_request_other_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
@@ -50,28 +50,39 @@
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <TextView
-                    android:id="@+id/fare_text"
+                    android:id="@+id/item_request_fare_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/other_user_name_text"
+                    android:layout_below="@+id/item_request_other_user_name"
                     android:padding="4dp"
                     android:layout_marginRight="36dp"
                     android:text="$12.34"
                     android:textAppearance="?android:attr/textAppearanceMedium" />/>
 
                 <TextView
-                    android:id="@+id/route_text"
+                    android:id="@+id/item_request_route_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/fare_text"
+                    android:layout_below="@id/item_request_fare_text"
                     android:padding="4dp"
                     android:paddingBottom="8dp"
                     android:layout_marginRight="36dp"
                     android:text="Current Location to Destination"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
+                <TextView
+                    android:id="@+id/item_request_status_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/item_request_route_text"
+                    android:padding="4dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginRight="36dp"
+                    android:text="Status"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
                 <ImageView
-                    android:id="@+id/call_image"
+                    android:id="@+id/item_request_call_image"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
@@ -81,11 +92,11 @@
                     app:srcCompat="@drawable/ic_call_black_24dp" />
 
                 <ImageView
-                    android:id="@+id/email_image"
+                    android:id="@+id/item_request_email_image"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_below="@+id/call_image"
+                    android:layout_below="@+id/item_request_call_image"
                     android:padding="4dp"
                     android:scaleType="fitXY"
                     app:srcCompat="@drawable/ic_email_black_24dp" />
@@ -98,6 +109,7 @@
             Author: yoah
             Date accessed: November 10, 2016
             -->
+            <!--
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -133,6 +145,7 @@
                     android:layout_weight="1" />
 
             </LinearLayout>
+            -->
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
