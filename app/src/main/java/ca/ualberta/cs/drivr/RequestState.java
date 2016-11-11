@@ -36,5 +36,15 @@ public enum RequestState {
     CANCELLED,
 
     /** The item_request has been fulfilled. */
-    COMPLETED
+    COMPLETED;
+
+    @Override
+    public String toString() {
+        String s = super.toString();
+        if (s.length() == 0)
+            return s;
+        String first = s.substring(0, 1);
+        String tail = s.substring(1);
+        return first.toUpperCase() + tail.toLowerCase();
+    }
 }

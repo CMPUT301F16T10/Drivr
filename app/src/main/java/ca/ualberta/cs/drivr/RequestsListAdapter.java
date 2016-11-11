@@ -50,8 +50,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         public final TextView otherUserNameTextView;
         public final TextView fareTextView;
         public final TextView routeTextView;
-        public final TextView acceptTextView;
-        public final TextView declineTextView;
+        public final TextView statusTextView;
         public final ImageView callImageView;
         public final ImageView emailImageView;
 
@@ -61,13 +60,12 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
          */
         public ViewHolder(View itemView) {
             super(itemView);
-            otherUserNameTextView = (TextView) itemView.findViewById(R.id.other_user_name_text);
-            fareTextView = (TextView) itemView.findViewById(R.id.fare_text);
-            routeTextView = (TextView) itemView.findViewById(R.id.route_text);
-            acceptTextView = (TextView) itemView.findViewById(R.id.accept_text);
-            declineTextView = (TextView) itemView.findViewById(R.id.decline_text);
-            callImageView = (ImageView) itemView.findViewById(R.id.call_image);
-            emailImageView = (ImageView) itemView.findViewById(R.id.email_image);
+            otherUserNameTextView = (TextView) itemView.findViewById(R.id.item_request_other_user_name);
+            fareTextView = (TextView) itemView.findViewById(R.id.item_request_fare_text);
+            routeTextView = (TextView) itemView.findViewById(R.id.item_request_route_text);
+            statusTextView = (TextView) itemView.findViewById(R.id.item_request_status_text);
+            callImageView = (ImageView) itemView.findViewById(R.id.item_request_call_image);
+            emailImageView = (ImageView) itemView.findViewById(R.id.item_request_email_image);
         }
     }
 
@@ -123,8 +121,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         TextView otherUserNameTextView = viewHolder.otherUserNameTextView;
         TextView fareTextView = viewHolder.fareTextView;
         TextView routeTextView = viewHolder.routeTextView;
-        TextView acceptTextView = viewHolder.acceptTextView;
-        TextView declineTextView = viewHolder.declineTextView;
+        TextView statusTextView = viewHolder.statusTextView;
         ImageView callImageView = viewHolder.callImageView;
         ImageView emailImageView = viewHolder.emailImageView;
 
@@ -140,21 +137,8 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         final Place destination = request.getDestinationPlace();
         routeTextView.setText("Going from " + source.getName() + " to " + destination.getName());
 
-        // Add a listener to the accept text view
-        acceptTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "You have accepted the request", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // Add a listener to the decline text view
-        declineTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "You have declined the request", Toast.LENGTH_SHORT).show();
-            }
-        });
+        // Show the status text
+        statusTextView.setText(request.getRequestState().toString());
 
         // Add a listener to the call image
         callImageView.setOnClickListener(new View.OnClickListener() {
