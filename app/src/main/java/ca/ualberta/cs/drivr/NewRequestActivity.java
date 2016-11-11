@@ -161,7 +161,7 @@ public class NewRequestActivity extends AppCompatActivity {
         intent.putExtra(RequestActivity.EXTRA_REQUEST, requestString);
         //TODO startActivityForResult() confirm if user presses accept or deny
 //        startActivityForResult(intent, );
-        startActivity(intent);
+//        startActivity(intent);
 
 
         userManager.getRequestsList().add(request);
