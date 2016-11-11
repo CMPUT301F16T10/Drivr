@@ -159,7 +159,7 @@ public class MapController implements DirectionCallback{
 
             new AlertDialog.Builder(context)
                     .setTitle("Confirm Pickup Location")
-                    .setMessage("Is this the Location you want to be picked up from")
+                    .setMessage("Is this the Location you want to be picked up from?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
@@ -180,7 +180,7 @@ public class MapController implements DirectionCallback{
         else if(markers.size() == 1){
             new AlertDialog.Builder(context)
                     .setTitle("Confirm Destination Location")
-                    .setMessage("Is this the Location you want to be dropped off at")
+                    .setMessage("Is this the Location you want to be dropped off at?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
@@ -206,10 +206,11 @@ public class MapController implements DirectionCallback{
 
 
     /**
-     * Clears the Map
+     * Clears the Map and allow another request
      */
     public void clearMap(){
         map.clear();
+        markers.clear();
     }
 
 
