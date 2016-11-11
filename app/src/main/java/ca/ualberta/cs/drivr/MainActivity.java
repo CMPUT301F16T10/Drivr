@@ -160,6 +160,25 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         FloatingActionButton fabHistory = (FloatingActionButton) findViewById(R.id.fabHistory);
         FloatingActionButton fabLogin = (FloatingActionButton) findViewById(R.id.fabLogin);
 
+        /* Used two fabs... we might want to create a settings xml later on and move this stuff there.
+        * Initially user is in Ridr mode so Drivr fab is set as invisible. When user presses this button
+        * he/she can switch to Drivr mode */
+        FloatingActionButton fabMode = (FloatingActionButton) findViewById(R.id.fabMode);
+
+        fabMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                /*UserManager userManager = null;
+                if (userManager.getUserMode() == UserMode.DRIVER) {
+                    userManager.setUserMode(UserMode.RIDER);
+                }
+                else if (userManager.getUserMode() == UserMode.RIDER) {
+                    userManager.setUserMode(UserMode.DRIVER);
+                } */
+                Log.i(TAG, "clicked mode fab which switches user modes");
+            }
+        });
+
         fabLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

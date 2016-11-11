@@ -96,6 +96,12 @@
             android:id="@+id/fabRequests"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+        <com.github.clans.fab.FloatingActionButton
+            fab:fab_label="Change mode"
+            fab:fab_colorNormal="@color/colorAccent"
+            android:id="@+id/fabMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </com.github.clans.fab.FloatingActionMenu>
 
