@@ -53,6 +53,7 @@
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fabMenu"
+        fab:menu_colorNormal="@color/colorAccent"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:layout_width="wrap_content"
@@ -63,42 +64,40 @@
         <!--//    add support for vector drawables in older versions of android-->
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fabLogin"
-            fab:fab_label="login"
+            fab:fab_label="Login"
+            fab:fab_colorNormal="@color/colorAccent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <com.github.clans.fab.FloatingActionButton
             fab:fab_label="Settings"
+            fab:fab_colorNormal="@color/colorAccent"
             android:src="@drawable/fab_settings"
             android:id="@+id/fabSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <com.github.clans.fab.FloatingActionButton
             fab:fab_label="Profile"
+            fab:fab_colorNormal="@color/colorAccent"
             android:src="@drawable/fab_profile"
             android:id="@+id/fabProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <com.github.clans.fab.FloatingActionButton
             fab:fab_label="History"
+            fab:fab_colorNormal="@color/colorAccent"
             android:src="@drawable/fab_history"
             android:id="@+id/fabHistory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <com.github.clans.fab.FloatingActionButton
             fab:fab_label="Requests"
+            fab:fab_colorNormal="@color/colorAccent"
             android:src="@drawable/fab_requests"
             android:id="@+id/fabRequests"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
     </com.github.clans.fab.FloatingActionMenu>
-
-
-
-
-
-
-
 
 </android.support.design.widget.CoordinatorLayout>
