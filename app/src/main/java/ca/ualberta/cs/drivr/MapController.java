@@ -108,8 +108,9 @@ public class MapController implements DirectionCallback{
     }
 
 
-
-
+    public GoogleMap getMap() {
+        return map;
+    }
 
     /**
      * Adds a Pickup Marker to the map
