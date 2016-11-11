@@ -17,10 +17,12 @@
 
 package ca.ualberta.cs.drivr;
 
+import java.util.Observable;
+
 /**
  * A (singleton) model class for providing access to application data.
  */
-public class UserManager implements IUserManager {
+public class UserManager extends Observable implements IUserManager {
 
     /**
      * The current user.
@@ -111,5 +113,11 @@ public class UserManager implements IUserManager {
     @Override
     public void setUserMode(UserMode userMode) {
         this.userMode = userMode;
+    }
+
+    @Override
+    public void notifyObservers() {
+        setChanged();
+        super.notifyObservers();
     }
 }
