@@ -29,6 +29,8 @@ public class NewRequestActivity extends AppCompatActivity {
     private static final String TAG = "NewRequestActivity";
     public static final String EXTRA_PLACE = "ca.ualberta.cs.driver.NewRequestActivity.EXTRA_PLACE";
 
+    private UserManager userManager = UserManager.getInstance();
+
     private Place destinationPlace;
     private Place sourcePlace;
 
@@ -147,10 +149,12 @@ public class NewRequestActivity extends AppCompatActivity {
         final BigDecimal fare = new BigDecimal(fareString).setScale(2, BigDecimal.ROUND_FLOOR)
                 .divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR); // Divide by 100 to get dollars from cents
 
-        // Make the item_request
-        Request request = new Request(null, sourcePlace, destinationPlace);
+        // Make the request and store it in the model
+        User user = userManager.getUser();
+        Request request = new Request(user, sourcePlace, destinationPlace);
         request.setFare(fare);
-        // TODO: Store the item_request
+        userManager.getRequestsList().add(request);
+        userManager.notifyObservers();
 
         finish();
     }

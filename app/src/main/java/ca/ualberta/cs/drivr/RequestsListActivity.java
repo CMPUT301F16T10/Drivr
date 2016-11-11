@@ -28,20 +28,16 @@ import android.support.v7.widget.RecyclerView;
 
 public class RequestsListActivity extends AppCompatActivity {
 
+    private UserManager userManager = UserManager.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requests_list);
 
-        // Some fake requests
-        RequestsList requestsList = new RequestsList();
-        requestsList.add(new Request());
-        requestsList.add(new Request());
-        requestsList.add(new Request());
-
         // Setup the RecyclerView
         RecyclerView requestsListRecyclerView = (RecyclerView) findViewById(R.id.requests_list_recycler);
-        RequestsListAdapter adapter = new RequestsListAdapter(this, requestsList.getRequests());
+        RequestsListAdapter adapter = new RequestsListAdapter(this, userManager.getRequestsList().getRequests());
         requestsListRecyclerView.setAdapter(adapter);
         requestsListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
