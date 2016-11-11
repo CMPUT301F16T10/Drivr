@@ -2,11 +2,9 @@ package ca.ualberta.cs.drivr;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +27,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView otherUserNameTextView;
-        public final TextView etaTextView;
+        public final TextView fareTextView;
         public final TextView routeTextView;
         public final TextView acceptTextView;
         public final TextView declineTextView;
@@ -39,7 +37,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         public ViewHolder(View itemView) {
             super(itemView);
             otherUserNameTextView = (TextView) itemView.findViewById(R.id.other_user_name_text);
-            etaTextView = (TextView) itemView.findViewById(R.id.eta_text);
+            fareTextView = (TextView) itemView.findViewById(R.id.fare_text);
             routeTextView = (TextView) itemView.findViewById(R.id.route_text);
             acceptTextView = (TextView) itemView.findViewById(R.id.accept_text);
             declineTextView = (TextView) itemView.findViewById(R.id.decline_text);
@@ -75,7 +73,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
 
         // Get the views to update
         TextView otherUserNameTextView = viewHolder.otherUserNameTextView;
-        TextView etaTextView = viewHolder.etaTextView;
+        TextView fareTextView = viewHolder.fareTextView;
         TextView routeTextView = viewHolder.routeTextView;
         TextView acceptTextView = viewHolder.acceptTextView;
         TextView declineTextView = viewHolder.declineTextView;
@@ -87,7 +85,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         otherUserNameTextView.setText(driver != null ? driver.getName() : "No Driver Yet");
 
         // Show the estimated time
-        etaTextView.setText("ETA: 15 minutes");
+        fareTextView.setText("$" + request.getFare().toString());
 
         // Show the route text
         final Place source = request.getSourcePlace();
