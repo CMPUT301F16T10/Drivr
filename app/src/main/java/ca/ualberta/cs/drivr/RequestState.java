@@ -21,21 +21,21 @@ package ca.ualberta.cs.drivr;
  * An enum that tracks the states or requests.
  */
 public enum RequestState {
-    /** A request made the by a rider but not yet accepted by a driver. */
+    /** A item_request made the by a rider but not yet accepted by a driver. */
     PENDING,
 
-    /** A request that has been confirmed by the driver. */
+    /** A item_request that has been confirmed by the driver. */
     ACCEPTED,
 
-    /** The rider confirms the driver's acceptance. The request is now ready to be fulfilled. */
+    /** The rider confirms the driver's acceptance. The item_request is now ready to be fulfilled. */
     CONFIRMED,
 
     /** The rider has rejected a driver who has accepted. */
     DECLINED,
 
-    /** The rider cancelled the request, indicating that they no longer want the ride. */
+    /** The rider cancelled the item_request, indicating that they no longer want the ride. */
     CANCELLED,
 
-    /** The request has been fulfilled. */
+    /** The item_request has been fulfilled. */
     COMPLETED
 }

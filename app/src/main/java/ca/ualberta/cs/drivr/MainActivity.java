@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "clicked requests fab");
-                Intent intent = new Intent(MainActivity.this, RequestActivity.class);
+                Intent intent = new Intent(MainActivity.this, RequestsListActivity.class);
                 startActivity(intent);
             }
         });
@@ -318,22 +318,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void viewSettings() {
-        throw new UnsupportedOperationException();
-    }
-
-    public void viewUserProfile() {
-        throw new UnsupportedOperationException();
-    }
-
-    public void viewRequests() {
-        throw new UnsupportedOperationException();
-    }
-
-    public void viewRequestHistory() {
-        throw new UnsupportedOperationException();
     }
 
     @Override

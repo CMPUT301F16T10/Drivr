@@ -22,7 +22,7 @@
         android:layout_height="36dp"
         android:layout_alignParentEnd="true"/>
     <ImageView
-        android:id="@+id/profile_picture"
+        android:id="@+id/profile_picture_image"
         android:layout_width="240dp"
         android:layout_height="240dp"
         android:padding="12dp"
