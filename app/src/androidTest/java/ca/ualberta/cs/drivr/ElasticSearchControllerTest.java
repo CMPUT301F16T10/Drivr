@@ -1,35 +1,94 @@
 package ca.ualberta.cs.drivr;
 
+import android.util.Log;
+
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
+
 /**
- * Created by colton on 2016-10-23.
+ * Tests for the ElasticSearch controller.
+ *
+ * NOTE THAT ASYNC REALLY HATES YOU FOR TRYING TO DO SEVERAL DIFFERENT THINGS AT ONCE AND YOU NEED
+ * TO FIGURE OUT SOME OTHER WAY OF HANDLING THESE TESTS.
  */
 
 public class ElasticSearchControllerTest {
 
+    private User user;
+
+    public void setUser() {
+        user = new User("tester", "test123");
+        user.setPhoneNumber("123-456-7890");
+        user.setEmail("test@test.test");
+    }
+
     @Test
-    public void searchString(){
-        ElasticSearchController elasticSearchController = new ElasticSearchController();
+    public void addRequest(){
+        assertEquals(2+2, 4);
+    }
 
-        String searchTerm = elasticSearchController.searchString("icecream");
+    @Test
+    public void updateRequest(){
+        assertEquals(2+2, 4);
+    }
 
-        assertEquals(searchTerm, "{some json}");
+    @Test
+    public void getRequests(){
+        assertEquals(2+2, 4);
+    }
+
+    @Test
+    public void searchRequestWithKeyword(){
+        assertEquals(2+2, 4);
+    }
+
+    @Test
+    public void searchRequestWithLocation(){
+        assertEquals(2+2, 4);
+    }
+
+    //AddUser test fails - not sure why, the class does work, but tests just fuck something up
+    //searchUser test succeeds
+    @Test
+    public void addAndSearchUser(){
+        setUser();
+        ElasticSearchController.AddUser addUser = new ElasticSearchController.AddUser();
+        addUser.execute(user);
+
+        User dup = null;
+        ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+        getUser.execute("test123");
+        try {
+            dup = getUser.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to load the user.");
+        }
+
+        assertEquals(user.getUsername(), dup.getUsername());
     }
 
 
     @Test
-    public void searchLocation(){
-        ElasticSearchController elasticSearchController = new ElasticSearchController();
-        android.location.Location location = new android.location.Location("Universtiy of Alberta");
-//        location.set(new Location("U"));
+    public void updateAndSearchUser(){
+        setUser();
+        ElasticSearchController.AddUser updateUser = new ElasticSearchController.AddUser();
+        updateUser.execute(user);
 
-        String searchTerm = elasticSearchController.searchLocation(location);
+        user.setEmail("test2@test2.test2");;
+        updateUser.execute(user);
 
-        assertEquals(searchTerm, "{some json}");
+        User dup = null;
+        ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+        getUser.execute("test123");
+        try {
+            dup = getUser.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to load the user.");
+        }
 
+        assertEquals(user.getEmail(), dup.getEmail());
     }
 
 }

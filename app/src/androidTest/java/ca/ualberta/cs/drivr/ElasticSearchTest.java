@@ -11,12 +11,13 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotSame;
 
 /**
- * Created by colton on 2016-10-23.
+ * Update these tests.
  */
 
 public class ElasticSearchTest {
+
     @Test
-    public void requestPost(){
+    public void addRequest(){
         Request request = new Request();
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.requestPost(request);
@@ -25,7 +26,7 @@ public class ElasticSearchTest {
     }
 
     @Test
-    public void requestUpdate(){
+    public void updateRequest(){
         Request request = new Request();
         ElasticSearch elasticSearch = new ElasticSearch();
         elasticSearch.requestPost(request);
@@ -41,7 +42,7 @@ public class ElasticSearchTest {
     }
 
     @Test
-    public void loadRequest(){
+    public void loadRequests(){
         Request request = new Request();
         ElasticSearch elasticSearch =  new ElasticSearch();
         elasticSearch.requestPost(request);
@@ -56,6 +57,17 @@ public class ElasticSearchTest {
         elasticSearch.saveUser(user);
         //        elastic search will only update the userId if it successfully posts to the database
         assertFalse(user.getUserId().isEmpty());
+    }
+
+    @Test
+    public void updateUser(){
+        User user = new User("John", "email@email", "123-456-7890");
+        ElasticSearch elasticSearch = new ElasticSearch();
+        elasticSearch.saveUser(user);
+        User loadedUser = elasticSearch.loadUser(user.getUserId());
+        assertEquals(loadedUser, user);
+
+
     }
 
     //    This tests both the load and save functions
