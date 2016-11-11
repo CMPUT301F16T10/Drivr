@@ -48,6 +48,10 @@ public class MapController implements DirectionCallback{
     private ArrayList<LatLng> markers = new ArrayList<LatLng>();
     private LatLng pickup;
 
+    private Marker pickupMarker;
+    private Marker destinationMarker;
+
+
 
     private GPSTracker gpsTracker;
     private String serverKey = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
@@ -86,7 +90,7 @@ public class MapController implements DirectionCallback{
         markerOptions.title("Destination");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 
-        map.addMarker(markerOptions);
+        destinationMarker = map.addMarker(markerOptions);
 
     }
     /**
@@ -123,7 +127,7 @@ public class MapController implements DirectionCallback{
         markerOptions.title("Pickup Location");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
-        map.addMarker(markerOptions);
+        pickupMarker = map.addMarker(markerOptions);
     }
 
     /**
@@ -231,6 +235,14 @@ public class MapController implements DirectionCallback{
             map.addPolyline(DirectionConverter.createPolyline(mContext,directionPositionList,3, Color.RED));
 
 
+
+        }
+    }
+
+
+    public void updateMarker(Marker marker){
+
+        if(marker == pickupMarker){
 
         }
     }
