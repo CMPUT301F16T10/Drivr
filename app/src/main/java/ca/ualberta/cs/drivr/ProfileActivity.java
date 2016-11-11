@@ -1,18 +1,17 @@
 /*
- *  Copyright 2016 CMPUT301F16T10
+ * Copyright 2016 CMPUT301F16T10
  *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
  */
 
 package ca.ualberta.cs.drivr;
@@ -29,7 +28,6 @@ import android.widget.TextView;
 
 public class ProfileActivity extends AppCompatActivity {
 
-
     private TextView usernameTextView;
     private TextView profileNameTextView;
     private TextView emailTextView;
@@ -41,9 +39,6 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView profileBoxImageView;
     private ImageView editProfileImageView;
     private ImageView profilePictureImageView;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Initialize the ImageViews
         profileBoxImageView = (ImageView)findViewById(R.id.profile_box);
-        editProfileImageView = (ImageView)findViewById(R.id.editProfile);
+        editProfileImageView = (ImageView)findViewById(R.id.edit_profile);
         profilePictureImageView = (ImageView)findViewById(R.id.profile_picture_image);
 
         editProfileImageView.setClickable(true);
@@ -79,9 +74,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void setUser(User user) {
-
-            }
+            public void setUser(User user) { }
 
             @Override
             public RequestsList getRequestsList() {
@@ -89,9 +82,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void setRequestsList(RequestsList requestsList) {
-
-            }
+            public void setRequestsList(RequestsList requestsList) { }
 
             @Override
             public UserMode getUserMode() {
@@ -99,37 +90,13 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void setUserMode(UserMode userMode) {
-
-            }
+            public void setUserMode(UserMode userMode) { }
         };
 
         profileController = new ProfileController(iUserManager);
 
-        // get user
-        // Set profile up
+        // TODO get user
+        // TODO Set profile up
 
-    }
-
-    // set the TextViews to the String Returned
-    public void InitializeProfile(){
-        throw new UnsupportedOperationException();
-    }
-
-
-    public String getName() {
-        throw new UnsupportedOperationException();
-    }
-
-    public String getPhoneNumber() {
-        throw new UnsupportedOperationException();
-    }
-
-    public String getEmail() {
-        throw new UnsupportedOperationException();
-    }
-
-    public String getAddress() {
-        throw new UnsupportedOperationException();
     }
 }

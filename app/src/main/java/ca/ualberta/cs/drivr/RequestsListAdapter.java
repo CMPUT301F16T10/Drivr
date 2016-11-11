@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 CMPUT301F16T10
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+
 package ca.ualberta.cs.drivr;
 
 import android.content.Context;
@@ -25,7 +41,12 @@ import java.util.ArrayList;
  */
 public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapter.ViewHolder> {
 
+    /**
+     * A class for storing subviews of a view.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        // References to the views in the list item
         public final TextView otherUserNameTextView;
         public final TextView fareTextView;
         public final TextView routeTextView;
@@ -34,6 +55,10 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         public final ImageView callImageView;
         public final ImageView emailImageView;
 
+        /**
+         * Instantiate a new ViewHolder.
+         * @param itemView The view of the lsit item.
+         */
         public ViewHolder(View itemView) {
             super(itemView);
             otherUserNameTextView = (TextView) itemView.findViewById(R.id.other_user_name_text);
@@ -46,27 +71,50 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         }
     }
 
+    /**
+     * The context ot display the data.
+     */
     private final Context context;
+
+    /**
+     * The requests to display.
+     */
     private final ArrayList<Request> requests;
 
+    /**
+     * Instantiate a new RequestListAdapter.
+     * @param context The context to display the the requests
+     * @param requests The requests
+     */
     public RequestsListAdapter(Context context, ArrayList<Request> requests) {
         this.context = context;
         this.requests = requests;
     }
 
+    /**
+     * Inflates the view.
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @Override
     public RequestsListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.item_request, parent, false);
+        View requestView = inflater.inflate(R.layout.item_request, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(contactView);
+        ViewHolder viewHolder = new ViewHolder(requestView);
         return viewHolder;
     }
 
+    /**
+     * Called when the view holder is wants to bind the request at a certain position in the list.
+     * @param viewHolder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(RequestsListAdapter.ViewHolder viewHolder, int position) {
         Request request = requests.get(position);
@@ -125,6 +173,10 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         });
     }
 
+    /**
+     * Get the number of items in the request list.
+     * @return
+     */
     @Override
     public int getItemCount() {
         return requests.size();
