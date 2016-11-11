@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -92,20 +93,6 @@ public class LoginActivity extends AppCompatActivity {
 
         signInButton = (Button) findViewById(R.id.sign_in_button);
         signUpButton = (Button) findViewById(R.id.sign_up_button);
-//        loginUsername = (EditText) findViewById(R.id.)
-//        populateAutoComplete();
-
-//        mPasswordView = (EditText) findViewById(R.id.password);
-//        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-//                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-//                    attemptLogin();
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
 
         signInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -120,7 +107,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
         signUpText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,9 +117,6 @@ public class LoginActivity extends AppCompatActivity {
                 signInButton.setVisibility(View.GONE);
                 signUpText.setVisibility(View.GONE);
                 signInText.setVisibility(View.VISIBLE);
-
-
-
             }
         });
         signInText.setOnClickListener(new OnClickListener() {
@@ -146,17 +129,9 @@ public class LoginActivity extends AppCompatActivity {
                 signInButton.setVisibility(View.VISIBLE);
                 signInText.setVisibility(View.GONE);
                 signUpText.setVisibility(View.VISIBLE);
-
-
-
             }
         });
-
-
-//        mLoginFormView = findViewById(R.id.login_form);
-//        mProgressView = findViewById(R.id.login_progress);
     }
-
 
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -198,35 +173,26 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // Reset errors.
         loginUsername.setError(null);
         loginName.setError(null);
         loginPhone.setError(null);
         loginEmail.setError(null);
-//        mEmailView.setError(null);
 
-//        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-//        String email = mEmailView.getText().toString();
         String username = loginUsername.getText().toString();
         String email = loginEmail.getText().toString();
         String name = loginName.getText().toString();
         String phone = loginPhone.getText().toString();
-//        String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         if (TextUtils.isEmpty(username)) {
-//            mEmailView.setError(getString(R.string.error_field_required));
             loginUsername.setError(getString(R.string.error_field_required));
             focusView = loginUsername;
             cancel = true;
         }
 
         if (TextUtils.isEmpty(name)) {
-//            mEmailView.setError(getString(R.string.error_field_required));
             loginName.setError(getString(R.string.error_field_required));
             focusView = loginName;
             cancel = true;
@@ -243,7 +209,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         if (TextUtils.isEmpty(email)) {
-//            mEmailView.setError(getString(R.string.error_field_required));
             loginEmail.setError(getString(R.string.error_field_required));
             focusView = loginEmail;
             cancel = true;
@@ -252,8 +217,6 @@ public class LoginActivity extends AppCompatActivity {
             focusView = loginEmail;
             cancel = true;
         }
-
-
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -279,39 +242,18 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // Reset errors.
         loginUsername.setError(null);
-//        mEmailView.setError(null);
-
-//        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-//        String email = mEmailView.getText().toString();
         String username = loginUsername.getText().toString();
-//        String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-//        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-//            mPasswordView.setError(getString(R.string.error_invalid_password));
-//            focusView = mPasswordView;
-//            cancel = true;
-//        }
-
         // Check for a valid email address.
         if (TextUtils.isEmpty(username)) {
-//            mEmailView.setError(getString(R.string.error_field_required));
             loginUsername.setError(getString(R.string.error_field_required));
             focusView = loginUsername;
             cancel = true;
         }
-//        else if (!isEmailValid(email)) {
-//            mEmailView.setError(getString(R.string.error_invalid_email));
-//            focusView = mEmailView;
-//            cancel = true;
-//        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -372,23 +314,16 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
-
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-//        private final String mEmail;
-//        private final String mPassword;
         private final String username;
         private User user;
         private UserManager userManager = UserManager.getInstance();
 
         UserLoginTask(String username) {
-//            mEmail = email;
-//            mPassword = password;
             this.username = username;
         }
 
@@ -420,8 +355,6 @@ public class LoginActivity extends AppCompatActivity {
 //                    return pieces[1].equals(mPassword);
 //                }
 //            }
-
-
         }
 
         @Override
@@ -430,9 +363,8 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-
                 userManager.setUser(user);
-//                user2 = user;
+                userManager.notifyObservers();
                 finish();
             } else {
 //                mPasswordView.setError(getString(R.string.error_incorrect_password));
@@ -452,7 +384,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public class UserSignUpTask extends AsyncTask<Void, Void, Boolean> {
 
-
         private final String username;
         private final String name;
         private final String email;
@@ -466,9 +397,7 @@ public class LoginActivity extends AppCompatActivity {
             this.name = name;
             this.email = email;
             this.phone = phone;
-
         }
-
 
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -498,6 +427,7 @@ public class LoginActivity extends AppCompatActivity {
                 user.setName(name);
                 user.setPhoneNumber(phone);
                 user.setUsername(username);
+                userManager.notifyObservers();
 
                 finish();
             } else {
