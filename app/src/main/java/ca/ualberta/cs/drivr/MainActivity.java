@@ -18,7 +18,9 @@ package ca.ualberta.cs.drivr;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -160,22 +162,26 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         FloatingActionButton fabHistory = (FloatingActionButton) findViewById(R.id.fabHistory);
         FloatingActionButton fabLogin = (FloatingActionButton) findViewById(R.id.fabLogin);
 
-        /* Used two fabs... we might want to create a settings xml later on and move this stuff there.
-        * Initially user is in Ridr mode so Drivr fab is set as invisible. When user presses this button
-        * he/she can switch to Drivr mode */
+        /* Change between user and driver mode... Will probably be replaced with an option in settings*/
         FloatingActionButton fabMode = (FloatingActionButton) findViewById(R.id.fabMode);
 
         fabMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
-                /*UserManager userManager = null;
+                Log.i(TAG, "clicked mode fab");
+                /*
+                Will be able to implement code below once elasticSearch is up and running
+                UserManager userManager = null; // Once elasticSearch is working will replace with finding a User
                 if (userManager.getUserMode() == UserMode.DRIVER) {
                     userManager.setUserMode(UserMode.RIDER);
                 }
                 else if (userManager.getUserMode() == UserMode.RIDER) {
                     userManager.setUserMode(UserMode.DRIVER);
-                } */
-                Log.i(TAG, "clicked mode fab which switches user modes");
+                    //Will have to implement a method "FindNearbyRequests" to get requests whose source
+                    // is nearby and display it on the map
+                    //Intent intent = new Intent((MainActivity.this, FindNearbyRequests.class);)
+                    //startActivity(intent);
+                }*/
             }
         });
 
