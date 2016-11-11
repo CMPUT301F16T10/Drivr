@@ -76,9 +76,16 @@
 
             </RelativeLayout>
 
+            <!--
+            Using the LinearLayout to provide two equal width width TextViews was modified from
+            URL: http://stackoverflow.com/a/20000701
+            Author: yoah
+            Date accessed: November 10, 2016
+            -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:padding="4dp"
                 android:weightSum="2">
 
