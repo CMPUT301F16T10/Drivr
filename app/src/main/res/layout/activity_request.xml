@@ -4,10 +4,82 @@
     android:id="@+id/activity_request"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ca.ualberta.cs.drivr.RequestActivity">
+    <View
+        android:background="@color/colorPrimary"
+        android:id="@+id/request_box"
+        android:layout_width="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_height="72dp"/>
+    <TextView
+        android:id="@+id/request_route_text"
+        android:padding="4dp"
+        android:layout_alignTop="@+id/request_box"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:text="current location to destination"/>
+    <TextView
+        android:id="@+id/request_fare_text"
+        android:padding="4dp"
+        android:layout_below="@+id/request_route_text"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="$12.34"/>
+
+    <com.google.android.gms.maps.MapFragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/request_box"
+        android:id="@+id/request_map_fragment" />
+
+    <!--<View-->
+        <!--android:background="@color/cardview_light_background"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="72dp"/>-->
+
+
+    <LinearLayout
+        android:background="@color/cardview_light_background"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/request_accept_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Accept"
+            android:gravity="center"
+            android:layout_weight="1" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/request_decline_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Decline"
+            android:gravity="center"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+
 
 </RelativeLayout>

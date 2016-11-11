@@ -149,10 +149,21 @@ public class NewRequestActivity extends AppCompatActivity {
         final BigDecimal fare = new BigDecimal(fareString).setScale(2, BigDecimal.ROUND_FLOOR)
                 .divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR); // Divide by 100 to get dollars from cents
 
+
         // Make the request and store it in the model
         User user = userManager.getUser();
         Request request = new Request(user, sourcePlace, destinationPlace);
         request.setFare(fare);
+
+        Gson gson = new Gson();
+        String requestString = gson.toJson(request, Request.class);
+        Intent intent = new Intent(NewRequestActivity.this, RequestActivity.class);
+        intent.putExtra(RequestActivity.EXTRA_REQUEST, requestString);
+        //TODO startActivityForResult() confirm if user presses accept or deny
+//        startActivityForResult(intent, );
+        startActivity(intent);
+
+
         userManager.getRequestsList().add(request);
         userManager.notifyObservers();
 
