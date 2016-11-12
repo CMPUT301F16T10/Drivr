@@ -105,6 +105,7 @@ public class MapController implements DirectionCallback{
         markerOptions.position(latLng);
         markerOptions.title("Destination");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        markerOptions.draggable(true);
 
         destinationMarker = map.addMarker(markerOptions);
 
@@ -141,6 +142,7 @@ public class MapController implements DirectionCallback{
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Pickup Location");
+        markerOptions.draggable(true);
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
         pickupMarker = map.addMarker(markerOptions);

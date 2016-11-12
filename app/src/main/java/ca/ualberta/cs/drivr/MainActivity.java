@@ -59,6 +59,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -247,6 +248,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 mapController.addPendingRequest(latLng, MainActivity.this);
             }
         });
+
+        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+
+            }
+        });
     }
 
     @Override
@@ -256,15 +275,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
     @Override
-    public void onMarkerDragStart(Marker marker) { }
+    public void onMarkerDragStart(Marker marker) {
 
-    @Override
-    public void onMarkerDrag(Marker marker) {
-        mapController.updateMarker(marker);
     }
 
     @Override
-    public void onMarkerDragEnd(Marker marker) { }
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+
+    }
 
     //https://github.com/akexorcist/Android-GoogleDirectionLibrary
     @Override

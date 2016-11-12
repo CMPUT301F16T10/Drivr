@@ -16,11 +16,13 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Setting this up for JavaDocs.
@@ -39,6 +41,13 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView profileBoxImageView;
     private ImageView editProfileImageView;
     private ImageView profilePictureImageView;
+
+    private String email;
+    private String address;
+    private String phoneNumber;
+
+    private Boolean editMode = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +70,68 @@ public class ProfileActivity extends AppCompatActivity {
         editProfileImageView.setOnClickListener(new View.OnClickListener(){
             @Override
                 public void onClick(View v) {
-                // Move To edit Mode
+                if (editMode){
+                    Toast.makeText(getApplicationContext(), "Edit Data Mode OFF", Toast.LENGTH_SHORT).show();
+                    editMode = false;
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Edit Data Mode On", Toast.LENGTH_SHORT).show();
+                    editMode = true;
+                }
             }
         });
+
+        profileNameTextView.setOnClickListener(new TextView.OnClickListener() {
+                                             @Override
+                                             public void onClick(View v) {
+                                                 if(editMode){
+                                                     profileNameTextView.setText("Changed Name");
+                                                 }
+                                             }
+                                         }
+
+
+        );
+
+
+        emailTextView.setOnClickListener(new TextView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(editMode){
+                    emailTextView.setText("Changed Email");
+                }
+            }
+        }
+
+
+        );
+
+        addressTextView.setOnClickListener(new TextView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(editMode){
+                    addressTextView.setText("Changed Address");
+                }
+            }
+        }
+
+
+        );
+        numberTextView.setOnClickListener(new TextView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(editMode){
+                    numberTextView.setText("Changed Number");
+                }
+            }
+        }
+
+
+        );
+
+
+
+
 
         //Create Controllers
         iUserManager = new IUserManager() {
