@@ -58,33 +58,37 @@
         android:id="@+id/profile_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_name"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:padding="4dp"/>
+        android:padding="4dp"
+        android:layout_below="@+id/profile_name"
+        android:layout_toStartOf="@+id/edit_profile" />
     <TextView
         android:text="email@example.com"
         android:id="@+id/profile_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_username"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:padding="4dp"/>
+        android:padding="4dp"
+        android:layout_below="@+id/profile_username"
+        android:layout_alignParentEnd="true" />
     <TextView
         android:text="(123) 456 - 7890"
         android:id="@+id/profile_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_email"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:padding="4dp"/>
+        android:padding="4dp"
+        android:layout_below="@+id/profile_email"
+        android:layout_alignParentEnd="true" />
     <TextView
         android:text="123 Fake Street"
         android:id="@+id/profile_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_phone"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:padding="4dp"/>
+        android:padding="4dp"
+        android:layout_below="@+id/profile_phone"
+        android:layout_alignStart="@+id/profile_phone" />
     <!--<ImageView-->
         <!--android:layout_height="240dp"-->
         <!--android:layout_below="@+id/profile_user_name"-->
@@ -96,6 +100,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:id="@+id/editTextUsername"
+        android:layout_above="@+id/profile_email"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/profile_email" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextEmail"
+        android:background="@android:color/transparent"
+        android:layout_above="@+id/profile_phone"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/profile_email" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextPhoneNumber"
+        android:background="@android:color/transparent"
+        android:layout_above="@+id/profile_address"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/profile_email" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextAddress"
+        android:background="@android:color/transparent"
+        android:layout_alignBottom="@+id/profile_address"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/editTextPhoneNumber" />
 
 
 </RelativeLayout>

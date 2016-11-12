@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,11 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView profileBoxImageView;
     private ImageView editProfileImageView;
     private ImageView profilePictureImageView;
+
+    private EditText userNameEditText;
+    private EditText phoneEditText;
+    private EditText emailEditText;
+    private EditText addressEditText;
 
     private String email;
     private String address;
@@ -66,6 +72,27 @@ public class ProfileActivity extends AppCompatActivity {
         editProfileImageView = (ImageView)findViewById(R.id.edit_profile);
         profilePictureImageView = (ImageView)findViewById(R.id.profile_picture_image);
 
+        userNameEditText = (EditText)findViewById(R.id.editTextUsername);
+        phoneEditText = (EditText)findViewById(R.id.editTextPhoneNumber);
+        addressEditText = (EditText)findViewById(R.id.editTextAddress);
+        emailEditText = (EditText)findViewById(R.id.editTextEmail);
+
+
+        userNameEditText.setText("UserName");
+        phoneEditText.setText("123-456-789");
+        addressEditText.setText("123 Fake Street");
+        emailEditText.setText("email@email.com");
+
+        userNameEditText.setTextIsSelectable(false);
+        phoneEditText.setTextIsSelectable(false);
+        addressEditText.setTextIsSelectable(false);
+        emailEditText.setTextIsSelectable(false);
+
+        userNameEditText.setCursorVisible(false);
+        phoneEditText.setCursorVisible(false);
+        addressEditText.setCursorVisible(false);
+        emailEditText.setCursorVisible(false);
+
         editProfileImageView.setClickable(true);
         editProfileImageView.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -73,10 +100,18 @@ public class ProfileActivity extends AppCompatActivity {
                 if (editMode){
                     Toast.makeText(getApplicationContext(), "Edit Data Mode OFF", Toast.LENGTH_SHORT).show();
                     editMode = false;
+                    userNameEditText.setCursorVisible(false);
+                    phoneEditText.setCursorVisible(false);
+                    addressEditText.setCursorVisible(false);
+                    emailEditText.setCursorVisible(false);
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Edit Data Mode On", Toast.LENGTH_SHORT).show();
                     editMode = true;
+                    userNameEditText.setCursorVisible(true);
+                    phoneEditText.setCursorVisible(true);
+                    addressEditText.setCursorVisible(true);
+                    emailEditText.setCursorVisible(true);
                 }
             }
         });
@@ -99,6 +134,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(editMode){
                     emailTextView.setText("Changed Email");
+                    //TODO After Click Change and Log info
                 }
             }
         }
@@ -111,6 +147,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(editMode){
                     addressTextView.setText("Changed Address");
+                    //TODO After Click Change and Log info
                 }
             }
         }

@@ -48,7 +48,8 @@ import java.util.List;
  * A class for Modifying the google map
  *
  * Uses a open source library to assist with polyline route drawing
- * https://github.com/akexorcist/Android-GoogleDirectionLibrary
+ * @see https://github.com/akexorcist/Android-GoogleDirectionLibrary
+ * @see DirectionCallback
  *
  */
 public class MapController implements DirectionCallback{
