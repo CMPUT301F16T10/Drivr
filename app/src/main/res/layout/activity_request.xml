@@ -21,6 +21,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ca.ualberta.cs.drivr.RequestActivity">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:id="@+id/request_map_fragment"
+        tools:context="com.example.app.MapActivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <View
         android:background="@color/colorPrimary"
         android:id="@+id/request_box"
@@ -46,11 +55,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:text="$12.34"/>
 
-    <com.google.android.gms.maps.MapFragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/request_box"
-        android:id="@+id/request_map_fragment" />
+
 
     <!--<View-->
         <!--android:background="@color/cardview_light_background"-->
