@@ -199,4 +199,58 @@ public class ElasticSearch {
      * Saves the user in ElasticSearch if they are connected to the internet. Else it'll store
      * the data and wait to come back online.
      *
-     * (since it's a pre-req when starting up 
+     * (since it's a pre-req when starting up it'd be necessary to be online - this is something that needs to be done)
+     *
+     * @param user
+     */
+    public void saveUser(User user) {
+        if(connectivityManager.getActiveNetworkInfo().isConnected()) {
+            ElasticSearchController.AddUser addUser = new ElasticSearchController.AddUser();
+            addUser.execute(user);
+        }
+        else {
+            this.user = user;
+        }
+    }
+
+    /**
+     * Returns the user the userID is associated to if it is found in ElasticSearch and the
+     * app is online, else it returns null.
+     *
+     * @param userID
+     * @return User
+     */
+    public User loadUser(String userID){
+        if(connectivityManager.getActiveNetworkInfo().isConnected()) {
+            ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+            getUser.execute(userID);
+            return getUser.get();
+        } else {
+            return null;
+        }
+    }
+
+    //    When the user gets network connectivity, all offline cached data will be posted to the data base
+    public void onNetworkStateChanged(){
+        if (connectivityManager.getActiveNetworkInfo().isConnected()){
+            if(user != null) {
+                saveUser(user);
+            }
+            if(requestsMadeOffline != null) {
+                for(int i = 0; i < requestsMadeOffline.size(); ++i) {
+                    saveRequest(requestsMadeOffline.get(i));
+                }
+            }
+            // Add others.
+        }
+    }
+
+    public ArrayList<Request> getOfflineRequests() {
+        return offlineRequests;
+    }
+
+    public void setOfflineRequests(ArrayList<Request> offlineRequests) {
+        this.offlineRequests = offlineRequests;
+    }
+}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
