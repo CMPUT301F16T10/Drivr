@@ -16,12 +16,16 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -30,10 +34,15 @@ import static ca.ualberta.cs.drivr.R.id.map;
 /**
  * Setting this up for JavaDocs.
  */
-public class RequestActivity extends AppCompatActivity {
+public class RequestActivity extends AppCompatActivity implements OnMapReadyCallback{
     private TextView routeText;
     private TextView fareText;
-    private MapFragment map;
+    private GoogleMap map;
+    private SupportMapFragment mapFragment;
+    private Context mContext;
+    private MapController mapController;
+    private Place sourcePlace;
+    private Place destinationPlace;
     public static final String EXTRA_REQUEST = "ca.ualberta.cs.drivr.RequestActivity.EXTRA_REQUEST";
 
     @Override
@@ -49,9 +58,27 @@ public class RequestActivity extends AppCompatActivity {
         Request request = gson.fromJson(requestString, Request.class);
 
 //        R.id.request_map_fragment
-//        TODO make a map with these points and the route between them
-        Place sourcePlace = request.getSourcePlace();
-        Place destinationPlace = request.getDestinationPlace();
 
+
+//        TODO make a map with these points and the route between them
+        mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.request_map_fragment);
+        mapFragment.getMapAsync(this);
+
+
+        //sourcePlace = request.getSourcePlace();
+        //destinationPlace = request.getDestinationPlace();
+
+        mContext = getApplicationContext();
+
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        final MapController mapController = new MapController(map,mContext);
+        if( sourcePlace != null && destinationPlace != null) {
+            mapController.addRequestOnMap(sourcePlace.getLatLng(), destinationPlace.getLatLng());
+        }
     }
 }
