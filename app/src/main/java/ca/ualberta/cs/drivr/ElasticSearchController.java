@@ -20,6 +20,8 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.maps.model.LatLng;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
@@ -94,11 +96,11 @@ public class ElasticSearchController {
                 String add = "{" +
                         "\"rider\": \"" + request.getRider() + "\"," +
                         "\"driver\": [";
-                for(int i = 0; i < request.getDriver().size(); i++) {
-                    Driver driver = request.getDriver().get(i);
+                for(int i = 0; i < request.getDrivers().size(); i++) {
+                    Driver driver = request.getDrivers().get(i);
                     add = add + "{\"username\": \"" + driver.getUsername() + "\", \"status\": \""
                             + driver.getStatus() + "\"";
-                    if(i != request.getDriver().size()-1) {
+                    if(i != request.getDrivers().size()-1) {
                         add += "}, ";
                     }
                 }
@@ -176,11 +178,11 @@ public class ElasticSearchController {
                 String add = "{" +
                         "\"rider\": \"" + request.getRider() + "\"," +
                         "\"driver\": [";
-                for(int i = 0; i < request.getDriver().size(); i++) {
-                    Driver driver = request.getDriver().get(i);
+                for(int i = 0; i < request.getDrivers().size(); i++) {
+                    Driver driver = request.getDrivers().get(i);
                     add = add + "{\"username\": \"" + driver.getUsername() + "\", \"status\": \""
                             + driver.getStatus() + "\"";
-                    if(i != request.getDriver().size()-1) {
+                    if(i != request.getDrivers().size()-1) {
                         add += "}, ";
                     }
                 }
@@ -568,7 +570,7 @@ public class ElasticSearchController {
             request.setFare(new BigDecimal(gottenRequest.getFare()));
             request.setId(gottenRequest.getId());
 
-            Place temp = new ConcretePlace();
+            ConcretePlace temp = new ConcretePlace();
             temp.setLatLng(new LatLng(gottenRequest.getStart()[1], gottenRequest.getStart()[0]));
             request.setSourcePlace(temp);
             temp.setLatLng(new LatLng(gottenRequest.getEnd()[1], gottenRequest.getEnd()[0]));
