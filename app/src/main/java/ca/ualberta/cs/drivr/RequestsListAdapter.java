@@ -126,8 +126,8 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         ImageView emailImageView = viewHolder.emailImageView;
 
         // Show the other person's name
-        final User driver = request.getDriver();
-        otherUserNameTextView.setText(driver != null ? driver.getName() : "No Driver Yet");
+        final Driver driver = request.getDriver();
+        otherUserNameTextView.setText(driver != null ? driver.getUsername() : "No Driver Yet");
 
         // Show the estimated time
         fareTextView.setText("$" + request.getFare().toString());
