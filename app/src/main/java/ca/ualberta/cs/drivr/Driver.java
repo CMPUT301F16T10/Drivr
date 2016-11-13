@@ -23,7 +23,7 @@ package ca.ualberta.cs.drivr;
  * @see ElasticSearchController
  */
 
-public class Driver extends User{
+public class Driver{
     private String username;
     private RequestState status;
 
