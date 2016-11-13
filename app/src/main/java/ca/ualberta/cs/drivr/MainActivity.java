@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     LatLng test2 = new LatLng(53.5225, -113.6242);
     private static final String SERVER_KEY = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
 
+
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     /*

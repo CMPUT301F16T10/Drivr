@@ -28,7 +28,8 @@ import java.util.Date;
 public class Request {
 
     private User rider;
-    private ArrayList<Driver> driver;
+    private ArrayList<Driver> drivers;
+    private Driver driver;
     private String description;
     private Date date;
     private BigDecimal fare;
@@ -104,16 +105,20 @@ public class Request {
      * Get the driver for the item_request.
      * @return The driver.
      */
-    public ArrayList<Driver> getDriver() {
+    public ArrayList<Driver> getDrivers() {
+        return drivers;
+    }
+
+    public Driver getDriver(){
         return driver;
     }
 
     /**
      * Set the driver.
-     * @param driver The driver.
+     * @param drivers The driver.
      */
-    public void setDriver(ArrayList<Driver> driver) {
-        this.driver = driver;
+    public void setDriver(ArrayList<Driver> drivers) {
+        this.drivers = drivers;
     }
 
     /**
