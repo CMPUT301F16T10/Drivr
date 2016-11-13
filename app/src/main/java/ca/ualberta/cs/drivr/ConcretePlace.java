@@ -150,6 +150,14 @@ public class ConcretePlace implements Place {
     }
 
     /**
+     * Set the location of a place as a latitude and longitude.
+     * @param latLng The location being set.
+     */
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
+    }
+
+    /**
      * Get the viewport bounds used to display this place on a map.
      * @return The place's viewport bounds.
      */
