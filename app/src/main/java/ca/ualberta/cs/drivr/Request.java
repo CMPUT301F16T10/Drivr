@@ -19,6 +19,7 @@ package ca.ualberta.cs.drivr;
 import com.google.android.gms.location.places.Place;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -27,7 +28,7 @@ import java.util.Date;
 public class Request {
 
     private User rider;
-    private User driver;
+    private ArrayList<Driver> driver;
     private String description;
     private Date date;
     private BigDecimal fare;
@@ -103,7 +104,7 @@ public class Request {
      * Get the driver for the item_request.
      * @return The driver.
      */
-    public User getDriver() {
+    public ArrayList<Driver> getDriver() {
         return driver;
     }
 
@@ -111,7 +112,7 @@ public class Request {
      * Set the driver.
      * @param driver The driver.
      */
-    public void setDriver(User driver) {
+    public void setDriver(ArrayList<Driver> driver) {
         this.driver = driver;
     }
 
