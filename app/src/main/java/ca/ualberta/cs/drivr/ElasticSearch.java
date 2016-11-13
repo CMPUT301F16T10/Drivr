@@ -4,7 +4,6 @@ import android.content.Context;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -21,8 +20,6 @@ import java.util.ArrayList;
  * @see MainActivity
  */
 
-//TODO: Implement connectivityManager for offline stuff.
-
 public class ElasticSearch {
     private ArrayList<Request> offlineRequests;
     private ArrayList<Request> requestsMadeOffline;
@@ -32,10 +29,11 @@ public class ElasticSearch {
     private boolean newInfo;
     private boolean newUser;
 
-    public ElasticSearch() {
+    public ElasticSearch(Context c) {
         newInfo = false;
-        //TODO: Fix this. Getting context seems necessary. This would require altering the activities that use ElasticSearch.
-        //connectivityManager = (ConnectivityManager) ;
+        newUser = false;
+        connectivityManager = (ConnectivityManager)
+                c.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     /**
@@ -100,8 +98,6 @@ public class ElasticSearch {
                 offlineRequests = requests.get();
                 return offlineRequests;
             } catch (Exception e) {
-                //Toast.makeText(getApplicationContext(), "An error occurred trying to get the
-                // search results", Toast.LENGTH_SHORT).show();
                 return offlineRequests;
             }
         } else {
@@ -109,13 +105,11 @@ public class ElasticSearch {
         }
     }
 
-    //TODO: Just here as a thought - maybe store this too?
     /**
      * Here, the requests for a user are gotten by first checking if there's anything made offline
      * that needs to be saved, then if the user is online it will get the requests within 50km of
      * the given geolocation and return the results gotten if successful. Else, if the
-     * search was unsuccessful, or the user is offline, it'll just return the previously stored
-     * requests.
+     * search was unsuccessful, or the user is offline, it'll return null.
      *
      * @param geolocation The location given by the user.
      * @return ArrayList<Request>
@@ -133,17 +127,15 @@ public class ElasticSearch {
                 return null;
             }
         } else {
-            return offlineRequests;
+            return null;
         }
     }
 
-    //TODO: Just here as a thought - maybe store this too?
     /**
      * Here, the requests for a given keyword are gotten by first checking if there's anything
      * offline that needs to be saved, then if the user is online it will get the requests with the
      * given keyword in description and return the results gotten if successful. Else, if the
-     * search was unsuccessful, or the user is offline, it'll just return the previously stored
-     * requests.
+     * search was unsuccessful, or the user is offline, it'll return null.
      *
      * @param searchTerm The keyword for the search.
      * @return ArrayList<Request>
@@ -161,7 +153,7 @@ public class ElasticSearch {
                 return null;
             }
         } else {
-            return offlineRequests;
+            return null;
         }
     }
 
@@ -281,5 +273,14 @@ public class ElasticSearch {
 
             newInfo = false;
         }
+    }
+
+    /**
+     * Used solely for testing.
+     *
+     * @return User
+     */
+    public User getUser() {
+        return user;
     }
 }

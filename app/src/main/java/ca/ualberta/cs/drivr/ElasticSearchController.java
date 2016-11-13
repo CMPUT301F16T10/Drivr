@@ -8,7 +8,10 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.searchbox.core.DocumentResult;
@@ -34,7 +37,6 @@ import io.searchbox.core.SearchResult;
  * @see ElasticSearchRequest
  */
 
-//TODO: Build the search result for Requests.
 public class ElasticSearchController {
     private static JestDroidClient client;
 
@@ -70,28 +72,32 @@ public class ElasticSearchController {
         protected Void doInBackground(Request... requests) {
             verifySettings();
             for(Request request: requests) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                String addedDate = format.format(request.getDate());
+
                 String add = "{" +
                         "\"rider\": \"" + request.getRider() + "\"," +
                         "\"driver\": [";
-                        for(int i = 0; i < size.drivers(); i++) {
-                            add = add + "{\"driver\": \"" + drivers.getDriver() + "\", \"status\": \""
-                                    + drivers.getStatus() + "\"";
-                            if(i != size.drivers()-1) {
-                                add += "}, ";
-                            }
-                        }
+                for(int i = 0; i < request.getDriver().size(); i++) {
+                    Driver driver = request.getDriver().get(i);
+                    add = add + "{\"username\": \"" + driver.getUsername() + "\", \"status\": \""
+                            + driver.getStatus() + "\"";
+                    if(i != request.getDriver().size()-1) {
+                        add += "}, ";
+                    }
+                }
 
                 add += "}]," +
                         "\"description\": \"" + request.getDescription() + "\"," +
                         "\"fare\": " + request.getFare().toString() + "," +
-                        "\"date\": \"" + request.getDate() + "\"," + // Change this.
+                        "\"date\": \"" + addedDate + "\"," +
                         "\"start\": [" + Double.toString(request.getSourcePlace().getLatLng().longitude)
                         + ", " + Double.toString(request.getSourcePlace().getLatLng().latitude) + "]," +
                         "\"end\": [" + Double.toString(request.getDestinationPlace().getLatLng().longitude)
                         + ", " + Double.toString(request.getDestinationPlace().getLatLng().latitude) + "]";
 
                 Index index = new Index.Builder(add + "}")
-                        .index("drivrtestzone")
+                        .index("drivr")
                         .type("requests")
                         .build();
                 try {
@@ -148,13 +154,17 @@ public class ElasticSearchController {
         protected Void doInBackground(Request... requests) {
             verifySettings();
             for(Request request: requests) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                String addedDate = format.format(request.getDate());
+
                 String add = "{" +
                         "\"rider\": \"" + request.getRider() + "\"," +
                         "\"driver\": [";
-                for(int i = 0; i < size.drivers(); i++) {
-                    add = add + "{\"driver\": \"" + drivers.getDriver() + "\", \"status\": \""
-                            + drivers.getStatus() + "\"";
-                    if(i != size.drivers()-1) {
+                for(int i = 0; i < request.getDriver().size(); i++) {
+                    Driver driver = request.getDriver().get(i);
+                    add = add + "{\"username\": \"" + driver.getUsername() + "\", \"status\": \""
+                            + driver.getStatus() + "\"";
+                    if(i != request.getDriver().size()-1) {
                         add += "}, ";
                     }
                 }
@@ -162,7 +172,7 @@ public class ElasticSearchController {
                 add += "}]," +
                         "\"description\": \"" + request.getDescription() + "\"," +
                         "\"fare\": " + request.getFare().toString() + "," +
-                        "\"date\": \"" + request.getDate() + "\"," + // Change this.
+                        "\"date\": \"" + addedDate + "\"," +
                         "\"start\": [" + Double.toString(request.getSourcePlace().getLatLng().longitude)
                         + ", " + Double.toString(request.getSourcePlace().getLatLng().latitude) + "]," +
                         "\"end\": [" + Double.toString(request.getDestinationPlace().getLatLng().longitude)
@@ -170,8 +180,8 @@ public class ElasticSearchController {
                         + "\"id\": \"" + request.getId() + "\"}";
 
                 Index index = new Index.Builder(add)
-                        .index("drivrtestzone")
-                        .type("request")
+                        .index("drivr")
+                        .type("requests")
                         .id(request.getId())
                         .build();
 
@@ -215,23 +225,24 @@ public class ElasticSearchController {
         protected ArrayList<Request> doInBackground(String... keywords) {
             verifySettings();
             ArrayList<Request> requests = new ArrayList<Request>();
+            ArrayList<ElasticSearchRequest> tempRequests = new ArrayList<ElasticSearchRequest>();
             for (String keyword: keywords) {
                 String search_string = "{\"from\": 0, \"size\": 10000, "
                         + "\"query\": {\"match\": {\"description\": \""
                         + keyword + "\"}}}";
 
                 Search search = new Search.Builder(search_string)
-                        .addIndex("drivrtestzone")
-                        .addType("request")
+                        .addIndex("drivr")
+                        .addType("requests")
                         .build();
 
                 try {
                     SearchResult result = client.execute(search);
                     if (result.isSucceeded()) {
-                        //TODO: Fix this to build the object from a hit list.
-                        List<Request> foundRequests = result
-                                .getSourceAsObjectList(Request.class);
-                        requests.addAll(foundRequests);
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
                     } else {
                         Log.i("Error", "The search executed but it didn't work.");
                     }
@@ -246,7 +257,7 @@ public class ElasticSearchController {
 
     /**
      * Here, the program will get take in the specified geolocation from the user, search within a
-     * 50 km radius for requests where the start locations are within that range and return the
+     * 5 km radius for requests where the start locations are within that range and return the
      * gotten requests.
      */
     public static class SearchForLocationRequests extends
@@ -255,10 +266,12 @@ public class ElasticSearchController {
         /**
          * Search query:
          * {
-         *     "from": 0, "size": 10000, "geo_distance":
-         *     {
-         *         "distance": "50km",
-         *         "start": [geolocation Longitude, geolocationLatitude]
+         *     "from": 0, "size": 10000, "filter": {
+         *        "geo_distance":
+         *         {
+         *             "distance": "5km",
+         *             "start": [geolocation Longitude, geolocationLatitude]
+         *         }
          *     }
          * }
          *
@@ -269,25 +282,27 @@ public class ElasticSearchController {
         protected ArrayList<Request> doInBackground(Location... geolocations) {
             verifySettings();
             ArrayList<Request> requests = new ArrayList<Request>();
+            ArrayList<ElasticSearchRequest> tempRequests = new ArrayList<ElasticSearchRequest>();
             for (Location geolocation : geolocations) {
-                String search_string = "{\"from\": 0, \"size\": 10000, \"geo_distance\":"
-                        + "{ \"distance\": \"50km\", \"start\": ["
+                String search_string = "{\"from\": 0, \"size\": 10000, \"filter\": "
+                        + "{ \"geo_distance\": "
+                        + "{ \"distance\": \"5km\", \"start\": ["
                         + Double.toString(geolocation.getLongitude()) + ", "
                         + Double.toString(geolocation.getLatitude())
-                        + "]}}";
+                        + "]}}}";
 
                 Search search = new Search.Builder(search_string)
-                        .addIndex("drivrtestzone")
-                        .addType("request")
+                        .addIndex("drivr")
+                        .addType("requests")
                         .build();
 
                 try {
                     SearchResult result = client.execute(search);
                     if (result.isSucceeded()) {
-                        //TODO: Fix this to build the object from a hit list.
-                        List<Request> foundRequests = result
-                                .getSourceAsObjectList(Request.class);
-                        requests.addAll(foundRequests);
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
                     } else {
                         Log.i("Error", "The search executed but it didn't work.");
                     }
@@ -308,17 +323,24 @@ public class ElasticSearchController {
     public static class SearchForRequests extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
-         * Search query:
+         * First search query:
          * {
          *     "from": 0, "size": 10000, "query":
          *     {
          *         "match":
          *         {
          *             "rider": "username" (given by user)
-         *             "driver":
-         *             {
-         *                 "username": "username" (given by user)
-         *             }
+         *         }
+         *     }
+         * }
+         *
+         * Second search query:
+         * {
+         *     "from": 0, "size": 10000, "query":
+         *     {
+         *         "match":
+         *         {
+         *             "driver.username": "username" (given by user)
          *         }
          *     }
          * }
@@ -330,24 +352,49 @@ public class ElasticSearchController {
         protected ArrayList<Request> doInBackground(String... usernames) {
             verifySettings();
             ArrayList<Request> requests = new ArrayList<Request>();
+            ArrayList<ElasticSearchRequest> tempRequests = new ArrayList<ElasticSearchRequest>();
             for(String username: usernames) {
                 String search_string = "{\"from\": 0, \"size\": 10000, "
-                        + "\"query\": {\"term\": " +
+                        + "\"query\": {\"match\": " +
                         "{\"rider\": \"" + username +
-                        "\", \"driver\": {\"username\": \"" + username + "\"}}}}";
+                        "\"}}}";
 
                 Search search = new Search.Builder(search_string)
-                        .addIndex("drivrtestzone")
-                        .addType("request")
+                        .addIndex("drivr")
+                        .addType("requests")
                         .build();
 
                 try {
                     SearchResult result = client.execute(search);
                     if (result.isSucceeded()) {
-                        //TODO: Fix this to build the object from a hit list.
-                        List<Request> foundRequests = result
-                                .getSourceAsObjectList(Request.class);
-                        requests.addAll(foundRequests);
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
+                    } else {
+                        Log.i("Error", "The search executed but it didn't work.");
+                    }
+                } catch (Exception e) {
+                    Log.i("Error", "Executing the get user method failed.");
+                }
+
+                search_string = "{\"from\": 0, \"size\": 10000, "
+                        + "\"query\": {\"match\": " +
+                        "{\"driver.username\": \"" + username +
+                        "\"}}}";
+
+                search = new Search.Builder(search_string)
+                        .addIndex("drivr")
+                        .addType("requests")
+                        .build();
+
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()) {
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
                     } else {
                         Log.i("Error", "The search executed but it didn't work.");
                     }
@@ -383,13 +430,13 @@ public class ElasticSearchController {
         protected Void doInBackground(User... users) {
             verifySettings();
             for(User user: users) {
-                String addUser = "{\"name\": \"" + user.getName() + "\"" +
-                        "\"username\": \"" + user.getUsername() + "\"," +
-                        "\"email\": \"" + user.getEmail() + "\"," +
+                String addUser = "{\"name\": \"" + user.getName() + "\", " +
+                        "\"username\": \"" + user.getUsername() + "\", " +
+                        "\"email\": \"" + user.getEmail() + "\", " +
                         "\"phoneNumber\": \"" + user.getPhoneNumber() + "\"}";
 
                 Index index = new Index.Builder(addUser)
-                        .index("drivrtestzone")
+                        .index("drivr")
                         .type("user")
                         .id(user.getUsername())
                         .build();
@@ -437,7 +484,7 @@ public class ElasticSearchController {
                         + "{\"username\": \"" + username + "\" }}}";
 
                 Search search = new Search.Builder(search_string)
-                        .addIndex("drivrtestzone")
+                        .addIndex("drivr")
                         .addType("user")
                         .build();
 
@@ -470,6 +517,51 @@ public class ElasticSearchController {
             JestClientFactory factory = new JestClientFactory();
             factory.setDroidClientConfig(config);
             client = (JestDroidClient) factory.getObject();
+        }
+    }
+
+    /**
+     * Here, the requests gotten from ElasticSearch will be converted to actual requests that can
+     * be stored within the app.
+     *
+     * Using reference:
+     * http://stackoverflow.com/questions/8573250/android-how-can-i-convert-string-to-date
+     * Author: user370305, edited by Tim Castelijns
+     *
+     * @param requests The requests to be returned to the rest of the app
+     * @param tempRequests The requests gotten from ElasticSearch.
+     */
+    //TODO: Will probably become necessary to fix this.
+    public static void addRequests(ArrayList<Request> requests,
+                                   ArrayList<ElasticSearchRequest> tempRequests) {
+        for(int i = 0; i < tempRequests.size(); ++i) {
+            ElasticSearchRequest gottenRequest = tempRequests.get(i);
+            Request request = new Request();
+
+            User tempUser = new User();
+            tempUser.setUsername(gottenRequest.getRider());
+            request.setRider(tempUser);
+            request.setDriver(gottenRequest.getDriver());
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            Date date;
+            try {
+                date = format.parse(gottenRequest.getDate()); // Fix.
+            } catch (Exception e) {
+                date = new Date();
+            }
+            request.setDate(date);
+            request.setDescription(gottenRequest.getDescription());
+            request.setFare(new BigDecimal(gottenRequest.getFare()));
+            request.setId(gottenRequest.getId());
+
+            Place temp = new ConcretePlace();
+            temp.setLatLon(new LatLng(gottenRequest.getStart()[1], gottenRequest.getStart()[0]));
+            request.setSourcePlace(temp);
+            temp.setLatLon(new LatLng(gottenRequest.getEnd()[1], gottenRequest.getEnd()[0]));
+            request.setDestinationPlace(temp);
+
+            requests.add(request);
         }
     }
 }

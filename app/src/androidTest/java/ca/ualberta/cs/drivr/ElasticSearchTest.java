@@ -1,14 +1,21 @@
 package ca.ualberta.cs.drivr;
 
+import android.content.Context;
+import android.location.Location;
 import android.net.ConnectivityManager;
+import android.test.mock.MockContext;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNotSame;
+import static junit.framework.Assert.assertNull;
 
 /**
  * Tests for the methods in the ElasticSearch class.
@@ -20,6 +27,43 @@ import static junit.framework.Assert.assertNotSame;
 //TODO: Use different contexts for online and offline for testing.
 public class ElasticSearchTest {
 
+    private User user;
+    private Request request;
+    private Context context;
+
+    /**
+     * Used to set the rider for each test.
+     */
+    public void setUser() {
+        user = new User("rider", "rider1");
+        user.setPhoneNumber("123-456-7890");
+        user.setEmail("test@test.test");
+    }
+
+    /**
+     * Used to set the request for each test.
+     */
+    public void setRequest() {
+        setUser();
+
+        ArrayList<Driver> driver = new ArrayList<Driver>();
+        Driver inDriver = new Driver();
+        inDriver.setStatus("PENDING");
+        inDriver.setUsername("driver1");
+        driver.add(inDriver);
+        request.setRider(user);
+        request.setDriver(driver);
+        request.setFare(new BigDecimal(555));
+        request.setDate(new Date());
+        request.setDescription("Go to Rogers Place");
+
+        Place temp = new ConcretePlace();
+        temp.setLatLng(new LatLng(50, 50));
+        request.setSourcePlace(temp);
+        temp.setLatLng(new LatLng(55, 55));
+        request.setDestinationPlace(temp);
+    }
+
     // ONLINE TESTS
 
     /**
@@ -27,30 +71,31 @@ public class ElasticSearchTest {
      */
     @Test
     public void addAndGetRequestOnline(){
-        Request request = new Request();
-        ElasticSearch elasticSearch = new ElasticSearch();
-        elasticSearch.requestPost(request);
-        Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
-        assertEquals(request, loadedRequest);
+        context = new MockContext();
+        setRequest();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
+        elasticSearch.saveRequest(request);
+        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
+        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        assertEquals(request.getId(), loadedRequest.getId());
     }
 
     /**
      * Test for updating a request online and searching for it.
      */
     @Test
-    public void updateRequestOnline(){
-        Request request = new Request();
-        ElasticSearch elasticSearch = new ElasticSearch();
-        elasticSearch.requestPost(request);
-        Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
-        assertEquals(loadedRequest, request);
-        request.setDriver(new User("name", "email", "phonenumer").getPublicInfo());
-        elasticSearch.requestUpdate(request);
-        Request newLoadedRequest = elasticSearch.loadRequest(request.getRequestId());
-        assertNotSame(newLoadedRequest, loadedRequest);
-        assertEquals(newLoadedRequest, request);
+    public void updateAndSearchRequestOnline(){
+        context = new MockContext();
+        setRequest();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
+        elasticSearch.saveRequest(request);
+        request.setDescription("Easiest thing to change.");
+        elasticSearch.updateRequest(request);
+        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
+        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
 
-
+        assertEquals(loadedRequest.getDescription(), request.getDescription());
+        assertEquals(request.getId(), loadedRequest.getId());
     }
 
     /**
@@ -58,11 +103,18 @@ public class ElasticSearchTest {
      */
     @Test
     public void searchRequestByLocationOnline(){
-        Request request = new Request();
-        ElasticSearch elasticSearch =  new ElasticSearch();
-        elasticSearch.requestPost(request);
-        Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
-        assertEquals(request,loadedRequest);
+        context = new MockContext();
+        setRequest();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
+        elasticSearch.saveRequest(request);
+
+        Location location = new Location("");
+        location.setLatitude(50);
+        location.setLongitude(50);
+
+        ArrayList<Request> loadedRequests = elasticSearch.searchRequestByGeolocation(location);
+        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        assertEquals(request.getId(), loadedRequest.getId());
     }
 
     /**
@@ -70,11 +122,13 @@ public class ElasticSearchTest {
      */
     @Test
     public void searchRequestByKeywordOnline(){
-        Request request = new Request();
-        ElasticSearch elasticSearch =  new ElasticSearch();
-        elasticSearch.requestPost(request);
-        Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
-        assertEquals(request,loadedRequest);
+        context = new MockContext();
+        setRequest();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
+        elasticSearch.saveRequest(request);
+        ArrayList<Request> loadedRequests = elasticSearch.searchRequestByKeyword("Rogers");
+        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        assertEquals(request.getId(), loadedRequest.getId());
     }
 
     /**
@@ -83,24 +137,28 @@ public class ElasticSearchTest {
      * This test should fail if the test case is already in ElasticSearch.
      */
     @Test
-    public void saveUserOnline(){
-        User user = new User();
-        ElasticSearch elasticSearch = new ElasticSearch();
+    public void saveAndSearchUserOnline(){
+        context = new MockContext();
+        setUser();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
         elasticSearch.saveUser(user);
-        //        elastic search will only update the userId if it successfully posts to the database
-        assertFalse(user.getUserId().isEmpty());
+        User loadedUser = elasticSearch.loadUser("rider1");
+        assertEquals(loadedUser.getUsername(), user.getUsername());
     }
 
     /**
      * Test for updating a user online and searching for it.
      */
     @Test
-    public void updateUserOnline(){
-        User user = new User("John", "email@email", "123-456-7890");
-        ElasticSearch elasticSearch = new ElasticSearch();
+    public void updateAndSearchUserOnline(){
+        context = new MockContext();
+        setUser();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
         elasticSearch.saveUser(user);
-        User loadedUser = elasticSearch.loadUser(user.getUserId());
-        assertEquals(loadedUser, user);
+        user.setEmail("test2@test2.test2");
+        elasticSearch.updateUser(user);
+        User loadedUser = elasticSearch.loadUser("rider1");
+        assertEquals(loadedUser.getEmail(), user.getEmail());
     }
 
     // OFFLINE TESTS
@@ -109,7 +167,13 @@ public class ElasticSearchTest {
      */
     @Test
     public void addRequestOffline(){
-        assertEquals(2+2, 4);
+        context = new MockContext();
+        setRequest();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
+        elasticSearch.saveRequest(request);
+        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
+        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        assertEquals(request.getRider(), loadedRequest.getRider());
     }
 
     /**
@@ -117,7 +181,13 @@ public class ElasticSearchTest {
      */
     @Test
     public void updateRequestOffline(){
-        assertEquals(2+2, 4);
+        context = new MockContext();
+        setRequest();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
+        elasticSearch.updateRequest(request);
+        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
+        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        assertEquals(request.getRider(), loadedRequest.getRider());
     }
 
     /**
@@ -125,7 +195,10 @@ public class ElasticSearchTest {
      */
     @Test
     public void loadRequestsOffline(){
-        assertEquals(2+2, 4);
+        context = new MockContext();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
+        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
+        assertEquals(loadedRequests.size(), 0);
     }
 
     /**
@@ -133,7 +206,14 @@ public class ElasticSearchTest {
      */
     @Test
     public void searchRequestByLocationOffline(){
-        assertEquals(2+2, 4);
+        context = new MockContext();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
+        Location location = new Location("");
+        location.setLatitude(50);
+        location.setLongitude(50);
+
+        ArrayList<Request> loadedRequests = elasticSearch.searchRequestByGeolocation(location);
+        assertNull(loadedRequests);
     }
 
     /**
@@ -141,7 +221,10 @@ public class ElasticSearchTest {
      */
     @Test
     public void searchRequestByKeywordOffline(){
-        assertEquals(2+2, 4);
+        context = new MockContext();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
+        ArrayList<Request> loadedRequests = elasticSearch.searchRequestByKeyword("hi");
+        assertNull(loadedRequests);
     }
 
     /**
@@ -149,7 +232,11 @@ public class ElasticSearchTest {
      */
     @Test
     public void saveUserOffline(){
-        assertEquals(2+2, 4);
+        context = new MockContext();
+        setUser();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
+        elasticSearch.saveUser(user);
+        assertNotNull(elasticSearch.getUser());
     }
 
     /**
@@ -157,7 +244,11 @@ public class ElasticSearchTest {
      */
     @Test
     public void updateUserOffline(){
-        assertEquals(2+2, 4);
+        context = new MockContext();
+        setUser();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
+        elasticSearch.updateUser(user);
+        assertNotNull(elasticSearch.getUser());
     }
 
     /**
@@ -165,7 +256,10 @@ public class ElasticSearchTest {
      */
     @Test
     public void gettingUserOffline(){
-        assertEquals(2+2, 4);
+        context = new MockContext();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
+        User user = elasticSearch.loadUser("bob");
+        assertNull(user);
     }
 
     // OFFLINE TO ONLINE TEST
@@ -174,13 +268,12 @@ public class ElasticSearchTest {
      */
     @Test
     public void onNetworkStateChanged(){
-        Request request = new Request();
-
-        ElasticSearch elasticSearch = new ElasticSearch();
-        ArrayList<Request> requestArrayList = elasticSearch.getOfflineRequests();
-        requestArrayList.add(request);
+        context = new MockContext();
+        ElasticSearch elasticSearch = new ElasticSearch(context);
+        elasticSearch.saveRequest(request);
         elasticSearch.onNetworkStateChanged();
-        Request loadedRequest = elasticSearch.loadRequest(request.getRequestId());
-        assertEquals(request, loadedRequest);
+        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
+        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        assertEquals(request.getId(), loadedRequest.getId());
     }
 }

@@ -1,8 +1,13 @@
 package ca.ualberta.cs.drivr;
 
+import android.location.Location;
 import android.util.Log;
 
 import org.junit.Test;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -17,30 +22,93 @@ import static junit.framework.Assert.assertEquals;
 public class ElasticSearchControllerTest {
 
     private User user;
+    private Request request;
 
     /**
-     * Used to set the user for each test.
+     * Used to set the rider for each test.
      */
     public void setUser() {
-        user = new User("tester", "test123");
+        user = new User("rider", "rider1");
         user.setPhoneNumber("123-456-7890");
         user.setEmail("test@test.test");
     }
 
     /**
-     * Test to make sure a request is added and gotten.
+     * Used to set the request for each test.
      */
-    @Test
-    public void addAndGetRequest(){
-        assertEquals(2+2, 4);
+    public void setRequest() {
+        setUser();
+
+        ArrayList<Driver> driver = new ArrayList<Driver>();
+        Driver inDriver = new Driver();
+        inDriver.setStatus("PENDING");
+        inDriver.setUsername("driver1");
+        driver.add(inDriver);
+        request.setRider(user);
+        request.setDriver(driver);
+        request.setFare(new BigDecimal(555));
+        request.setDate(new Date());
+        request.setDescription("Go to Rogers Place");
+
+        Place temp = new ConcretePlace();
+        temp.setLatLng(new LatLng(50, 50));
+        request.setSourcePlace(temp);
+        temp.setLatLng(new LatLng(55, 55));
+        request.setDestinationPlace(temp);
     }
 
     /**
-     * Test to make sure a request is updated and gotten.
+     * Test to make sure a request is added and gotten. Uses username search.
      */
     @Test
-    public void updateRequest(){
-        assertEquals(2+2, 4);
+    public void addAndGetRequest(){
+        setRequest();
+        ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
+        addRequest.execute(request);
+
+        ArrayList<Request> gotten = new ArrayList<Request>();
+        ElasticSearchController.SearchForRequests searchForRequests =
+                new ElasticSearchController.SearchForRequests();
+        searchForRequests.execute("rider1");
+        try {
+            gotten = searchForRequests.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to load the user.");
+        }
+
+        Request gottenRequest = gotten.get(gotten.size()-1);
+
+        assertEquals(request.getId(), gottenRequest.getId());
+    }
+
+    /**
+     * Test to make sure a request is updated and gotten. Uses username search.
+     */
+    @Test
+    public void updateAndGetRequest(){
+        setRequest();
+        ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
+        addRequest.execute(request);
+
+        request.setDescription("Easiest thing to change.");
+        ElasticSearchController.UpdateRequest updateRequest =
+                new ElasticSearchController.UpdateRequest();
+        updateRequest.execute(request);
+
+        ArrayList<Request> gotten = new ArrayList<Request>();
+        ElasticSearchController.SearchForRequests searchForRequests =
+                new ElasticSearchController.SearchForRequests();
+        searchForRequests.execute("rider1");
+        try {
+            gotten = searchForRequests.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to load the user.");
+        }
+
+        Request gottenRequest = gotten.get(gotten.size()-1);
+
+        assertEquals(gottenRequest.getDescription(), request.getDescription());
+        assertEquals(request.getId(), gottenRequest.getId());
     }
 
     /**
@@ -48,7 +116,23 @@ public class ElasticSearchControllerTest {
      */
     @Test
     public void searchRequestWithKeyword(){
-        assertEquals(2+2, 4);
+        setRequest();
+        ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
+        addRequest.execute(request);
+
+        ArrayList<Request> gotten = new ArrayList<Request>();
+        ElasticSearchController.SearchForKeywordRequests searchForKeywordRequests =
+                new ElasticSearchController.SearchForKeywordRequests();
+        searchForKeywordRequests.execute("Rogers");
+        try {
+            gotten = searchForKeywordRequests.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to load the user.");
+        }
+
+        Request gottenRequest = gotten.get(gotten.size()-1);
+
+        assertEquals(request.getId(), gottenRequest.getId());
     }
 
     /**
@@ -56,7 +140,26 @@ public class ElasticSearchControllerTest {
      */
     @Test
     public void searchRequestWithLocation(){
-        assertEquals(2+2, 4);
+        setRequest();
+        ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
+        addRequest.execute(request);
+
+        ArrayList<Request> gotten = new ArrayList<Request>();
+        ElasticSearchController.SearchForLocationRequests searchForLocationRequests =
+                new ElasticSearchController.SearchForLocationRequests();
+        Location location = new Location("");
+        location.setLatitude(50);
+        location.setLongitude(50);
+        searchForLocationRequests.execute(location);
+        try {
+            gotten = searchForLocationRequests.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to load the user.");
+        }
+
+        Request gottenRequest = gotten.get(gotten.size()-1);
+
+        assertEquals(request.getId(), gottenRequest.getId());
     }
 
     /**
@@ -73,7 +176,7 @@ public class ElasticSearchControllerTest {
         //Set second async timer here.
         User dup = null;
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-        getUser.execute("test123");
+        getUser.execute("rider1");
         try {
             dup = getUser.get();
         } catch (Exception e) {
