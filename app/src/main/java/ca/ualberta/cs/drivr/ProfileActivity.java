@@ -37,7 +37,6 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView addressTextView;
     private TextView numberTextView;
     private ProfileController profileController;
-    private IUserManager iUserManager;
 
     private ImageView profileBoxImageView;
     private ImageView editProfileImageView;
@@ -48,8 +47,10 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText addressEditText;
 
+    private User user;
     private String email;
-    private String address;
+    private String name;
+    private String userName;
     private String phoneNumber;
 
     private Boolean editMode = false;
@@ -62,10 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Initialize the Text Views
         profileNameTextView = (TextView)findViewById(R.id.profile_name);
-        usernameTextView = (TextView)findViewById(R.id.profile_username);
-        emailTextView = (TextView)findViewById(R.id.profile_email);
-        addressTextView = (TextView)findViewById(R.id.profile_address);
-        numberTextView = (TextView)findViewById(R.id.profile_phone);
+
 
         // Initialize the ImageViews
         profileBoxImageView = (ImageView)findViewById(R.id.profile_box);
@@ -77,11 +75,22 @@ public class ProfileActivity extends AppCompatActivity {
         addressEditText = (EditText)findViewById(R.id.editTextAddress);
         emailEditText = (EditText)findViewById(R.id.editTextEmail);
 
+        // Set up UserManager
+        final UserManager userManager = UserManager.getInstance();
+        user = userManager.getUser();
 
-        userNameEditText.setText("UserName");
-        phoneEditText.setText("123-456-789");
+        // Get info
+        phoneNumber = user.getPhoneNumber();
+        email = user.getEmail();
+        userName = user.getUsername();
+        name = user.getName();
+
+
+        userNameEditText.setText(userName);
+        phoneEditText.setText(phoneNumber);
         addressEditText.setText("123 Fake Street");
-        emailEditText.setText("email@email.com");
+        emailEditText.setText(email);
+        profileNameTextView.setText(name);
 
         userNameEditText.setTextIsSelectable(false);
         phoneEditText.setTextIsSelectable(false);
@@ -100,15 +109,25 @@ public class ProfileActivity extends AppCompatActivity {
                 if (editMode){
                     Toast.makeText(getApplicationContext(), "Edit Data Mode OFF", Toast.LENGTH_SHORT).show();
                     editMode = false;
-                    userNameEditText.setCursorVisible(false);
+                    //userNameEditText.setCursorVisible(false);
                     phoneEditText.setCursorVisible(false);
                     addressEditText.setCursorVisible(false);
                     emailEditText.setCursorVisible(false);
+                    profileNameTextView.setCursorVisible(true);
+
+                    phoneNumber = phoneEditText.getText().toString();
+                    email = emailEditText.getText().toString();
+
+                    user.setEmail(email);
+                    user.setPhoneNumber(phoneNumber);
+
+
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Edit Data Mode On", Toast.LENGTH_SHORT).show();
                     editMode = true;
-                    userNameEditText.setCursorVisible(true);
+                    //userNameEditText.setCursorVisible(true);
+                    profileNameTextView.setCursorVisible(true);
                     phoneEditText.setCursorVisible(true);
                     addressEditText.setCursorVisible(true);
                     emailEditText.setCursorVisible(true);
@@ -116,89 +135,14 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        profileNameTextView.setOnClickListener(new TextView.OnClickListener() {
-                                             @Override
-                                             public void onClick(View v) {
-                                                 if(editMode){
-                                                     profileNameTextView.setText("Changed Name");
-                                                 }
-                                             }
-                                         }
-
-
-        );
-
-
-        emailTextView.setOnClickListener(new TextView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(editMode){
-                    emailTextView.setText("Changed Email");
-                    //TODO After Click Change and Log info
-                }
-            }
-        }
-
-
-        );
-
-        addressTextView.setOnClickListener(new TextView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(editMode){
-                    addressTextView.setText("Changed Address");
-                    //TODO After Click Change and Log info
-                }
-            }
-        }
-
-
-        );
-        numberTextView.setOnClickListener(new TextView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(editMode){
-                    numberTextView.setText("Changed Number");
-                }
-            }
-        }
-
-
-        );
 
 
 
 
 
-        //Create Controllers
-        iUserManager = new IUserManager() {
-            @Override
-            public User getUser() {
-                // Query for User
-                return null;
-            }
 
-            @Override
-            public void setUser(User user) { }
 
-            @Override
-            public RequestsList getRequestsList() {
-                return null;
-            }
 
-            @Override
-            public void setRequestsList(RequestsList requestsList) { }
-
-            @Override
-            public UserMode getUserMode() {
-                return null;
-            }
-
-            @Override
-            public void setUserMode(UserMode userMode) { }
-        };
-
-        profileController = new ProfileController(iUserManager);
 
         // TODO get user
         // TODO Set profile up

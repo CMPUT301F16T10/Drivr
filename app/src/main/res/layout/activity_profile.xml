@@ -23,11 +23,48 @@
     android:layout_height="match_parent"
     tools:context="ca.ualberta.cs.drivr.ProfileActivity">
 
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:id="@+id/editTextUsername"
+        android:layout_below="@+id/profile_name"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:id="@+id/editTextEmail"
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/editTextAddress"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:id="@+id/editTextPhoneNumber"
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/editTextEmail"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:id="@+id/editTextAddress"
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/profile_name"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="48dp" />
+
+
     <ImageView
         android:id="@+id/profile_box"
         android:layout_width="match_parent"
         android:background="@color/colorPrimary"
-        android:layout_height="200dp" />
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <ImageView
         app:srcCompat="@drawable/ic_mode_edit_black_24dp"
@@ -41,8 +78,9 @@
         android:layout_width="240dp"
         android:layout_height="240dp"
         android:padding="12dp"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/ic_person_black_24dp"/>
+        app:srcCompat="@drawable/ic_person_black_24dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:padding="12dp"
@@ -53,42 +91,7 @@
         android:gravity="center"
         android:text="John Doe"
         android:textSize="48sp"/>
-    <TextView
-        android:text="j.doe"
-        android:id="@+id/profile_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:padding="4dp"
-        android:layout_below="@+id/profile_name"
-        android:layout_toStartOf="@+id/edit_profile" />
-    <TextView
-        android:text="email@example.com"
-        android:id="@+id/profile_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:padding="4dp"
-        android:layout_below="@+id/profile_username"
-        android:layout_alignParentEnd="true" />
-    <TextView
-        android:text="(123) 456 - 7890"
-        android:id="@+id/profile_phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:padding="4dp"
-        android:layout_below="@+id/profile_email"
-        android:layout_alignParentEnd="true" />
-    <TextView
-        android:text="123 Fake Street"
-        android:id="@+id/profile_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:padding="4dp"
-        android:layout_below="@+id/profile_phone"
-        android:layout_alignStart="@+id/profile_phone" />
+
     <!--<ImageView-->
         <!--android:layout_height="240dp"-->
         <!--android:layout_below="@+id/profile_user_name"-->
@@ -96,46 +99,7 @@
         <!--android:layout_width="240dp"-->
         <!--android:layout_centerHorizontal="true" />-->
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:id="@+id/editTextUsername"
-        android:layout_above="@+id/profile_email"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/profile_email" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextEmail"
-        android:background="@android:color/transparent"
-        android:layout_above="@+id/profile_phone"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/profile_email" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextPhoneNumber"
-        android:background="@android:color/transparent"
-        android:layout_above="@+id/profile_address"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/profile_email" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextAddress"
-        android:background="@android:color/transparent"
-        android:layout_alignBottom="@+id/profile_address"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/editTextPhoneNumber" />
 
 
 </RelativeLayout>
