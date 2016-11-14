@@ -160,8 +160,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         FloatingActionButton fabHistory = (FloatingActionButton) findViewById(R.id.fabHistory);
         FloatingActionButton fabLogin = (FloatingActionButton) findViewById(R.id.fabLogin);
 
-        /* Change between user and driver mode... Will probably be replaced with an option in settings*/
+        /*
+        Change between user and driver mode. Will probably be replaced with an option in settings.
+        For now the visibility of this is set to gone because we should not have too many FABs.
+        Having too many FABs may cause confusion and rendering issues on small screens.
+        */
         FloatingActionButton fabMode = (FloatingActionButton) findViewById(R.id.fabMode);
+        fabMode.setVisibility(View.GONE);
 
         fabMode.setOnClickListener(new View.OnClickListener() {
             @Override
