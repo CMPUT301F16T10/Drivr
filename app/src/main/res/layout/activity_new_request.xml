@@ -133,7 +133,6 @@
                 android:paddingBottom="8dp">
 
                 <TextView
-                    android:text="The estimated cost for this ride is $12.34. What would you like to play for this ride?"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
                     android:layout_width="match_parent"
@@ -141,7 +140,6 @@
                     android:id="@+id/new_request_fare_message" />
 
                 <EditText
-                    android:text="$12.34"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="8dp"
