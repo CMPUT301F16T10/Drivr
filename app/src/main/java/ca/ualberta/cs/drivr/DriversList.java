@@ -59,7 +59,7 @@ public class DriversList implements Iterable<Driver> {
      * @param other The drivers to add to the list.
      * @throws ConfirmedDriverAlreadyExistsException
      */
-    public void addAll(Collection<? extends Driver> other) throws ConfirmedDriverAlreadyExistsException {
+    public void addAll(Collection<Driver> other) throws ConfirmedDriverAlreadyExistsException {
         int count = 0;
         if (hasConfirmedDriver())
             count++;

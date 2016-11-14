@@ -25,13 +25,23 @@ public class RequestsListController {
     /**
      * The user manager that does the operations on item_request lists.
      */
-    private IUserManager userManager;
+    private UserManager userManager;
 
     /**
      * Instantiate a new RequestListController.
      * @param userManager The manager to perform operations with.
      */
-    public RequestsListController(IUserManager userManager) {
+    public RequestsListController(UserManager userManager) {
         this.userManager = userManager;
+    }
+
+    /**
+     * Adds a request to the requests list.
+     * The request to add.
+     * @param request
+     */
+    public void addRequest(Request request) {
+        userManager.getRequestsList().add(request);
+        userManager.notifyObservers();
     }
 }

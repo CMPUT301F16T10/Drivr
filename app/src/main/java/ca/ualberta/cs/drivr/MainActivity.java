@@ -62,7 +62,6 @@ import com.google.gson.GsonBuilder;
 
 /**
  * Setting this up for JavaDocs.
- *
  */
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
