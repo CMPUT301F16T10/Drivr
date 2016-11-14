@@ -18,7 +18,9 @@ package ca.ualberta.cs.drivr;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText usernameEditText;
     private EditText phoneEditText;
     private EditText emailEditText;
+    private Button saveChanges;
 
     private ViewSwitcher usernameSwitch;
     private ViewSwitcher phoneSwitch;
