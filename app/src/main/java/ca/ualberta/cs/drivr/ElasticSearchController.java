@@ -510,10 +510,12 @@ public class ElasticSearchController {
 
                 try {
                     SearchResult result = client.execute(search);
-                    if (result.isSucceeded())
+                    if (result.isSucceeded()) {
                         user = result.getSourceAsObject(User.class);
-                    else
+                    }
+                    else {
                         Log.i("Error", "The search executed but it didn't work.");
+                    }
                 }
                 catch (Exception e) {
                     Log.i("Error", "Executing the get user method failed.");
