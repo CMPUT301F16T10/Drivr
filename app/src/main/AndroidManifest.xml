@@ -16,6 +16,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.ualberta.cs.drivr">
 
+
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -61,11 +62,7 @@
             android:name="com.google.android.geo.API_KEY2"
             android:value="AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE" />
 
-        <activity android:name=".NewRequestActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+        <activity android:name=".NewRequestActivity"></activity>
     </application>
 
 </manifest>
