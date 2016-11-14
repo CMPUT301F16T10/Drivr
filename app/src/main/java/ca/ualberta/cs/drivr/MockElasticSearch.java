@@ -37,6 +37,16 @@ public class MockElasticSearch {
         }
         return null;
     }
+    public void updateUser(User user) {
+        for (User savedUser: userArrayList) {
+            if (savedUser.getUsername().equals(user.getUsername())) {
+                userArrayList.remove(savedUser);
+                userArrayList.add(user);
+                return;
+            }
+        }
+    }
+
 
 
 }

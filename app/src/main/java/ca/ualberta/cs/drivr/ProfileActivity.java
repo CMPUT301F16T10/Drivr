@@ -32,7 +32,7 @@ import android.widget.ViewSwitcher;
  */
 public class ProfileActivity extends AppCompatActivity {
 
-    private final IUserManager userManager = UserManager.getInstance();
+    private final UserManager userManager = UserManager.getInstance();
     private ProfileController profileController;
 
     private View profileContent;
@@ -130,21 +130,23 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
                 public void onClick(View v) {
                 if (editMode) {
+                    boolean changed = false;
                     Toast.makeText(getApplicationContext(), "Edit Data Mode OFF", Toast.LENGTH_SHORT).show();
                     editProfileImageView.setImageResource(R.drawable.ic_mode_edit_black_24dp);
 
-                    if (!usernameEditText.getText().toString().equals(username)) {
-//                        The username has been changed
-                        //TODO validate the new username with elastic search
-                        username = usernameEditText.getText().toString();
-                        user.setUsername(username);
-                        usernameTextView.setText(username);
-
-                    }
-
-                    usernameSwitch.findViewById(R.id.profile_username_text_view);
-                    usernameEditText.setVisibility(View.GONE);
-                    usernameTextView.setVisibility(View.VISIBLE);
+//                    if (!usernameEditText.getText().toString().equals(username)) {
+////                        The username has been changed
+//                        //TODO validate the new username with elastic search
+//                        username = usernameEditText.getText().toString();
+//                        user.setUsername(username);
+//                        usernameTextView.setText(username);
+//                        changed = true;
+//
+//                    }
+//
+//                    usernameSwitch.findViewById(R.id.profile_username_text_view);
+//                    usernameEditText.setVisibility(View.GONE);
+//                    usernameTextView.setVisibility(View.VISIBLE);
 
                     if (!phoneEditText.getText().toString().equals(phoneNumber)) {
 //                        The Phone Number has been changed
@@ -152,6 +154,7 @@ public class ProfileActivity extends AppCompatActivity {
                         phoneNumber = phoneEditText.getText().toString();
                         user.setPhoneNumber(phoneNumber);
                         phoneTextView.setText(phoneNumber);
+                        changed = true;
 
                     }
 
@@ -165,6 +168,7 @@ public class ProfileActivity extends AppCompatActivity {
                         email = emailEditText.getText().toString();
                         user.setEmail(email);
                         emailTextView.setText(email);
+                        changed = true;
 
                     }
 
@@ -178,9 +182,15 @@ public class ProfileActivity extends AppCompatActivity {
                         name = profileNameEditText.getText().toString();
                         user.setName(name);
                         profileNameTextView.setText(name);
+                        changed = true;
 
                     }
 
+                    if (changed) {
+                        MockElasticSearch elasticSearch = MockElasticSearch.getInstance();
+                        elasticSearch.updateUser(user);
+                        userManager.notifyObservers();
+                    }
                     profileNameSwitch.findViewById(R.id.profile_name_text_view);
                     profileNameEditText.setVisibility(View.GONE);
                     profileNameTextView.setVisibility(View.VISIBLE);
@@ -199,10 +209,10 @@ public class ProfileActivity extends AppCompatActivity {
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Edit Data Mode On", Toast.LENGTH_SHORT).show();
-                    usernameSwitch.findViewById(R.id.profile_username_edit_text);
+//                    usernameSwitch.findViewById(R.id.profile_username_edit_text);
                     usernameEditText.setText(username);
-                    usernameEditText.setVisibility(View.VISIBLE);
-                    usernameTextView.setVisibility(View.GONE);
+//                    usernameEditText.setVisibility(View.VISIBLE);
+//                    usernameTextView.setVisibility(View.GONE);
 
                     phoneSwitch.findViewById(R.id.profile_phone_number_edit_text);
                     phoneEditText.setText(phoneNumber);

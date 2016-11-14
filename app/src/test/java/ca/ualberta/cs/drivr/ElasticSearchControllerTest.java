@@ -22,6 +22,7 @@ import android.util.Log;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -46,17 +47,14 @@ public class ElasticSearchControllerTest {
     /**
      * Used to set the rider for each test.
      */
-    public void setUser() {
+    @Before
+    public void setUp() {
         user = new User("rider", "rider1");
         user.setPhoneNumber("123-456-7890");
         user.setEmail("test@test.test");
-    }
 
-    /**
-     * Used to set the request for each test.
-     */
-    public void setRequest() {
-        setUser();
+        request = new Request();
+
         DriversList drivers = new DriversList();
         Driver inDriver = new Driver();
         inDriver.setStatus(RequestState.PENDING);
@@ -76,11 +74,35 @@ public class ElasticSearchControllerTest {
     }
 
     /**
+     * Used to set the request for each test.
+     */
+//    @Test
+//    public void setRequest() {
+////        setUser();
+//        DriversList drivers = new DriversList();
+//        Driver inDriver = new Driver();
+//        inDriver.setStatus(RequestState.PENDING);
+//        inDriver.setUsername("driver1");
+//        drivers.add(inDriver);
+//        request.setRider(user);
+//        request.setDrivers(drivers);
+//        request.setFare(new BigDecimal(555));
+//        request.setDate(new Date());
+//        request.setDescription("Go to Rogers Place");
+//
+//        ConcretePlace temp = new ConcretePlace();
+//        temp.setLatLng(new LatLng(50, 50));
+//        request.setSourcePlace(temp);
+//        temp.setLatLng(new LatLng(55, 55));
+//        request.setDestinationPlace(temp);
+//    }
+
+    /**
      * Test to make sure a request is added and gotten. Uses username search.
      */
     @Test
     public void addAndGetRequest(){
-        setRequest();
+//        setRequest();
         ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
         addRequest.execute(request);
 
@@ -104,7 +126,7 @@ public class ElasticSearchControllerTest {
      */
     @Test
     public void updateAndGetRequest(){
-        setRequest();
+//        setRequest();
         ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
         addRequest.execute(request);
 
@@ -134,7 +156,7 @@ public class ElasticSearchControllerTest {
      */
     @Test
     public void searchRequestWithKeyword(){
-        setRequest();
+//        setRequest();
         ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
         addRequest.execute(request);
 
@@ -158,7 +180,7 @@ public class ElasticSearchControllerTest {
      */
     @Test
     public void searchRequestWithLocation(){
-        setRequest();
+//        setRequest();
         ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
         addRequest.execute(request);
 
@@ -186,7 +208,7 @@ public class ElasticSearchControllerTest {
     @Test
     public void addAndSearchUser(){
         //Set first async timer here.
-        setUser();
+//        setUser();
         ElasticSearchController.AddUser addUser = new ElasticSearchController.AddUser();
         addUser.execute(user);
         //End first async timer here.
@@ -211,7 +233,7 @@ public class ElasticSearchControllerTest {
     @Test
     public void updateAndSearchUser(){
         //Set first async timer here.
-        setUser();
+//        setUser();
         ElasticSearchController.AddUser updateUser = new ElasticSearchController.AddUser();
         updateUser.execute(user);
         //End first async timer here.
