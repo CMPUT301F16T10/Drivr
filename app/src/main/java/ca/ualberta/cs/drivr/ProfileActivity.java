@@ -18,7 +18,9 @@ package ca.ualberta.cs.drivr;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText usernameEditText;
     private EditText phoneEditText;
     private EditText emailEditText;
+    private Button saveChanges;
 
     private User user;
     private String email;
@@ -68,6 +71,9 @@ public class ProfileActivity extends AppCompatActivity {
         usernameEditText = (EditText) findViewById(R.id.profile_username_edit_text);
         phoneEditText = (EditText) findViewById(R.id.profile_phone_number_edit_text);
         emailEditText = (EditText) findViewById(R.id.profile_email_edit_text);
+
+        // Save changes button
+        saveChanges = (Button) findViewById(R.id.SaveButton);
 
         // Get the current user
         user = userManager.getUser();
@@ -104,7 +110,7 @@ public class ProfileActivity extends AppCompatActivity {
                     //userNameEditText.setCursorVisible(false);
                     phoneEditText.setCursorVisible(false);
                     emailEditText.setCursorVisible(false);
-                    profileNameTextView.setCursorVisible(true);
+                    usernameEditText.setCursorVisible(true);
 
                     phoneNumber = phoneEditText.getText().toString();
                     email = emailEditText.getText().toString();
@@ -116,9 +122,27 @@ public class ProfileActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Edit Data Mode On", Toast.LENGTH_SHORT).show();
                     editMode = true;
                     //userNameEditText.setCursorVisible(true);
-                    profileNameTextView.setCursorVisible(true);
+                    usernameEditText.setCursorVisible(true);
                     phoneEditText.setCursorVisible(true);
                     emailEditText.setCursorVisible(true);
+                    saveChanges.setVisibility(View.VISIBLE);
+
+                    //TODO: Replace this with a update user elasticSearch, rather than simply adding another instance of a User
+                    saveChanges.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v) {
+                            email = emailEditText.getText().toString();
+                            name = usernameEditText.getText().toString();
+                            phoneNumber = phoneEditText.getText().toString();
+                            user.setName(name);
+                            user.setEmail(email);
+                            user.setPhoneNumber(phoneNumber);
+                            ElasticSearchController.AddUser addUser = new ElasticSearchController.AddUser();
+                            addUser.execute(user);
+                            saveChanges.setVisibility(View.INVISIBLE);
+                            user = new User();
+                        }
+                    });
                 }
             }
         });
