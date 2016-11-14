@@ -107,6 +107,10 @@ public class NewRequestActivity extends AppCompatActivity {
             }
         });
 
+        // Hide the source text until we put something there
+        findViewById(R.id.new_request_place_source_name).setVisibility(View.GONE);
+        findViewById(R.id.new_request_place_source_address).setVisibility(View.GONE);
+
         // Setup listener for the create button
         final Button createButton =  (Button) findViewById(R.id.new_request_create_button);
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -127,9 +131,9 @@ public class NewRequestActivity extends AppCompatActivity {
      */
     private void updateDestinationPlace(Place place) {
         destinationPlace = new ConcretePlace(place);
-        TextView name = (TextView) findViewById(R.id.new_request_place_dest_name);
+        final TextView name = (TextView) findViewById(R.id.new_request_place_dest_name);
         name.setText(destinationPlace.getName());
-        TextView address = (TextView) findViewById(R.id.new_request_place_dest_address);
+        final TextView address = (TextView) findViewById(R.id.new_request_place_dest_address);
         address.setText(destinationPlace.getAddress());
     }
 
@@ -139,14 +143,16 @@ public class NewRequestActivity extends AppCompatActivity {
      */
     private void updateSourcePlace(Place place) {
         sourcePlace = new ConcretePlace(place);
-        TextView name = (TextView) findViewById(R.id.new_request_place_source_name);
+        final TextView name = (TextView) findViewById(R.id.new_request_place_source_name);
         name.setText(sourcePlace.getName());
-        TextView address = (TextView) findViewById(R.id.new_request_place_source_address);
+        name.setVisibility(View.VISIBLE);
+        final TextView address = (TextView) findViewById(R.id.new_request_place_source_address);
         address.setText(sourcePlace.getAddress());
+        address.setVisibility(View.VISIBLE);
     }
 
     /**
-     * Gerenates a item_request from the input data and places it in the requests list. A successful call
+     * Generates a item_request from the input data and places it in the requests list. A successful call
      * to this method will terminate the activity. An unsuccessful call to this method will display
      * a message on the screen to tell the user what went wrong.
      */
