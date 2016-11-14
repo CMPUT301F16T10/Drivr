@@ -18,6 +18,7 @@ package ca.ualberta.cs.drivr;
 
 import com.google.android.gms.location.places.Place;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,10 +34,11 @@ public class Request {
     private Date date;
     private BigDecimal fare;
     private RequestState requestState;
-    private Place source;
-    private Place destination;
+    private ConcretePlace source;
+    private ConcretePlace destination;
     private Boolean synced;
     private String id;
+    private String fareString;
 
     /**
      * Instantiates a new item_request.
@@ -60,7 +62,7 @@ public class Request {
      * @param source The starting location.
      * @param destination The edning location.
      */
-    public Request(User rider, Place source, Place destination) {
+    public Request(User rider, ConcretePlace source, ConcretePlace destination) {
         this();
         this.rider = rider;
         this.setDate(new Date());
@@ -80,7 +82,7 @@ public class Request {
      * Set the source location.
      * @param source
      */
-    public void setSourcePlace(Place source) {
+    public void setSourcePlace(ConcretePlace source) {
         this.source = source;
     }
 
@@ -96,7 +98,7 @@ public class Request {
      * Set the ending place.
      * @param destination The destination location.
      */
-    public void setDestinationPlace(Place destination) {
+    public void setDestinationPlace(ConcretePlace destination) {
         this.destination = destination;
     }
 
@@ -264,5 +266,13 @@ public class Request {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getFareString() {
+        return fareString;
+    }
+
+    public void setFareString(String fareString) {
+        this.fareString = fareString;
     }
 }

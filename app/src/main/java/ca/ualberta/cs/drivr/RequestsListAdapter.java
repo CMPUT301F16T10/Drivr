@@ -17,6 +17,8 @@
 package ca.ualberta.cs.drivr;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
@@ -115,7 +119,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
      */
     @Override
     public void onBindViewHolder(RequestsListAdapter.ViewHolder viewHolder, int position) {
-        Request request = requests.get(position);
+        final Request request = requests.get(position);
 
         // Get the views to update
         final TextView otherUserNameTextView = viewHolder.otherUserNameTextView;
@@ -137,6 +141,23 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         final Place source = request.getSourcePlace();
         final Place destination = request.getDestinationPlace();
         routeTextView.setText("Going from " + source.getName() + " to " + destination.getName());
+
+        routeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(Uri.class, new UriSerializer())
+                        .create();
+                String requestString = gson.toJson(request, Request.class);
+                Intent intent = new Intent(context, RequestActivity.class);
+                intent.putExtra(RequestActivity.EXTRA_REQUEST, requestString);
+                // TODO startActivityForResult() confirm if user presses accept or deny
+                // startActivityForResult(intent, );
+//                startActivity(intent);
+//                startActivity
+                context.startActivity(intent);
+            }
+        });
 
         // Show the status text
         statusTextView.setText(request.getRequestState().toString());

@@ -54,8 +54,9 @@ public class NewRequestActivity extends AppCompatActivity {
 
     private RequestsListController requestsListController;
 
-    private Place destinationPlace;
-    private Place sourcePlace;
+    private ConcretePlace destinationPlace;
+    private ConcretePlace sourcePlace;
+    private String fareString;
 
     /**
      * This method initializes the activity by deserializing the JSON given to it to get the
@@ -187,14 +188,17 @@ public class NewRequestActivity extends AppCompatActivity {
         User user = userManager.getUser();
         Request request = new Request(user, sourcePlace, destinationPlace);
         request.setFare(fare);
+        request.setFareString(fareString);
 
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Uri.class, new UriSerializer())
+                .create();
         String requestString = gson.toJson(request, Request.class);
         Intent intent = new Intent(NewRequestActivity.this, RequestActivity.class);
         intent.putExtra(RequestActivity.EXTRA_REQUEST, requestString);
         // TODO startActivityForResult() confirm if user presses accept or deny
         // startActivityForResult(intent, );
-        // startActivity(intent);
+         startActivity(intent);
 
         //userManager.getRequestsList().add(request);
         //userManager.notifyObservers();
@@ -238,6 +242,7 @@ public class NewRequestActivity extends AppCompatActivity {
         distance = distance + 3; // $3 base cost
 
         String cost = "$" + String.format("%.2f", distance);
+        fareString = cost;
 
         TextView fareTextView = (TextView) findViewById(R.id.new_request_fare_message);
         EditText editTextFare = (EditText) findViewById(R.id.new_request_fare_edit_text);

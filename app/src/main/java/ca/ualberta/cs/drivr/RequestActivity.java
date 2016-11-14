@@ -17,8 +17,11 @@
 package ca.ualberta.cs.drivr;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.location.places.Place;
@@ -26,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * An activity that shows information about a request.
@@ -40,6 +44,7 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
     private MapController mapController;
     private Place sourcePlace;
     private Place destinationPlace;
+    private TextView acceptButton;
 
     /**
      * Used as a key for passing a request into this activity as an extra to an intent.
@@ -52,20 +57,34 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         setContentView(R.layout.activity_request);
         routeText = (TextView) findViewById(R.id.request_route_text);
         fareText = (TextView) findViewById(R.id.request_fare_text);
+        acceptButton = (TextView) findViewById(R.id.request_accept_text);
         // map = findViewById(R.id.request_map_fragment);
 
         String requestString = getIntent().getStringExtra(EXTRA_REQUEST);
-        Gson gson = new Gson();
+//        Gson gson = new Gson();
+//        ConcretePlace concretePlace = new ConcretePlace(place);
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Uri.class, new UriSerializer())
+                .create();
         Request request = gson.fromJson(requestString, Request.class);
-
+        sourcePlace = request.getSourcePlace();
+        destinationPlace = request.getDestinationPlace();
+        fareText.setText(request.getFareString());
+//        routeText.setText();
+        routeText.setText("Going from " + sourcePlace.getName() + " to " + destinationPlace.getName());
         // TODO make a map with these points and the route between them
         mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.request_map_fragment);
         mapFragment.getMapAsync(this);
 
-        // sourcePlace = request.getSourcePlace();
-        // destinationPlace = request.getDestinationPlace();
 
         mContext = getApplicationContext();
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
     @Override
