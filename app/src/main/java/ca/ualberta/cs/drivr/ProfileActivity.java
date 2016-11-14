@@ -16,7 +16,6 @@
 
 package ca.ualberta.cs.drivr;
 
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -58,7 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
         profileContent = findViewById(R.id.profile_content);
 
         // Get references to the ImageViews
-        editProfileImageView = (ImageView) findViewById(R.id.edit_profile);
+        editProfileImageView = (ImageView) findViewById(R.id.profile_edit_icon);
 
         // Get references to the TextViews
         notSignedInText = (TextView) findViewById(R.id.profile_not_signed_in_text);
@@ -66,9 +65,9 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         // Get references to the EditTexts
-        usernameEditText = (EditText) findViewById(R.id.editTextUsername);
-        phoneEditText = (EditText) findViewById(R.id.editTextPhoneNumber);
-        emailEditText = (EditText) findViewById(R.id.editTextEmail);
+        usernameEditText = (EditText) findViewById(R.id.profile_username_edit_text);
+        phoneEditText = (EditText) findViewById(R.id.profile_phone_number_edit_text);
+        emailEditText = (EditText) findViewById(R.id.profile_email_edit_text);
 
         // Get the current user
         user = userManager.getUser();

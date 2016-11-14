@@ -17,20 +17,15 @@
 package ca.ualberta.cs.drivr;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 //import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -41,13 +36,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
-import com.akexorcist.googledirection.GoogleDirection;
-import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
-import com.akexorcist.googledirection.util.DirectionConverter;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -66,11 +57,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import java.util.ArrayList;
 
 /**
  * Setting this up for JavaDocs.
@@ -128,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     .build();
         }
 
-        mFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.map);
+        mFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.main_map);
         mFragment.getMapAsync(this);
 
         autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
@@ -155,17 +143,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         // Using the floating action button menu system
         FloatingActionButton fabSettings = (FloatingActionButton) findViewById(R.id.fabSettings);
-        FloatingActionButton fabRequests = (FloatingActionButton) findViewById(R.id.fabRequests);
-        FloatingActionButton fabProfile = (FloatingActionButton) findViewById(R.id.fabProfile);
-        FloatingActionButton fabHistory = (FloatingActionButton) findViewById(R.id.fabHistory);
-        FloatingActionButton fabLogin = (FloatingActionButton) findViewById(R.id.fabLogin);
+        FloatingActionButton fabRequests = (FloatingActionButton) findViewById(R.id.main_fab_requests);
+        FloatingActionButton fabProfile = (FloatingActionButton) findViewById(R.id.main_fab_profile);
+        FloatingActionButton fabHistory = (FloatingActionButton) findViewById(R.id.main_fah_history);
+        FloatingActionButton fabLogin = (FloatingActionButton) findViewById(R.id.main_fab_login);
 
         /*
         Change between user and driver mode. Will probably be replaced with an option in settings.
         For now the visibility of this is set to gone because we should not have too many FABs.
         Having too many FABs may cause confusion and rendering issues on small screens.
         */
-        FloatingActionButton fabMode = (FloatingActionButton) findViewById(R.id.fabMode);
+        FloatingActionButton fabMode = (FloatingActionButton) findViewById(R.id.main_fab_mode);
         fabMode.setVisibility(View.GONE);
 
         fabMode.setOnClickListener(new View.OnClickListener() {

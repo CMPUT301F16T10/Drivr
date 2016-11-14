@@ -55,15 +55,6 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:text="$12.34"/>
 
-
-
-    <!--<View-->
-        <!--android:background="@color/cardview_light_background"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="72dp"/>-->
-
-
     <LinearLayout
         android:background="@color/cardview_light_background"
         android:layout_alignParentBottom="true"
@@ -100,7 +91,5 @@
             android:layout_weight="1" />
 
     </LinearLayout>
-
-
 
 </RelativeLayout>
