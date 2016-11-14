@@ -37,6 +37,7 @@ import java.lang.reflect.Type;
  * </ul>
  */
 public class UriSerializer implements JsonSerializer<Uri>, JsonDeserializer<Uri> {
+
     @Override
     public JsonElement serialize(Uri src, Type typeOfSrc, JsonSerializationContext context) {
         return new JsonPrimitive(src.toString());

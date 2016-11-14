@@ -22,7 +22,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 /**
- * Setting this up for JavaDocs.
+ * An activity that shows a list of currently active requests.
  */
 
 public class RequestsListActivity extends AppCompatActivity {
@@ -40,8 +40,6 @@ public class RequestsListActivity extends AppCompatActivity {
         requestsListRecyclerView.setAdapter(adapter);
         requestsListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
-    public void viewRequest(Request request) { throw new UnsupportedOperationException(); }
 
     public Request getRequest(int position) { throw new UnsupportedOperationException(); }
 

@@ -29,18 +29,12 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 
-/**
- * Created by justin on 09/11/16.
- */
 
 /**
  * Able to get User Current Location
  * http://stackoverflow.com/questions/1513485/how-do-i-get-the-current-gps-location-programmatically-in-android
  */
-
-
 public class GPSTracker implements LocationListener {
-
 
     private Context mContext;
     protected LocationManager locationManger;
@@ -58,8 +52,7 @@ public class GPSTracker implements LocationListener {
     double myLongitude;
 
     /**
-     * Initiates A GPS Tracker
-     * .
+     * Instantiate a new GPSTracker.
      */
     public GPSTracker(Context context) {
         this.mContext = context;
@@ -68,10 +61,8 @@ public class GPSTracker implements LocationListener {
 
     /**
      * Gets the User Current Location through GPS or Wifi
-     * @return returns user current Location
-     * .
+     * @return returns user current Location.
      */
-
     public Location getLocation() {
         try {
             locationManger = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
@@ -83,7 +74,8 @@ public class GPSTracker implements LocationListener {
             if (!isGPSEnabled  && !isNetworkEnabled) {
                 // Services not Enabled
                 enableGPS();
-            } else {
+            }
+            else {
                 this.canGetLocation = true;
                 if (isNetworkEnabled) {
                     location = null;
@@ -99,8 +91,6 @@ public class GPSTracker implements LocationListener {
                         }
 
                     }
-
-
                 }
                 if (isGPSEnabled) {
                     location = null;
@@ -116,12 +106,10 @@ public class GPSTracker implements LocationListener {
                         }
 
                     }
-
-
                 }
-
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         if (myLocation != null) {
@@ -140,29 +128,26 @@ public class GPSTracker implements LocationListener {
     }
 
     /**
-     * End the updating through the GPS
+     * End the updating through the GPS.
      */
     public void stopUsingGPS() {
         if (locationManger != null) {
             if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 locationManger.removeUpdates(GPSTracker.this);
             }
-
         }
     }
 
     /**
-     * Get users Location object
-     * @return returns user current Location
-     * .
+     * Get users Location object.
+     * @return returns user current Location.
      */
     public Location getMyLocation() {
         return myLocation;
     }
 
     /**
-     * Opens settings Activity to allow user to turn on GPs
-     * .
+     * Opens settings Activity to allow user to turn on GPS.
      */
     public void enableGPS(){
         AlertDialog.Builder GPSDialog = new AlertDialog.Builder(mContext);
@@ -178,31 +163,18 @@ public class GPSTracker implements LocationListener {
                         mContext.startActivity(intent);
                     }
                 });
-
-
          GPSDialog.show();
-
-    }
-
-
-
-    @Override
-    public void onLocationChanged(Location location) {
-
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
+    public void onLocationChanged(Location location) { }
 
     @Override
-    public void onProviderEnabled(String provider) {
-
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) { }
 
     @Override
-    public void onProviderDisabled(String provider) {
+    public void onProviderEnabled(String provider) { }
 
-    }
+    @Override
+    public void onProviderDisabled(String provider) { }
 }

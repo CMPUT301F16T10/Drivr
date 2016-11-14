@@ -20,7 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 /**
- * Setting this up for JavaDocs.
+ * An activity that displays past requests.
  */
 public class RequestHistoryActivity extends AppCompatActivity {
 
@@ -28,10 +28,6 @@ public class RequestHistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-    }
-
-    public void viewRequest(Request request) {
-        throw new UnsupportedOperationException();
     }
 
     public Request getRequest(int position) { throw new UnsupportedOperationException(); }

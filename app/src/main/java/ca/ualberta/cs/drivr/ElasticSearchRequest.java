@@ -30,6 +30,7 @@ import io.searchbox.annotations.JestId;
  */
 
 public class ElasticSearchRequest {
+
     private String rider;
     private ArrayList<Driver> driver;
     private String description;

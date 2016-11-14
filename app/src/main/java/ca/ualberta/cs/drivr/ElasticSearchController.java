@@ -64,8 +64,7 @@ public class ElasticSearchController {
      * getting the ID where it's stored, appending it to the end of the add query and then replacing
      * the query we just added with the new query including the ID.
      */
-    public static class AddRequest extends
-            AsyncTask<Request, Void, Void> {
+    public static class AddRequest extends  AsyncTask<Request, Void, Void> {
 
         /**
          * Add query:
@@ -89,20 +88,19 @@ public class ElasticSearchController {
         @Override
         protected Void doInBackground(Request... requests) {
             verifySettings();
-            for(Request request: requests) {
+            for (Request request: requests) {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
                 String addedDate = format.format(request.getDate());
 
                 String add = "{" +
                         "\"rider\": \"" + request.getRider() + "\"," +
                         "\"driver\": [";
-                for(int i = 0; i < request.getDrivers().size(); i++) {
+                for (int i = 0; i < request.getDrivers().size(); i++) {
                     Driver driver = request.getDrivers().get(i);
                     add = add + "{\"username\": \"" + driver.getUsername() + "\", \"status\": \""
                             + driver.getStatus() + "\"";
-                    if(i != request.getDrivers().size()-1) {
+                    if (i != request.getDrivers().size() - 1)
                         add += "}, ";
-                    }
                 }
 
                 add += "}]," +
@@ -120,7 +118,7 @@ public class ElasticSearchController {
                         .build();
                 try {
                     DocumentResult result = client.execute(index);
-                    if(result.isSucceeded()) {
+                    if (result.isSucceeded()) {
                         request.setId(result.getId());
                         add += ", \"id:\" \"" + request.getId() + "\" }";
                         index = new Index.Builder(add + "}").index("drivrtestzone").type("requests")
@@ -130,13 +128,16 @@ public class ElasticSearchController {
                             if(!result.isSucceeded()) {
                                 Log.i("Error", "Failed to insert the request into elastic search.");
                             }
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e) {
                             Log.i("Error", "The application failed to build and send the requests.");
                         }
-                    } else {
+                    }
+                    else {
                         Log.i("Error", "Failed to insert the request into elastic search.");
                     }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     Log.i("Error", "The application failed to build and send the requests.");
                 }
 
@@ -146,8 +147,7 @@ public class ElasticSearchController {
     }
 
     // Updates a request in ElasticSearch
-    public static class UpdateRequest extends
-            AsyncTask<Request, Void, Void> {
+    public static class UpdateRequest extends AsyncTask<Request, Void, Void> {
 
         /**
          * Add query:
@@ -171,20 +171,19 @@ public class ElasticSearchController {
         @Override
         protected Void doInBackground(Request... requests) {
             verifySettings();
-            for(Request request: requests) {
+            for (Request request: requests) {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
                 String addedDate = format.format(request.getDate());
 
                 String add = "{" +
                         "\"rider\": \"" + request.getRider() + "\"," +
                         "\"driver\": [";
-                for(int i = 0; i < request.getDrivers().size(); i++) {
+                for (int i = 0; i < request.getDrivers().size(); i++) {
                     Driver driver = request.getDrivers().get(i);
                     add = add + "{\"username\": \"" + driver.getUsername() + "\", \"status\": \""
                             + driver.getStatus() + "\"";
-                    if(i != request.getDrivers().size()-1) {
+                    if(i != request.getDrivers().size() - 1)
                         add += "}, ";
-                    }
                 }
 
                 add += "}]," +
@@ -205,10 +204,10 @@ public class ElasticSearchController {
 
                 try {
                     DocumentResult result = client.execute(index);
-                    if(!result.isSucceeded()) {
+                    if(!result.isSucceeded())
                         Log.i("Error", "Failed to insert the request into elastic search.");
-                    }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     Log.i("Error", "The application failed to build and send the requests.");
                 }
 
@@ -221,8 +220,7 @@ public class ElasticSearchController {
      * Here, all the requests that have the description containing the keyword given by the user
      * will be gotten.
      */
-    public static class SearchForKeywordRequests extends
-            AsyncTask<String, Void, ArrayList<Request>> {
+    public static class SearchForKeywordRequests extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
          * Search query:
@@ -261,10 +259,12 @@ public class ElasticSearchController {
                                 .getSourceAsObjectList(ElasticSearchRequest.class);
                         tempRequests.addAll(foundRequests);
                         addRequests(requests, tempRequests);
-                    } else {
+                    }
+                    else {
                         Log.i("Error", "The search executed but it didn't work.");
                     }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     Log.i("Error", "Executing the get user method failed.");
                 }
 
@@ -278,8 +278,7 @@ public class ElasticSearchController {
      * 5 km radius for requests where the start locations are within that range and return the
      * gotten requests.
      */
-    public static class SearchForLocationRequests extends
-            AsyncTask<Location, Void, ArrayList<Request>> {
+    public static class SearchForLocationRequests extends AsyncTask<Location, Void, ArrayList<Request>> {
 
         /**
          * Search query:
@@ -321,13 +320,14 @@ public class ElasticSearchController {
                                 .getSourceAsObjectList(ElasticSearchRequest.class);
                         tempRequests.addAll(foundRequests);
                         addRequests(requests, tempRequests);
-                    } else {
+                    }
+                    else {
                         Log.i("Error", "The search executed but it didn't work.");
                     }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     Log.i("Error", "Executing the get user method failed.");
                 }
-
             }
             return requests;
         }
@@ -371,7 +371,7 @@ public class ElasticSearchController {
             verifySettings();
             ArrayList<Request> requests = new ArrayList<Request>();
             ArrayList<ElasticSearchRequest> tempRequests = new ArrayList<ElasticSearchRequest>();
-            for(String username: usernames) {
+            for (String username: usernames) {
                 String search_string = "{\"from\": 0, \"size\": 10000, "
                         + "\"query\": {\"match\": " +
                         "{\"rider\": \"" + username +
@@ -389,10 +389,12 @@ public class ElasticSearchController {
                                 .getSourceAsObjectList(ElasticSearchRequest.class);
                         tempRequests.addAll(foundRequests);
                         addRequests(requests, tempRequests);
-                    } else {
+                    }
+                    else {
                         Log.i("Error", "The search executed but it didn't work.");
                     }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     Log.i("Error", "Executing the get user method failed.");
                 }
 
@@ -413,10 +415,12 @@ public class ElasticSearchController {
                                 .getSourceAsObjectList(ElasticSearchRequest.class);
                         tempRequests.addAll(foundRequests);
                         addRequests(requests, tempRequests);
-                    } else {
+                    }
+                    else {
                         Log.i("Error", "The search executed but it didn't work.");
                     }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     Log.i("Error", "Executing the get user method failed.");
                 }
             }
@@ -429,8 +433,7 @@ public class ElasticSearchController {
      * Here, the user is either added or updated (since this class handles both) in ElasticSearch
      * by building it then adding it in the ID which is the same as the user's unique username.
      */
-    public static class AddUser extends
-            AsyncTask<User, Void, Void> {
+    public static class AddUser extends AsyncTask<User, Void, Void> {
 
         /**
          * Add query:
@@ -447,7 +450,7 @@ public class ElasticSearchController {
         @Override
         protected Void doInBackground(User... users) {
             verifySettings();
-            for(User user: users) {
+            for (User user: users) {
                 String addUser = "{\"name\": \"" + user.getName() + "\", " +
                         "\"username\": \"" + user.getUsername() + "\", " +
                         "\"email\": \"" + user.getEmail() + "\", " +
@@ -461,13 +464,12 @@ public class ElasticSearchController {
 
                 try {
                     DocumentResult result = client.execute(index);
-                    if(!result.isSucceeded()) {
+                    if(!result.isSucceeded())
                         Log.i("Error", "Failed to insert the request into elastic search.");
-                    }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     Log.i("Error", "The application failed to build and send the requests.");
                 }
-
             }
             return null;
         }
@@ -508,12 +510,12 @@ public class ElasticSearchController {
 
                 try {
                     SearchResult result = client.execute(search);
-                    if (result.isSucceeded()) {
+                    if (result.isSucceeded())
                         user = result.getSourceAsObject(User.class);
-                    } else {
+                    else
                         Log.i("Error", "The search executed but it didn't work.");
-                    }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     Log.i("Error", "Executing the get user method failed.");
                 }
             }
@@ -548,7 +550,7 @@ public class ElasticSearchController {
     //TODO: Will probably become necessary to fix this.
     public static void addRequests(ArrayList<Request> requests,
                                    ArrayList<ElasticSearchRequest> tempRequests) {
-        for(int i = 0; i < tempRequests.size(); ++i) {
+        for (int i = 0; i < tempRequests.size(); i++) {
             ElasticSearchRequest gottenRequest = tempRequests.get(i);
             Request request = new Request();
 
@@ -561,7 +563,8 @@ public class ElasticSearchController {
             Date date;
             try {
                 date = format.parse(gottenRequest.getDate()); // Fix.
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 date = new Date();
             }
 
