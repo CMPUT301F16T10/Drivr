@@ -56,6 +56,11 @@
             <!--android:text="John Doe"-->
             <!--android:textSize="48sp"/>-->
 
+        <!--7.  * From: http://stackoverflow.com/a/9255093-->
+        <!--* Author: joneswah-->
+        <!--* Accessed: November 13, 2016-->
+        <!--* Allows the user profile to switch between textViews and EditText views where editing personal information.-->
+
         <ViewSwitcher
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
