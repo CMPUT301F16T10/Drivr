@@ -33,15 +33,10 @@ public class ProfileActivity extends AppCompatActivity {
     private final IUserManager userManager = UserManager.getInstance();
     private ProfileController profileController;
 
-    private TextView usernameTextView;
-    private TextView profileNameTextView;
-    private TextView emailTextView;
-    private TextView numberTextView;
-
-    private ImageView profileBoxImageView;
+    private View profileContent;
     private ImageView editProfileImageView;
-    private ImageView profilePictureImageView;
-
+    private TextView notSignedInText;
+    private TextView profileNameTextView;
     private EditText usernameEditText;
     private EditText phoneEditText;
     private EditText emailEditText;
@@ -59,18 +54,23 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        // Get references to the TextViews
-        profileNameTextView = (TextView) findViewById(R.id.profile_name);
+        // Get a reference to the content container
+        profileContent = findViewById(R.id.profile_content);
 
         // Get references to the ImageViews
         editProfileImageView = (ImageView) findViewById(R.id.edit_profile);
+
+        // Get references to the TextViews
+        notSignedInText = (TextView) findViewById(R.id.profile_not_signed_in_text);
+        profileNameTextView = (TextView) findViewById(R.id.profile_name);
+
 
         // Get references to the EditTexts
         usernameEditText = (EditText) findViewById(R.id.editTextUsername);
         phoneEditText = (EditText) findViewById(R.id.editTextPhoneNumber);
         emailEditText = (EditText) findViewById(R.id.editTextEmail);
 
-        // Set up UserManager
+        // Get the current user
         user = userManager.getUser();
 
         // Get info
@@ -78,6 +78,9 @@ public class ProfileActivity extends AppCompatActivity {
         email = user.getEmail();
         username = user.getUsername();
         name = user.getName();
+
+        // Show the appropriate content based on whether the user is signed in or not
+        toggleContent(username != null && !username.isEmpty());
 
         usernameEditText.setText(username);
         phoneEditText.setText(phoneNumber);
@@ -125,5 +128,22 @@ public class ProfileActivity extends AppCompatActivity {
 
         // TODO get user
         // TODO Set profile up
+    }
+
+    private void toggleContent(boolean isSignedIn) {
+        // If there is not a user, display an empty page because there is no profile
+        // The check for a user is if the username is non-null and non-empty
+        if (!isSignedIn) {
+            // There is no user signed in so display an empty profile page
+            notSignedInText.setVisibility(View.VISIBLE);
+            profileContent.setVisibility(View.GONE);
+            editProfileImageView.setVisibility(View.GONE);
+        }
+        else {
+            // There is a user, so make sure the page is not empty
+            notSignedInText.setVisibility(View.GONE);
+            profileContent.setVisibility(View.VISIBLE);
+            editProfileImageView.setVisibility(View.VISIBLE);
+        }
     }
 }
