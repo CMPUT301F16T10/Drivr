@@ -95,6 +95,10 @@ public class ConcretePlace implements Place {
         return address;
     }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     /**
      * Get the attributions to be shown for a place.
      * @return The place's attributions.
@@ -102,6 +106,14 @@ public class ConcretePlace implements Place {
     @Override
     public CharSequence getAttributions() {
         return attributions;
+    }
+
+    /**
+     * Set the attributions to be shown for a place.
+     * @param attributions The attributions.
+     */
+    public void setAttributions(String attributions) {
+        this.attributions = attributions;
     }
 
     /**
@@ -114,12 +126,28 @@ public class ConcretePlace implements Place {
     }
 
     /**
+     * Set the name of a place.
+     * @param name The name.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
      * Get the phone number of a place.
      * @return The place's phone number.
      */
     @Override
     public CharSequence getPhoneNumber() {
         return phoneNumber;
+    }
+
+    /**
+     * Set the phone number of a place.
+     * @param phoneNumber The phone number.
+     */
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     /**
@@ -132,12 +160,28 @@ public class ConcretePlace implements Place {
     }
 
     /**
+     * Set the rating of a place.
+     * @param rating The rating.
+     */
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    /**
      * Get the price level of a place.
      * @return The place's price level.
      */
     @Override
     public int getPriceLevel() {
         return priceLevel;
+    }
+
+    /**
+     * Set the price level of a place.
+     * @param priceLevel The price level.
+     */
+    public void setPriceLevel(int priceLevel) {
+        this.priceLevel = priceLevel;
     }
 
     /**
@@ -167,12 +211,28 @@ public class ConcretePlace implements Place {
     }
 
     /**
+     * Set the viewport bounds used to display this place on a map.
+     * @param viewport The bounds.
+     */
+    public void setViewport(LatLngBounds viewport) {
+        this.viewport = viewport;
+    }
+
+    /**
      * Get the types of places that this place is tagged as.
      * @return The place's types.
      */
     @Override
     public List<Integer> getPlaceTypes() {
         return placeTypes;
+    }
+
+    /**
+     * Set the types of places that this place is tagged as.
+     * @param placeTypes The place's types.
+     */
+    public void setPlaceTypes(List<Integer> placeTypes) {
+        this.placeTypes = placeTypes;
     }
 
     /**
@@ -185,6 +245,14 @@ public class ConcretePlace implements Place {
     }
 
     /**
+     * Set the locale used for te place data.
+     * @param locale  The place's information locale.
+     */
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
+    /**
      * Get a unique ID of a place.
      * @return The place's ID.
      */
@@ -194,12 +262,28 @@ public class ConcretePlace implements Place {
     }
 
     /**
+     * Set a unique ID of a place.
+     * @param id The place's ID.
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
      * Get the website of a place.
      * @return The place's website.
      */
     @Override
     public Uri getWebsiteUri() {
         return websiteUri;
+    }
+
+    /**
+     * Set the website of a place.
+     * @param websiteUri The place's website.
+     */
+    public void setWebsiteUri(Uri websiteUri) {
+        this.websiteUri = websiteUri;
     }
 
     /**

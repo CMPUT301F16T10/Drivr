@@ -19,10 +19,12 @@ package ca.ualberta.cs.drivr;
 import android.location.Location;
 
 import org.junit.Test;
-import org.xmlpull.v1.sax2.Driver;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Created by adam on 2016-10-12.
@@ -31,11 +33,11 @@ import static org.junit.Assert.assertTrue;
 public class RequestTest {
 
     @Test
-    public void getDriver() {
-        User driver = new User();
+    public void getDrivers() {
+        ArrayList<Driver> driver = new ArrayList<Driver>();
         Request request = new Request(null, null, null);
-        request.setDriver(driver);
-        assertEquals(driver, request.getDriver());
+        request.setDrivers(driver);
+        assertEquals(driver, request.getDrivers());
     }
 
     @Test
@@ -43,6 +45,78 @@ public class RequestTest {
         User rider = new User();
         Request request = new Request(rider, null, null);
         assertEquals(rider, request.getRider());
+    }
+
+    @Test
+    public void addDriver() {
+        Driver driver1 = new Driver();
+        Driver driver2 = new Driver();
+        Request request = new Request();
+
+        assertFalse(request.getDrivers().contains(driver1));
+        request.addDriver(driver1);
+        assertTrue(request.getDrivers().contains(driver1));
+
+        assertFalse(request.getDrivers().contains(driver2));
+        request.addDriver(driver2);
+        assertTrue(request.getDrivers().contains(driver2));
+    }
+
+    @Test
+    public void removeDriver() {
+        Driver driver1 = new Driver();
+        Driver driver2 = new Driver();
+        Request request = new Request();
+
+        request.addDriver(driver1);
+        request.addDriver(driver2);
+        assertTrue(request.getDrivers().contains(driver1));
+        request.removeDriver(driver2);
+        assertFalse(request.getDrivers().contains(driver2));
+    }
+
+    @Test
+    public void getDriversWithStatus() {
+        Driver driver1 = new Driver();
+        Driver driver2 = new Driver();
+        Driver driver3 = new Driver();
+        driver1.setStatus(RequestState.ACCEPTED);
+        driver2.setStatus(RequestState.PENDING);
+        driver3.setStatus(RequestState.ACCEPTED);
+
+        ArrayList<Driver> drivers = new ArrayList<>();
+        drivers.add(driver1);
+        drivers.add(driver2);
+        drivers.add(driver3);
+
+        Request request = new Request();
+        request.setDrivers(drivers);
+
+        assertEquals(1, request.getDriversWithStatus(RequestState.PENDING).size());
+        assertEquals(2, request.getDriversWithStatus(RequestState.ACCEPTED).size());
+    }
+
+    @Test
+    public void hasConfirmedDriver() {
+        Driver driver1 = new Driver();
+        Driver driver2 = new Driver();
+        Driver driver3 = new Driver();
+        driver1.setStatus(RequestState.ACCEPTED);
+        driver2.setStatus(RequestState.PENDING);
+        driver3.setStatus(RequestState.ACCEPTED);
+
+        Request request = new Request();
+        request.addDriver(driver1);
+        request.addDriver(driver2);
+        request.addDriver(driver3);
+
+        assertFalse(request.hasConfirmedDriver());
+
+        Driver driver4 = new Driver();
+        driver4.setStatus(RequestState.CONFIRMED);
+        request.addDriver(driver4);
+
+        assertTrue(request.hasConfirmedDriver());
     }
 
     @Test
@@ -61,7 +135,7 @@ public class RequestTest {
         User rider = new User();
         ConcretePlace source = new ConcretePlace();
         ConcretePlace destination = new ConcretePlace();
-        Request request = new Request(rider, source,destination);
+        Request request = new Request(rider, source, destination);
         assertEquals(source, request.getSourcePlace());
         assertEquals(destination, request.getDestinationPlace());
     }

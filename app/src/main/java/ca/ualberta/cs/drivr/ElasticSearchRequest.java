@@ -73,7 +73,7 @@ public class ElasticSearchRequest {
      * Return the ArrayList of driver objects.
      * @return ArrayList containing drivers.
      */
-    public ArrayList<Driver> getDriver() {
+    public ArrayList<Driver> getDrivers() {
         return driver;
     }
 
@@ -81,7 +81,7 @@ public class ElasticSearchRequest {
      * Set the ArrayList of driver objects.
      * @param driver ArrayList containing the drivers.
      */
-    public void setDriver(ArrayList<Driver> driver) {
+    public void setDrivers(ArrayList<Driver> driver) {
         this.driver = driver;
     }
 

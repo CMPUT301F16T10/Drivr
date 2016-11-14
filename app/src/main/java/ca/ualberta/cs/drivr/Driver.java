@@ -23,32 +23,15 @@ package ca.ualberta.cs.drivr;
  * @see ElasticSearchController
  */
 
-public class Driver{
-    private String username;
+public class Driver extends User {
+
     private RequestState status;
 
     /**
      * Constructor for Driver.
      */
     public Driver() {
-        username = "";
         status = RequestState.PENDING;
-    }
-
-    /**
-     * Returns username of driver.
-     * @return String
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * Sets username of driver.
-     * @param username Driver's username.
-     */
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     /**

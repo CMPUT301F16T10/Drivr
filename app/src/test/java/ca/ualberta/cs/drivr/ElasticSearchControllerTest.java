@@ -19,6 +19,9 @@ package ca.ualberta.cs.drivr;
 import android.location.Location;
 import android.util.Log;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.maps.model.LatLng;
+
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -54,19 +57,18 @@ public class ElasticSearchControllerTest {
      */
     public void setRequest() {
         setUser();
-
         ArrayList<Driver> driver = new ArrayList<Driver>();
         Driver inDriver = new Driver();
         inDriver.setStatus(RequestState.PENDING);
         inDriver.setUsername("driver1");
         driver.add(inDriver);
         request.setRider(user);
-        request.setDriver(driver);
+        request.setDrivers(driver);
         request.setFare(new BigDecimal(555));
         request.setDate(new Date());
         request.setDescription("Go to Rogers Place");
 
-        Place temp = new ConcretePlace();
+        ConcretePlace temp = new ConcretePlace();
         temp.setLatLng(new LatLng(50, 50));
         request.setSourcePlace(temp);
         temp.setLatLng(new LatLng(55, 55));
