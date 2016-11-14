@@ -29,7 +29,6 @@ public class Request {
 
     private User rider;
     private ArrayList<Driver> drivers;
-    private Driver driver;
     private String description;
     private Date date;
     private BigDecimal fare;
@@ -44,7 +43,7 @@ public class Request {
      */
     public Request() {
         rider = null;
-        driver = null;
+        drivers = new ArrayList<Driver>();
         description = "";
         setDate(new Date());
         setFare(new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP));
@@ -102,27 +101,61 @@ public class Request {
     }
 
     /**
-     * Get the driver for the item_request.
-     * @return The driver.
+     * Set the possible drivers for the request.
+     * @param drivers The possible drivers.
+     */
+    public void setDrivers(ArrayList<Driver> drivers) {
+        this.drivers = drivers;
+    }
+
+    /**
+     * Get the possible drivers for the request.
+     * @return The possible drivers.
      */
     public ArrayList<Driver> getDrivers() {
         return drivers;
     }
 
-    public Driver getDriver(){
-        return driver;
-    }
-
     /**
-     * Set the driver.
-     * @param drivers The driver.
+     * Adds a driver to the list of possible drivers.
+     * @param driver The driver.
      */
-    public void setDriver(ArrayList<Driver> drivers) {
-        this.drivers = drivers;
+    public void addDriver(Driver driver) {
+        if (!drivers.contains(driver))
+            drivers.add(driver);
     }
 
     /**
-     * Get the date the item_request was made.
+     * Removes a driver from the list of possible drivers.
+     * @param driver The driver.
+     */
+    public void removeDriver(Driver driver) {
+        drivers.remove(driver);
+    }
+
+    /**
+     * Gets a list of all drivers for the request with a given status.
+     * @param requestState The state of the driver.
+     * @return A list of drivers.
+     */
+    public ArrayList<Driver> getDriversWithStatus(RequestState requestState) {
+        ArrayList<Driver> driversWithStatus = new ArrayList<>();
+        for (Driver driver : drivers)
+            if (driver.getStatus() == requestState)
+                driversWithStatus.add(driver);
+        return driversWithStatus;
+    }
+
+    /**
+     * Determine whether there is a confirmed driver for the request.
+     * @return True when there is a confirmed driver, false otherwise.
+     */
+    public boolean hasConfirmedDriver() {
+        return getDriversWithStatus(RequestState.CONFIRMED).size() > 0;
+    }
+
+    /**
+     * Get the date the request was made.
      * @return The date.
      */
     public Date getDate() {
@@ -130,7 +163,7 @@ public class Request {
     }
 
     /**
-     * Set the date the item_request was made.
+     * Set the date the request was made.
      * @param date The date.
      */
     public void setDate(Date date) {
@@ -155,15 +188,15 @@ public class Request {
 
     /**
      * Get the item_request sate.
-     * @return The item_request state.
+     * @return The request state.
      */
     public RequestState getRequestState() {
         return requestState;
     }
 
     /**
-     * Set the item_request state.
-     * @param requestState The item_request state.
+     * Set the request state.
+     * @param requestState The request state.
      */
     public void setRequestState(RequestState requestState) {
         this.requestState = requestState;
@@ -178,7 +211,7 @@ public class Request {
     }
 
     /**
-     * Set the rider for the item_request.
+     * Set the rider for the request.
      * @param rider The rider.
      */
     public void setRider(User rider) {
@@ -186,7 +219,7 @@ public class Request {
     }
 
     /**
-     * Get whether the item_request is synced online or not.
+     * Get whether the request is synced online or not.
      * @return True when synced, false otherwise.
      */
     public Boolean getSynced() {
@@ -194,7 +227,7 @@ public class Request {
     }
 
     /**
-     * Set whther the item_request is synced online or not.
+     * Set whether the request is synced online or not.
      * @param synced True when synced, false otherwise.
      */
     public void setSynced(Boolean synced) {

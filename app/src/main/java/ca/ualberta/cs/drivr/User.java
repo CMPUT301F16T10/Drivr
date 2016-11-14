@@ -73,10 +73,10 @@ public class User {
 
     /**
      * Set the username.
-     * @param userName The username.
+     * @param username The username.
      */
-    public void setUsername(String userName) {
-        this.username = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**
