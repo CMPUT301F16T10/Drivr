@@ -17,6 +17,7 @@
 package ca.ualberta.cs.drivr;
 
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -53,6 +54,8 @@ public class NewRequestActivity extends AppCompatActivity {
 
     private Place destinationPlace;
     private Place sourcePlace;
+    private String cost;
+
 
     /**
      * This method initializes the activity by deserializing the JSON given to it to get the
@@ -88,6 +91,7 @@ public class NewRequestActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(Place place) {
                 updateDestinationPlace(place);
+                estimateFare(sourcePlace, place);
             }
 
             @Override
@@ -103,6 +107,7 @@ public class NewRequestActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(Place place) {
                 updateSourcePlace(place);
+                estimateFare(sourcePlace,destinationPlace);
             }
 
             @Override
@@ -171,6 +176,7 @@ public class NewRequestActivity extends AppCompatActivity {
         }
 
         final EditText fareEditText = (EditText) findViewById(R.id.new_request_fare_edit_text);
+
         final String fareString = fareEditText.getText().toString().replaceAll("[$,.]", "");
         final BigDecimal fare = new BigDecimal(fareString).setScale(2, BigDecimal.ROUND_FLOOR)
                 .divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR); // Divide by 100 to get dollars from cents
@@ -208,4 +214,35 @@ public class NewRequestActivity extends AppCompatActivity {
         Boolean latLngIsValid = place.getLatLng() != null;
         return addressIsValid || latLngIsValid;
     }
+
+    private void estimateFare(Place dest, Place pickUp){
+
+        String cost;
+
+        Location locationDest = new Location("Dest");
+        locationDest.setLongitude(dest.getLatLng().longitude);
+        locationDest.setLatitude(dest.getLatLng().latitude);
+
+        Location locationStart = new Location("Start");
+        locationStart.setLongitude(pickUp.getLatLng().longitude);
+        locationStart.setLatitude(pickUp.getLatLng().latitude);
+
+        float distance = locationDest.distanceTo(locationStart);
+        distance = distance / 1000;
+        distance = distance +3;
+
+        cost = String.format("%.2f", distance);
+        cost = "$" + cost;
+
+        TextView fareTextView = (TextView) findViewById(R.id.new_request_fare_message);
+        EditText editTextFare = (EditText) findViewById(R.id.new_request_fare_edit_text);
+        String message = "The estimated cost for the ride is " + cost + " How much would you like to play";
+
+
+        fareTextView.setText(message);
+        editTextFare.setText(cost);
+    }
+
+
+
 }
