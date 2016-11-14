@@ -118,12 +118,12 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         Request request = requests.get(position);
 
         // Get the views to update
-        TextView otherUserNameTextView = viewHolder.otherUserNameTextView;
-        TextView fareTextView = viewHolder.fareTextView;
-        TextView routeTextView = viewHolder.routeTextView;
-        TextView statusTextView = viewHolder.statusTextView;
-        ImageView callImageView = viewHolder.callImageView;
-        ImageView emailImageView = viewHolder.emailImageView;
+        final TextView otherUserNameTextView = viewHolder.otherUserNameTextView;
+        final TextView fareTextView = viewHolder.fareTextView;
+        final TextView routeTextView = viewHolder.routeTextView;
+        final TextView statusTextView = viewHolder.statusTextView;
+        final ImageView callImageView = viewHolder.callImageView;
+        final ImageView emailImageView = viewHolder.emailImageView;
 
         // Show the other person's name
         final DriversList drivers = request.getDrivers();

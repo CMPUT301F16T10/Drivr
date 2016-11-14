@@ -25,6 +25,9 @@ package ca.ualberta.cs.drivr;
 
 public class Driver extends User {
 
+    /**
+     * The state of the driver.
+     */
     private RequestState status;
 
     /**

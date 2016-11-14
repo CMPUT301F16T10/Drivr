@@ -32,9 +32,10 @@ import com.google.gson.GsonBuilder;
 import static ca.ualberta.cs.drivr.R.id.map;
 
 /**
- * Setting this up for JavaDocs.
+ * An activity that shows information about a request.
  */
-public class RequestActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class RequestActivity extends AppCompatActivity implements OnMapReadyCallback {
+
     private TextView routeText;
     private TextView fareText;
     private GoogleMap map;
@@ -43,6 +44,10 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
     private MapController mapController;
     private Place sourcePlace;
     private Place destinationPlace;
+
+    /**
+     * Used as a key for passing a request into this activity as an extra to an intent.
+     */
     public static final String EXTRA_REQUEST = "ca.ualberta.cs.drivr.RequestActivity.EXTRA_REQUEST";
 
     @Override
@@ -51,33 +56,27 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         setContentView(R.layout.activity_request);
         routeText = (TextView) findViewById(R.id.request_route_text);
         fareText = (TextView) findViewById(R.id.request_fare_text);
-//        map = findViewById(R.id.request_map_fragment);
+        // map = findViewById(R.id.request_map_fragment);
 
         String requestString = getIntent().getStringExtra(EXTRA_REQUEST);
         Gson gson = new Gson();
         Request request = gson.fromJson(requestString, Request.class);
 
-//        R.id.request_map_fragment
-
-
-//        TODO make a map with these points and the route between them
+        // TODO make a map with these points and the route between them
         mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.request_map_fragment);
         mapFragment.getMapAsync(this);
 
-
-        //sourcePlace = request.getSourcePlace();
-        //destinationPlace = request.getDestinationPlace();
+        // sourcePlace = request.getSourcePlace();
+        // destinationPlace = request.getDestinationPlace();
 
         mContext = getApplicationContext();
-
-
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         final MapController mapController = new MapController(map,mContext);
-        if( sourcePlace != null && destinationPlace != null) {
+        if(sourcePlace != null && destinationPlace != null) {
             mapController.addRequestOnMap(sourcePlace.getLatLng(), destinationPlace.getLatLng());
         }
     }

@@ -37,6 +37,7 @@ import java.util.ArrayList;
  */
 
 public class ElasticSearch {
+
     private ArrayList<Request> offlineRequests;
     private ArrayList<Request> requestsMadeOffline;
     private ArrayList<Request> offlineUpdateRequest;
@@ -60,13 +61,14 @@ public class ElasticSearch {
      *
      * @param request The request to be saved in ElasticSearch.
      */
-    public void saveRequest(Request request){
+    public void saveRequest(Request request) {
         onNetworkStateChanged();
-        if(connectivityManager.getActiveNetworkInfo().isConnected()) {
+        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.AddRequest addRequest = new
                     ElasticSearchController.AddRequest();
             addRequest.execute(request);
-        } else {
+        }
+        else {
             newInfo = true;
             requestsMadeOffline.add(request);
             offlineRequests.add(request);
@@ -81,13 +83,14 @@ public class ElasticSearch {
      *
      * @param request The request to be updated in ElasticSearch.
      */
-    public void updateRequest(Request request){
+    public void updateRequest(Request request) {
         onNetworkStateChanged();
-        if(connectivityManager.getActiveNetworkInfo().isConnected()) {
+        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.UpdateRequest updateRequest = new
                     ElasticSearchController.UpdateRequest();
             updateRequest.execute(request);
-        } else {
+        }
+        else {
             newInfo = true;
             offlineUpdateRequest.add(request);
             offlineRequests.add(request);
@@ -104,19 +107,21 @@ public class ElasticSearch {
      * @param username The username of the user.
      * @return The ArrayList of matching requests
      */
-    public ArrayList<Request> loadUserRequests(String username){
+    public ArrayList<Request> loadUserRequests(String username) {
         onNetworkStateChanged();
-        if(connectivityManager.getActiveNetworkInfo().isConnected()) {
+        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.SearchForRequests requests = new
                     ElasticSearchController.SearchForRequests();
             requests.execute(username);
             try {
                 offlineRequests = requests.get();
                 return offlineRequests;
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 return offlineRequests;
             }
-        } else {
+        }
+        else {
             return offlineRequests;
         }
     }
@@ -130,19 +135,21 @@ public class ElasticSearch {
      * @param geolocation The location given by the user.
      * @return The ArrayList of matching requests
      */
-    public ArrayList<Request> searchRequestByGeolocation(Location geolocation){
+    public ArrayList<Request> searchRequestByGeolocation(Location geolocation) {
         onNetworkStateChanged();
-        if(connectivityManager.getActiveNetworkInfo().isConnected()) {
+        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.SearchForLocationRequests searchRequest = new
                     ElasticSearchController.SearchForLocationRequests();
             searchRequest.execute(geolocation);
             try {
                 return searchRequest.get();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 Log.i("Error", "Failed to load the user.");
                 return null;
             }
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -158,17 +165,19 @@ public class ElasticSearch {
      */
     public ArrayList<Request> searchRequestByKeyword(String searchTerm) {
         onNetworkStateChanged();
-        if(connectivityManager.getActiveNetworkInfo().isConnected()) {
+        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.SearchForKeywordRequests searchRequest = new
                     ElasticSearchController.SearchForKeywordRequests();
             searchRequest.execute(searchTerm);
             try {
                 return searchRequest.get();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 Log.i("Error", "Failed to load the user.");
                 return null;
             }
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -190,21 +199,23 @@ public class ElasticSearch {
      */
     public boolean saveUser(User user) {
         onNetworkStateChanged();
-        if(connectivityManager.getActiveNetworkInfo().isConnected()) {
+        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             User inUser;
             ElasticSearchController.GetUser searchUser = new ElasticSearchController.GetUser();
             searchUser.execute(user.getUsername());
             try {
                 inUser = searchUser.get();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 return false;
             }
 
-            if(inUser == null) {
+            if (inUser == null) {
                 ElasticSearchController.AddUser addUser = new ElasticSearchController.AddUser();
                 addUser.execute(user);
                 return true;
-            } else {
+            }
+            else {
                 return false;
             }
         }
@@ -222,12 +233,13 @@ public class ElasticSearch {
      *
      * @param user The user to be updated in ElasticSearch.
      */
-    public void updateUser(User user){
+    public void updateUser(User user) {
         onNetworkStateChanged();
         if(connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.AddUser updateUser = new ElasticSearchController.AddUser();
             updateUser.execute(user);
-        } else {
+        }
+        else {
             newInfo = true;
             this.user = user;
         }
@@ -240,18 +252,20 @@ public class ElasticSearch {
      * @param username The username given by the user to search for.
      * @return The user gotten
      */
-    public User loadUser(String username){
+    public User loadUser(String username) {
         onNetworkStateChanged();
-        if(connectivityManager.getActiveNetworkInfo().isConnected()) {
+        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
             getUser.execute(username);
             try {
                 return getUser.get();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 Log.i("Error", "Failed to load the user.");
                 return null;
             }
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -261,29 +275,26 @@ public class ElasticSearch {
      * ElasticSearch, it will go through the User user and ArrayLists if they aren't null and
      * get their respective calls.
      */
-    public void onNetworkStateChanged(){
-        if (connectivityManager.getActiveNetworkInfo().isConnected() && newInfo){
-            if(user != null) {
-                if(newUser) {
+    public void onNetworkStateChanged() {
+        if (connectivityManager.getActiveNetworkInfo().isConnected() && newInfo) {
+            if (user != null) {
+                if(newUser)
                     saveUser(user);
-                } else {
+                else
                     updateUser(user);
-                }
                 newUser = false;
                 user = null;
             }
 
-            if(requestsMadeOffline != null) {
-                for(int i = 0; i < requestsMadeOffline.size(); ++i) {
+            if (requestsMadeOffline != null) {
+                for (int i = 0; i < requestsMadeOffline.size(); i++)
                     saveRequest(requestsMadeOffline.get(i));
-                }
                 requestsMadeOffline = null;
             }
 
-            if(offlineUpdateRequest != null) {
-                for(int i = 0; i < offlineUpdateRequest.size(); ++i) {
+            if (offlineUpdateRequest != null) {
+                for(int i = 0; i < offlineUpdateRequest.size(); i++)
                     saveRequest(offlineUpdateRequest.get(i));
-                }
                 offlineUpdateRequest = null;
             }
 

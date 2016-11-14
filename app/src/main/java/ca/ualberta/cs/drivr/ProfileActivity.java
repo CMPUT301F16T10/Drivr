@@ -26,9 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * Setting this up for JavaDocs.
+ * An activity that displays information about a user's profile.
  */
-
 public class ProfileActivity extends AppCompatActivity {
 
     private TextView usernameTextView;
@@ -55,25 +54,24 @@ public class ProfileActivity extends AppCompatActivity {
 
     private Boolean editMode = false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        // Initialize the Text Views
-        profileNameTextView = (TextView)findViewById(R.id.profile_name);
+        // Get references to the TextViews
+        profileNameTextView = (TextView) findViewById(R.id.profile_name);
 
+        // Get references to the ImageViews
+        profileBoxImageView = (ImageView) findViewById(R.id.profile_box);
+        editProfileImageView = (ImageView) findViewById(R.id.edit_profile);
+        profilePictureImageView = (ImageView) findViewById(R.id.profile_picture_image);
 
-        // Initialize the ImageViews
-        profileBoxImageView = (ImageView)findViewById(R.id.profile_box);
-        editProfileImageView = (ImageView)findViewById(R.id.edit_profile);
-        profilePictureImageView = (ImageView)findViewById(R.id.profile_picture_image);
-
-        userNameEditText = (EditText)findViewById(R.id.editTextUsername);
-        phoneEditText = (EditText)findViewById(R.id.editTextPhoneNumber);
-        addressEditText = (EditText)findViewById(R.id.editTextAddress);
-        emailEditText = (EditText)findViewById(R.id.editTextEmail);
+        // Get references to the EditTexts
+        userNameEditText = (EditText) findViewById(R.id.editTextUsername);
+        phoneEditText = (EditText) findViewById(R.id.editTextPhoneNumber);
+        addressEditText = (EditText) findViewById(R.id.editTextAddress);
+        emailEditText = (EditText) findViewById(R.id.editTextEmail);
 
         // Set up UserManager
         final UserManager userManager = UserManager.getInstance();
@@ -84,7 +82,6 @@ public class ProfileActivity extends AppCompatActivity {
         email = user.getEmail();
         userName = user.getUsername();
         name = user.getName();
-
 
         userNameEditText.setText(userName);
         phoneEditText.setText(phoneNumber);
@@ -106,7 +103,7 @@ public class ProfileActivity extends AppCompatActivity {
         editProfileImageView.setOnClickListener(new View.OnClickListener(){
             @Override
                 public void onClick(View v) {
-                if (editMode){
+                if (editMode) {
                     Toast.makeText(getApplicationContext(), "Edit Data Mode OFF", Toast.LENGTH_SHORT).show();
                     editMode = false;
                     //userNameEditText.setCursorVisible(false);
@@ -135,17 +132,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-
-
-
         // TODO get user
         // TODO Set profile up
-
     }
 }

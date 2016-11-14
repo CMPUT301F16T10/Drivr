@@ -68,24 +68,21 @@ public class MapController implements DirectionCallback{
     private Marker pickupMarker;
     private Marker destinationMarker;
 
-
-
     private GPSTracker gpsTracker;
-    private String serverKey = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
+    private final String serverKey = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
 
 
     /**
      * Instantiates a new map controller.
-     * @param map The google map
-     * @param context The activities context
-     * .
+     * @param map The google map.
+     * @param context The activities context.
      */
     public MapController(GoogleMap map, Context context) {
-        // initialize map
+        // Initialize map
         this.mContext = context;
         this.map = map;
         gpsTracker = new GPSTracker(context);
-        // initialize location
+        // Initialize location
 
         myLocation = gpsTracker.getMyLocation();
         myLatitude = myLocation.getLatitude();
@@ -93,13 +90,11 @@ public class MapController implements DirectionCallback{
 
         // Zoom map in to current Location
         zoomToCurrentLocation();
-
     }
 
     /**
-     * Adds a Destination Marker to the map
-     * @param latLng a point on the map
-     * .
+     * Adds a Destination Marker to the map.
+     * @param latLng a point on the map.
      */
     public void addDestination(LatLng latLng){
         MarkerOptions markerOptions = new MarkerOptions();
@@ -109,16 +104,13 @@ public class MapController implements DirectionCallback{
         markerOptions.draggable(true);
 
         destinationMarker = map.addMarker(markerOptions);
-
     }
+
     /**
-     * Zooms the camera angle on the Map to the User Location
-     * .
+     * Zooms the camera angle on the Map to the User Location.
      */
     public void zoomToCurrentLocation(){
-
-
-        // Cam
+        // Camera
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLatitude, myLongitude), 13));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -126,7 +118,6 @@ public class MapController implements DirectionCallback{
                 .zoom(10)                   // Sets the zoom
                 .build();                   // Creates a CameraPosition from the builder
         map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
     }
 
 
@@ -135,9 +126,8 @@ public class MapController implements DirectionCallback{
     }
 
     /**
-     * Adds a Pickup Marker to the map
-     * @param latLng a point on the map
-     * .
+     * Adds a Pickup Marker to the map.
+     * @param latLng a point on the map.
      */
     public void addPickUp(LatLng latLng){
         MarkerOptions markerOptions = new MarkerOptions();
@@ -150,43 +140,33 @@ public class MapController implements DirectionCallback{
     }
 
     /**
-     * Queries a route with google direction api to the map
-     * @param pickup point on the map
-     * @param destination pickup on the map
-     * .
+     * Queries a route with google direction api to the map.
+     * @param pickup point on the map.
+     * @param destination pickup on the map.
      */
     public void addRequestOnMap(LatLng pickup, LatLng destination){
-
         this.pickupLatlng = pickup;
         this.destinationLatLng = destination;
-
-            GoogleDirection.withServerKey(serverKey)
-                    .from(pickup)
-                    .to(destination)
-                    .transitMode(TransportMode.DRIVING)
-                    .execute(this);
-
-
+        GoogleDirection.withServerKey(serverKey)
+                .from(pickup)
+                .to(destination)
+                .transitMode(TransportMode.DRIVING)
+                .execute(this);
     }
 
     /**
-     * After a click on Map adds a marker to the map
-     * Shows Dialog to confirm pickup and drop off location
-     *
-     * @param mapMarker point on the map
-     * @param context context from activity
-     * .
+     * After a click on Map adds a marker to the map.
+     * Shows Dialog to confirm pickup and drop off location.
+     * @param mapMarker point on the map.
+     * @param context context from activity.
      */
     public void addPendingRequest(final LatLng mapMarker, Context context) {
-
-        if(markers.size() == 0){
-
+        if (markers.size() == 0) {
             new AlertDialog.Builder(context)
                     .setTitle("Confirm Pickup Location")
                     .setMessage("Is this the Location you want to be picked up from?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-
                             addPickUp(mapMarker);
                             pickup = mapMarker;
                             markers.add(mapMarker);
@@ -198,16 +178,14 @@ public class MapController implements DirectionCallback{
                         }
                     })
                     .show();
-
         }
         // Pickup Location Already Set Up
-        else if(markers.size() == 1){
+        else if(markers.size() == 1) {
             new AlertDialog.Builder(context)
                     .setTitle("Confirm Destination Location")
                     .setMessage("Is this the Location you want to be dropped off at?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-
                             addDestination(mapMarker);
                             markers.add(mapMarker);
                             addRequestOnMap(pickup,mapMarker);
@@ -215,11 +193,10 @@ public class MapController implements DirectionCallback{
                     })
                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            // do nothing
+                            // Do nothing
                         }
                     })
                     .show();
-
         }
         else {
             // Delete
@@ -237,12 +214,9 @@ public class MapController implements DirectionCallback{
         markers.clear();
     }
 
-
-
     /**
      * Queries a route with google direction api to the map
-     * consult https://github.com/akexorcist/Android-GoogleDirectionLibrary
-     *
+     * @see <a href="https://github.com/akexorcist/Android-GoogleDirectionLibrary">Android-GoogleDirectionLibrary</a>.
      */
     @Override
     public void onDirectionSuccess(Direction direction, String rawBody) {
@@ -258,17 +232,7 @@ public class MapController implements DirectionCallback{
         }
     }
 
-
-    public void updateMarker(Marker marker){
-
-        if(marker == pickupMarker){
-
-        }
-    }
-
     // If marker can't be added to map
     @Override
-    public void onDirectionFailure(Throwable t) {
-
-    }
+    public void onDirectionFailure(Throwable t) { }
 }

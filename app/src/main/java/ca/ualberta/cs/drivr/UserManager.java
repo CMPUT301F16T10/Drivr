@@ -114,6 +114,11 @@ public class UserManager extends Observable implements IUserManager {
         this.userMode = userMode;
     }
 
+    /**
+     * Notifies all observers of this object that the object has changed. This forces the object
+     * into a changed state so all observers will see that the object has changed on every call to
+     * this method.
+     */
     @Override
     public void notifyObservers() {
         setChanged();

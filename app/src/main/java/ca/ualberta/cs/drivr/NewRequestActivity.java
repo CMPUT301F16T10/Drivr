@@ -43,6 +43,10 @@ import java.math.BigDecimal;
 public class NewRequestActivity extends AppCompatActivity {
 
     private static final String TAG = "NewRequestActivity";
+
+    /**
+     * The key used for passing a Place to this activity as an extra to an intent.
+     */
     public static final String EXTRA_PLACE = "ca.ualberta.cs.driver.NewRequestActivity.EXTRA_PLACE";
 
     private UserManager userManager = UserManager.getInstance();
@@ -171,7 +175,6 @@ public class NewRequestActivity extends AppCompatActivity {
         final BigDecimal fare = new BigDecimal(fareString).setScale(2, BigDecimal.ROUND_FLOOR)
                 .divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR); // Divide by 100 to get dollars from cents
 
-
         // Make the request and store it in the model
         User user = userManager.getUser();
         Request request = new Request(user, sourcePlace, destinationPlace);
@@ -181,10 +184,9 @@ public class NewRequestActivity extends AppCompatActivity {
         String requestString = gson.toJson(request, Request.class);
         Intent intent = new Intent(NewRequestActivity.this, RequestActivity.class);
         intent.putExtra(RequestActivity.EXTRA_REQUEST, requestString);
-        //TODO startActivityForResult() confirm if user presses accept or deny
-//        startActivityForResult(intent, );
-//        startActivity(intent);
-
+        // TODO startActivityForResult() confirm if user presses accept or deny
+        // startActivityForResult(intent, );
+        // startActivity(intent);
 
         userManager.getRequestsList().add(request);
         userManager.notifyObservers();

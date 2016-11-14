@@ -83,16 +83,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
-    private LatLng pickup;
     private PlaceAutocompleteFragment autocompleteFragment;
     private GoogleMap mMap;
     private SupportMapFragment mFragment;
-    private Activity activity;
-    private MapController mapController;
     private Context context;
     LatLng test = new LatLng(53.5232, -113.5263);
-    LatLng test2 = new LatLng(53.5225, -113.6242);
     private static final String SERVER_KEY = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
 
 
@@ -104,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     Accessed: November 10, 2016
 
     Add support for vector drawables in older versions of android
-     */
+    */
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
@@ -230,8 +225,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 startActivity(intent);
             }
         });
-
-
     }
 
     @Override
@@ -253,20 +246,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
-            public void onMarkerDragStart(Marker marker) {
-
-            }
+            public void onMarkerDragStart(Marker marker) { }
 
             @Override
             public void onMarkerDrag(Marker marker) {
-
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
             }
 
             @Override
-            public void onMarkerDragEnd(Marker marker) {
-
-            }
+            public void onMarkerDragEnd(Marker marker) { }
         });
     }
 
@@ -277,21 +265,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
     @Override
-    public void onMarkerDragStart(Marker marker) {
-
-    }
+    public void onMarkerDragStart(Marker marker) { }
 
     @Override
-    public void onMarkerDrag(Marker marker) {
-
-    }
+    public void onMarkerDrag(Marker marker) { }
 
     @Override
-    public void onMarkerDragEnd(Marker marker) {
+    public void onMarkerDragEnd(Marker marker) { }
 
-    }
-
-    //https://github.com/akexorcist/Android-GoogleDirectionLibrary
     @Override
     public void onDirectionSuccess(Direction direction, String rawBody) { }
 
@@ -300,12 +281,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE){
-            if(resultCode == RESULT_OK){
-                Place place = PlaceAutocomplete.getPlace(this,data);
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK){
+                Place place = PlaceAutocomplete.getPlace(this, data);
 
-            } else if(resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(this,data);
+            }
+            else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
             }
         }
         else if (resultCode == RESULT_CANCELED){
@@ -350,15 +332,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.i(TAG, "permissions check");
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.i(TAG, "permissions failed");
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            /*
+            TODO: Consider calling
+               ActivityCompat#requestPermissions
+            here to request the missing permissions, and then overriding
+              public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                                     int[] grantResults)
+            to handle the case where the user grants the permission. See the documentation
+            for ActivityCompat#requestPermissions for more details.
+            */
             String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
             ActivityCompat.requestPermissions(this, permissions, 1);
         }

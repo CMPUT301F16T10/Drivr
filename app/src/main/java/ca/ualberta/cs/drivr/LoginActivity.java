@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-//        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        // mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mLoginFormView = (ScrollView) findViewById(R.id.login_form);
         mProgressView = (ProgressBar) findViewById(R.id.login_progress);
 
@@ -165,7 +165,8 @@ public class LoginActivity extends AppCompatActivity {
                             requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
                         }
                     });
-        } else {
+        }
+        else {
             requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
         }
         return false;
@@ -179,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
                                            @NonNull int[] grantResults) {
         if (requestCode == REQUEST_READ_CONTACTS) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                populateAutoComplete();
+                // populateAutoComplete();
             }
         }
     }
@@ -275,7 +276,8 @@ public class LoginActivity extends AppCompatActivity {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-        } else {
+        }
+        else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
@@ -289,10 +291,12 @@ public class LoginActivity extends AppCompatActivity {
         return email.contains("@");
     }
 
-//    private boolean isPasswordValid(String password) {
-//        //TODO: Replace this with your own logic
-//        return password.length() > 4;
-//    }
+    /*
+    private boolean isPasswordValid(String password) {
+        // TODO: Replace this with your own logic
+        return password.length() > 4;
+    }
+    */
 
     /**
      * Shows the progress UI and hides the login form.
@@ -322,7 +326,8 @@ public class LoginActivity extends AppCompatActivity {
                     mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
                 }
             });
-        } else {
+        }
+        else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
@@ -347,30 +352,35 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-//            //TODO : use actual elastic search
-//            ElasticSearch elasticSearch = new ElasticSearch();
-//            user = elasticSearch.getUser(username);
-//            if (user.getUserId().isEmpty()){
-//                return false;
-//            }
+            /*
+            // TODO : use actual elastic search
+            ElasticSearch elasticSearch = new ElasticSearch();
+            user = elasticSearch.getUser(username);
+            if (user.getUserId().isEmpty()){
+                return false;
+            }
+            */
             user = new User();
 
             return true;
 
-//            try {
-//                // Simulate network access.
-//                Thread.sleep(2000);
-//            } catch (InterruptedException e) {
-//                return false;
-//            }
+            /*
+            try {
+                // Simulate network access.
+                Thread.sleep(2000);
+            }
+            catch (InterruptedException e) {
+                return false;
+            }
 
-//            for (String credential : DUMMY_CREDENTIALS) {
-//                String[] pieces = credential.split(":");
-//                if (pieces[0].equals(mEmail)) {
-//                    // Account exists, return true if the password matches.
-//                    return pieces[1].equals(mPassword);
-//                }
-//            }
+            for (String credential : DUMMY_CREDENTIALS) {
+                String[] pieces = credential.split(":");
+                if (pieces[0].equals(mEmail)) {
+                    // Account exists, return true if the password matches.
+                    return pieces[1].equals(mPassword);
+                }
+            }
+            */
         }
 
         @Override
@@ -382,9 +392,10 @@ public class LoginActivity extends AppCompatActivity {
                 userManager.setUser(user);
                 userManager.notifyObservers();
                 finish();
-            } else {
-//                mPasswordView.setError(getString(R.string.error_incorrect_password));
-//                mPasswordView.requestFocus();
+            }
+            else {
+                // mPasswordView.setError(getString(R.string.error_incorrect_password));
+                // mPasswordView.requestFocus();
                 loginUsername.setError("Username does not exist");
                 loginUsername.requestFocus();
             }
@@ -416,12 +427,14 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-//            //TODO : use actual elastic search
-//            ElasticSearch elasticSearch = new ElasticSearch();
-//            user = elasticSearch.getUser(username);
-//            if (!user.getUserId().isEmpty()){
-//                return false;
-//            }
+            /*
+            //TODO : use actual elastic search
+            ElasticSearch elasticSearch = new ElasticSearch();
+            user = elasticSearch.getUser(username);
+            if (!user.getUserId().isEmpty()){
+                return false;
+            }
+            */
             newUser = new User();
             return true;
         }
