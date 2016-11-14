@@ -112,8 +112,6 @@ public class ProfileActivity extends AppCompatActivity {
 
                     user.setEmail(email);
                     user.setPhoneNumber(phoneNumber);
-
-
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Edit Data Mode On", Toast.LENGTH_SHORT).show();
@@ -130,6 +128,12 @@ public class ProfileActivity extends AppCompatActivity {
         // TODO Set profile up
     }
 
+    /**
+     * Shows and hides certain content based on whether the user is signed in orn not. When signed
+     * in, the personal information of the user is shown. When not signed in, a message saying the
+     * user is not signed in is shown.
+     * @param isSignedIn True when signed in, false otherwise.
+     */
     private void toggleContent(boolean isSignedIn) {
         // If there is not a user, display an empty page because there is no profile
         // The check for a user is if the username is non-null and non-empty
