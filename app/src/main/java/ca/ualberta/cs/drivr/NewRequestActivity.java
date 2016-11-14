@@ -17,6 +17,7 @@
 package ca.ualberta.cs.drivr;
 
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -51,6 +52,8 @@ public class NewRequestActivity extends AppCompatActivity {
 
     private UserManager userManager = UserManager.getInstance();
 
+    private RequestsListController requestsListController;
+
     private Place destinationPlace;
     private Place sourcePlace;
 
@@ -64,6 +67,9 @@ public class NewRequestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_request);
+
+        // Setup controllers
+        requestsListController = new RequestsListController(userManager);
 
         // Get the intent arguments
         String destinationJson = getIntent().getStringExtra(EXTRA_PLACE);
@@ -190,8 +196,9 @@ public class NewRequestActivity extends AppCompatActivity {
         // startActivityForResult(intent, );
         // startActivity(intent);
 
-        userManager.getRequestsList().add(request);
-        userManager.notifyObservers();
+        //userManager.getRequestsList().add(request);
+        //userManager.notifyObservers();
+        requestsListController.addRequest(request);
 
         finish();
     }
@@ -210,9 +217,13 @@ public class NewRequestActivity extends AppCompatActivity {
         Boolean latLngIsValid = place.getLatLng() != null;
         return addressIsValid || latLngIsValid;
     }
-        private void estimateFare(Place dest, Place pickUp){
 
-        String cost;
+    /**
+     * Estimate the fare between two locations and show it on screen.
+     * @param dest
+     * @param pickUp
+     */
+    private void estimateFare(Place dest, Place pickUp) {
 
         Location locationDest = new Location("Dest");
         locationDest.setLongitude(dest.getLatLng().longitude);
@@ -223,16 +234,14 @@ public class NewRequestActivity extends AppCompatActivity {
         locationStart.setLatitude(pickUp.getLatLng().latitude);
 
         float distance = locationDest.distanceTo(locationStart);
-        distance = distance / 1000;
-        distance = distance +3;
+        distance = distance / 1000; // m to km
+        distance = distance + 3; // $3 base cost
 
-        cost = String.format("%.2f", distance);
-        cost = "$" + cost;
+        String cost = "$" + String.format("%.2f", distance);
 
         TextView fareTextView = (TextView) findViewById(R.id.new_request_fare_message);
         EditText editTextFare = (EditText) findViewById(R.id.new_request_fare_edit_text);
-        String message = "The estimated cost for the ride is " + cost + " How much would you like to play";
-
+        String message = "The estimated cost for the ride is " + cost + " How much would you like to pay?";
 
         fareTextView.setText(message);
         editTextFare.setText(cost);
