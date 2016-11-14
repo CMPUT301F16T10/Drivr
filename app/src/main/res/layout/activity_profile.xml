@@ -23,6 +23,13 @@
     android:layout_height="match_parent"
     tools:context="ca.ualberta.cs.drivr.ProfileActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/profile_not_signed_in_text"
+        android:gravity="center"
+        android:text="Oops, it looks like you're not signed in."/>
+
     <ImageView
         app:srcCompat="@drawable/ic_mode_edit_black_24dp"
         android:id="@+id/edit_profile"
@@ -34,6 +41,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/profile_content"
         android:orientation="vertical"
         android:padding="4dp">
 
