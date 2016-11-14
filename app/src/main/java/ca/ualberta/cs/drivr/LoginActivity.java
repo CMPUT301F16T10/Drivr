@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private AsyncTask<Void, Void, Boolean> mAuthTask = null;
+    private static final String TAG = "LoginActivity";
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -305,12 +306,6 @@ public class LoginActivity extends AppCompatActivity {
         return email.contains("@");
     }
 
-    /*
-    private boolean isPasswordValid(String password) {
-        // TODO: Replace this with your own logic
-        return password.length() > 4;
-    }
-    */
 
     /**
      * Shows the progress UI and hides the login form.
@@ -409,35 +404,19 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i("error", "logging in");
                 return false;
             }*/
-            user = new User();
+
+
+            Log.i(TAG, "begin elastic search login" );
+//            ElasticSearch elasticSearch = new ElasticSearch(getApplicationContext());
+            MockElasticSearch elasticSearch = MockElasticSearch.getInstance();
+            user = elasticSearch.loadUser(username);
+            Log.i(TAG, "end elastic search login" );
+            if (user == null) {
+                return false;
+            }
             return true;
         }
 
-            /*
-            ElasticSearch elasticSearch = new ElasticSearch();
-            user = elasticSearch.getUser(username);
-            if (user.getUserId().isEmpty()){
-                return false;
-            }
-            */
-
-            /*
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            }
-            catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-            */
 
         @Override
         protected void onPostExecute(final Boolean success) {
@@ -485,15 +464,22 @@ public class LoginActivity extends AppCompatActivity {
 
             //TODO : use actual elastic search
 
-            ElasticSearchController.AddUser addUser = new ElasticSearchController.AddUser();
-            User newuser = new User();
-            newuser.setName(name);
-            newuser.setUsername(username);
-            newuser.setEmail(email);
-            newuser.setPhoneNumber(phone);
-            addUser.execute(newuser);
             newUser = new User();
-            return true;
+            newUser.setName(name);
+            newUser.setUsername(username);
+            newUser.setEmail(email);
+            newUser.setPhoneNumber(phone);
+
+//            ElasticSearch elasticSearch = new ElasticSearch(getApplicationContext());
+            MockElasticSearch elasticSearch = MockElasticSearch.getInstance();
+            if (elasticSearch.saveUser(newUser)) {
+                return true;
+            } else {
+                return false;
+            }
+//            ElasticSearchController.AddUser addUser = new ElasticSearchController.AddUser();
+
+//            return true;
         }
 
         @Override
