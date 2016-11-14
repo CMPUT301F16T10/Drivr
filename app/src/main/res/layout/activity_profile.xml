@@ -24,63 +24,122 @@
     tools:context="ca.ualberta.cs.drivr.ProfileActivity">
 
     <ImageView
-        android:id="@+id/profile_box"
-        android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <ImageView
-        android:id="@+id/profile_picture_image"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
-        android:padding="12dp"
-        app:srcCompat="@drawable/ic_person_black_24dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:padding="12dp"
-        android:id="@+id/profile_name"
-        android:layout_below="@id/profile_box"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="John Doe"
-        android:textSize="48sp"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:background="@android:color/transparent"
-        android:id="@+id/editTextUsername"
-        android:layout_below="@+id/profile_name"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:id="@+id/editTextEmail"
-        android:background="@android:color/transparent"
-        android:layout_below="@+id/editTextUsername"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:id="@+id/editTextPhoneNumber"
-        android:background="@android:color/transparent"
-        android:layout_below="@+id/editTextEmail"
-        android:layout_alignParentStart="true" />
-
-    <ImageView
         app:srcCompat="@drawable/ic_mode_edit_black_24dp"
         android:id="@+id/edit_profile"
-        android:padding="4dp"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:padding="8dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentEnd="true"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <TextView
+            android:padding="12dp"
+            android:id="@+id/profile_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="John Doe"
+            android:textSize="48sp"/>
+
+        <!-- Username -->
+        <android.support.v7.widget.CardView
+            app:cardUseCompatPadding="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="24dp"
+                android:paddingBottom="24dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_person_black_24dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/editTextUsername"
+                    android:layout_marginStart="8dp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <!-- Email -->
+        <android.support.v7.widget.CardView
+            app:cardUseCompatPadding="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="24dp"
+                android:paddingBottom="24dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_email_black_24dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editTextEmail"
+                    android:background="@android:color/transparent"
+                    android:layout_marginStart="8dp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <!-- Phone Number -->
+        <android.support.v7.widget.CardView
+            app:cardUseCompatPadding="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="24dp"
+                android:paddingBottom="24dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_call_black_24dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editTextPhoneNumber"
+                    android:background="@android:color/transparent"
+                    android:layout_marginStart="8dp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
 
     <!--<ImageView-->
         <!--android:layout_height="240dp"-->

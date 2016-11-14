@@ -63,9 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
         profileNameTextView = (TextView) findViewById(R.id.profile_name);
 
         // Get references to the ImageViews
-        profileBoxImageView = (ImageView) findViewById(R.id.profile_box);
         editProfileImageView = (ImageView) findViewById(R.id.edit_profile);
-        profilePictureImageView = (ImageView) findViewById(R.id.profile_picture_image);
 
         // Get references to the EditTexts
         usernameEditText = (EditText) findViewById(R.id.editTextUsername);
