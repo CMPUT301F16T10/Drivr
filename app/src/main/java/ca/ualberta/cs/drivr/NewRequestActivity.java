@@ -88,6 +88,7 @@ public class NewRequestActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(Place place) {
                 updateDestinationPlace(place);
+                estimateFare(sourcePlace,destinationPlace);
             }
 
             @Override
@@ -103,6 +104,7 @@ public class NewRequestActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(Place place) {
                 updateSourcePlace(place);
+                estimateFare(sourcePlace,destinationPlace);
             }
 
             @Override
@@ -207,5 +209,32 @@ public class NewRequestActivity extends AppCompatActivity {
         Boolean addressIsValid = place.getAddress() != null && place.getAddress().length() > 0;
         Boolean latLngIsValid = place.getLatLng() != null;
         return addressIsValid || latLngIsValid;
+    }
+        private void estimateFare(Place dest, Place pickUp){
+
+        String cost;
+
+        Location locationDest = new Location("Dest");
+        locationDest.setLongitude(dest.getLatLng().longitude);
+        locationDest.setLatitude(dest.getLatLng().latitude);
+
+        Location locationStart = new Location("Start");
+        locationStart.setLongitude(pickUp.getLatLng().longitude);
+        locationStart.setLatitude(pickUp.getLatLng().latitude);
+
+        float distance = locationDest.distanceTo(locationStart);
+        distance = distance / 1000;
+        distance = distance +3;
+
+        cost = String.format("%.2f", distance);
+        cost = "$" + cost;
+
+        TextView fareTextView = (TextView) findViewById(R.id.new_request_fare_message);
+        EditText editTextFare = (EditText) findViewById(R.id.new_request_fare_edit_text);
+        String message = "The estimated cost for the ride is " + cost + " How much would you like to play";
+
+
+        fareTextView.setText(message);
+        editTextFare.setText(cost);
     }
 }
