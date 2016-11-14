@@ -555,7 +555,7 @@ public class ElasticSearchController {
             User tempUser = new User();
             tempUser.setUsername(gottenRequest.getRider());
             request.setRider(tempUser);
-            request.setDrivers(gottenRequest.getDrivers());
+            request.getDrivers().addAll(gottenRequest.getDrivers());
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             Date date;
