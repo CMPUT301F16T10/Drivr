@@ -32,7 +32,7 @@
 
     <ImageView
         app:srcCompat="@drawable/ic_mode_edit_black_24dp"
-        android:id="@+id/edit_profile"
+        android:id="@+id/profile_edit_icon"
         android:padding="8dp"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:id="@+id/editTextUsername"
+                    android:id="@+id/profile_username_edit_text"
                     android:layout_marginStart="8dp" />
 
             </LinearLayout>
@@ -108,7 +108,7 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editTextEmail"
+                    android:id="@+id/profile_email_edit_text"
                     android:background="@android:color/transparent"
                     android:layout_marginStart="8dp" />
 
@@ -140,7 +140,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="phone"
-                    android:id="@+id/editTextPhoneNumber"
+                    android:id="@+id/profile_phone_number_edit_text"
                     android:background="@android:color/transparent"
                     android:layout_marginStart="8dp" />
 

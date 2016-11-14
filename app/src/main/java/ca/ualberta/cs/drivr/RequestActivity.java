@@ -23,13 +23,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import static ca.ualberta.cs.drivr.R.id.map;
 
 /**
  * An activity that shows information about a request.
