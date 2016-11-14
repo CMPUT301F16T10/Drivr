@@ -45,14 +45,37 @@
         android:orientation="vertical"
         android:padding="4dp">
 
-        <TextView
-            android:padding="12dp"
-            android:id="@+id/profile_name"
+        <!--<TextView-->
+            <!--android:padding="12dp"-->
+            <!--android:id="@+id/profile_name"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="center"-->
+            <!--android:text="John Doe"-->
+            <!--android:textSize="48sp"/>-->
+
+        <ViewSwitcher
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="John Doe"
-            android:textSize="48sp"/>
+            android:id="@+id/name_switcher">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="48sp"
+                android:layout_gravity="center"
+                android:text="John Doe"
+                android:id="@+id/profile_name_text_view"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/profile_name_edit_text"
+                android:textSize="48sp"
+                android:visibility="gone"
+                android:layout_marginStart="8dp" />
+
+
+        </ViewSwitcher>
 
         <!-- Username -->
         <android.support.v7.widget.CardView
@@ -71,15 +94,31 @@
 
                 <ImageView
                     app:srcCompat="@drawable/ic_person_black_24dp"
+                    android:layout_gravity="center"
                     android:layout_width="32dp"
                     android:layout_height="32dp" />
-
-                <EditText
+                <ViewSwitcher
+                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:id="@+id/profile_username_edit_text"
-                    android:layout_marginStart="8dp" />
+                    android:id="@+id/username_switcher">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:layout_gravity="center"
+                        android:id="@+id/profile_username_text_view"/>
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/profile_username_edit_text"
+                        android:visibility="gone"
+                        android:layout_marginStart="8dp" />
+
+
+                </ViewSwitcher>
+
+
 
             </LinearLayout>
 
@@ -105,12 +144,32 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp" />
 
-                <EditText
+                <!--<EditText-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/profile_email_edit_text"-->
+                    <!--android:background="@android:color/transparent"-->
+                    <!--android:layout_marginStart="8dp" />-->
+                <ViewSwitcher
+                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/profile_email_edit_text"
-                    android:background="@android:color/transparent"
-                    android:layout_marginStart="8dp" />
+                    android:id="@+id/email_switcher">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:layout_gravity="center"
+                        android:id="@+id/profile_email_text_view"/>
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/profile_email_edit_text"
+                        android:inputType="textWebEmailAddress"
+                        android:visibility="gone"
+                        android:layout_marginStart="8dp" />
+                </ViewSwitcher>
+
 
             </LinearLayout>
 
@@ -136,13 +195,32 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp" />
 
-                <EditText
+                <!--<EditText-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:inputType="phone"-->
+                    <!--android:id="@+id/profile_phone_number_edit_text"-->
+                    <!--android:background="@android:color/transparent"-->
+                    <!--android:layout_marginStart="8dp" />-->
+                <ViewSwitcher
+                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:id="@+id/profile_phone_number_edit_text"
-                    android:background="@android:color/transparent"
-                    android:layout_marginStart="8dp" />
+                    android:id="@+id/phone_number_switcher">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:layout_gravity="center"
+                        android:id="@+id/profile_phone_number_text_view"/>
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:id="@+id/profile_phone_number_edit_text"
+                        android:visibility="gone"
+                        android:layout_marginStart="8dp" />
+                </ViewSwitcher>
 
             </LinearLayout>
 

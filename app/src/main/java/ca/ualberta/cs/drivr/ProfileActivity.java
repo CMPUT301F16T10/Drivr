@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 /**
  * An activity that displays information about a user's profile.
@@ -35,10 +36,19 @@ public class ProfileActivity extends AppCompatActivity {
     private View profileContent;
     private ImageView editProfileImageView;
     private TextView notSignedInText;
-    private TextView profileNameTextView;
+    private EditText profileNameEditText;
     private EditText usernameEditText;
     private EditText phoneEditText;
     private EditText emailEditText;
+
+    private ViewSwitcher usernameSwitch;
+    private ViewSwitcher phoneSwitch;
+    private ViewSwitcher emailSwitch;
+    private ViewSwitcher profileNameSwitch;
+    private TextView profileNameTextView;
+    private TextView usernameTextView;
+    private TextView emailTextView;
+    private TextView phoneTextView;
 
     private User user;
     private String email;
@@ -53,6 +63,19 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+
+        usernameSwitch = (ViewSwitcher) findViewById(R.id.username_switcher);
+        usernameTextView = (TextView) findViewById(R.id.profile_username_text_view);
+
+        emailSwitch = (ViewSwitcher) findViewById(R.id.email_switcher);
+        phoneSwitch = (ViewSwitcher) findViewById(R.id.phone_number_switcher);
+        profileNameSwitch = (ViewSwitcher) findViewById(R.id.name_switcher);
+
+        emailTextView = (TextView) findViewById(R.id.profile_email_text_view);
+        phoneTextView = (TextView) findViewById(R.id.profile_phone_number_text_view);
+        profileNameTextView = (TextView) findViewById(R.id.profile_name_text_view);
+
+
         // Get a reference to the content container
         profileContent = findViewById(R.id.profile_content);
 
@@ -61,13 +84,14 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Get references to the TextViews
         notSignedInText = (TextView) findViewById(R.id.profile_not_signed_in_text);
-        profileNameTextView = (TextView) findViewById(R.id.profile_name);
 
 
         // Get references to the EditTexts
+        profileNameEditText = (EditText) findViewById(R.id.profile_name_edit_text);
         usernameEditText = (EditText) findViewById(R.id.profile_username_edit_text);
         phoneEditText = (EditText) findViewById(R.id.profile_phone_number_edit_text);
         emailEditText = (EditText) findViewById(R.id.profile_email_edit_text);
+
 
         // Get the current user
         user = userManager.getUser();
@@ -81,18 +105,22 @@ public class ProfileActivity extends AppCompatActivity {
         // Show the appropriate content based on whether the user is signed in or not
         toggleContent(username != null && !username.isEmpty());
 
-        usernameEditText.setText(username);
-        phoneEditText.setText(phoneNumber);
-        emailEditText.setText(email);
+//        usernameEditText.setText(username);
+        usernameSwitch.findViewById(R.id.profile_username_text_view);
+        usernameTextView.setText(username);
+        phoneTextView.setText(phoneNumber);
+        emailTextView.setText(email);
         profileNameTextView.setText(name);
 
-        usernameEditText.setTextIsSelectable(false);
-        phoneEditText.setTextIsSelectable(false);
-        emailEditText.setTextIsSelectable(false);
 
-        usernameEditText.setCursorVisible(false);
-        phoneEditText.setCursorVisible(false);
-        emailEditText.setCursorVisible(false);
+
+//        usernameEditText.setTextIsSelectable(false);
+//        phoneEditText.setTextIsSelectable(false);
+//        emailEditText.setTextIsSelectable(false);
+
+//        usernameEditText.setCursorVisible(false);
+//        phoneEditText.setCursorVisible(false);
+//        emailEditText.setCursorVisible(false);
 
         editProfileImageView.setClickable(true);
         editProfileImageView.setOnClickListener(new View.OnClickListener(){
@@ -100,25 +128,100 @@ public class ProfileActivity extends AppCompatActivity {
                 public void onClick(View v) {
                 if (editMode) {
                     Toast.makeText(getApplicationContext(), "Edit Data Mode OFF", Toast.LENGTH_SHORT).show();
+                    editProfileImageView.setImageResource(R.drawable.ic_mode_edit_black_24dp);
+
+                    if (!usernameEditText.getText().toString().equals(username)) {
+//                        The username has been changed
+                        //TODO validate the new username with elastic search
+                        username = usernameEditText.getText().toString();
+                        user.setUsername(username);
+                        usernameTextView.setText(username);
+
+                    }
+
+                    usernameSwitch.findViewById(R.id.profile_username_text_view);
+                    usernameEditText.setVisibility(View.GONE);
+                    usernameTextView.setVisibility(View.VISIBLE);
+
+                    if (!phoneEditText.getText().toString().equals(phoneNumber)) {
+//                        The Phone Number has been changed
+                        //TODO validate the new username with elastic search
+                        phoneNumber = phoneEditText.getText().toString();
+                        user.setPhoneNumber(phoneNumber);
+                        phoneTextView.setText(phoneNumber);
+
+                    }
+
+                    phoneSwitch.findViewById(R.id.profile_phone_number_text_view);
+                    phoneEditText.setVisibility(View.GONE);
+                    phoneTextView.setVisibility(View.VISIBLE);
+
+                    if (!emailEditText.getText().toString().equals(email)) {
+//                        The Email has been changed
+                        //TODO validate the new username with elastic search
+                        email = emailEditText.getText().toString();
+                        user.setEmail(email);
+                        emailTextView.setText(email);
+
+                    }
+
+                    emailSwitch.findViewById(R.id.profile_email_text_view);
+                    emailEditText.setVisibility(View.GONE);
+                    emailTextView.setVisibility(View.VISIBLE);
+
+                    if (!profileNameEditText.getText().toString().equals(name)) {
+//                        The Name has been changed
+                        //TODO validate the new username with elastic search
+                        name = profileNameEditText.getText().toString();
+                        user.setName(name);
+                        profileNameTextView.setText(name);
+
+                    }
+
+                    profileNameSwitch.findViewById(R.id.profile_name_text_view);
+                    profileNameEditText.setVisibility(View.GONE);
+                    profileNameTextView.setVisibility(View.VISIBLE);
+
                     editMode = false;
                     //userNameEditText.setCursorVisible(false);
-                    phoneEditText.setCursorVisible(false);
-                    emailEditText.setCursorVisible(false);
-                    profileNameTextView.setCursorVisible(true);
+//                    phoneEditText.setCursorVisible(false);
+//                    emailEditText.setCursorVisible(false);
+//                    profileNameTextView.setCursorVisible(true);
 
-                    phoneNumber = phoneEditText.getText().toString();
-                    email = emailEditText.getText().toString();
+//                    phoneNumber = phoneEditText.getText().toString();
+//                    email = emailEditText.getText().toString();
 
-                    user.setEmail(email);
-                    user.setPhoneNumber(phoneNumber);
+//                    user.setEmail(email);
+//                    user.setPhoneNumber(phoneNumber);
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Edit Data Mode On", Toast.LENGTH_SHORT).show();
+                    usernameSwitch.findViewById(R.id.profile_username_edit_text);
+                    usernameEditText.setText(username);
+                    usernameEditText.setVisibility(View.VISIBLE);
+                    usernameTextView.setVisibility(View.GONE);
+
+                    phoneSwitch.findViewById(R.id.profile_phone_number_edit_text);
+                    phoneEditText.setText(phoneNumber);
+                    phoneEditText.setVisibility(View.VISIBLE);
+                    phoneTextView.setVisibility(View.GONE);
+
+                    emailSwitch.findViewById(R.id.profile_email_edit_text);
+                    emailEditText.setText(email);
+                    emailEditText.setVisibility(View.VISIBLE);
+                    emailTextView.setVisibility(View.GONE);
+
+                    profileNameSwitch.findViewById(R.id.profile_name_edit_text);
+                    profileNameEditText.setText(name);
+                    profileNameEditText.setVisibility(View.VISIBLE);
+                    profileNameTextView.setVisibility(View.GONE);
+
                     editMode = true;
+                    editProfileImageView.setImageResource(R.drawable.ic_check_black_24dp);
                     //userNameEditText.setCursorVisible(true);
-                    profileNameTextView.setCursorVisible(true);
-                    phoneEditText.setCursorVisible(true);
-                    emailEditText.setCursorVisible(true);
+//                    profileNameTextView.setCursorVisible(true);
+//                    phoneEditText.setCursorVisible(true);
+//                    emailEditText.setCursorVisible(true);
                 }
             }
         });
