@@ -61,7 +61,11 @@
             android:name="com.google.android.geo.API_KEY2"
             android:value="AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE" />
 
-        <activity android:name=".NewRequestActivity"></activity>
+        <activity android:name=".NewRequestActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
     </application>
 
 </manifest>

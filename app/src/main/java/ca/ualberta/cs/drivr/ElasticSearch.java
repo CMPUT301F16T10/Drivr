@@ -46,11 +46,11 @@ public class ElasticSearch {
     private boolean newInfo;
     private boolean newUser;
 
-    public ElasticSearch(Context c) {
+    public ElasticSearch(Context context) {
         newInfo = false;
         newUser = false;
         connectivityManager = (ConnectivityManager)
-                c.getSystemService(Context.CONNECTIVITY_SERVICE);
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     /**
@@ -278,11 +278,13 @@ public class ElasticSearch {
     public void onNetworkStateChanged() {
         if (connectivityManager.getActiveNetworkInfo().isConnected() && newInfo) {
             if (user != null) {
-                if(newUser)
+                if(newUser) {
                     saveUser(user);
-                else
+                }
+                else {
                     updateUser(user);
-                newUser = false;
+                }
+                    newUser = false;
                 user = null;
             }
 
