@@ -126,7 +126,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         ImageView emailImageView = viewHolder.emailImageView;
 
         // Show the other person's name
-        final ArrayList<Driver> drivers = request.getDrivers();
+        final DriversList drivers = request.getDrivers();
         final String driverUsername = drivers.size() > 0 ? drivers.get(0).getUsername() : "No Driver Yet";
         otherUserNameTextView.setText(driverUsername);
 

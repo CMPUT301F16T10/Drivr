@@ -34,7 +34,7 @@ public class RequestTest {
 
     @Test
     public void getDrivers() {
-        ArrayList<Driver> driver = new ArrayList<Driver>();
+        DriversList driver = new DriversList();
         Request request = new Request(null, null, null);
         request.setDrivers(driver);
         assertEquals(driver, request.getDrivers());
@@ -84,7 +84,7 @@ public class RequestTest {
         driver2.setStatus(RequestState.PENDING);
         driver3.setStatus(RequestState.ACCEPTED);
 
-        ArrayList<Driver> drivers = new ArrayList<>();
+        DriversList drivers = new DriversList();
         drivers.add(driver1);
         drivers.add(driver2);
         drivers.add(driver3);

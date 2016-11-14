@@ -66,7 +66,7 @@ public class ElasticSearchTest {
     public void setRequest() {
         setUser();
 
-        ArrayList<Driver> driver = new ArrayList<Driver>();
+        DriversList driver = new DriversList();
         Driver inDriver = new Driver();
         inDriver.setStatus(RequestState.PENDING);
         inDriver.setUsername("driver1");

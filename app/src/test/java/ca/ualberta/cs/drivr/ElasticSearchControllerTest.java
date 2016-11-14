@@ -57,13 +57,13 @@ public class ElasticSearchControllerTest {
      */
     public void setRequest() {
         setUser();
-        ArrayList<Driver> driver = new ArrayList<Driver>();
+        DriversList drivers = new DriversList();
         Driver inDriver = new Driver();
         inDriver.setStatus(RequestState.PENDING);
         inDriver.setUsername("driver1");
-        driver.add(inDriver);
+        drivers.add(inDriver);
         request.setRider(user);
-        request.setDrivers(driver);
+        request.setDrivers(drivers);
         request.setFare(new BigDecimal(555));
         request.setDate(new Date());
         request.setDescription("Go to Rogers Place");
