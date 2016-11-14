@@ -30,26 +30,26 @@ import android.widget.Toast;
  */
 public class ProfileActivity extends AppCompatActivity {
 
+    private final IUserManager userManager = UserManager.getInstance();
+    private ProfileController profileController;
+
     private TextView usernameTextView;
     private TextView profileNameTextView;
     private TextView emailTextView;
-    private TextView addressTextView;
     private TextView numberTextView;
-    private ProfileController profileController;
 
     private ImageView profileBoxImageView;
     private ImageView editProfileImageView;
     private ImageView profilePictureImageView;
 
-    private EditText userNameEditText;
+    private EditText usernameEditText;
     private EditText phoneEditText;
     private EditText emailEditText;
-    private EditText addressEditText;
 
     private User user;
     private String email;
     private String name;
-    private String userName;
+    private String username;
     private String phoneNumber;
 
     private Boolean editMode = false;
@@ -68,35 +68,30 @@ public class ProfileActivity extends AppCompatActivity {
         profilePictureImageView = (ImageView) findViewById(R.id.profile_picture_image);
 
         // Get references to the EditTexts
-        userNameEditText = (EditText) findViewById(R.id.editTextUsername);
+        usernameEditText = (EditText) findViewById(R.id.editTextUsername);
         phoneEditText = (EditText) findViewById(R.id.editTextPhoneNumber);
-        addressEditText = (EditText) findViewById(R.id.editTextAddress);
         emailEditText = (EditText) findViewById(R.id.editTextEmail);
 
         // Set up UserManager
-        final UserManager userManager = UserManager.getInstance();
         user = userManager.getUser();
 
         // Get info
         phoneNumber = user.getPhoneNumber();
         email = user.getEmail();
-        userName = user.getUsername();
+        username = user.getUsername();
         name = user.getName();
 
-        userNameEditText.setText(userName);
+        usernameEditText.setText(username);
         phoneEditText.setText(phoneNumber);
-        addressEditText.setText("123 Fake Street");
         emailEditText.setText(email);
         profileNameTextView.setText(name);
 
-        userNameEditText.setTextIsSelectable(false);
+        usernameEditText.setTextIsSelectable(false);
         phoneEditText.setTextIsSelectable(false);
-        addressEditText.setTextIsSelectable(false);
         emailEditText.setTextIsSelectable(false);
 
-        userNameEditText.setCursorVisible(false);
+        usernameEditText.setCursorVisible(false);
         phoneEditText.setCursorVisible(false);
-        addressEditText.setCursorVisible(false);
         emailEditText.setCursorVisible(false);
 
         editProfileImageView.setClickable(true);
@@ -108,7 +103,6 @@ public class ProfileActivity extends AppCompatActivity {
                     editMode = false;
                     //userNameEditText.setCursorVisible(false);
                     phoneEditText.setCursorVisible(false);
-                    addressEditText.setCursorVisible(false);
                     emailEditText.setCursorVisible(false);
                     profileNameTextView.setCursorVisible(true);
 
@@ -126,7 +120,6 @@ public class ProfileActivity extends AppCompatActivity {
                     //userNameEditText.setCursorVisible(true);
                     profileNameTextView.setCursorVisible(true);
                     phoneEditText.setCursorVisible(true);
-                    addressEditText.setCursorVisible(true);
                     emailEditText.setCursorVisible(true);
                 }
             }
