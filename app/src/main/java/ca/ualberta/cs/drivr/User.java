@@ -25,6 +25,9 @@ public class User {
     private String username;
     private String phoneNumber;
     private String email;
+    private String vehicleDescription;
+    private double rating;
+    private int totalRatings;
 
     /**
      * Instantiate a new User.
@@ -34,6 +37,9 @@ public class User {
         username = "";
         phoneNumber = "";
         email = "";
+        vehicleDescription = "";
+        rating = 0;
+        totalRatings = 0;
     }
 
     /**
@@ -96,7 +102,7 @@ public class User {
     }
 
     /**
-     * Set the email address.
+     * Get the email address.
      * @return The email address.
      */
     public String getEmail() {
@@ -104,10 +110,57 @@ public class User {
     }
 
     /**
-     * Get the email address.
+     * Set the email address.
      * @param email The email address.
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+
+
+    /**
+     * Get the driver's vehicle description.
+     * @return The vehicle description.
+     */
+    public String getVehicleDescription() {
+        return vehicleDescription;
+    }
+
+    /**
+     * Set the driver's vehicle description.
+     * @param vehicleDescription The vehicle description.
+     */
+    public void setVehicleDescription(String vehicleDescription) {
+        this.vehicleDescription = vehicleDescription;
+    }
+
+    /**
+     * Get the driver's rating.
+     * @return The rating.
+     */
+    public double getRating() {
+        return rating;
+    }
+
+    /**
+     * Get the driver's total ratings.
+     * @return The total ratings.
+     */
+    public int getTotalRatings() {
+        return totalRatings;
+    }
+
+    /**
+     * Sets the driver's rating by multiplying it by totalRatings to get his overall sum of
+     * ratings, then increases totalRatings by 1, adds the new rating to this rating then
+     * divides it by the new totalRatings.
+     * 
+     * @param rating The rating given to the driver.
+     */
+    public void setRating(double rating) {
+        this.rating *= totalRatings;
+        totalRatings++;
+        this.rating += rating;
+        this.rating /= totalRatings;
     }
 }
