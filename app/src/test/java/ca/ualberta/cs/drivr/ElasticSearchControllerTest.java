@@ -38,7 +38,8 @@ import static junit.framework.Assert.assertEquals;
  * @author Tiegan Bonowicz
  */
 
-//TODO: Grab async testing from StackOverflow, use it, credit it.
+//TODO: Use a different test unit for this. It is impossible to use JUnit with the Async tasks.
+
 public class ElasticSearchControllerTest {
 
     private User user;

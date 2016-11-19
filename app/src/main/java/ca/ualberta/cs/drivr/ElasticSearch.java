@@ -36,6 +36,10 @@ import java.util.ArrayList;
  * @see MainActivity
  */
 
+//TODO: Add 2 new methods for searching (by price, by given location)
+//TODO: Fuck around with offline stuff (may not be doing enough per eClass)
+//TODO: Remove log testing stuff when done with it.
+
 public class ElasticSearch {
 
     private ArrayList<Request> offlineRequests;
@@ -200,6 +204,7 @@ public class ElasticSearch {
     public boolean saveUser(User user) {
         onNetworkStateChanged();
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
+            Log.i("Here", user.getUsername());
             User inUser;
             ElasticSearchController.GetUser searchUser = new ElasticSearchController.GetUser();
             searchUser.execute(user.getUsername());
@@ -210,9 +215,17 @@ public class ElasticSearch {
                 return false;
             }
 
+            if(inUser == null) {
+                Log.i("Here", "Set 2");
+            } else {
+                Log.i("Huh?", inUser.getUsername());
+            }
+
             if (inUser == null) {
+                Log.i("Here", "Set 3");
                 ElasticSearchController.AddUser addUser = new ElasticSearchController.AddUser();
                 addUser.execute(user);
+                Log.i("Here", "Set 4");
                 return true;
             }
             else {

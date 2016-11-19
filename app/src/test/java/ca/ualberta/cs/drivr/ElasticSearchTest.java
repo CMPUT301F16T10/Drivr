@@ -42,8 +42,7 @@ import static junit.framework.Assert.assertNull;
  * @author Tiegan Bonowicz
  */
 
-//TODO: Grab async testing from StackOverflow, use it, credit it.
-//TODO: Use different contexts for online and offline for testing.
+//TODO: Use a different test unit for this. It is impossible to use JUnit with the Mock and Async tasks.
 
 public class ElasticSearchTest {
 
