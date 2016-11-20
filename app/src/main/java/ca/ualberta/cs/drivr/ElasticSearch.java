@@ -87,12 +87,21 @@ public class ElasticSearch {
      *
      * @param request The request to be updated in ElasticSearch.
      */
+    //TODO: Cry.
     public void updateRequest(Request request) {
         onNetworkStateChanged();
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
-            ElasticSearchController.UpdateRequest updateRequest = new
-                    ElasticSearchController.UpdateRequest();
-            updateRequest.execute(request);
+            // Change the if/else statement so that if a request is being updated by a driver
+            // then it uses updatePendingRequest (inserts user into DriverList in ES)
+            if(true) {
+                ElasticSearchController.UpdateRequest updateRequest = new
+                        ElasticSearchController.UpdateRequest();
+                updateRequest.execute(request);
+            } else {
+                ElasticSearchController.UpdatePendingRequest updatePendingRequest = new
+                        ElasticSearchController.UpdatePendingRequest();
+                updatePendingRequest.execute(request);
+            }
         }
         else {
             newInfo = true;
@@ -142,8 +151,8 @@ public class ElasticSearch {
     public ArrayList<Request> searchRequestByGeolocation(Location geolocation) {
         onNetworkStateChanged();
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
-            ElasticSearchController.SearchForLocationRequests searchRequest = new
-                    ElasticSearchController.SearchForLocationRequests();
+            ElasticSearchController.SearchForGeolocationRequests searchRequest = new
+                    ElasticSearchController.SearchForGeolocationRequests();
             searchRequest.execute(geolocation);
             try {
                 return searchRequest.get();
@@ -177,7 +186,7 @@ public class ElasticSearch {
                 return searchRequest.get();
             }
             catch (Exception e) {
-                Log.i("Error", "Failed to load the user.");
+                Log.i("Error", "Failed to load the requests by keyword.");
                 return null;
             }
         }
@@ -185,6 +194,58 @@ public class ElasticSearch {
             return null;
         }
     }
+
+    //TODO
+    /* public ArrayList<Request> searchRequestByPrice(double price) {
+        onNetworkStateChanged();
+        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
+            ElasticSearchController.SearchForPriceRequests searchRequest = new
+                    ElasticSearchController.SearchForPriceRequests();
+            searchRequest.execute(price);
+            try {
+                return searchRequest.get();
+            }
+            catch (Exception e) {
+                Log.i("Error", "Failed to load the requests by price.");
+                return null;
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    public ArrayList<Request> searchRequestByLocation(String location) {
+        onNetworkStateChanged();
+        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
+            ElasticSearchController.SearchForLocationRequests searchRequest = new
+                    ElasticSearchController.SearchForLocationRequests();
+            searchRequest.execute(location);
+            try {
+                ArrayList<Request> requests = searchRequest.get();
+                if(requests == null) {
+                    //Get location's geocoordinates here.
+                    ElasticSearchController.SearchForGeolocationRequests searchGeoRequest = new
+                            ElasticSearchController.SearchForGeolocationRequests();
+                    searchGeoRequest.execute(geolocation);
+                    try {
+                        requests = searchGeoRequest.get();
+                    } catch (Exception e) {
+                        Log.i("Error", "Failed to load the requests by geolocation.");
+                        return null;
+                    }
+                }
+                return requests;
+            }
+            catch (Exception e) {
+                Log.i("Error", "Failed to load the requests by location.");
+                return null;
+            }
+        }
+        else {
+            return null;
+        }
+    } */
 
     /**
      * Here, the requests for a given keyword are gotten by first checking if there's anything

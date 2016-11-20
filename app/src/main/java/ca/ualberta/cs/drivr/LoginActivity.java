@@ -366,10 +366,10 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             ElasticSearch elasticSearch = new ElasticSearch(getApplicationContext());
-            User foundUser = elasticSearch.loadUser(username);
+            user = elasticSearch.loadUser(username);
             Boolean actualBool;
 
-            if(foundUser == null) {
+            if(user == null) {
                 actualBool = false;
             } else {
                 actualBool = true;
@@ -430,6 +430,7 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             ElasticSearch elasticSearch = new ElasticSearch(getApplicationContext());
             Boolean actualBool = elasticSearch.saveUser(newUser);
+            Log.i("Bool", actualBool.toString());
 
             mAuthTask = null;
             showProgress(false);
@@ -455,4 +456,3 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 }
-

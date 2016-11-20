@@ -24,7 +24,12 @@ import android.test.mock.MockContext;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.shadows.ShadowLog;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -44,6 +49,7 @@ import static junit.framework.Assert.assertNull;
 
 //TODO: Use a different test unit for this. It is impossible to use JUnit with the Mock and Async tasks.
 
+@RunWith(RobolectricTestRunner.class)
 public class ElasticSearchTest {
 
     private User user;
@@ -51,36 +57,43 @@ public class ElasticSearchTest {
     private Context context;
 
     /**
-     * Used to set the rider for each test.
+     * Used to set the user and request for each test.
      */
-    public void setUser() {
-        user = new User("rider", "rider1");
+    @Before
+    public void setUp() {
+        ShadowLog.stream = System.out;
+        user = new User("rider1", "Jelas");
         user.setPhoneNumber("123-456-7890");
         user.setEmail("test@test.test");
-    }
 
-    /**
-     * Used to set the request for each test.
-     */
-    public void setRequest() {
-        setUser();
+        request = new Request();
 
-        DriversList driver = new DriversList();
+        DriversList drivers = new DriversList();
         Driver inDriver = new Driver();
-        inDriver.setStatus(RequestState.PENDING);
-        inDriver.setUsername("driver1");
-        driver.add(inDriver);
+        inDriver.setStatus(RequestState.DECLINED);
+        inDriver.setUsername("tiegan");
+        drivers.add(inDriver);
+
+        Driver inDriver2 = new Driver();
+        inDriver2.setStatus(RequestState.ACCEPTED);
+        inDriver2.setUsername("danika");
+        drivers.add(inDriver2);
+
         request.setRider(user);
-        request.setDrivers(driver);
+        request.setDrivers(drivers);
         request.setFare(new BigDecimal(555));
         request.setDate(new Date());
         request.setDescription("Go to Rogers Place");
 
         ConcretePlace temp = new ConcretePlace();
         temp.setLatLng(new LatLng(50, 50));
+        temp.setAddress("University of Alberta");
         request.setSourcePlace(temp);
-        temp.setLatLng(new LatLng(55, 55));
-        request.setDestinationPlace(temp);
+
+        ConcretePlace temp2 = new ConcretePlace();
+        temp2.setAddress("Rogers Place");
+        temp2.setLatLng(new LatLng(55, 55));
+        request.setDestinationPlace(temp2);
     }
 
     // ONLINE TESTS
@@ -90,8 +103,7 @@ public class ElasticSearchTest {
      */
     @Test
     public void addAndGetRequestOnline(){
-        context = new MockContext();
-        setRequest();
+        //context = new Robolectric.getShadowApplication();
         ElasticSearch elasticSearch = new ElasticSearch(context);
         elasticSearch.saveRequest(request);
         ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
@@ -105,7 +117,6 @@ public class ElasticSearchTest {
     @Test
     public void updateAndSearchRequestOnline(){
         context = new MockContext();
-        setRequest();
         ElasticSearch elasticSearch = new ElasticSearch(context);
         elasticSearch.saveRequest(request);
         request.setDescription("Easiest thing to change.");
@@ -123,7 +134,6 @@ public class ElasticSearchTest {
     @Test
     public void searchRequestByLocationOnline(){
         context = new MockContext();
-        setRequest();
         ElasticSearch elasticSearch = new ElasticSearch(context);
         elasticSearch.saveRequest(request);
 
@@ -142,7 +152,6 @@ public class ElasticSearchTest {
     @Test
     public void searchRequestByKeywordOnline(){
         context = new MockContext();
-        setRequest();
         ElasticSearch elasticSearch = new ElasticSearch(context);
         elasticSearch.saveRequest(request);
         ArrayList<Request> loadedRequests = elasticSearch.searchRequestByKeyword("Rogers");
@@ -158,7 +167,6 @@ public class ElasticSearchTest {
     @Test
     public void saveAndSearchUserOnline(){
         context = new MockContext();
-        setUser();
         ElasticSearch elasticSearch = new ElasticSearch(context);
         elasticSearch.saveUser(user);
         User loadedUser = elasticSearch.loadUser("rider1");
@@ -171,7 +179,6 @@ public class ElasticSearchTest {
     @Test
     public void updateAndSearchUserOnline(){
         context = new MockContext();
-        setUser();
         ElasticSearch elasticSearch = new ElasticSearch(context);
         elasticSearch.saveUser(user);
         user.setEmail("test2@test2.test2");
@@ -187,7 +194,6 @@ public class ElasticSearchTest {
     @Test
     public void addRequestOffline(){
         context = new MockContext();
-        setRequest();
         ElasticSearch elasticSearch = new ElasticSearch(context);
         elasticSearch.saveRequest(request);
         ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
@@ -201,7 +207,6 @@ public class ElasticSearchTest {
     @Test
     public void updateRequestOffline(){
         context = new MockContext();
-        setRequest();
         ElasticSearch elasticSearch = new ElasticSearch(context);
         elasticSearch.updateRequest(request);
         ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
@@ -252,7 +257,6 @@ public class ElasticSearchTest {
     @Test
     public void saveUserOffline(){
         context = new MockContext();
-        setUser();
         ElasticSearch elasticSearch = new ElasticSearch(context);
         elasticSearch.saveUser(user);
         assertNotNull(elasticSearch.getUser());
@@ -264,7 +268,6 @@ public class ElasticSearchTest {
     @Test
     public void updateUserOffline(){
         context = new MockContext();
-        setUser();
         ElasticSearch elasticSearch = new ElasticSearch(context);
         elasticSearch.updateUser(user);
         assertNotNull(elasticSearch.getUser());

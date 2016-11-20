@@ -36,6 +36,7 @@ import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.Update;
 
 /**
  * In ElasticSearchController, the actual calls to ElasticSearch are done. This requires the use of
@@ -74,16 +75,18 @@ public class ElasticSearchController {
         /**
          * Add query:
          * {
-         *     "rider": "rider" (in Request)
+         *     "rider": "rider", (in Request Rider)
          *     "driver": [{
-         *         "username": "username", (in Request.Driver)
-         *         "status": "status" (in Request.Driver)
+         *         "username": "username", (in Request Driver)
+         *         "status": "status" (in Request Driver)
          *     }, ...],
-         *     "description": "description" (in Request)
-         *     "fare": fare (in Request)
-         *     "date": "date" (in Request)
-         *     "start": [ startLongitude, startLatitude], (in Request)
-         *     "end": [ endLongitude, endLatitude] (in Request)
+         *     "description": "description", (in Request)
+         *     "fare": fare, (in Request)
+         *     "date": "date", (in Request)
+         *     "startAddress": "startAddress", (in Request SourcePlace)
+         *     "start": [ startLongitude, startLatitude], (in Request SourcePlace)
+         *     "endAddress": "endAddress", (in Request DestinationPlace)
+         *     "end": [ endLongitude, endLatitude], (in Request DestinationPlace)
          *     "id": "id" (gotten from ElasticSearch after first add)
          * }
          *
@@ -98,14 +101,13 @@ public class ElasticSearchController {
                 String addedDate = format.format(request.getDate());
 
                 String add = "{" +
-                        "\"rider\": \"" + request.getRider() + "\"," +
+                        "\"rider\": \"" + request.getRider().getUsername() + "\"," +
                         "\"driver\": [";
 
-                //TODO: Expand drivers here.
                 for (int i = 0; i < request.getDrivers().size(); i++) {
                     Driver driver = request.getDrivers().get(i);
-                    add = add + "{\"username\": \"" + driver.getUsername() + "\", \"status\": \""
-                            + driver.getStatus() + "\"";
+                    add = add + "{\"username\": \"" + driver.getUsername() +
+                            "\", \"status\": \"" + driver.getStatus() + "\"";
                     if (i != request.getDrivers().size() - 1)
                         add += "}, ";
                 }
@@ -114,11 +116,15 @@ public class ElasticSearchController {
                         "\"description\": \"" + request.getDescription() + "\"," +
                         "\"fare\": " + request.getFare().toString() + "," +
                         "\"date\": \"" + addedDate + "\"," +
-                        "\"start\": [" + Double.toString(request.getSourcePlace().getLatLng().longitude)
-                        + ", " + Double.toString(request.getSourcePlace().getLatLng().latitude) + "]," +
-                        "\"end\": [" + Double.toString(request.getDestinationPlace().getLatLng().longitude)
-                        + ", " + Double.toString(request.getDestinationPlace().getLatLng().latitude) + "]";
-                //TODO: Start/end locations here.
+                        "\"startAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
+                        "\"start\": [" +
+                        Double.toString(request.getSourcePlace().getLatLng().longitude) + ", " +
+                        Double.toString(request.getSourcePlace().getLatLng().latitude) + "]," +
+                        "\"endAddress\": \"" + request.getDestinationPlace().getAddress() + "\", " +
+                        "\"end\": [" +
+                        Double.toString(request.getDestinationPlace().getLatLng().longitude) +
+                        ", " + Double.toString(request.getDestinationPlace().getLatLng().latitude) +
+                        "]";
 
                 Index index = new Index.Builder(add + "}")
                         .index("drivr")
@@ -128,9 +134,13 @@ public class ElasticSearchController {
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()) {
                         request.setId(result.getId());
-                        add += ", \"id:\" \"" + request.getId() + "\" }";
-                        index = new Index.Builder(add + "}").index("drivrtestzone").type("requests")
-                                .index(request.getId()).build();
+                        add += ", \"id\": \"" + request.getId() + "\" }";
+                        index = new Index.Builder(add)
+                                .index("drivrtestzone")
+                                .type("requests")
+                                .id(request.getId())
+                                .build();
+
                         try {
                             result = client.execute(index);
                             if(!result.isSucceeded()) {
@@ -154,7 +164,9 @@ public class ElasticSearchController {
         }
     }
 
-    // Updates a request in ElasticSearch
+    /**
+     * Here, a request that is not pending is updated.
+     */
     public static class UpdateRequest extends AsyncTask<Request, Void, Void> {
 
         /**
@@ -184,13 +196,14 @@ public class ElasticSearchController {
                 String addedDate = format.format(request.getDate());
 
                 String add = "{" +
-                        "\"rider\": \"" + request.getRider() + "\"," +
+                        "\"rider\": \"" + request.getRider().getUsername() + "\"," +
                         "\"driver\": [";
+
                 for (int i = 0; i < request.getDrivers().size(); i++) {
                     Driver driver = request.getDrivers().get(i);
-                    add = add + "{\"username\": \"" + driver.getUsername() + "\", \"status\": \""
-                            + driver.getStatus() + "\"";
-                    if(i != request.getDrivers().size() - 1)
+                    add = add + "{\"username\": \"" + driver.getUsername() +
+                            "\", \"status\": \"" + driver.getStatus() + "\"";
+                    if (i != request.getDrivers().size() - 1)
                         add += "}, ";
                 }
 
@@ -198,11 +211,15 @@ public class ElasticSearchController {
                         "\"description\": \"" + request.getDescription() + "\"," +
                         "\"fare\": " + request.getFare().toString() + "," +
                         "\"date\": \"" + addedDate + "\"," +
-                        "\"start\": [" + Double.toString(request.getSourcePlace().getLatLng().longitude)
-                        + ", " + Double.toString(request.getSourcePlace().getLatLng().latitude) + "]," +
-                        "\"end\": [" + Double.toString(request.getDestinationPlace().getLatLng().longitude)
-                        + ", " + Double.toString(request.getDestinationPlace().getLatLng().latitude) + "], "
-                        + "\"id\": \"" + request.getId() + "\"}";
+                        "\"startAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
+                        "\"start\": [" +
+                        Double.toString(request.getSourcePlace().getLatLng().longitude) + ", " +
+                        Double.toString(request.getSourcePlace().getLatLng().latitude) + "]," +
+                        "\"endAddress\": \"" + request.getDestinationPlace().getAddress() + "\", " +
+                        "\"end\": [" +
+                        Double.toString(request.getDestinationPlace().getLatLng().longitude) +
+                        ", " + Double.toString(request.getDestinationPlace().getLatLng().latitude) +
+                        "], \"id\": \"" + request.getId() + "\"}";
 
                 Index index = new Index.Builder(add)
                         .index("drivr")
@@ -212,6 +229,49 @@ public class ElasticSearchController {
 
                 try {
                     DocumentResult result = client.execute(index);
+                    if(!result.isSucceeded())
+                        Log.i("Error", "Failed to insert the request into elastic search.");
+                }
+                catch (Exception e) {
+                    Log.i("Error", "The application failed to build and send the requests.");
+                }
+
+            }
+            return null;
+        }
+    }
+
+
+    /**
+     * Here, a request that is pending is updated.
+     */
+    public static class UpdatePendingRequest extends AsyncTask<Request, Void, Void> {
+
+        /**
+         * Add query:
+         * {
+         *     "username": "username", (from last driver in DriverList)
+         * }
+         *
+         * @param requests The request given by the user.
+         * @return null
+         */
+        @Override
+        protected Void doInBackground(Request... requests) {
+            verifySettings();
+            for (Request request: requests) {
+                Driver driver = request.getDrivers().get(request.getDrivers().size()-1);
+                String add = "{\"username\": " + driver.getUsername() +
+                        "\", \"status\": \"" + driver.getStatus() + "\"}";
+
+                Update update = new Update.Builder(add)
+                        .index("drivr")
+                        .type("requests")
+                        .id(request.getId())
+                        .build();
+
+                try {
+                    DocumentResult result = client.execute(update);
                     if(!result.isSucceeded())
                         Log.i("Error", "Failed to insert the request into elastic search.");
                 }
@@ -286,7 +346,7 @@ public class ElasticSearchController {
      * 5 km radius for requests where the start locations are within that range and return the
      * gotten requests.
      */
-    public static class SearchForLocationRequests extends AsyncTask<Location, Void, ArrayList<Request>> {
+    public static class SearchForGeolocationRequests extends AsyncTask<Location, Void, ArrayList<Request>> {
 
         /**
          * Search query:
@@ -474,6 +534,8 @@ public class ElasticSearchController {
                         .build();
 
                 try {
+                    Log.i("User", addUser);
+                    Log.i("index", index.toString());
                     DocumentResult result = client.execute(index);
                     if(!result.isSucceeded())
                         Log.i("Error", "Failed to insert the user into elastic search.");
@@ -525,7 +587,9 @@ public class ElasticSearchController {
                     SearchResult result = client.execute(search);
                     if (result.isSucceeded()) {
                         Log.i("uh", Integer.toString(result.getTotal()));
-                        user = result.getSourceAsObject(User.class);
+                        List<User> foundUsers = result
+                                .getSourceAsObjectList(User.class);
+                        user = foundUsers.get(foundUsers.size()-1);
                     }
                     else {
                         Log.i("Error", "The search executed but it didn't work.");
@@ -620,6 +684,7 @@ public class ElasticSearchController {
             ElasticSearchRequest gottenRequest = tempRequests.get(i);
             Request request = new Request();
 
+            //TODO: I want to change this just to call getUser, but this requires Async fuckery.
             User tempUser = new User();
             tempUser.setUsername(gottenRequest.getRider());
             request.setRider(tempUser);
@@ -628,7 +693,7 @@ public class ElasticSearchController {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             Date date;
             try {
-                date = format.parse(gottenRequest.getDate()); // Fix.
+                date = format.parse(gottenRequest.getDate());
             }
             catch (Exception e) {
                 date = new Date();
@@ -640,10 +705,14 @@ public class ElasticSearchController {
             request.setId(gottenRequest.getId());
 
             ConcretePlace temp = new ConcretePlace();
+            temp.setAddress(gottenRequest.getStartAddress());
             temp.setLatLng(new LatLng(gottenRequest.getStart()[1], gottenRequest.getStart()[0]));
             request.setSourcePlace(temp);
-            temp.setLatLng(new LatLng(gottenRequest.getEnd()[1], gottenRequest.getEnd()[0]));
-            request.setDestinationPlace(temp);
+
+            ConcretePlace temp2 = new ConcretePlace();
+            temp2.setAddress(gottenRequest.getEndAddress());
+            temp2.setLatLng(new LatLng(gottenRequest.getEnd()[1], gottenRequest.getEnd()[0]));
+            request.setDestinationPlace(temp2);
 
             requests.add(request);
         }

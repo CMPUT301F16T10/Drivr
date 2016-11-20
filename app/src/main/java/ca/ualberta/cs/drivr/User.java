@@ -142,6 +142,15 @@ public class User {
         return rating;
     }
 
+
+    /**
+     * Get the driver's rating.
+     * @param rating The rating.
+     */
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
     /**
      * Get the driver's total ratings.
      * @return The total ratings.
@@ -151,13 +160,21 @@ public class User {
     }
 
     /**
+     * Set the driver's total ratings.
+     * @param totalRatings The total ratings.
+     */
+    public void setTotalRatings(int totalRatings) {
+        this.totalRatings = totalRatings;
+    }
+
+    /**
      * Sets the driver's rating by multiplying it by totalRatings to get his overall sum of
      * ratings, then increases totalRatings by 1, adds the new rating to this rating then
      * divides it by the new totalRatings.
      *
      * @param rating The rating given to the driver.
      */
-    public void setRating(double rating) {
+    public void changeRating(double rating) {
         this.rating *= totalRatings;
         totalRatings++;
         this.rating += rating;
