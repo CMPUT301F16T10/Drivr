@@ -185,11 +185,12 @@ public class ElasticSearchControllerTest {
 
         ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
-        request.setDescription("Go to Rogers Place");
         Robolectric.flushBackgroundThreadScheduler();
 
         assertEquals(gottenRequest.getDescription(), request.getDescription());
         assertEquals(request.getId(), gottenRequest.getId());
+        
+        request.setDescription("Go to Rogers Place");
     }
 
     /**
