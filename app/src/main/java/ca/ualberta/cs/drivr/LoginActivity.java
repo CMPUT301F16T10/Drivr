@@ -358,40 +358,27 @@ public class LoginActivity extends AppCompatActivity {
 
         UserLoginTask(String username) {this.username = username;}
 
-
-
         @Override
         protected Boolean doInBackground(Void... params) {
-
-            // TODO : use actual elastic search
-            /*User foundUser = new User();
-            ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-            try {
-                getUser.execute(username);
-            } catch (Exception e) {
-                Log.i("error", "logging in");
-                return false;
-            }*/
-
-
-            Log.i(TAG, "begin elastic search login" );
-//            ElasticSearch elasticSearch = new ElasticSearch(getApplicationContext());
-            MockElasticSearch elasticSearch = MockElasticSearch.getInstance();
-            user = elasticSearch.loadUser(username);
-            Log.i(TAG, "end elastic search login" );
-            if (user == null) {
-                return false;
-            }
             return true;
         }
 
-
         @Override
         protected void onPostExecute(final Boolean success) {
+            ElasticSearch elasticSearch = new ElasticSearch(getApplicationContext());
+            user = elasticSearch.loadUser(username);
+            Boolean actualBool;
+
+            if(user == null) {
+                actualBool = false;
+            } else {
+                actualBool = true;
+            }
+
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
+            if (actualBool) {
                 userManager.setUser(user);
                 userManager.notifyObservers();
                 finish();
@@ -430,32 +417,25 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            //TODO : use actual elastic search
-
             newUser = new User();
             newUser.setName(name);
             newUser.setUsername(username);
             newUser.setEmail(email);
             newUser.setPhoneNumber(phone);
 
-//            ElasticSearch elasticSearch = new ElasticSearch(getApplicationContext());
-            MockElasticSearch elasticSearch = MockElasticSearch.getInstance();
-            if (elasticSearch.saveUser(newUser)) {
-                return true;
-            } else {
-                return false;
-            }
-//            ElasticSearchController.AddUser addUser = new ElasticSearchController.AddUser();
-
-//            return true;
+            return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            ElasticSearch elasticSearch = new ElasticSearch(getApplicationContext());
+            Boolean actualBool = elasticSearch.saveUser(newUser);
+            Log.i("Bool", actualBool.toString());
+
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
+            if (actualBool) {
                 User user = userManager.getUser();
                 user.setEmail(email);
                 user.setName(name);
