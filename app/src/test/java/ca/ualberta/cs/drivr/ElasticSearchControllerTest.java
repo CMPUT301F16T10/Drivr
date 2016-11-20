@@ -59,7 +59,7 @@ public class ElasticSearchControllerTest {
     @Before
     public void setUp() {
         ShadowLog.stream = System.out;
-        user = new User("rider", "rider1");
+        user = new User("rider1", "rider1");
         user.setPhoneNumber("123-456-7890");
         user.setEmail("test@test.test");
 
@@ -67,9 +67,15 @@ public class ElasticSearchControllerTest {
 
         DriversList drivers = new DriversList();
         Driver inDriver = new Driver();
-        inDriver.setStatus(RequestState.PENDING);
+        inDriver.setStatus(RequestState.DECLINED);
         inDriver.setUsername("driver1");
         drivers.add(inDriver);
+
+        Driver inDriver2 = new Driver();
+        inDriver2.setStatus(RequestState.ACCEPTED);
+        inDriver2.setUsername("driver2");
+        drivers.add(inDriver2);
+
         request.setRider(user);
         request.setDrivers(drivers);
         request.setFare(new BigDecimal(555));
@@ -94,11 +100,13 @@ public class ElasticSearchControllerTest {
     public void addAndGetRequest(){
         ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
         addRequest.execute(request);
+        Robolectric.flushBackgroundThreadScheduler();
 
         ArrayList<Request> gotten = new ArrayList<Request>();
         ElasticSearchController.SearchForRequests searchForRequests =
                 new ElasticSearchController.SearchForRequests();
         searchForRequests.execute("rider1");
+        Robolectric.flushBackgroundThreadScheduler();
         try {
             gotten = searchForRequests.get();
         } catch (Exception e) {
@@ -106,6 +114,10 @@ public class ElasticSearchControllerTest {
         }
 
         Request gottenRequest = gotten.get(gotten.size()-1);
+
+        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        deleteRequest.execute(request.getId());
+        Robolectric.flushBackgroundThreadScheduler();
 
         assertEquals(request.getId(), gottenRequest.getId());
     }
@@ -117,16 +129,20 @@ public class ElasticSearchControllerTest {
     public void updateAndGetRequest(){
         ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
         addRequest.execute(request);
+        Robolectric.flushBackgroundThreadScheduler();
 
         request.setDescription("Easiest thing to change.");
         ElasticSearchController.UpdateRequest updateRequest =
                 new ElasticSearchController.UpdateRequest();
         updateRequest.execute(request);
+        Robolectric.flushBackgroundThreadScheduler();
 
         ArrayList<Request> gotten = new ArrayList<Request>();
         ElasticSearchController.SearchForRequests searchForRequests =
                 new ElasticSearchController.SearchForRequests();
         searchForRequests.execute("rider1");
+        Robolectric.flushBackgroundThreadScheduler();
+
         try {
             gotten = searchForRequests.get();
         } catch (Exception e) {
@@ -134,7 +150,6 @@ public class ElasticSearchControllerTest {
         }
 
         Request gottenRequest = gotten.get(gotten.size()-1);
-
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         String addedDate = format.format(gottenRequest.getDate());
@@ -171,6 +186,7 @@ public class ElasticSearchControllerTest {
         ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
         request.setDescription("Go to Rogers Place");
+        Robolectric.flushBackgroundThreadScheduler();
 
         assertEquals(gottenRequest.getDescription(), request.getDescription());
         assertEquals(request.getId(), gottenRequest.getId());
@@ -183,11 +199,14 @@ public class ElasticSearchControllerTest {
     public void searchRequestWithKeyword(){
         ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
         addRequest.execute(request);
+        Robolectric.flushBackgroundThreadScheduler();
 
         ArrayList<Request> gotten = new ArrayList<Request>();
         ElasticSearchController.SearchForKeywordRequests searchForKeywordRequests =
                 new ElasticSearchController.SearchForKeywordRequests();
         searchForKeywordRequests.execute("Rogers");
+        Robolectric.flushBackgroundThreadScheduler();
+
         try {
             gotten = searchForKeywordRequests.get();
         } catch (Exception e) {
@@ -198,6 +217,7 @@ public class ElasticSearchControllerTest {
 
         ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
+        Robolectric.flushBackgroundThreadScheduler();
 
         assertEquals(request.getId(), gottenRequest.getId());
     }
@@ -209,6 +229,7 @@ public class ElasticSearchControllerTest {
     public void searchRequestWithLocation(){
         ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
         addRequest.execute(request);
+        Robolectric.flushBackgroundThreadScheduler();
 
         ArrayList<Request> gotten = new ArrayList<Request>();
         ElasticSearchController.SearchForGeolocationRequests searchForLocationRequests =
@@ -217,6 +238,8 @@ public class ElasticSearchControllerTest {
         location.setLatitude(50);
         location.setLongitude(50);
         searchForLocationRequests.execute(location);
+        Robolectric.flushBackgroundThreadScheduler();
+
         try {
             gotten = searchForLocationRequests.get();
         } catch (Exception e) {
@@ -227,6 +250,7 @@ public class ElasticSearchControllerTest {
 
         ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
+        Robolectric.flushBackgroundThreadScheduler();
 
         assertEquals(request.getId(), gottenRequest.getId());
     }

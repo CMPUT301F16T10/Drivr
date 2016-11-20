@@ -62,7 +62,7 @@ public class ElasticSearchTest {
     @Before
     public void setUp() {
         ShadowLog.stream = System.out;
-        user = new User("rider", "rider1");
+        user = new User("rider1", "Jelas");
         user.setPhoneNumber("123-456-7890");
         user.setEmail("test@test.test");
 
@@ -70,9 +70,15 @@ public class ElasticSearchTest {
 
         DriversList drivers = new DriversList();
         Driver inDriver = new Driver();
-        inDriver.setStatus(RequestState.PENDING);
-        inDriver.setUsername("driver1");
+        inDriver.setStatus(RequestState.DECLINED);
+        inDriver.setUsername("tiegan");
         drivers.add(inDriver);
+
+        Driver inDriver2 = new Driver();
+        inDriver2.setStatus(RequestState.ACCEPTED);
+        inDriver2.setUsername("danika");
+        drivers.add(inDriver2);
+
         request.setRider(user);
         request.setDrivers(drivers);
         request.setFare(new BigDecimal(555));
@@ -81,9 +87,13 @@ public class ElasticSearchTest {
 
         ConcretePlace temp = new ConcretePlace();
         temp.setLatLng(new LatLng(50, 50));
+        temp.setAddress("University of Alberta");
         request.setSourcePlace(temp);
-        temp.setLatLng(new LatLng(55, 55));
-        request.setDestinationPlace(temp);
+
+        ConcretePlace temp2 = new ConcretePlace();
+        temp2.setAddress("Rogers Place");
+        temp2.setLatLng(new LatLng(55, 55));
+        request.setDestinationPlace(temp2);
     }
 
     // ONLINE TESTS
