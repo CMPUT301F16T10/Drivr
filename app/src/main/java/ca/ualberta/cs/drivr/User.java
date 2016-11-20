@@ -19,6 +19,8 @@ package ca.ualberta.cs.drivr;
 /**
  * A data class for storing user information.
  */
+
+//TODO: I've just put everything in here to keep things simple, but we could just put the new things related to Drivers in the Driver class.
 public class User {
 
     private String name;
@@ -141,6 +143,14 @@ public class User {
     public double getRating() {
         return rating;
     }
+    
+    /**
+     * Get the driver's rating.
+     * @param rating The rating.
+     */
+    public void getRating(double rating) {
+        this.rating = rating;
+    }
 
     /**
      * Get the driver's total ratings.
@@ -149,15 +159,23 @@ public class User {
     public int getTotalRatings() {
         return totalRatings;
     }
+    
+    /**
+     * Set the driver's total ratings.
+     * @param totalRatings The total ratings.
+     */
+    public void setTotalRatings(int totalRatings) {
+        this.totalRatings = totalRatings;
+    }
 
     /**
-     * Sets the driver's rating by multiplying it by totalRatings to get his overall sum of
+     * Changes the driver's rating by multiplying it by totalRatings to get his overall sum of
      * ratings, then increases totalRatings by 1, adds the new rating to this rating then
      * divides it by the new totalRatings.
      * 
      * @param rating The rating given to the driver.
      */
-    public void setRating(double rating) {
+    public void changeRating(double rating) {
         this.rating *= totalRatings;
         totalRatings++;
         this.rating += rating;
