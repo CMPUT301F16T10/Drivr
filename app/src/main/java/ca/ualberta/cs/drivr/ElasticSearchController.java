@@ -101,7 +101,7 @@ public class ElasticSearchController {
                 String addedDate = format.format(request.getDate());
 
                 String add = "{" +
-                        "\"rider\": \"" + request.getRider() + "\"," +
+                        "\"rider\": \"" + request.getRider().getUsername() + "\"," +
                         "\"driver\": [";
 
                 for (int i = 0; i < request.getDrivers().size(); i++) {
@@ -134,9 +134,13 @@ public class ElasticSearchController {
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()) {
                         request.setId(result.getId());
-                        add += ", \"id:\" \"" + request.getId() + "\" }";
-                        index = new Index.Builder(add + "}").index("drivrtestzone").type("requests")
-                                .index(request.getId()).build();
+                        add += ", \"id\": \"" + request.getId() + "\" }";
+                        index = new Index.Builder(add)
+                                .index("drivrtestzone")
+                                .type("requests")
+                                .id(request.getId())
+                                .build();
+
                         try {
                             result = client.execute(index);
                             if(!result.isSucceeded()) {
@@ -192,7 +196,7 @@ public class ElasticSearchController {
                 String addedDate = format.format(request.getDate());
 
                 String add = "{" +
-                        "\"rider\": \"" + request.getRider() + "\"," +
+                        "\"rider\": \"" + request.getRider().getUsername() + "\"," +
                         "\"driver\": [";
 
                 for (int i = 0; i < request.getDrivers().size(); i++) {
@@ -593,7 +597,6 @@ public class ElasticSearchController {
                 }
                 catch (Exception e) {
                     Log.i("Error", "Executing the get user method failed.");
-                    user = null;
                 }
             }
 
@@ -702,10 +705,14 @@ public class ElasticSearchController {
             request.setId(gottenRequest.getId());
 
             ConcretePlace temp = new ConcretePlace();
+            temp.setAddress(gottenRequest.getStartAddress());
             temp.setLatLng(new LatLng(gottenRequest.getStart()[1], gottenRequest.getStart()[0]));
             request.setSourcePlace(temp);
-            temp.setLatLng(new LatLng(gottenRequest.getEnd()[1], gottenRequest.getEnd()[0]));
-            request.setDestinationPlace(temp);
+
+            ConcretePlace temp2 = new ConcretePlace();
+            temp2.setAddress(gottenRequest.getEndAddress());
+            temp2.setLatLng(new LatLng(gottenRequest.getEnd()[1], gottenRequest.getEnd()[0]));
+            request.setDestinationPlace(temp2);
 
             requests.add(request);
         }

@@ -36,7 +36,9 @@ public class ElasticSearchRequest {
     private String description;
     private double fare;
     private String date;
+    private String startAddress;
     private double []start;
+    private String endAddress;
     private double []end;
     @JestId
     private String id;
@@ -180,5 +182,22 @@ public class ElasticSearchRequest {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    //TODO: Comment these.
+    public String getStartAddress() {
+        return startAddress;
+    }
+
+    public void setStartAddress(String startLocation) {
+        this.startAddress = startAddress;
+    }
+
+    public String getEndAddress() {
+        return endAddress;
+    }
+
+    public void setEndAddress(String endLocation) {
+        this.endAddress = endAddress;
     }
 }

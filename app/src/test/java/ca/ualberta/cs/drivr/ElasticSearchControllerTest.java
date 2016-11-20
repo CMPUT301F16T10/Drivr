@@ -31,6 +31,7 @@ import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLog;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -77,39 +78,19 @@ public class ElasticSearchControllerTest {
 
         ConcretePlace temp = new ConcretePlace();
         temp.setLatLng(new LatLng(50, 50));
+        temp.setAddress("University of Alberta");
         request.setSourcePlace(temp);
-        temp.setLatLng(new LatLng(55, 55));
-        request.setDestinationPlace(temp);
-    }
 
-    /**
-     * Used to set the request for each test.
-     */
-//    @Test
-//    public void setRequest() {
-////        setUser();
-//        DriversList drivers = new DriversList();
-//        Driver inDriver = new Driver();
-//        inDriver.setStatus(RequestState.PENDING);
-//        inDriver.setUsername("driver1");
-//        drivers.add(inDriver);
-//        request.setRider(user);
-//        request.setDrivers(drivers);
-//        request.setFare(new BigDecimal(555));
-//        request.setDate(new Date());
-//        request.setDescription("Go to Rogers Place");
-//
-//        ConcretePlace temp = new ConcretePlace();
-//        temp.setLatLng(new LatLng(50, 50));
-//        request.setSourcePlace(temp);
-//        temp.setLatLng(new LatLng(55, 55));
-//        request.setDestinationPlace(temp);
-//    }
+        ConcretePlace temp2 = new ConcretePlace();
+        temp2.setAddress("Rogers Place");
+        temp2.setLatLng(new LatLng(55, 55));
+        request.setDestinationPlace(temp2);
+    }
 
     /**
      * Test to make sure a request is added and gotten. Uses username search.
      */
-    /* @Test
+    @Test
     public void addAndGetRequest(){
         ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
         addRequest.execute(request);
@@ -127,12 +108,12 @@ public class ElasticSearchControllerTest {
         Request gottenRequest = gotten.get(gotten.size()-1);
 
         assertEquals(request.getId(), gottenRequest.getId());
-    } */
+    }
 
     /**
      * Test to make sure a request is updated and gotten. Uses username search.
      */
-    /* @Test
+    @Test
     public void updateAndGetRequest(){
         ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
         addRequest.execute(request);
@@ -154,14 +135,51 @@ public class ElasticSearchControllerTest {
 
         Request gottenRequest = gotten.get(gotten.size()-1);
 
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        String addedDate = format.format(gottenRequest.getDate());
+
+        String add = "{" +
+                "\"rider\": \"" + gottenRequest.getRider().getUsername() + "\"," +
+                "\"driver\": [";
+
+        for (int i = 0; i < gottenRequest.getDrivers().size(); i++) {
+            Driver driver = gottenRequest.getDrivers().get(i);
+            add = add + "{\"username\": \"" + driver.getUsername() +
+                    "\", \"status\": \"" + driver.getStatus() + "\"";
+            if (i != gottenRequest.getDrivers().size() - 1) {
+                add += "}, ";
+            }
+        }
+
+        add += "}]," +
+                "\"description\": \"" + gottenRequest.getDescription() + "\"," +
+                "\"fare\": " + gottenRequest.getFare().toString() + "," +
+                "\"date\": \"" + addedDate + "\"," +
+                "\"startAddress\": \"" + gottenRequest.getSourcePlace().getAddress() + "\", " +
+                "\"start\": [" +
+                Double.toString(gottenRequest.getSourcePlace().getLatLng().longitude) + ", " +
+                Double.toString(gottenRequest.getSourcePlace().getLatLng().latitude) + "]," +
+                "\"endAddress\": \"" + gottenRequest.getDestinationPlace().getAddress() + "\", " +
+                "\"end\": [" +
+                Double.toString(gottenRequest.getDestinationPlace().getLatLng().longitude) +
+                ", " + Double.toString(gottenRequest.getDestinationPlace().getLatLng().latitude) +
+                "], \"id\": \"" + gottenRequest.getId() + "\"}";
+
+        ShadowLog.v("Here", add);
+
+        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        deleteRequest.execute(request.getId());
+        request.setDescription("Go to Rogers Place");
+
         assertEquals(gottenRequest.getDescription(), request.getDescription());
         assertEquals(request.getId(), gottenRequest.getId());
-    } */
+    }
 
     /**
      * Test to make sure a request can be gotten with a keyword.
      */
-    /* @Test
+    @Test
     public void searchRequestWithKeyword(){
         ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
         addRequest.execute(request);
@@ -178,13 +196,16 @@ public class ElasticSearchControllerTest {
 
         Request gottenRequest = gotten.get(gotten.size()-1);
 
+        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        deleteRequest.execute(request.getId());
+
         assertEquals(request.getId(), gottenRequest.getId());
-    } */
+    }
 
     /**
      * Test to make sure a request can be gotten with a geolocation.
      */
-    /* @Test
+    @Test
     public void searchRequestWithLocation(){
         ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
         addRequest.execute(request);
@@ -204,8 +225,11 @@ public class ElasticSearchControllerTest {
 
         Request gottenRequest = gotten.get(gotten.size()-1);
 
+        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        deleteRequest.execute(request.getId());
+
         assertEquals(request.getId(), gottenRequest.getId());
-    } */
+    }
 
     /**
      * Test to make sure a user is added and can be gotten.
@@ -220,15 +244,20 @@ public class ElasticSearchControllerTest {
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
         getUser.execute("rider1");
         Robolectric.flushBackgroundThreadScheduler();
+
         try {
             dup = getUser.get();
         } catch (Exception e) {
             Log.d("Error", "Failed to load the user.");
         }
 
+        ElasticSearchController.DeleteUser deleteUser = new ElasticSearchController.DeleteUser();
+        deleteUser.execute("rider1");
+        Robolectric.flushBackgroundThreadScheduler();
+
         ShadowLog.v("User dup", dup.getUsername());
 
-        assertFalse(user.equals(dup));
+        assertEquals(user.getUsername(), dup.getUsername());
     }
 
     /**
@@ -238,20 +267,28 @@ public class ElasticSearchControllerTest {
     public void updateAndSearchUser(){
         ElasticSearchController.AddUser updateUser = new ElasticSearchController.AddUser();
         updateUser.execute(user);
+        Robolectric.flushBackgroundThreadScheduler();
 
         user.setEmail("test2@test2.test2");;
         updateUser.execute(user);
+        Robolectric.flushBackgroundThreadScheduler();
 
         User dup = null;
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
         getUser.execute("rider1");
+        Robolectric.flushBackgroundThreadScheduler();
+
         try {
             dup = getUser.get();
         } catch (Exception e) {
             Log.i("Error", "Failed to load the user.");
         }
 
-        assertTrue(user.equals(dup));
+        ElasticSearchController.DeleteUser deleteUser = new ElasticSearchController.DeleteUser();
+        deleteUser.execute("rider1");
+        Robolectric.flushBackgroundThreadScheduler();
+
+        assertEquals(user.getEmail(), dup.getEmail());
     }
 
 }
