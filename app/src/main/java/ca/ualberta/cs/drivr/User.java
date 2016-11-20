@@ -148,7 +148,7 @@ public class User {
      * Get the driver's rating.
      * @param rating The rating.
      */
-    public void getRating(double rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
