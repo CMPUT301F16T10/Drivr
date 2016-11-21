@@ -365,7 +365,8 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            ElasticSearch elasticSearch = new ElasticSearch(getApplicationContext());
+            ElasticSearch elasticSearch = new ElasticSearch((ConnectivityManager)
+                    getSystemService(Context.CONNECTIVITY_SERVICE));
             user = elasticSearch.loadUser(username);
             Boolean actualBool;
 
@@ -428,7 +429,8 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            ElasticSearch elasticSearch = new ElasticSearch(getApplicationContext());
+            ElasticSearch elasticSearch = new ElasticSearch((ConnectivityManager)
+                    getSystemService(Context.CONNECTIVITY_SERVICE));
             Boolean actualBool = elasticSearch.saveUser(newUser);
             Log.i("Bool", actualBool.toString());
 

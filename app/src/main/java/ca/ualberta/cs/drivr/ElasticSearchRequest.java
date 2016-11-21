@@ -36,9 +36,9 @@ public class ElasticSearchRequest {
     private String description;
     private double fare;
     private String date;
-    private String startAddress;
+    private String sourceAddress;
     private double []start;
-    private String endAddress;
+    private String destinationAddress;
     private double []end;
     @JestId
     private String id;
@@ -52,7 +52,9 @@ public class ElasticSearchRequest {
         description = "";
         fare = 0;
         date = "";
+        sourceAddress = "";
         start = new double[2];
+        destinationAddress = "";
         end = new double[2];
     }
 
@@ -184,20 +186,35 @@ public class ElasticSearchRequest {
         this.id = id;
     }
 
-    //TODO: Comment these.
-    public String getStartAddress() {
-        return startAddress;
+    /**
+     * Gets the source address of the request in ElasticSearch
+     * @return The address the rider's picked up from
+     */
+    public String getSourceAddress() {
+        return sourceAddress;
     }
 
-    public void setStartAddress(String startLocation) {
-        this.startAddress = startAddress;
+    /**
+     * Sets the source address of the request in ElasticSearch
+     * @param sourceAddress The address the rider's picked up from
+     */
+    public void setSourceAddress(String sourceAddress) {
+        this.sourceAddress = sourceAddress;
     }
 
-    public String getEndAddress() {
-        return endAddress;
+    /**
+     * Gets the destination address of the request in ElasticSearch
+     * @return The address the rider's dropped off at
+     */
+    public String getDestinationAddress() {
+        return destinationAddress;
     }
 
-    public void setEndAddress(String endLocation) {
-        this.endAddress = endAddress;
+    /**
+     * Sets the destination address of the request in ElasticSearch
+     * @param destinationAddress The address the rider's dropped off at
+     */
+    public void setDestinationAddress(String destinationAddress) {
+        this.destinationAddress = destinationAddress;
     }
 }

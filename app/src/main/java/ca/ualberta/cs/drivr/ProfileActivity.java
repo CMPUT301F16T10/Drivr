@@ -137,6 +137,7 @@ public class ProfileActivity extends AppCompatActivity {
 //                    if (!usernameEditText.getText().toString().equals(username)) {
 ////                        The username has been changed
 //                        //TODO validate the new username with elastic search
+                          //TODO: Username can be changed, first try adding new one (make sure it's valid) then if it is delete the old one
 //                        username = usernameEditText.getText().toString();
 //                        user.setUsername(username);
 //                        usernameTextView.setText(username);

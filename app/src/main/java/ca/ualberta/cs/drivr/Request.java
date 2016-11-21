@@ -26,6 +26,7 @@ import java.util.Date;
 /**
  * A class for storing information about a item_request.
  */
+//TODO: Maybe have ID too?
 public class Request {
 
     private User rider;

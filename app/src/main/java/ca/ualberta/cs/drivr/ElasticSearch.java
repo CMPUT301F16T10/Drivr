@@ -16,11 +16,11 @@
 
 package ca.ualberta.cs.drivr;
 
-import android.content.Context;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
@@ -37,8 +37,7 @@ import java.util.ArrayList;
  */
 
 //TODO: Add 2 new methods for searching (by price, by given location)
-//TODO: Fuck around with offline stuff (may not be doing enough per eClass)
-//TODO: Remove log testing stuff when done with it.
+//TODO: Add more to how offline stuff is handled?
 
 public class ElasticSearch {
 
@@ -50,11 +49,13 @@ public class ElasticSearch {
     private boolean newInfo;
     private boolean newUser;
 
-    public ElasticSearch(Context context) {
+    public ElasticSearch(ConnectivityManager connectivityManager) {
         newInfo = false;
         newUser = false;
-        connectivityManager = (ConnectivityManager)
-                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        offlineRequests = new ArrayList<Request>();
+        requestsMadeOffline = new ArrayList<Request>();
+        offlineUpdateRequest = new ArrayList<Request>();
+        this.connectivityManager = connectivityManager;
     }
 
     /**
@@ -66,7 +67,6 @@ public class ElasticSearch {
      * @param request The request to be saved in ElasticSearch.
      */
     public void saveRequest(Request request) {
-        onNetworkStateChanged();
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.AddRequest addRequest = new
                     ElasticSearchController.AddRequest();
@@ -87,20 +87,17 @@ public class ElasticSearch {
      *
      * @param request The request to be updated in ElasticSearch.
      */
-    //TODO: Cry.
     public void updateRequest(Request request) {
-        onNetworkStateChanged();
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
-            // Change the if/else statement so that if a request is being updated by a driver
-            // then it uses updatePendingRequest (inserts user into DriverList in ES)
-            if(true) {
-                ElasticSearchController.UpdateRequest updateRequest = new
-                        ElasticSearchController.UpdateRequest();
-                updateRequest.execute(request);
-            } else {
+            //if(request.getDrivers().hasOnlyAcceptedDrivers()) {
+            if(false) {
                 ElasticSearchController.UpdatePendingRequest updatePendingRequest = new
                         ElasticSearchController.UpdatePendingRequest();
                 updatePendingRequest.execute(request);
+            } else {
+                ElasticSearchController.UpdateRequest updateRequest = new
+                        ElasticSearchController.UpdateRequest();
+                updateRequest.execute(request);
             }
         }
         else {
@@ -121,7 +118,6 @@ public class ElasticSearch {
      * @return The ArrayList of matching requests
      */
     public ArrayList<Request> loadUserRequests(String username) {
-        onNetworkStateChanged();
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.SearchForRequests requests = new
                     ElasticSearchController.SearchForRequests();
@@ -149,7 +145,6 @@ public class ElasticSearch {
      * @return The ArrayList of matching requests
      */
     public ArrayList<Request> searchRequestByGeolocation(Location geolocation) {
-        onNetworkStateChanged();
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.SearchForGeolocationRequests searchRequest = new
                     ElasticSearchController.SearchForGeolocationRequests();
@@ -158,7 +153,7 @@ public class ElasticSearch {
                 return searchRequest.get();
             }
             catch (Exception e) {
-                Log.i("Error", "Failed to load the user.");
+                Log.i("Error", "Failed to load the requests by geolocation.");
                 return null;
             }
         }
@@ -177,7 +172,6 @@ public class ElasticSearch {
      * @return The ArrayList of matching requests
      */
     public ArrayList<Request> searchRequestByKeyword(String searchTerm) {
-        onNetworkStateChanged();
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.SearchForKeywordRequests searchRequest = new
                     ElasticSearchController.SearchForKeywordRequests();
@@ -196,27 +190,7 @@ public class ElasticSearch {
     }
 
     //TODO
-    /* public ArrayList<Request> searchRequestByPrice(double price) {
-        onNetworkStateChanged();
-        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
-            ElasticSearchController.SearchForPriceRequests searchRequest = new
-                    ElasticSearchController.SearchForPriceRequests();
-            searchRequest.execute(price);
-            try {
-                return searchRequest.get();
-            }
-            catch (Exception e) {
-                Log.i("Error", "Failed to load the requests by price.");
-                return null;
-            }
-        }
-        else {
-            return null;
-        }
-    }
-
-    public ArrayList<Request> searchRequestByLocation(String location) {
-        onNetworkStateChanged();
+    /* public ArrayList<Request> searchRequestByLocation(String location) {
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.SearchForLocationRequests searchRequest = new
                     ElasticSearchController.SearchForLocationRequests();
@@ -248,6 +222,22 @@ public class ElasticSearch {
     } */
 
     /**
+     * Here, we filter requests by price.
+     * @param requests
+     * @param price
+     * @return
+     */
+    public ArrayList<Request> filterRequestByPrice(ArrayList<Request> requests, double price) {
+        for(int i = 0; i < requests.size(); i++) {
+            //Convert fare to something that can use >
+            //if(requests.getFare() > price) {
+
+            //}
+        }
+        return requests;
+    }
+
+    /**
      * Here, the requests for a given keyword are gotten by first checking if there's anything
      * offline that needs to be saved. Next, if the user is connected to the internet, it will first
      * check to see if the username already exists in ElasticSearch by using GetUser in the
@@ -263,9 +253,7 @@ public class ElasticSearch {
      * @return True or False to indicate the state
      */
     public boolean saveUser(User user) {
-        onNetworkStateChanged();
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
-            Log.i("Here", user.getUsername());
             User inUser;
             ElasticSearchController.GetUser searchUser = new ElasticSearchController.GetUser();
             searchUser.execute(user.getUsername());
@@ -276,17 +264,9 @@ public class ElasticSearch {
                 return false;
             }
 
-            if(inUser == null) {
-                Log.i("Here", "Set 2");
-            } else {
-                Log.i("Huh?", inUser.getUsername());
-            }
-
             if (inUser == null) {
-                Log.i("Here", "Set 3");
                 ElasticSearchController.AddUser addUser = new ElasticSearchController.AddUser();
                 addUser.execute(user);
-                Log.i("Here", "Set 4");
                 return true;
             }
             else {
@@ -308,7 +288,6 @@ public class ElasticSearch {
      * @param user The user to be updated in ElasticSearch.
      */
     public void updateUser(User user) {
-        onNetworkStateChanged();
         if(connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.AddUser updateUser = new ElasticSearchController.AddUser();
             updateUser.execute(user);
@@ -327,7 +306,6 @@ public class ElasticSearch {
      * @return The user gotten
      */
     public User loadUser(String username) {
-        onNetworkStateChanged();
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
             getUser.execute(username);
@@ -345,9 +323,24 @@ public class ElasticSearch {
     }
 
     /**
+     * Deletes the user from ElasticSearch
+     * @param username The user to be deleted
+     */
+    public void deleteUser(String username) {
+        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
+            ElasticSearchController.DeleteUser deleteUser = new ElasticSearchController.DeleteUser();
+            deleteUser.execute(username);
+        } else {
+            Log.i("a", "Unable to connect to the internet");
+        }
+    }
+
+    /**
      * Here, if the network state is connected to the internet and there's new info to put into
      * ElasticSearch, it will go through the User user and ArrayLists if they aren't null and
      * get their respective calls.
+     *
+     * //TODO: IMPORTANT: Call this first before doing any other methods. Or change it.
      */
     public void onNetworkStateChanged() {
         if (connectivityManager.getActiveNetworkInfo().isConnected() && newInfo) {
@@ -358,7 +351,7 @@ public class ElasticSearch {
                 else {
                     updateUser(user);
                 }
-                    newUser = false;
+                newUser = false;
                 user = null;
             }
 

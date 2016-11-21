@@ -16,6 +16,8 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.util.Log;
+
 /**
  * A data class for storing user information.
  */
@@ -142,7 +144,6 @@ public class User {
         return rating;
     }
 
-
     /**
      * Get the driver's rating.
      * @param rating The rating.
@@ -168,7 +169,7 @@ public class User {
     }
 
     /**
-     * Sets the driver's rating by multiplying it by totalRatings to get his overall sum of
+     * Changes the driver's rating by multiplying it by totalRatings to get his overall sum of
      * ratings, then increases totalRatings by 1, adds the new rating to this rating then
      * divides it by the new totalRatings.
      *

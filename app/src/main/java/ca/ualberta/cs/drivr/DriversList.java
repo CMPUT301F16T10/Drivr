@@ -172,6 +172,18 @@ public class DriversList implements Iterable<Driver> {
         return false;
     }
 
+
+    /**
+     * Test whether the collection has only accepted drivers.
+     * @return True if all drivers have an accepted state, false otherwise.
+     */
+    public boolean hasOnlyAcceptedDrivers() {
+        for (Driver d: drivers)
+            if (d.getStatus() != RequestState.ACCEPTED)
+                return false;
+        return true;
+    }
+
     /**
      * Gets the confirmed driver if it exists, otherwise return the default value.
      * @param def The default value.

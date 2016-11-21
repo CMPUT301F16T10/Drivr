@@ -56,10 +56,9 @@ import io.searchbox.core.Update;
  * @see ElasticSearchRequest
  */
 
-//TODO: Update adding requests
-//TODO: Add updating request for drivers accepting requests + test it.
-//TODO: Add new searching requests (price, specific location?) + test them.
-//TODO: Test building request and possibly fix it.
+//TODO: Update building requests to just get the user (maybe?)
+//TODO: Add updating request for drivers accepting requests + test it. (Want to just add in their acceptance, not potentially overwrite over anybody else)
+//TODO: Add new searching requests (specific location) + test them.
 
 public class ElasticSearchController {
     private static JestDroidClient client;
@@ -83,9 +82,9 @@ public class ElasticSearchController {
          *     "description": "description", (in Request)
          *     "fare": fare, (in Request)
          *     "date": "date", (in Request)
-         *     "startAddress": "startAddress", (in Request SourcePlace)
+         *     "sourceAddress": "sourceAddress", (in Request SourcePlace)
          *     "start": [ startLongitude, startLatitude], (in Request SourcePlace)
-         *     "endAddress": "endAddress", (in Request DestinationPlace)
+         *     "destinationAddress": "destinationAddress", (in Request DestinationPlace)
          *     "end": [ endLongitude, endLatitude], (in Request DestinationPlace)
          *     "id": "id" (gotten from ElasticSearch after first add)
          * }
@@ -114,14 +113,14 @@ public class ElasticSearchController {
 
                 add += "}]," +
                         "\"description\": \"" + request.getDescription() + "\"," +
-                        "\"fare\": " + request.getFare().toString() + "," +
+                        "\"fare\": " + request.getFareString() + "," +
                         "\"date\": \"" + addedDate + "\"," +
-                        "\"startAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
+                        "\"sourceAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
                         "\"start\": [" +
                         Double.toString(request.getSourcePlace().getLatLng().longitude) + ", " +
                         Double.toString(request.getSourcePlace().getLatLng().latitude) + "]," +
-                        "\"endAddress\": \"" + request.getDestinationPlace().getAddress() + "\", " +
-                        "\"end\": [" +
+                        "\"destinationAddress\": \"" + request.getDestinationPlace().getAddress() +
+                        "\", \"end\": [" +
                         Double.toString(request.getDestinationPlace().getLatLng().longitude) +
                         ", " + Double.toString(request.getDestinationPlace().getLatLng().latitude) +
                         "]";
@@ -180,8 +179,10 @@ public class ElasticSearchController {
          *     "description": "description" (in Request)
          *     "fare": fare (in Request)
          *     "date": "date" (in Request)
-         *     "start": [ startLongitude, startLatitude], (in Request)
-         *     "end": [ endLongitude, endLatitude] (in Request)
+         *     "sourceAddress": "sourceAddress", (in Request SourcePlace)
+         *     "start": [ startLongitude, startLatitude], (in Request SourcePlace)
+         *     "destinationAddress": "destinationAddress", (in Request DestinationPlace)
+         *     "end": [ endLongitude, endLatitude], (in Request DestinationPlace)
          *     "id": "id" (in Request)
          * }
          *
@@ -209,14 +210,14 @@ public class ElasticSearchController {
 
                 add += "}]," +
                         "\"description\": \"" + request.getDescription() + "\"," +
-                        "\"fare\": " + request.getFare().toString() + "," +
+                        "\"fare\": " + request.getFareString() + "," +
                         "\"date\": \"" + addedDate + "\"," +
-                        "\"startAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
+                        "\"sourceAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
                         "\"start\": [" +
                         Double.toString(request.getSourcePlace().getLatLng().longitude) + ", " +
                         Double.toString(request.getSourcePlace().getLatLng().latitude) + "]," +
-                        "\"endAddress\": \"" + request.getDestinationPlace().getAddress() + "\", " +
-                        "\"end\": [" +
+                        "\"destinationAddress\": \"" + request.getDestinationPlace().getAddress() +
+                        "\", \"end\": [" +
                         Double.toString(request.getDestinationPlace().getLatLng().longitude) +
                         ", " + Double.toString(request.getDestinationPlace().getLatLng().latitude) +
                         "], \"id\": \"" + request.getId() + "\"}";
@@ -245,6 +246,7 @@ public class ElasticSearchController {
     /**
      * Here, a request that is pending is updated.
      */
+    //TODO
     public static class UpdatePendingRequest extends AsyncTask<Request, Void, Void> {
 
         /**
@@ -261,8 +263,8 @@ public class ElasticSearchController {
             verifySettings();
             for (Request request: requests) {
                 Driver driver = request.getDrivers().get(request.getDrivers().size()-1);
-                String add = "{\"username\": " + driver.getUsername() +
-                        "\", \"status\": \"" + driver.getStatus() + "\"}";
+                String add = "{\"doc\": {\"driver\": [{\"username\": \"" + driver.getUsername() +
+                        "\", \"status\": \"" + driver.getStatus() + "\"}]}}";
 
                 Update update = new Update.Builder(add)
                         .index("drivr")
@@ -398,6 +400,23 @@ public class ElasticSearchController {
                 }
             }
             return requests;
+        }
+    }
+
+    //TODO
+    public static class SearchForLocationRequests extends AsyncTask<String, Void, ArrayList<Request>> {
+
+        /**
+         * Search query:
+         * {
+         * }
+         *
+         * @param locations
+         * @return
+         */
+        @Override
+        protected ArrayList<Request> doInBackground(String... locations) {
+            return null;
         }
     }
 
@@ -597,6 +616,7 @@ public class ElasticSearchController {
                 }
                 catch (Exception e) {
                     Log.i("Error", "Executing the get user method failed.");
+                    user = null;
                 }
             }
 
@@ -684,7 +704,35 @@ public class ElasticSearchController {
             ElasticSearchRequest gottenRequest = tempRequests.get(i);
             Request request = new Request();
 
-            //TODO: I want to change this just to call getUser, but this requires Async fuckery.
+            String add = "{" +
+                    "\"rider\": \"" + gottenRequest.getRider() + "\"," +
+                    "\"driver\": [";
+            for (int j = 0; j < gottenRequest.getDrivers().size(); j++) {
+                Driver driver = gottenRequest.getDrivers().get(j);
+                add = add + "{\"username\": \"" + driver.getUsername() +
+                        "\", \"status\": \"" + driver.getStatus().toString() + "\"";
+                if (j != gottenRequest.getDrivers().size() - 1) {
+                    add += "}, ";
+                }
+            }
+
+            add += "}]," +
+                    "\"description\": \"" + gottenRequest.getDescription() + "\"," +
+                    "\"fare\": " + gottenRequest.getFare() + "," +
+                    "\"date\": \"" + gottenRequest.getDate() + "\"," +
+                    "\"sourceAddress\": \"" + gottenRequest.getSourceAddress() + "\", " +
+                    "\"start\": [" +
+                    Double.toString(gottenRequest.getStart()[0]) + ", " +
+                    Double.toString(gottenRequest.getStart()[1]) + "]," +
+                    "\"destinationAddress\": \"" + gottenRequest.getDestinationAddress() + "\", " +
+                    "\"end\": [" +
+                    Double.toString(gottenRequest.getEnd()[0]) +
+                    ", " + Double.toString(gottenRequest.getStart()[1]) +
+                    "], \"id\": \"" + gottenRequest.getId() + "\"}";
+
+            Log.i("Here", add);
+
+            //TODO: I want to change this to just call getUser, but this requires Async fuckery.
             User tempUser = new User();
             tempUser.setUsername(gottenRequest.getRider());
             request.setRider(tempUser);
@@ -705,12 +753,12 @@ public class ElasticSearchController {
             request.setId(gottenRequest.getId());
 
             ConcretePlace temp = new ConcretePlace();
-            temp.setAddress(gottenRequest.getStartAddress());
+            temp.setAddress(gottenRequest.getSourceAddress());
             temp.setLatLng(new LatLng(gottenRequest.getStart()[1], gottenRequest.getStart()[0]));
             request.setSourcePlace(temp);
 
             ConcretePlace temp2 = new ConcretePlace();
-            temp2.setAddress(gottenRequest.getEndAddress());
+            temp2.setAddress(gottenRequest.getDestinationAddress());
             temp2.setLatLng(new LatLng(gottenRequest.getEnd()[1], gottenRequest.getEnd()[0]));
             request.setDestinationPlace(temp2);
 
