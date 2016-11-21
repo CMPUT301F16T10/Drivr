@@ -189,7 +189,7 @@ public class ElasticSearchControllerTest {
 
         assertEquals(gottenRequest.getDescription(), request.getDescription());
         assertEquals(request.getId(), gottenRequest.getId());
-        
+
         request.setDescription("Go to Rogers Place");
     }
 

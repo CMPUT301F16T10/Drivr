@@ -20,7 +20,8 @@ package ca.ualberta.cs.drivr;
  * This is the object for drivers in ElasticSearch.
  *
  * @author Tiegan Bonowicz
- * @see ElasticSearchController
+ * @see User
+ * @see DriversList
  */
 
 public class Driver extends User {
@@ -28,28 +29,36 @@ public class Driver extends User {
     /**
      * The state of the driver.
      */
-    private RequestState status;
+    private String status;
 
     /**
      * Constructor for Driver.
      */
     public Driver() {
-        status = RequestState.PENDING;
+        super();
     }
 
     /**
-     * Returns status of driver.
-     * @return RequestState
+     * Returns the status of driver as a RequestState
+     * @return The driver's status.
      */
     public RequestState getStatus() {
-        return status;
+        return RequestState.valueOf(status.toUpperCase());
     }
 
     /**
-     * Sets status of driver.
-     * @param status Driver's status.
+     * Sets the status of the driver given a string.
+     * @param status A status in String form.
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /**
+     * Sets the status of the driver given a RequestState.
+     * @param status A status in RequestState form.
      */
     public void setStatus(RequestState status) {
-        this.status = status;
+        this.status = status.toString();
     }
 }
