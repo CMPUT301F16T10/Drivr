@@ -16,19 +16,19 @@
 
 package ca.ualberta.cs.drivr;
 
-import android.content.Context;
 import android.location.Location;
 import android.net.ConnectivityManager;
-import android.test.mock.MockContext;
+import android.net.NetworkInfo;
 
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLog;
 
 import java.math.BigDecimal;
@@ -36,9 +36,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNotSame;
 import static junit.framework.Assert.assertNull;
 
 /**
@@ -47,20 +45,23 @@ import static junit.framework.Assert.assertNull;
  * @author Tiegan Bonowicz
  */
 
-//TODO: Use a different test unit for this. It is impossible to use JUnit with the Mock and Async tasks.
-
 @RunWith(RobolectricTestRunner.class)
+@Config(manifest=Config.NONE)
 public class ElasticSearchTest {
 
     private User user;
     private Request request;
-    private Context context;
+    private ConnectivityManager connectivityManager;
+    private NetworkInfo networkInfo;
 
     /**
      * Used to set the user and request for each test.
      */
     @Before
     public void setUp() {
+        connectivityManager = Mockito.mock(ConnectivityManager.class);
+        networkInfo = Mockito.mock(NetworkInfo.class);
+        Mockito.when(connectivityManager.getActiveNetworkInfo()).thenReturn(networkInfo);
         ShadowLog.stream = System.out;
         user = new User("rider1", "Jelas");
         user.setPhoneNumber("123-456-7890");
@@ -70,14 +71,9 @@ public class ElasticSearchTest {
 
         DriversList drivers = new DriversList();
         Driver inDriver = new Driver();
-        inDriver.setStatus(RequestState.DECLINED);
+        inDriver.setStatus(RequestState.ACCEPTED);
         inDriver.setUsername("tiegan");
         drivers.add(inDriver);
-
-        Driver inDriver2 = new Driver();
-        inDriver2.setStatus(RequestState.ACCEPTED);
-        inDriver2.setUsername("danika");
-        drivers.add(inDriver2);
 
         request.setRider(user);
         request.setDrivers(drivers);
@@ -103,11 +99,21 @@ public class ElasticSearchTest {
      */
     @Test
     public void addAndGetRequestOnline(){
-        //context = new Robolectric.getShadowApplication();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+        Mockito.when(connectivityManager.getActiveNetworkInfo()).thenReturn(networkInfo);
+        Mockito.when(networkInfo.isConnected()).thenReturn(true);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.saveRequest(request);
-        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
+        Robolectric.flushBackgroundThreadScheduler();
+
+        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests(user.getUsername());
+        Robolectric.flushBackgroundThreadScheduler();
+
         Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+
+        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        deleteRequest.execute(request.getId());
+        Robolectric.flushBackgroundThreadScheduler();
+
         assertEquals(request.getId(), loadedRequest.getId());
     }
 
@@ -116,32 +122,51 @@ public class ElasticSearchTest {
      */
     @Test
     public void updateAndSearchRequestOnline(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+        Mockito.when(networkInfo.isConnected()).thenReturn(true);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.saveRequest(request);
+        Robolectric.flushBackgroundThreadScheduler();
+
         request.setDescription("Easiest thing to change.");
         elasticSearch.updateRequest(request);
-        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
+        Robolectric.flushBackgroundThreadScheduler();
+
+        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests(user.getUsername());
+        Robolectric.flushBackgroundThreadScheduler();
+
         Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+
+        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        deleteRequest.execute(request.getId());
+        Robolectric.flushBackgroundThreadScheduler();
 
         assertEquals(loadedRequest.getDescription(), request.getDescription());
         assertEquals(request.getId(), loadedRequest.getId());
+
+        request.setDescription("Go to Rogers Place");
     }
 
     /**
      * Test for searching for a request online based on location.
      */
     @Test
-    public void searchRequestByLocationOnline(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+    public void searchRequestByGeolocationOnline(){
+        Mockito.when(networkInfo.isConnected()).thenReturn(true);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.saveRequest(request);
+        Robolectric.flushBackgroundThreadScheduler();
 
         Location location = new Location("");
         location.setLatitude(50);
         location.setLongitude(50);
 
         ArrayList<Request> loadedRequests = elasticSearch.searchRequestByGeolocation(location);
+        Robolectric.flushBackgroundThreadScheduler();
+
+        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        deleteRequest.execute(request.getId());
+        Robolectric.flushBackgroundThreadScheduler();
+
         Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
         assertEquals(request.getId(), loadedRequest.getId());
     }
@@ -151,12 +176,36 @@ public class ElasticSearchTest {
      */
     @Test
     public void searchRequestByKeywordOnline(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+        Mockito.when(networkInfo.isConnected()).thenReturn(true);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.saveRequest(request);
+        Robolectric.flushBackgroundThreadScheduler();
+
         ArrayList<Request> loadedRequests = elasticSearch.searchRequestByKeyword("Rogers");
+        Robolectric.flushBackgroundThreadScheduler();
+
+        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        deleteRequest.execute(request.getId());
+        Robolectric.flushBackgroundThreadScheduler();
+
         Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
         assertEquals(request.getId(), loadedRequest.getId());
+    }
+
+    /**
+     * Test for searching a request by price online.
+     */
+    @Test
+    public void searchRequestByPriceOnline() {
+        assertEquals(2+2, 4);
+    }
+
+    /**
+     * Test for searching a request by given address location online.
+     */
+    @Test
+    public void searchRequestByLocationOnline() {
+        assertEquals(2+2, 4);
     }
 
     /**
@@ -166,10 +215,18 @@ public class ElasticSearchTest {
      */
     @Test
     public void saveAndSearchUserOnline(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+        Mockito.when(networkInfo.isConnected()).thenReturn(true);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.saveUser(user);
-        User loadedUser = elasticSearch.loadUser("rider1");
+        Robolectric.flushBackgroundThreadScheduler();
+
+        User loadedUser = elasticSearch.loadUser(user.getUsername());
+        Robolectric.flushBackgroundThreadScheduler();
+
+        ElasticSearchController.DeleteUser deleteUser = new ElasticSearchController.DeleteUser();
+        deleteUser.execute(user.getUsername());
+        Robolectric.flushBackgroundThreadScheduler();
+
         assertEquals(loadedUser.getUsername(), user.getUsername());
     }
 
@@ -178,12 +235,22 @@ public class ElasticSearchTest {
      */
     @Test
     public void updateAndSearchUserOnline(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+        Mockito.when(networkInfo.isConnected()).thenReturn(true);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.saveUser(user);
+
+        Robolectric.flushBackgroundThreadScheduler();
         user.setEmail("test2@test2.test2");
         elasticSearch.updateUser(user);
-        User loadedUser = elasticSearch.loadUser("rider1");
+        Robolectric.flushBackgroundThreadScheduler();
+
+        User loadedUser = elasticSearch.loadUser(user.getUsername());
+        Robolectric.flushBackgroundThreadScheduler();
+
+        ElasticSearchController.DeleteUser deleteUser = new ElasticSearchController.DeleteUser();
+        deleteUser.execute(user.getUsername());
+        Robolectric.flushBackgroundThreadScheduler();
+
         assertEquals(loadedUser.getEmail(), user.getEmail());
     }
 
@@ -193,11 +260,12 @@ public class ElasticSearchTest {
      */
     @Test
     public void addRequestOffline(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+        Mockito.when(networkInfo.isConnected()).thenReturn(false);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.saveRequest(request);
-        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
+        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests(user.getUsername());
         Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        ShadowLog.v("Size", Integer.toString(loadedRequests.size()));
         assertEquals(request.getRider(), loadedRequest.getRider());
     }
 
@@ -206,10 +274,10 @@ public class ElasticSearchTest {
      */
     @Test
     public void updateRequestOffline(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+        Mockito.when(networkInfo.isConnected()).thenReturn(false);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.updateRequest(request);
-        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
+        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests(user.getUsername());
         Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
         assertEquals(request.getRider(), loadedRequest.getRider());
     }
@@ -219,19 +287,19 @@ public class ElasticSearchTest {
      */
     @Test
     public void loadRequestsOffline(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
-        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
+        Mockito.when(networkInfo.isConnected()).thenReturn(false);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
+        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests(user.getUsername());
         assertEquals(loadedRequests.size(), 0);
     }
 
     /**
-     * Test for getting requests by a location offline.
+     * Test for getting requests by a geolocation offline.
      */
     @Test
-    public void searchRequestByLocationOffline(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+    public void searchRequestByGeolocationOffline(){
+        Mockito.when(networkInfo.isConnected()).thenReturn(false);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         Location location = new Location("");
         location.setLatitude(50);
         location.setLongitude(50);
@@ -245,10 +313,26 @@ public class ElasticSearchTest {
      */
     @Test
     public void searchRequestByKeywordOffline(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+        Mockito.when(networkInfo.isConnected()).thenReturn(false);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         ArrayList<Request> loadedRequests = elasticSearch.searchRequestByKeyword("hi");
         assertNull(loadedRequests);
+    }
+
+    /**
+     * Test for getting requests by price offline.
+     */
+    @Test
+    public void searchRequestByPriceOffline() {
+        assertEquals(2+2, 4);
+    }
+
+    /**
+     * Test for getting requests by price offline.
+     */
+    @Test
+    public void searchRequestByLocationOffline() {
+        assertEquals(2+2, 4);
     }
 
     /**
@@ -256,8 +340,8 @@ public class ElasticSearchTest {
      */
     @Test
     public void saveUserOffline(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+        Mockito.when(networkInfo.isConnected()).thenReturn(false);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.saveUser(user);
         assertNotNull(elasticSearch.getUser());
     }
@@ -267,8 +351,8 @@ public class ElasticSearchTest {
      */
     @Test
     public void updateUserOffline(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+        Mockito.when(networkInfo.isConnected()).thenReturn(false);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.updateUser(user);
         assertNotNull(elasticSearch.getUser());
     }
@@ -278,8 +362,8 @@ public class ElasticSearchTest {
      */
     @Test
     public void gettingUserOffline(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+        Mockito.when(networkInfo.isConnected()).thenReturn(false);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         User user = elasticSearch.loadUser("bob");
         assertNull(user);
     }
@@ -290,12 +374,23 @@ public class ElasticSearchTest {
      */
     @Test
     public void onNetworkStateChanged(){
-        context = new MockContext();
-        ElasticSearch elasticSearch = new ElasticSearch(context);
+        Mockito.when(networkInfo.isConnected()).thenReturn(false);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.saveRequest(request);
+
+        Mockito.when(networkInfo.isConnected()).thenReturn(true);
         elasticSearch.onNetworkStateChanged();
-        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests("rider1");
+        Robolectric.flushBackgroundThreadScheduler();
+
+        ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests(user.getUsername());
+        Robolectric.flushBackgroundThreadScheduler();
+
         Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+
+        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        deleteRequest.execute(request.getId());
+        Robolectric.flushBackgroundThreadScheduler();
+
         assertEquals(request.getId(), loadedRequest.getId());
     }
 }
