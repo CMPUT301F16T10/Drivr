@@ -36,6 +36,7 @@ public class Driver extends User {
      */
     public Driver() {
         super();
+        status = RequestState.PENDING.toString();
     }
 
     /**
