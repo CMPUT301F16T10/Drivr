@@ -35,8 +35,8 @@ import java.util.ArrayList;
  * @see MainActivity
  */
 
-//TODO: Add 2 new methods for searching (by price, by given location)
-//TODO: Add more to how offline stuff is handled?
+//TODO: Add filters (by price, by price/km)
+//TODO: Add more to how offline stuff is handled? (Meets use cases, but for searching beyond own requests it won't do much right now)
 
 public class ElasticSearch {
     private ArrayList<Request> offlineRequests;
@@ -121,7 +121,7 @@ public class ElasticSearch {
                     ElasticSearchController.SearchForRequests();
             requests.execute(username);
             try {
-                offlineRequests = requests.get();
+                offlineRequests = putUsersIntoRequests(requests.get());
                 return offlineRequests;
             }
             catch (Exception e) {
@@ -148,7 +148,7 @@ public class ElasticSearch {
                     ElasticSearchController.SearchForGeolocationRequests();
             searchRequest.execute(geolocation);
             try {
-                return searchRequest.get();
+                return putUsersIntoRequests(searchRequest.get());
             }
             catch (Exception e) {
                 Log.i("Error", "Failed to load the requests by geolocation.");
@@ -175,7 +175,7 @@ public class ElasticSearch {
                     ElasticSearchController.SearchForKeywordRequests();
             searchRequest.execute(searchTerm);
             try {
-                return searchRequest.get();
+                return putUsersIntoRequests(searchRequest.get());
             }
             catch (Exception e) {
                 Log.i("Error", "Failed to load the requests by keyword.");
@@ -188,24 +188,6 @@ public class ElasticSearch {
     }
 
     //TODO
-    /* public ArrayList<Request> searchRequestByPrice(double price) {
-        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
-            ElasticSearchController.SearchForPriceRequests searchRequest = new
-                    ElasticSearchController.SearchForPriceRequests();
-            searchRequest.execute(price);
-            try {
-                return searchRequest.get();
-            }
-            catch (Exception e) {
-                Log.i("Error", "Failed to load the requests by price.");
-                return null;
-            }
-        }
-        else {
-            return null;
-        }
-    }
-
     public ArrayList<Request> searchRequestByLocation(String location) {
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.SearchForLocationRequests searchRequest = new
@@ -213,7 +195,8 @@ public class ElasticSearch {
             searchRequest.execute(location);
             try {
                 ArrayList<Request> requests = searchRequest.get();
-                if(requests == null) {
+                //Will probably remove this.
+                /* if(requests == null) {
                     //Get location's geocoordinates here.
                     ElasticSearchController.SearchForGeolocationRequests searchGeoRequest = new
                             ElasticSearchController.SearchForGeolocationRequests();
@@ -224,8 +207,8 @@ public class ElasticSearch {
                         Log.i("Error", "Failed to load the requests by geolocation.");
                         return null;
                     }
-                }
-                return requests;
+                }*/
+                return putUsersIntoRequests(requests);
             }
             catch (Exception e) {
                 Log.i("Error", "Failed to load the requests by location.");
@@ -235,7 +218,25 @@ public class ElasticSearch {
         else {
             return null;
         }
-    } */
+    }
+
+    /**
+     * Here, we filter requests by price.
+     *
+     * @param requests The requests to be filtered through
+     * @param price The minimum price a request fare must have
+     * @return The filtered ArrayList of requests.
+     */
+    //TODO
+    public ArrayList<Request> filterRequestByPrice(ArrayList<Request> requests, double price) {
+        for(int i = 0; i < requests.size(); i++) {
+            //Convert fare to something that can use >
+            //if(requests.getFare() > price) {
+
+            //}
+        }
+        return requests;
+    }
 
     /**
      * Here, the requests for a given keyword are gotten by first checking if there's anything
@@ -370,6 +371,38 @@ public class ElasticSearch {
 
             newInfo = false;
         }
+    }
+
+    /**
+     * Here, users are gotten and added to the request.
+     * @param requests The ArrayList of requests to get the users for.
+     * @return The updated ArrayList of requests
+     */
+    //TODO: This works, it's just some ugly code. Should add a method in DriversList that sets a driver. That'd make this a bit nicer.
+    private ArrayList<Request> putUsersIntoRequests(ArrayList<Request> requests) {
+        User temp;
+
+        for(int i = 0; i < requests.size(); ++i) {
+            temp = loadUser(requests.get(i).getRider().getUsername());
+
+            if(temp != null) {
+                requests.get(i).setRider(temp);
+            }
+
+            for(int j = 0; j < requests.get(i).getDrivers().size(); ++j) {
+                temp = loadUser(requests.get(i).getDrivers().get(j).getUsername());
+                if(temp != null) {
+                    requests.get(i).getDrivers().get(j).setName(temp.getName());
+                    requests.get(i).getDrivers().get(j).setPhoneNumber(temp.getPhoneNumber());
+                    requests.get(i).getDrivers().get(j).setEmail(temp.getEmail());
+                    requests.get(i).getDrivers().get(j).setVehicleDescription(temp.getVehicleDescription());
+                    requests.get(i).getDrivers().get(j).setRating(temp.getRating());
+                    requests.get(i).getDrivers().get(j).setTotalRatings(temp.getTotalRatings());
+                }
+            }
+
+        }
+        return requests;
     }
 
     /**

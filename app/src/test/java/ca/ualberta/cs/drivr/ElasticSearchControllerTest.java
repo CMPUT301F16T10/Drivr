@@ -42,6 +42,8 @@ import static junit.framework.Assert.assertEquals;
  * @author Tiegan Bonowicz
  */
 
+//TODO: Add a timer (just to ensure that all tests will pass)
+
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest=Config.NONE)
 public class ElasticSearchControllerTest {
