@@ -26,7 +26,6 @@ import java.util.Date;
 /**
  * A class for storing information about a item_request.
  */
-//TODO: Maybe have ID too?
 public class Request {
 
     private User rider;
@@ -34,12 +33,14 @@ public class Request {
     private String description;
     private Date date;
     private BigDecimal fare;
+    private BigDecimal fareByKm;
     private RequestState requestState;
     private ConcretePlace source;
     private ConcretePlace destination;
     private Boolean synced;
     private String id;
     private String fareString;
+    private String fareByKmString;
 
     /**
      * Instantiates a new item_request.
@@ -275,5 +276,29 @@ public class Request {
 
     public void setFareString(String fareString) {
         this.fareString = fareString;
+    }
+
+    public String getFareByKmString() {
+        return fareByKmString;
+    }
+
+    public void setFareByKmString(String fareByKmString) {
+        this.fareByKmString = fareByKmString;
+    }
+
+    /**
+     * Get the fare by KM.
+     * @return The fare divided by KM.
+     */
+    public BigDecimal getFareByKm() {
+        return fareByKm;
+    }
+
+    /**
+     * Set the fare by KM.
+     * @param fareByKm The fare divided by KM.
+     */
+    public void setFareByKm(BigDecimal fareByKm) {
+        this.fareByKm = fareByKm;
     }
 }

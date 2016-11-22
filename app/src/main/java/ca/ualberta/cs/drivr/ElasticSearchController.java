@@ -56,9 +56,8 @@ import io.searchbox.core.Update;
  * @see ElasticSearchRequest
  */
 
-//TODO: Update building requests to just get the user (maybe?)
-//TODO: Add updating request for drivers accepting requests + test it. (Want to just add in their acceptance, not potentially overwrite over anybody else)
-//TODO: Add new searching requests (specific location) + test them.
+//TODO: Fix adding/getting requests if we're putting in a new Fare/KM variable
+//TODO: Fix updating request for drivers accepting requests + test it. (Want to just add in their acceptance, not potentially overwrite over anybody else)
 
 public class ElasticSearchController {
     private static JestDroidClient client;
@@ -403,12 +402,19 @@ public class ElasticSearchController {
         }
     }
 
-    //TODO
+    //TODO: Only searches for exact source location, could expand to exact destination location
     public static class SearchForLocationRequests extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
          * Search query:
          * {
+         *     "from": 0, "size": 10000, "query":
+         *     {
+         *         "match":
+         *         {
+         *             "sourceLocation": "location" (given by user)
+         *         }
+         *     }
          * }
          *
          * @param locations
@@ -416,7 +422,37 @@ public class ElasticSearchController {
          */
         @Override
         protected ArrayList<Request> doInBackground(String... locations) {
-            return null;
+            verifySettings();
+            ArrayList<Request> requests = new ArrayList<Request>();
+            ArrayList<ElasticSearchRequest> tempRequests = new ArrayList<ElasticSearchRequest>();
+            for (String location: locations) {
+                String search_string = "{\"from\": 0, \"size\": 10000, "
+                        + "\"query\": {\"match\": " +
+                        "{\"sourceLocation\": \"" + location +
+                        "\"}}}";
+
+                Search search = new Search.Builder(search_string)
+                        .addIndex("drivr")
+                        .addType("requests")
+                        .build();
+
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()) {
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
+                    }
+                    else {
+                        Log.i("Error", "The search executed but it didn't work.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Executing search for requests failed.");
+                }
+            }
+            return requests;
         }
     }
 
@@ -482,7 +518,7 @@ public class ElasticSearchController {
                     }
                 }
                 catch (Exception e) {
-                    Log.i("Error", "Executing the get user method failed.");
+                    Log.i("Error", "Executing search for requests failed.");
                 }
 
                 search_string = "{\"from\": 0, \"size\": 10000, "
@@ -508,7 +544,7 @@ public class ElasticSearchController {
                     }
                 }
                 catch (Exception e) {
-                    Log.i("Error", "Executing the get user method failed.");
+                    Log.i("Error", "Executing search for requests failed.");
                 }
             }
 
@@ -697,42 +733,12 @@ public class ElasticSearchController {
      * @param requests The requests to be returned to the rest of the app
      * @param tempRequests The requests gotten from ElasticSearch.
      */
-    //TODO: Will probably become necessary to fix this.
-    public static void addRequests(ArrayList<Request> requests,
+    private static void addRequests(ArrayList<Request> requests,
                                    ArrayList<ElasticSearchRequest> tempRequests) {
         for (int i = 0; i < tempRequests.size(); i++) {
             ElasticSearchRequest gottenRequest = tempRequests.get(i);
             Request request = new Request();
 
-            String add = "{" +
-                    "\"rider\": \"" + gottenRequest.getRider() + "\"," +
-                    "\"driver\": [";
-            for (int j = 0; j < gottenRequest.getDrivers().size(); j++) {
-                Driver driver = gottenRequest.getDrivers().get(j);
-                add = add + "{\"username\": \"" + driver.getUsername() +
-                        "\", \"status\": \"" + driver.getStatus().toString() + "\"";
-                if (j != gottenRequest.getDrivers().size() - 1) {
-                    add += "}, ";
-                }
-            }
-
-            add += "}]," +
-                    "\"description\": \"" + gottenRequest.getDescription() + "\"," +
-                    "\"fare\": " + gottenRequest.getFare() + "," +
-                    "\"date\": \"" + gottenRequest.getDate() + "\"," +
-                    "\"sourceAddress\": \"" + gottenRequest.getSourceAddress() + "\", " +
-                    "\"start\": [" +
-                    Double.toString(gottenRequest.getStart()[0]) + ", " +
-                    Double.toString(gottenRequest.getStart()[1]) + "]," +
-                    "\"destinationAddress\": \"" + gottenRequest.getDestinationAddress() + "\", " +
-                    "\"end\": [" +
-                    Double.toString(gottenRequest.getEnd()[0]) +
-                    ", " + Double.toString(gottenRequest.getStart()[1]) +
-                    "], \"id\": \"" + gottenRequest.getId() + "\"}";
-
-            Log.i("Here", add);
-
-            //TODO: I want to change this to just call getUser, but this requires Async fuckery.
             User tempUser = new User();
             tempUser.setUsername(gottenRequest.getRider());
             request.setRider(tempUser);
