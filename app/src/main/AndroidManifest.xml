@@ -63,6 +63,7 @@
             android:value="AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE" />
 
         <activity android:name=".NewRequestActivity"></activity>
+        <activity android:name=".SearchRequestActivity"/>
     </application>
 
 </manifest>

@@ -17,6 +17,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreference
+        android:id="@+id/driver_mode_switch_button"
         android:defaultValue="false"
         android:key="driver_switch"
         android:summary="Pick up passengers of your own"

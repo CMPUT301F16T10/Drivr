@@ -66,4 +66,6 @@ dependencies {
     testCompile 'org.robolectric:robolectric:3.1.4'
     testCompile 'org.mockito:mockito-core:2.2.21'
     compile 'io.searchbox:jest-droid:2.0.1'
+
+    compile 'com.appyvet:materialrangebar:1.3'
 }
