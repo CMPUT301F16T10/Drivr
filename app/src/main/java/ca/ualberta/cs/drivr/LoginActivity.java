@@ -381,6 +381,8 @@ public class LoginActivity extends AppCompatActivity {
 
             if (actualBool) {
                 userManager.setUser(user);
+                for (Request request : elasticSearch.loadUserRequests(username))
+                    userManager.getRequestsList().add(request);
                 userManager.notifyObservers();
                 finish();
             } else {
