@@ -23,6 +23,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 //import android.support.design.widget.FloatingActionButton;
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private GoogleMap mMap;
     private SupportMapFragment mFragment;
     private Context context;
+    private UserManager userManager = UserManager.getInstance();
     LatLng test = new LatLng(53.5232, -113.5263);
     private static final String SERVER_KEY = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
 
@@ -97,12 +99,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         // Looks better without Blue Bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         context = getApplicationContext();
+        PreferenceManager.setDefaultValues(this, R.xml.pref_driver_mode, false);
 
         setSupportActionBar(toolbar);
 
@@ -127,11 +130,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 Gson gson = new GsonBuilder()
                         .registerTypeAdapter(Uri.class, new UriSerializer())
                         .create();
-                Intent intent = new Intent(MainActivity.this, NewRequestActivity.class);
-                String concretePlaceJson = gson.toJson(concretePlace);
-                intent.putExtra(NewRequestActivity.EXTRA_PLACE, concretePlaceJson);
-                Log.i(TAG, "Place: " + place.getName() + ", :" + place.getLatLng());
-                startActivity(intent);
+                if (userManager.getUserMode().equals(UserMode.RIDER)){
+                    Intent intent = new Intent(MainActivity.this, NewRequestActivity.class);
+                    String concretePlaceJson = gson.toJson(concretePlace);
+                    intent.putExtra(NewRequestActivity.EXTRA_PLACE, concretePlaceJson);
+                    Log.i(TAG, "Place: " + place.getName() + ", :" + place.getLatLng());
+                    startActivity(intent);
+
+                } else if (userManager.getUserMode().equals(UserMode.DRIVER)) {
+                    Intent intent = new Intent(MainActivity.this, SearchRequestActivity.class);
+                    String concretePlaceJson = gson.toJson(concretePlace);
+                    intent.putExtra(SearchRequestActivity.EXTRA_PLACE, concretePlaceJson);
+                    intent.putExtra(SearchRequestActivity.EXTRA_KEYWORD, "");
+                    Log.i(TAG, "Place: " + place.getName() + ", :" + place.getLatLng());
+                    startActivity(intent);
+                }
             }
 
             @Override

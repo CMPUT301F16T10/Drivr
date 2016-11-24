@@ -29,14 +29,17 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.List;
+
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -50,6 +53,7 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
+    private static final String TAG = "SettingsActivity";
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -281,7 +285,48 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_driver_mode);
+
             setHasOptionsMenu(true);
+
+            SwitchPreference switchPreference = (SwitchPreference) findPreference("driver_switch");
+            switchPreference.setDefaultValue(false);
+            UserManager userManager = UserManager.getInstance();
+            if (userManager.getUserMode().equals(UserMode.RIDER)) {
+                switchPreference.setChecked(false);
+                Log.i(TAG, "set to off from defualt");
+
+            } else {
+                switchPreference.setChecked(true);
+                Log.i(TAG, "set to on from defualt");
+            }
+//            switchPreference.setEnabled(true);
+            switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    UserManager userManager = UserManager.getInstance();
+                    User user = userManager.getUser();
+                    if (newValue.equals(true)){
+                        Log.i(TAG, "driver mode is true");
+                        if (user.getVehicleDescription().isEmpty()) {
+                            // cannot enter driver mode without first entering a vehicle description.
+                            //TODO call intent to get user vehicle description.
+                            // for now we enter driver mode without the correct information
+                            userManager.setUserMode(UserMode.DRIVER);
+                            userManager.notifyObservers();
+
+                        } else {
+                            userManager.setUserMode(UserMode.DRIVER);
+                            userManager.notifyObservers();
+
+                        }
+                    } else {
+                        Log.i(TAG, "driver mode is off");
+                        userManager.setUserMode(UserMode.RIDER);
+                        userManager.notifyObservers();
+                    }
+                    return true;
+                }
+            });
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
