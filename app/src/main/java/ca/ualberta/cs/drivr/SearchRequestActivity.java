@@ -69,7 +69,7 @@ public class SearchRequestActivity extends AppCompatActivity {
     private String maxPrice;
     private String minPricePer;
     private String maxPricePer;
-
+    private String keyword;
 
     /**
      * This method initializes the activity by deserializing the JSON given to it to get the
@@ -104,7 +104,7 @@ public class SearchRequestActivity extends AppCompatActivity {
             updateSearchPlace(searchPlace);
         }
 
-        String keyword = getIntent().getStringExtra(EXTRA_KEYWORD);
+        keyword = getIntent().getStringExtra(EXTRA_KEYWORD);
         final EditText keywordEditText = (EditText) findViewById(R.id.keyword_search_edit_text);
         if (!keyword.isEmpty()) {
             keywordEditText.setText(keyword);
@@ -247,6 +247,22 @@ public class SearchRequestActivity extends AppCompatActivity {
 //    }
 
     private void searchRequest() {
+        SearchRequest searchRequest = new SearchRequest(minPrice, maxPrice, minPricePer, maxPricePer, searchPlace, keyword);
+
+
+//        ConcretePlace concretePlace = new ConcreteP;
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Uri.class, new UriSerializer())
+                .create();
+//        Intent intent = new Intent(MainActivity.this, NewRequestActivity.class);
+        String searchRequestJson = gson.toJson(searchRequest);
+
+        SearchRequest newSearchRequest = gson.fromJson(searchRequestJson, SearchRequest.class);
+        Intent intent = new Intent(SearchRequestActivity.this, SearchRequestsListActivity.class);
+        intent.putExtra(SearchRequestsListActivity.EXTRA_SEARCH_REQUEST, searchRequestJson);
+//            Log.i(TAG, "Place: " + place.getName() + ", :" + place.getLatLng());
+        startActivity(intent);
+
         finish();
     }
 
