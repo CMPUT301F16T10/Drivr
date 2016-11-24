@@ -523,6 +523,7 @@ public class ElasticSearchController {
                     Log.i("Error", "Executing search for requests failed.");
                 }
 
+                /*
                 search_string = "{\"from\": 0, \"size\": 10000, "
                         + "\"query\": {\"match\": " +
                         "{\"driver.username\": \"" + username +
@@ -548,6 +549,7 @@ public class ElasticSearchController {
                 catch (Exception e) {
                     Log.i("Error", "Executing search for requests failed.");
                 }
+                */
             }
 
             return requests;
