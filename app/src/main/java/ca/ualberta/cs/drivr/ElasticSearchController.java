@@ -68,7 +68,7 @@ public class ElasticSearchController {
      * getting the ID where it's stored, appending it to the end of the add query and then replacing
      * the query we just added with the new query including the ID.
      */
-    public static class AddRequest extends  AsyncTask<Request, Void, Void> {
+    public static class AddRequest extends AsyncTask<Request, Void, Void> {
 
         /**
          * Add query:
@@ -105,12 +105,13 @@ public class ElasticSearchController {
                 for (int i = 0; i < request.getDrivers().size(); i++) {
                     Driver driver = request.getDrivers().get(i);
                     add = add + "{\"username\": \"" + driver.getUsername() +
-                            "\", \"status\": \"" + driver.getStatus() + "\"";
-                    if (i != request.getDrivers().size() - 1)
-                        add += "}, ";
+                            "\", \"status\": \"" + driver.getStatus() + "\"}";
+                    if (i != request.getDrivers().size() - 1) {
+                        add += ", ";
+                    }
                 }
 
-                add += "}]," +
+                add += "]," +
                         "\"description\": \"" + request.getDescription() + "\"," +
                         "\"fare\": " + request.getFareString() + "," +
                         "\"date\": \"" + addedDate + "\"," +
@@ -202,12 +203,13 @@ public class ElasticSearchController {
                 for (int i = 0; i < request.getDrivers().size(); i++) {
                     Driver driver = request.getDrivers().get(i);
                     add = add + "{\"username\": \"" + driver.getUsername() +
-                            "\", \"status\": \"" + driver.getStatus() + "\"";
-                    if (i != request.getDrivers().size() - 1)
-                        add += "}, ";
+                            "\", \"status\": \"" + driver.getStatus() + "\"}";
+                    if (i != request.getDrivers().size() - 1) {
+                        add += ", ";
+                    }
                 }
 
-                add += "}]," +
+                add += "]," +
                         "\"description\": \"" + request.getDescription() + "\"," +
                         "\"fare\": " + request.getFareString() + "," +
                         "\"date\": \"" + addedDate + "\"," +
