@@ -70,7 +70,7 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Uri.class, new UriSerializer())
                 .create();
-        Request request = gson.fromJson(requestString, Request.class);
+        final Request request = gson.fromJson(requestString, Request.class);
         sourcePlace = request.getSourcePlace();
         destinationPlace = request.getDestinationPlace();
         sourceAddress = request.getSourceAddress();
@@ -95,6 +95,8 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
+                addRequest.execute(request);
                 finish();
             }
         });
