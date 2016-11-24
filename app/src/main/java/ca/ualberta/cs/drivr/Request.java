@@ -16,6 +16,8 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.location.Address;
+
 import com.google.android.gms.location.places.Place;
 
 import java.io.Serializable;
@@ -37,6 +39,8 @@ public class Request {
     private RequestState requestState;
     private ConcretePlace source;
     private ConcretePlace destination;
+    private Address sourceAddress;
+    private Address destinationAddress;
     private Boolean synced;
     private String id;
     private String fareString;
@@ -58,6 +62,7 @@ public class Request {
         id = "";
     }
 
+
     /**
      * Instantiates a new item_request.
      * @param rider The rider for the item_request.
@@ -70,7 +75,31 @@ public class Request {
         this.setDate(new Date());
         this.source = source;
         this.destination = destination;
+        this.destinationAddress = null;
+        this.sourceAddress = null;
+
     }
+
+    public Request(User rider, Address source, Address destination){
+        this();
+        this.rider = rider;
+        this.setDate(new Date());
+        this.sourceAddress = source;
+        this.source = null;
+        this.destination = null;
+        this.destinationAddress = destination;
+
+    }
+
+    public Address getDestinationAddress() {
+        return destinationAddress;
+    }
+
+
+    public Address getSourceAddress() {
+        return sourceAddress;
+    }
+
 
     /**
      * Get the starting location.
