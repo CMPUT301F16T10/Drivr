@@ -136,7 +136,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         otherUserNameTextView.setText(driverUsername);
 
         // Show the estimated time
-        fareTextView.setText("$" + request.getFare().toString());
+        fareTextView.setText("$" + request.getFareString());
 
         // Show the route text
         final Place source = request.getSourcePlace();
