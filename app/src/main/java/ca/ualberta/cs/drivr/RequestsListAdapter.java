@@ -148,7 +148,8 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
             routeTextView.setText("Going from " + sourceAddress.getAddressLine(0) + " to " + destinationAddress.getAddressLine(0));
         }
         else {
-            routeTextView.setText("Going from " + source.getName() + " to " + destination.getName());
+            routeTextView.setText("Going from " + (source.getName() != null ? source.getName() : source.getAddress())
+                    + " to " + (destination.getName() != null ? destination.getName() : destination.getAddress()));
         }
 
         routeTextView.setOnClickListener(new View.OnClickListener() {
