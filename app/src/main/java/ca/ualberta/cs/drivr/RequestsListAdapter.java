@@ -18,6 +18,7 @@ package ca.ualberta.cs.drivr;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -140,7 +141,15 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         // Show the route text
         final Place source = request.getSourcePlace();
         final Place destination = request.getDestinationPlace();
-        routeTextView.setText("Going from " + source.getName() + " to " + destination.getName());
+        final Address sourceAddress = request.getSourceAddress();
+        final Address destinationAddress = request.getDestinationAddress();
+
+        if (destination == null){
+            routeTextView.setText("Going from " + sourceAddress.getAddressLine(0) + " to " + destinationAddress.getAddressLine(0));
+        }
+        else {
+            routeTextView.setText("Going from " + source.getName() + " to " + destination.getName());
+        }
 
         routeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
