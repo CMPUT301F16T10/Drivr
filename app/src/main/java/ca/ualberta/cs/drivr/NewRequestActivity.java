@@ -180,14 +180,11 @@ public class NewRequestActivity extends AppCompatActivity {
         }
 
         final EditText fareEditText = (EditText) findViewById(R.id.new_request_fare_edit_text);
-        final String fareString = fareEditText.getText().toString().replaceAll("[$,.]", "");
-        final BigDecimal fare = new BigDecimal(fareString).setScale(2, BigDecimal.ROUND_FLOOR)
-                .divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR); // Divide by 100 to get dollars from cents
+        final String fareString = fareEditText.getText().toString().replaceAll("[$,]", "");
 
         // Make the request and store it in the model
         User user = userManager.getUser();
         Request request = new Request(user, sourcePlace, destinationPlace);
-        request.setFare(fare);
         request.setFareString(fareString);
 
         Gson gson = new GsonBuilder()
