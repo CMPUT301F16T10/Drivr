@@ -91,8 +91,10 @@ public class LoginActivity extends AppCompatActivity {
     private EditText loginUsername;
     private Button signUpButton;
     private Button signInButton;
+    private Button logoutButton;
     private TextView signUpText;
     private TextView signInText;
+    private UserManager userManager = UserManager.getInstance();
 
     private View mProgressView;
     private View mLoginFormView;
@@ -116,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
 
         signInButton = (Button) findViewById(R.id.sign_in_button);
         signUpButton = (Button) findViewById(R.id.sign_up_button);
+        logoutButton = (Button) findViewById(R.id.logout_button);
 
         signInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -154,6 +157,18 @@ public class LoginActivity extends AppCompatActivity {
                 signUpText.setVisibility(View.VISIBLE);
             }
         });
+
+
+        /*
+         if(userManager.getUser() != null) {
+            signInButton.setVisibility(View.GONE);
+            loginUsername.setVisibility(View.GONE);
+            signUpText.setVisibility(View.GONE);
+
+            logoutButton.setVisibility(View.VISIBLE);
+
+        } */
+
 
     }
 
