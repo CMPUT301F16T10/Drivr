@@ -83,7 +83,9 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
             routeText.setText("Going from " + sourceAddress.getLocality() + "to " + destinationAddress.getLocality());
         }
         else {
-            routeText.setText("Going from " + sourcePlace.getName() + " to " + destinationPlace.getName());
+            routeText.setText(
+                    "Going from " + (sourcePlace.getName() != null ? sourcePlace.getName() : sourcePlace.getAddress())
+                            + " to " + (destinationPlace.getName() != null ? destinationPlace.getName() : destinationPlace.getAddress()));
         }
 
         // TODO make a map with these points and the route between them

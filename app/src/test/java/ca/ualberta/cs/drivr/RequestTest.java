@@ -155,4 +155,12 @@ public class RequestTest {
         assertEquals(destination, request.getDestinationPlace());
     }
 
+    @Test
+    public void getAndSetFareString() {
+        Request request = new Request();
+        assertEquals("0.00", request.getFareString());
+        request.setFareString("12.34");
+        assertEquals("12.34", request.getFareString());
+    }
+
 }

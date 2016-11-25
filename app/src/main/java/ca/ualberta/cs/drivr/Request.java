@@ -300,9 +300,7 @@ public class Request {
      * Gets the fare as a properly formatted string (ie. DDDD.cc where D is dollars and c is cents).
      * @return The fare
      */
-    public String getFareString() {
-        return fare.toString();
-    }
+    public String getFareString() { return String.format("%.2f", fare); }
 
     /**
      * Expects a numeric string in the form DDDD.cc where D is dollars and c is cents.
