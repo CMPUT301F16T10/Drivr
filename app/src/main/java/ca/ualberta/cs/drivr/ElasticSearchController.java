@@ -68,7 +68,7 @@ public class ElasticSearchController {
      * getting the ID where it's stored, appending it to the end of the add query and then replacing
      * the query we just added with the new query including the ID.
      */
-    public static class AddRequest extends AsyncTask<Request, Void, Void> {
+    public static class AddRequest extends  AsyncTask<Request, Void, Void> {
 
         /**
          * Add query:
@@ -113,7 +113,7 @@ public class ElasticSearchController {
 
                 add += "]," +
                         "\"description\": \"" + request.getDescription() + "\"," +
-                        "\"fare\": " + request.getFareString() + "," +
+                        "\"fare\": " + request.getFareString() + " ," +
                         "\"date\": \"" + addedDate + "\"," +
                         "\"sourceAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
                         "\"start\": [" +
@@ -204,14 +204,13 @@ public class ElasticSearchController {
                     Driver driver = request.getDrivers().get(i);
                     add = add + "{\"username\": \"" + driver.getUsername() +
                             "\", \"status\": \"" + driver.getStatus() + "\"}";
-                    if (i != request.getDrivers().size() - 1) {
+                    if (i != request.getDrivers().size() - 1)
                         add += ", ";
-                    }
                 }
 
                 add += "]," +
                         "\"description\": \"" + request.getDescription() + "\"," +
-                        "\"fare\": " + request.getFareString() + "," +
+                        "\"fare\": " + request.getFareString() + " ," +
                         "\"date\": \"" + addedDate + "\"," +
                         "\"sourceAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
                         "\"start\": [" +
@@ -414,7 +413,7 @@ public class ElasticSearchController {
          *     {
          *         "match":
          *         {
-         *             "sourceLocation": "location" (given by user)
+         *             "sourceAddress": "location" (given by user)
          *         }
          *     }
          * }
@@ -430,7 +429,7 @@ public class ElasticSearchController {
             for (String location: locations) {
                 String search_string = "{\"from\": 0, \"size\": 10000, "
                         + "\"query\": {\"match\": " +
-                        "{\"sourceLocation\": \"" + location +
+                        "{\"sourceAddress\": \"" + location +
                         "\"}}}";
 
                 Search search = new Search.Builder(search_string)
@@ -524,6 +523,7 @@ public class ElasticSearchController {
                     Log.i("Error", "Executing search for requests failed.");
                 }
 
+
                 search_string = "{\"from\": 0, \"size\": 10000, "
                         + "\"query\": {\"match\": " +
                         "{\"driver.username\": \"" + username +
@@ -541,7 +541,6 @@ public class ElasticSearchController {
                                 .getSourceAsObjectList(ElasticSearchRequest.class);
                         tempRequests.addAll(foundRequests);
                         addRequests(requests, tempRequests);
-                        tempRequests.clear();
                     }
                     else {
                         Log.i("Error", "The search executed but it didn't work.");
