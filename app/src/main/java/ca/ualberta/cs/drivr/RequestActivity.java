@@ -45,8 +45,6 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
     private MapController mapController;
     private Place sourcePlace;
     private Place destinationPlace;
-    private Address sourceAddress;
-    private Address destinationAddress;
 
     private TextView acceptButton;
 
@@ -73,20 +71,9 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         final Request request = gson.fromJson(requestString, Request.class);
         sourcePlace = request.getSourcePlace();
         destinationPlace = request.getDestinationPlace();
-        sourceAddress = request.getSourceAddress();
-        destinationAddress = request.getDestinationAddress();
 
-        fareText.setText(request.getFareString());
-//        routeText.setText();
-
-        if (sourcePlace == null){
-            routeText.setText("Going from " + sourceAddress.getLocality() + "to " + destinationAddress.getLocality());
-        }
-        else {
-            routeText.setText(
-                    "Going from " + (sourcePlace.getName() != null ? sourcePlace.getName() : sourcePlace.getAddress())
-                            + " to " + (destinationPlace.getName() != null ? destinationPlace.getName() : destinationPlace.getAddress()));
-        }
+        fareText.setText("$" + request.getFareString());
+        routeText.setText(request.getRoute());
 
         // TODO make a map with these points and the route between them
         mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.request_map_fragment);

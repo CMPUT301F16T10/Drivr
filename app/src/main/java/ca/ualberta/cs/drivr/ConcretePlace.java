@@ -16,6 +16,7 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.location.Address;
 import android.net.Uri;
 
 import com.google.android.gms.location.places.Place;
@@ -83,6 +84,34 @@ public class ConcretePlace implements Place {
             locale = place.getLocale();
             id = place.getId();
             websiteUri = place.getWebsiteUri();
+        }
+    }
+
+    /**
+     * Instantiates a new ConcretePlace from an existing Address.
+     * @param address The address to get information from.
+     * @see Address
+     */
+    public ConcretePlace(Address address) {
+        this();
+        if (address != null) {
+            this.address = address.getAddressLine(0);
+            attributions = null;
+            name = address.getFeatureName();
+            phoneNumber = address.getPhone();
+            rating = 0;
+            priceLevel = 0;
+            try {
+                latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            }
+            catch (IllegalStateException e) {
+                latLng = null;
+            }
+            viewport = null;
+            placeTypes = null;
+            locale = address.getLocale();
+            id = null;
+            websiteUri = null;
         }
     }
 

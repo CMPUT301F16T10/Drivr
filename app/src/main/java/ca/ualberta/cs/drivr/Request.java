@@ -38,8 +38,6 @@ public class Request {
     private RequestState requestState;
     private ConcretePlace source;
     private ConcretePlace destination;
-    private Address sourceAddress;
-    private Address destinationAddress;
     private Boolean synced;
     private String id;
 
@@ -72,31 +70,8 @@ public class Request {
         this.setDate(new Date());
         this.source = source;
         this.destination = destination;
-        this.destinationAddress = null;
-        this.sourceAddress = null;
 
     }
-
-    public Request(User rider, Address source, Address destination){
-        this();
-        this.rider = rider;
-        this.setDate(new Date());
-        this.sourceAddress = source;
-        this.source = null;
-        this.destination = null;
-        this.destinationAddress = destination;
-
-    }
-
-    public Address getDestinationAddress() {
-        return destinationAddress;
-    }
-
-
-    public Address getSourceAddress() {
-        return sourceAddress;
-    }
-
 
     /**
      * Get the starting location.
@@ -128,6 +103,22 @@ public class Request {
      */
     public void setDestinationPlace(ConcretePlace destination) {
         this.destination = destination;
+    }
+
+    /**
+     * Gets a description of the route to be taken.
+     * @return A string describing the route
+     */
+    public String getRoute() {
+        final String sourceName =
+                source.getName() != null ? source.getName().toString() :
+                        source.getAddress() != null ? source.getAddress().toString() :
+                                "Unknown Address";
+        final String destinationName =
+                destination.getName() != null ? destination.getName().toString() :
+                        destination.getAddress() != null ? destination.getAddress().toString() :
+                                "Unknown Address";
+        return "Going from " + sourceName + " to " + destinationName;
     }
 
     /**

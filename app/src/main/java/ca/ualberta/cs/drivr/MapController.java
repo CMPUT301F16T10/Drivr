@@ -232,17 +232,12 @@ public class MapController implements DirectionCallback{
             Address pickupAddress = pickupList.get(0);
             Address destinationAddress = destinationList.get(0);
 
-            Request request = new Request(userManager.getUser(),pickupAddress,destinationAddress);
+            Request request = new Request(userManager.getUser(), new ConcretePlace(pickupAddress), new ConcretePlace(destinationAddress));
             requestsListController.addRequest(request);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-
-
     }
 
     /**
@@ -265,9 +260,6 @@ public class MapController implements DirectionCallback{
 
             ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
             map.addPolyline(DirectionConverter.createPolyline(mContext,directionPositionList,3, Color.RED));
-
-
-
         }
     }
 
