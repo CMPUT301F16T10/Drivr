@@ -132,6 +132,17 @@
                 android:layout_marginTop="16dp"
                 android:text="Sign Up"
                 android:textStyle="bold" />
+
+            <Button
+                android:visibility="gone"
+                android:id="@+id/logout_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Logout"
+                android:textStyle="bold" />
+
             <TextView
                 android:padding="12dp"
                 android:id="@+id/login_sign_up_text"
