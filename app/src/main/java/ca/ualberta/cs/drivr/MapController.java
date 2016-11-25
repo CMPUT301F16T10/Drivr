@@ -21,6 +21,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -39,8 +41,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by justin on 09/11/16.
@@ -65,8 +69,15 @@ public class MapController implements DirectionCallback{
     private ArrayList<LatLng> markers = new ArrayList<LatLng>();
     private LatLng pickup;
 
+    private UserManager userManager = UserManager.getInstance();
+    private RequestsListController requestsListController;
+
     private Marker pickupMarker;
     private Marker destinationMarker;
+    private Geocoder geocoder;
+
+    private ArrayList<Marker> pickupArrayList = new ArrayList<Marker>();
+    private ArrayList<Marker> destinationArrayList = new ArrayList<Marker>();
 
     private GPSTracker gpsTracker;
     private final String serverKey = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
@@ -88,6 +99,9 @@ public class MapController implements DirectionCallback{
         myLatitude = myLocation.getLatitude();
         myLongitude = myLocation.getLongitude();
 
+        geocoder = new Geocoder(mContext);
+        requestsListController = new RequestsListController(userManager);
+
         // Zoom map in to current Location
         zoomToCurrentLocation();
     }
@@ -104,6 +118,7 @@ public class MapController implements DirectionCallback{
         markerOptions.draggable(true);
 
         destinationMarker = map.addMarker(markerOptions);
+        pickupArrayList.add(destinationMarker);
     }
 
     /**
@@ -137,6 +152,7 @@ public class MapController implements DirectionCallback{
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
         pickupMarker = map.addMarker(markerOptions);
+        pickupArrayList.add(pickupMarker);
     }
 
     /**
@@ -189,6 +205,9 @@ public class MapController implements DirectionCallback{
                             addDestination(mapMarker);
                             markers.add(mapMarker);
                             addRequestOnMap(pickup,mapMarker);
+                            createRequest(pickup,mapMarker);
+
+
                         }
                     })
                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -205,6 +224,26 @@ public class MapController implements DirectionCallback{
         }
     }
 
+    public void createRequest(LatLng pickupLatlng, LatLng destinationLatLng){
+        try {
+            List<Address> pickupList = geocoder.getFromLocation(pickupLatlng.latitude, pickupLatlng.longitude, 1);
+            List<Address> destinationList = geocoder.getFromLocation(destinationLatLng.latitude, destinationLatLng.longitude, 1);
+
+            Address pickupAddress = pickupList.get(0);
+            Address destinationAddress = destinationList.get(0);
+
+            Request request = new Request(userManager.getUser(),pickupAddress,destinationAddress);
+            requestsListController.addRequest(request);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+    }
 
     /**
      * Clears the Map and allow another request

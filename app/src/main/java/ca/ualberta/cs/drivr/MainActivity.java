@@ -20,6 +20,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -78,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private UserManager userManager = UserManager.getInstance();
     LatLng test = new LatLng(53.5232, -113.5263);
     private static final String SERVER_KEY = "AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE";
+
+
 
 
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;

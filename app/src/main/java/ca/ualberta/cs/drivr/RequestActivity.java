@@ -18,6 +18,7 @@ package ca.ualberta.cs.drivr;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,6 +45,9 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
     private MapController mapController;
     private Place sourcePlace;
     private Place destinationPlace;
+    private Address sourceAddress;
+    private Address destinationAddress;
+
     private TextView acceptButton;
 
     /**
@@ -66,12 +70,24 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Uri.class, new UriSerializer())
                 .create();
-        Request request = gson.fromJson(requestString, Request.class);
+        final Request request = gson.fromJson(requestString, Request.class);
         sourcePlace = request.getSourcePlace();
         destinationPlace = request.getDestinationPlace();
+        sourceAddress = request.getSourceAddress();
+        destinationAddress = request.getDestinationAddress();
+
         fareText.setText(request.getFareString());
 //        routeText.setText();
-        routeText.setText("Going from " + sourcePlace.getName() + " to " + destinationPlace.getName());
+
+        if (sourcePlace == null){
+            routeText.setText("Going from " + sourceAddress.getLocality() + "to " + destinationAddress.getLocality());
+        }
+        else {
+            routeText.setText(
+                    "Going from " + (sourcePlace.getName() != null ? sourcePlace.getName() : sourcePlace.getAddress())
+                            + " to " + (destinationPlace.getName() != null ? destinationPlace.getName() : destinationPlace.getAddress()));
+        }
+
         // TODO make a map with these points and the route between them
         mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.request_map_fragment);
         mapFragment.getMapAsync(this);
@@ -81,6 +97,8 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
+                addRequest.execute(request);
                 finish();
             }
         });

@@ -16,6 +16,8 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.location.Address;
+
 import com.google.android.gms.location.places.Place;
 
 import java.io.Serializable;
@@ -33,14 +35,13 @@ public class Request {
     private String description;
     private Date date;
     private BigDecimal fare;
-    private BigDecimal fareByKm;
     private RequestState requestState;
     private ConcretePlace source;
     private ConcretePlace destination;
+    private Address sourceAddress;
+    private Address destinationAddress;
     private Boolean synced;
     private String id;
-    private String fareString;
-    private String fareByKmString;
 
     /**
      * Instantiates a new item_request.
@@ -58,6 +59,7 @@ public class Request {
         id = "";
     }
 
+
     /**
      * Instantiates a new item_request.
      * @param rider The rider for the item_request.
@@ -70,7 +72,31 @@ public class Request {
         this.setDate(new Date());
         this.source = source;
         this.destination = destination;
+        this.destinationAddress = null;
+        this.sourceAddress = null;
+
     }
+
+    public Request(User rider, Address source, Address destination){
+        this();
+        this.rider = rider;
+        this.setDate(new Date());
+        this.sourceAddress = source;
+        this.source = null;
+        this.destination = null;
+        this.destinationAddress = destination;
+
+    }
+
+    public Address getDestinationAddress() {
+        return destinationAddress;
+    }
+
+
+    public Address getSourceAddress() {
+        return sourceAddress;
+    }
+
 
     /**
      * Get the starting location.
@@ -270,35 +296,22 @@ public class Request {
         this.id = id;
     }
 
-    public String getFareString() {
-        return fareString;
-    }
+    /**
+     * Gets the fare as a properly formatted string (ie. DDDD.cc where D is dollars and c is cents).
+     * @return The fare
+     */
+    public String getFareString() { return String.format("%.2f", fare); }
 
+    /**
+     * Expects a numeric string in the form DDDD.cc where D is dollars and c is cents.
+     * @param fareString
+     */
     public void setFareString(String fareString) {
-        this.fareString = fareString;
-    }
-
-    public String getFareByKmString() {
-        return fareByKmString;
-    }
-
-    public void setFareByKmString(String fareByKmString) {
-        this.fareByKmString = fareByKmString;
-    }
-
-    /**
-     * Get the fare by KM.
-     * @return The fare divided by KM.
-     */
-    public BigDecimal getFareByKm() {
-        return fareByKm;
-    }
-
-    /**
-     * Set the fare by KM.
-     * @param fareByKm The fare divided by KM.
-     */
-    public void setFareByKm(BigDecimal fareByKm) {
-        this.fareByKm = fareByKm;
+        try {
+            fare = new BigDecimal(fareString).setScale(2, BigDecimal.ROUND_HALF_UP);
+        }
+        catch (NumberFormatException e) {
+            fare = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
+        }
     }
 }
