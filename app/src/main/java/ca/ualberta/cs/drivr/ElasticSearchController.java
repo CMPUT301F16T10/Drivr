@@ -514,6 +514,7 @@ public class ElasticSearchController {
                                 .getSourceAsObjectList(ElasticSearchRequest.class);
                         tempRequests.addAll(foundRequests);
                         addRequests(requests, tempRequests);
+                        tempRequests.clear();
                     }
                     else {
                         Log.i("Error", "The search executed but it didn't work.");
@@ -540,6 +541,7 @@ public class ElasticSearchController {
                                 .getSourceAsObjectList(ElasticSearchRequest.class);
                         tempRequests.addAll(foundRequests);
                         addRequests(requests, tempRequests);
+                        tempRequests.clear();
                     }
                     else {
                         Log.i("Error", "The search executed but it didn't work.");
