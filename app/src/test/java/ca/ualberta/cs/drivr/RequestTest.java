@@ -35,7 +35,7 @@ public class RequestTest {
     @Test
     public void getDrivers() {
         DriversList driver = new DriversList();
-        Request request = new Request(null, null, null);
+        Request request = new Request();
         request.setDrivers(driver);
         assertEquals(driver, request.getDrivers());
     }
@@ -43,7 +43,8 @@ public class RequestTest {
     @Test
     public void getRider() {
         User rider = new User();
-        Request request = new Request(rider, null, null);
+        Request request = new Request();
+        request.setRider(rider);
         assertEquals(rider, request.getRider());
     }
 
@@ -152,6 +153,14 @@ public class RequestTest {
         Request request = new Request(rider, source, destination);
         assertEquals(source, request.getSourcePlace());
         assertEquals(destination, request.getDestinationPlace());
+    }
+
+    @Test
+    public void getAndSetFareString() {
+        Request request = new Request();
+        assertEquals("0.00", request.getFareString());
+        request.setFareString("12.34");
+        assertEquals("12.34", request.getFareString());
     }
 
 }
