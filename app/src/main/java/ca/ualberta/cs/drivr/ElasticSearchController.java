@@ -113,7 +113,7 @@ public class ElasticSearchController {
 
                 add += "]," +
                         "\"description\": \"" + request.getDescription() + "\"," +
-                        "\"fare\": " + request.getFareString() + "," +
+                        "\"fare\": " + request.getFareString() + " ," +
                         "\"date\": \"" + addedDate + "\"," +
                         "\"sourceAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
                         "\"start\": [" +
@@ -210,7 +210,7 @@ public class ElasticSearchController {
 
                 add += "]," +
                         "\"description\": \"" + request.getDescription() + "\"," +
-                        "\"fare\": " + request.getFareString() + "," +
+                        "\"fare\": " + request.getFareString() + " ," +
                         "\"date\": \"" + addedDate + "\"," +
                         "\"sourceAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
                         "\"start\": [" +
@@ -429,7 +429,7 @@ public class ElasticSearchController {
             for (String location: locations) {
                 String search_string = "{\"from\": 0, \"size\": 10000, "
                         + "\"query\": {\"match\": " +
-                        "{\"sourceLocation\": \"" + location +
+                        "{\"sourceAddress\": \"" + location +
                         "\"}}}";
 
                 Search search = new Search.Builder(search_string)
@@ -513,6 +513,7 @@ public class ElasticSearchController {
                                 .getSourceAsObjectList(ElasticSearchRequest.class);
                         tempRequests.addAll(foundRequests);
                         addRequests(requests, tempRequests);
+                        tempRequests.clear();
                     }
                     else {
                         Log.i("Error", "The search executed but it didn't work.");
@@ -521,6 +522,7 @@ public class ElasticSearchController {
                 catch (Exception e) {
                     Log.i("Error", "Executing search for requests failed.");
                 }
+
 
                 search_string = "{\"from\": 0, \"size\": 10000, "
                         + "\"query\": {\"match\": " +

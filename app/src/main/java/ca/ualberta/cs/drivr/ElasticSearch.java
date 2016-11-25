@@ -226,21 +226,16 @@ public class ElasticSearch {
     }
 
     /**
-     * Here, we filter requests by price.
-     *
-     * @param requests The requests to be filtered through
-     * @param price The minimum price a request fare must have
-     * @return The filtered ArrayList of requests.
+     * Deletes the request from ElasticSearch
+     * @param requestId The request to be deleted
      */
-    //TODO
-    public ArrayList<Request> filterRequestByPrice(ArrayList<Request> requests, double price) {
-        for(int i = 0; i < requests.size(); i++) {
-            //Convert fare to something that can use >
-            //if(requests.getFare() > price) {
-
-            //}
+    public void deleteRequest(String requestId) {
+        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
+            ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+            deleteRequest.execute(requestId);
+        } else {
+            Log.i("Error", "Unable to connect to the internet");
         }
-        return requests;
     }
 
     /**
@@ -338,7 +333,7 @@ public class ElasticSearch {
             ElasticSearchController.DeleteUser deleteUser = new ElasticSearchController.DeleteUser();
             deleteUser.execute(username);
         } else {
-            Log.i("a", "Unable to connect to the internet");
+            Log.i("Error", "Unable to connect to the internet");
         }
     }
 
