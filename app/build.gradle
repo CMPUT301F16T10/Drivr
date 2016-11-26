@@ -52,6 +52,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-places:9.2.+'
     compile 'com.google.android.gms:play-services-location:9.2.+'
     compile 'com.google.android.gms:play-services-maps:9.2.+'
+    compile 'com.google.android.gms:play-services-wallet:9.2.+'
     // This line causes DexException
     //compile 'com.google.android.gms:play-services-places:9.2.+'
     compile 'com.akexorcist:googledirectionlibrary:1.0.4'

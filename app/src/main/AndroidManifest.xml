@@ -12,10 +12,9 @@
   ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~   See the License for the specific language governing permissions and
   ~   limitations under the License.
-  -->
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.ualberta.cs.drivr">
-
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -23,7 +22,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -61,12 +60,23 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY2"
             android:value="AIzaSyB13lv5FV6dbDRec8NN173qj4HSHuNmPHE" />
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".NewRequestActivity"></activity>
-        <activity android:name=".SearchRequestActivity"
-            android:label="Search"/>
-        <activity android:name=".SearchRequestsListActivity"
-            android:label="Search Results"/>
+
+        <activity android:name=".NewRequestActivity" />
+        <activity
+            android:name=".SearchRequestActivity"
+            android:label="Search" />
+        <activity
+            android:name=".SearchRequestsListActivity"
+            android:label="Search Results" />
+
+        <activity android:name=".PaymentActivity"></activity>
     </application>
 
 </manifest>
