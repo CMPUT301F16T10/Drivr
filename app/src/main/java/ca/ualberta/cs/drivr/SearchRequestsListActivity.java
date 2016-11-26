@@ -58,7 +58,7 @@ public class SearchRequestsListActivity extends AppCompatActivity {
 //                SearchRequest searchRequest = null;
         }
 
-        adapter = new RequestsListAdapter(this, searchRequest.getRequests());
+        adapter = new RequestsListAdapter(this, searchRequest.getRequests(getApplicationContext()));
 
         requestsListRecyclerView.setAdapter(adapter);
         requestsListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
