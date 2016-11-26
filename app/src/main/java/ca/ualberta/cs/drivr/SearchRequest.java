@@ -1,6 +1,9 @@
 package ca.ualberta.cs.drivr;
 
+import android.content.Context;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -14,6 +17,8 @@ public class SearchRequest {
     private String minPricePer;
     private String maxPricePer;
     private ArrayList<Request> requestList;
+    private ConnectivityManager connectivityManager;
+    private Context context;
 
     private ConcretePlace location;
     private String keyword;
@@ -26,12 +31,21 @@ public class SearchRequest {
         this.location = location;
         this.keyword = keyword;
         requestList = new ArrayList<Request>();
+
     }
 
     //TODO: When searches are in place just remove the return null
-    public ArrayList<Request> getRequests(){
+    public ArrayList<Request> getRequests(Context context){
         //return requestList;
-        return null;
+        this.context = context;
+        this.connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (!keyword.isEmpty()) {
+            SearchKeyword();
+        }
+        if (!location.getAddress().toString().isEmpty()) {
+            SearchNearLocation();
+        }
+        return this.requestList;
     }
 
     /**
@@ -46,15 +60,22 @@ public class SearchRequest {
      * all requests around that location
      */
     private void SearchKeyword() {
-        throw new UnsupportedOperationException();
+//        throw new UnsupportedOperationException();
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
+        requestList.addAll(elasticSearch.searchRequestByKeyword(this.keyword));
     }
     private void SearchExactLocation() {
         throw new UnsupportedOperationException();
     }
     //TODO: Get geolocation for location, use that in ElasticSearch SearchForGeolocationRequests
     private void SearchNearLocation() {
-        throw new UnsupportedOperationException();
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);\
+        Location newlocation = new Location("");
+        newlocation.setLongitude(this.location.getLatLng().longitude);
+        newlocation.setLatitude(this.location.getLatLng().latitude);
+        requestList.addAll(elasticSearch.searchRequestByGeolocation(newlocation));
     }
+
 
     //Price filters are handled here (makes more sense)
     private void FilterByPrice() {
