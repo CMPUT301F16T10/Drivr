@@ -263,8 +263,8 @@ public class NewRequestActivity extends AppCompatActivity {
         locationStart.setLatitude(pickUp.getLatLng().latitude);
 
         float distance = locationDest.distanceTo(locationStart);
-        distance = distance / 1000; // m to km
-        distance = distance + 3; // $3 base cost
+        distance = distance / 500; // m to km
+        distance = distance + 4; // $3 base cost
 
         String cost = "$" + String.format("%.2f", distance);
 
