@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -53,6 +54,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
 
         // References to the views in the list item
         public final TextView otherUserNameTextView;
+        public final TextView descriptionTextView;
         public final TextView fareTextView;
         public final TextView routeTextView;
         public final TextView statusTextView;
@@ -66,6 +68,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         public ViewHolder(View itemView) {
             super(itemView);
             otherUserNameTextView = (TextView) itemView.findViewById(R.id.item_request_other_user_name);
+            descriptionTextView = (TextView) itemView.findViewById(R.id.item_request_description_text);
             fareTextView = (TextView) itemView.findViewById(R.id.item_request_fare_text);
             routeTextView = (TextView) itemView.findViewById(R.id.item_request_route_text);
             statusTextView = (TextView) itemView.findViewById(R.id.item_request_status_text);
@@ -124,6 +127,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
 
         // Get the views to update
         final TextView otherUserNameTextView = viewHolder.otherUserNameTextView;
+        final TextView descriptionTextView = viewHolder.descriptionTextView;
         final TextView fareTextView = viewHolder.fareTextView;
         final TextView routeTextView = viewHolder.routeTextView;
         final TextView statusTextView = viewHolder.statusTextView;
@@ -135,7 +139,16 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         final String driverUsername = drivers.size() > 0 ? drivers.get(0).getUsername() : "No Driver Yet";
         otherUserNameTextView.setText(driverUsername);
 
+        // If the request has a description, show it. Otherwise, hide te description
+        if (Strings.isNullOrEmpty(request.getDescription()))
+            descriptionTextView.setVisibility(View.GONE);
+        else
+            descriptionTextView.setText(request.getDescription());
+
+        // Show the fare
         fareTextView.setText("$" + request.getFareString());
+
+        // Show the route
         routeTextView.setText(request.getRoute());
 
         routeTextView.setOnClickListener(new View.OnClickListener() {

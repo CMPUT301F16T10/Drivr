@@ -56,7 +56,6 @@ public class NewRequestActivity extends AppCompatActivity {
 
     private ConcretePlace destinationPlace;
     private ConcretePlace sourcePlace;
-    private String fareString;
 
     /**
      * This method initializes the activity by deserializing the JSON given to it to get the
@@ -179,12 +178,16 @@ public class NewRequestActivity extends AppCompatActivity {
             return;
         }
 
+        final EditText descriptionEditText = (EditText) findViewById(R.id.new_request_description_edit_text);
         final EditText fareEditText = (EditText) findViewById(R.id.new_request_fare_edit_text);
+
+        final String description = descriptionEditText.getText().toString();
         final String fareString = fareEditText.getText().toString().replaceAll("[$,]", "");
 
         // Make the request and store it in the model
         User user = userManager.getUser();
         Request request = new Request(user, sourcePlace, destinationPlace);
+        request.setDescription(description);
         request.setFareString(fareString);
 
         Gson gson = new GsonBuilder()
@@ -195,7 +198,7 @@ public class NewRequestActivity extends AppCompatActivity {
         intent.putExtra(RequestActivity.EXTRA_REQUEST, requestString);
         // TODO startActivityForResult() confirm if user presses accept or deny
         // startActivityForResult(intent, );
-         startActivity(intent);
+        startActivity(intent);
 
         //userManager.getRequestsList().add(request);
         //userManager.notifyObservers();
@@ -239,7 +242,6 @@ public class NewRequestActivity extends AppCompatActivity {
         distance = distance + 3; // $3 base cost
 
         String cost = "$" + String.format("%.2f", distance);
-        fareString = cost;
 
         TextView fareTextView = (TextView) findViewById(R.id.new_request_fare_message);
         EditText editTextFare = (EditText) findViewById(R.id.new_request_fare_edit_text);
