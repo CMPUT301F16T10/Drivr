@@ -111,6 +111,7 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         final MapController mapController = new MapController(map,mContext);
         if(sourcePlace != null && destinationPlace != null) {
             mapController.addRequestOnMap(sourcePlace.getLatLng(), destinationPlace.getLatLng());
+            mapController.requestCenter(sourcePlace.getLatLng(),destinationPlace.getLatLng());
         }
     }
 }
