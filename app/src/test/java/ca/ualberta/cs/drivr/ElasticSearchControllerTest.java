@@ -29,20 +29,18 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLog;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
 
+
 /**
  * Tests for the ElasticSearch controller to make sure everything works accordingly.
  *
  * @author Tiegan Bonowicz
  */
-
-//TODO: Add a timer (just to ensure that all tests will pass)
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest=Config.NONE)
@@ -76,7 +74,7 @@ public class ElasticSearchControllerTest {
 
         request.setRider(user);
         request.setDrivers(drivers);
-        request.setFare(new BigDecimal(555));
+        request.setFareString("555.55");
         request.setDate(new Date());
         request.setDescription("Go to Rogers Place");
 
@@ -99,6 +97,12 @@ public class ElasticSearchControllerTest {
         ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
         addRequest.execute(request);
         Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
 
         ArrayList<Request> gotten = new ArrayList<Request>();
         ElasticSearchController.SearchForRequests searchForRequests =
@@ -129,10 +133,22 @@ public class ElasticSearchControllerTest {
         addRequest.execute(request);
         Robolectric.flushBackgroundThreadScheduler();
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
+
         ElasticSearchController.UpdateRequest updateRequest =
                 new ElasticSearchController.UpdateRequest();
         updateRequest.execute(request);
         Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
 
         ArrayList<Request> gotten = new ArrayList<Request>();
         ElasticSearchController.SearchForRequests searchForRequests =
@@ -199,6 +215,12 @@ public class ElasticSearchControllerTest {
         addRequest.execute(request);
         Robolectric.flushBackgroundThreadScheduler();
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
+
         ArrayList<Request> gotten = new ArrayList<Request>();
         ElasticSearchController.SearchForKeywordRequests searchForKeywordRequests =
                 new ElasticSearchController.SearchForKeywordRequests();
@@ -229,6 +251,12 @@ public class ElasticSearchControllerTest {
         addRequest.execute(request);
         Robolectric.flushBackgroundThreadScheduler();
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
+
         ArrayList<Request> gotten = new ArrayList<Request>();
         ElasticSearchController.SearchForGeolocationRequests searchForLocationRequests =
                 new ElasticSearchController.SearchForGeolocationRequests();
@@ -254,19 +282,39 @@ public class ElasticSearchControllerTest {
     }
 
     /**
-     * Test to make sure a request can be gotten by price.
-     */
-    @Test
-    public void searchRequestWithPrice() {
-        assertEquals(2+2, 4);
-    }
-
-    /**
      * Test to make sure a request can be gotten by address location.
      */
     @Test
     public void searchRequestWithLocation() {
-        assertEquals(2+2, 4);
+        ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
+        addRequest.execute(request);
+        Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
+
+        ArrayList<Request> gotten = new ArrayList<Request>();
+        ElasticSearchController.SearchForLocationRequests searchForLocationRequests =
+                new ElasticSearchController.SearchForLocationRequests();
+        searchForLocationRequests.execute("University of Alberta");
+        Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            gotten = searchForLocationRequests.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to load the request.");
+        }
+
+        Request gottenRequest = gotten.get(gotten.size()-1);
+
+        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        deleteRequest.execute(request.getId());
+        Robolectric.flushBackgroundThreadScheduler();
+
+        assertEquals(request.getId(), gottenRequest.getId());
     }
 
     /**
@@ -277,6 +325,12 @@ public class ElasticSearchControllerTest {
         ElasticSearchController.AddUser addUser = new ElasticSearchController.AddUser();
         addUser.execute(user);
         Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
 
         User dup = null;
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
@@ -307,9 +361,21 @@ public class ElasticSearchControllerTest {
         updateUser.execute(user);
         Robolectric.flushBackgroundThreadScheduler();
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
+
         user.setEmail("test2@test2.test2");;
         updateUser.execute(user);
         Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
 
         User dup = null;
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
@@ -319,7 +385,7 @@ public class ElasticSearchControllerTest {
         try {
             dup = getUser.get();
         } catch (Exception e) {
-            Log.i("Error", "Failed to load the user.");
+            ShadowLog.v("Error", "Failed to load the user.");
         }
 
         ElasticSearchController.DeleteUser deleteUser = new ElasticSearchController.DeleteUser();
