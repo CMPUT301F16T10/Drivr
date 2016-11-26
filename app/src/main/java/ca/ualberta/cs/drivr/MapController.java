@@ -24,6 +24,7 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
@@ -31,18 +32,21 @@ import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Step;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -62,6 +66,9 @@ public class MapController implements DirectionCallback{
     private Location myLocation;
     private LatLng destinationLatLng;
     private LatLng pickupLatlng;
+
+    private int zoom = 10;
+    private final static float KM = 1000;
 
     private Double myLatitude;
     private Double myLongitude;
@@ -251,6 +258,32 @@ public class MapController implements DirectionCallback{
     public void clearMap(){
         map.clear();
         markers.clear();
+    }
+
+
+    public void requestCenter(LatLng pickup, LatLng destination) {
+
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(pickup);
+        builder.include(destination);
+
+        final LatLngBounds bounds = builder.build();
+
+
+        final CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds,0);
+        final CameraUpdate cameraUpdate1 = CameraUpdateFactory.zoomOut();
+
+        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback(){
+
+            @Override
+            public void onMapLoaded() {
+                map.moveCamera(cameraUpdate);
+                map.animateCamera(cameraUpdate1);
+            }
+        });
+
+
     }
 
     /**
