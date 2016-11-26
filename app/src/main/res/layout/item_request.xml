@@ -50,14 +50,24 @@
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <TextView
-                    android:id="@+id/item_request_fare_text"
+                    android:id="@+id/item_request_description_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/item_request_other_user_name"
                     android:padding="4dp"
                     android:layout_marginRight="36dp"
+                    android:text="Description"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/item_request_fare_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/item_request_description_text"
+                    android:padding="4dp"
+                    android:layout_marginRight="36dp"
                     android:text="$12.34"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/item_request_route_text"
