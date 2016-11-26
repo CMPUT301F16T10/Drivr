@@ -35,7 +35,7 @@ import java.util.ArrayList;
  * @see MainActivity
  */
 
-//TODO: Add filters (by price, by price/km)
+//TODO: Sort requests by date added (could do in ESC)
 //TODO: Add more to how offline stuff is handled? (Meets use cases, but for searching beyond own requests it won't do much right now)
 
 public class ElasticSearch {
@@ -148,7 +148,8 @@ public class ElasticSearch {
                     ElasticSearchController.SearchForGeolocationRequests();
             searchRequest.execute(geolocation);
             try {
-                return putUsersIntoRequests(searchRequest.get());
+                ArrayList<Request> requests = getPendingRequests(searchRequest.get());
+                return putUsersIntoRequests(requests);
             }
             catch (Exception e) {
                 Log.i("Error", "Failed to load the requests by geolocation.");
@@ -175,7 +176,8 @@ public class ElasticSearch {
                     ElasticSearchController.SearchForKeywordRequests();
             searchRequest.execute(searchTerm);
             try {
-                return putUsersIntoRequests(searchRequest.get());
+                ArrayList<Request> requests = getPendingRequests(searchRequest.get());
+                return putUsersIntoRequests(requests);
             }
             catch (Exception e) {
                 Log.i("Error", "Failed to load the requests by keyword.");
@@ -195,6 +197,7 @@ public class ElasticSearch {
             searchRequest.execute(location);
             try {
                 ArrayList<Request> requests = searchRequest.get();
+                requests = getPendingRequests(requests);
                 //Will probably remove this.
                 /* if(requests == null) {
                     //Get location's geocoordinates here.
@@ -221,21 +224,16 @@ public class ElasticSearch {
     }
 
     /**
-     * Here, we filter requests by price.
-     *
-     * @param requests The requests to be filtered through
-     * @param price The minimum price a request fare must have
-     * @return The filtered ArrayList of requests.
+     * Deletes the request from ElasticSearch
+     * @param requestId The request to be deleted
      */
-    //TODO
-    public ArrayList<Request> filterRequestByPrice(ArrayList<Request> requests, double price) {
-        for(int i = 0; i < requests.size(); i++) {
-            //Convert fare to something that can use >
-            //if(requests.getFare() > price) {
-
-            //}
+    public void deleteRequest(String requestId) {
+        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
+            ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+            deleteRequest.execute(requestId);
+        } else {
+            Log.i("Error", "Unable to connect to the internet");
         }
-        return requests;
     }
 
     /**
@@ -333,7 +331,7 @@ public class ElasticSearch {
             ElasticSearchController.DeleteUser deleteUser = new ElasticSearchController.DeleteUser();
             deleteUser.execute(username);
         } else {
-            Log.i("a", "Unable to connect to the internet");
+            Log.i("Error", "Unable to connect to the internet");
         }
     }
 
@@ -371,6 +369,25 @@ public class ElasticSearch {
 
             newInfo = false;
         }
+    }
+
+
+    /**
+     * Here, any requests that are unnecessary for the driver to see (i.e. those that are completed
+     * or cancelled) are removed from the given ArrayList of requests.
+     *
+     * @param requests The ArrayList of requests from the search.
+     * @return The updated ArrayList of requests containing only requests that can be accepted.
+     */
+    private ArrayList<Request> getPendingRequests(ArrayList<Request> requests) {
+        for(int i = 0; i < requests.size(); ++i) {
+            Request request = requests.get(i);
+            if(!request.getDrivers().isEmpty() && !request.getDrivers().hasOnlyAcceptedDrivers()) {
+                requests.remove(i);
+                --i;
+            }
+        }
+        return requests;
     }
 
     /**

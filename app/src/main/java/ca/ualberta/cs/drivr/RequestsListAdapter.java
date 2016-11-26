@@ -135,22 +135,8 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         final String driverUsername = drivers.size() > 0 ? drivers.get(0).getUsername() : "No Driver Yet";
         otherUserNameTextView.setText(driverUsername);
 
-        // Show the estimated time
         fareTextView.setText("$" + request.getFareString());
-
-        // Show the route text
-        final Place source = request.getSourcePlace();
-        final Place destination = request.getDestinationPlace();
-        final Address sourceAddress = request.getSourceAddress();
-        final Address destinationAddress = request.getDestinationAddress();
-
-        if (destination == null){
-            routeTextView.setText("Going from " + sourceAddress.getAddressLine(0) + " to " + destinationAddress.getAddressLine(0));
-        }
-        else {
-            routeTextView.setText("Going from " + (source.getName() != null ? source.getName() : source.getAddress())
-                    + " to " + (destination.getName() != null ? destination.getName() : destination.getAddress()));
-        }
+        routeTextView.setText(request.getRoute());
 
         routeTextView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -31,7 +31,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLog;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -44,8 +43,6 @@ import static junit.framework.Assert.assertNull;
  *
  * @author Tiegan Bonowicz
  */
-
-//TODO: Add a timer (just to ensure that all tests will pass)
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest=Config.NONE)
@@ -79,7 +76,7 @@ public class ElasticSearchTest {
 
         request.setRider(user);
         request.setDrivers(drivers);
-        request.setFare(new BigDecimal(555));
+        request.setFareString("555.55");
         request.setDate(new Date());
         request.setDescription("Go to Rogers Place");
 
@@ -107,6 +104,12 @@ public class ElasticSearchTest {
         elasticSearch.saveRequest(request);
         Robolectric.flushBackgroundThreadScheduler();
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
+
         ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests(user.getUsername());
         Robolectric.flushBackgroundThreadScheduler();
 
@@ -129,9 +132,21 @@ public class ElasticSearchTest {
         elasticSearch.saveRequest(request);
         Robolectric.flushBackgroundThreadScheduler();
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
+
         request.setDescription("Easiest thing to change.");
         elasticSearch.updateRequest(request);
         Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
 
         ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests(user.getUsername());
         Robolectric.flushBackgroundThreadScheduler();
@@ -158,6 +173,12 @@ public class ElasticSearchTest {
         elasticSearch.saveRequest(request);
         Robolectric.flushBackgroundThreadScheduler();
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
+
         Location location = new Location("");
         location.setLatitude(50);
         location.setLongitude(50);
@@ -183,6 +204,12 @@ public class ElasticSearchTest {
         elasticSearch.saveRequest(request);
         Robolectric.flushBackgroundThreadScheduler();
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
+
         ArrayList<Request> loadedRequests = elasticSearch.searchRequestByKeyword("Rogers");
         Robolectric.flushBackgroundThreadScheduler();
 
@@ -195,19 +222,30 @@ public class ElasticSearchTest {
     }
 
     /**
-     * Test for searching a request by price online.
-     */
-    @Test
-    public void searchRequestByPriceOnline() {
-        assertEquals(2+2, 4);
-    }
-
-    /**
      * Test for searching a request by given address location online.
      */
     @Test
     public void searchRequestByLocationOnline() {
-        assertEquals(2+2, 4);
+        Mockito.when(networkInfo.isConnected()).thenReturn(true);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
+        elasticSearch.saveRequest(request);
+        Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
+
+        ArrayList<Request> loadedRequests = elasticSearch.searchRequestByLocation("University of Alberta");
+        Robolectric.flushBackgroundThreadScheduler();
+
+        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        deleteRequest.execute(request.getId());
+        Robolectric.flushBackgroundThreadScheduler();
+
+        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        assertEquals(request.getId(), loadedRequest.getId());
     }
 
     /**
@@ -221,6 +259,12 @@ public class ElasticSearchTest {
         ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.saveUser(user);
         Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
 
         User loadedUser = elasticSearch.loadUser(user.getUsername());
         Robolectric.flushBackgroundThreadScheduler();
@@ -241,10 +285,22 @@ public class ElasticSearchTest {
         ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.saveUser(user);
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
+
         Robolectric.flushBackgroundThreadScheduler();
         user.setEmail("test2@test2.test2");
         elasticSearch.updateUser(user);
         Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
 
         User loadedUser = elasticSearch.loadUser(user.getUsername());
         Robolectric.flushBackgroundThreadScheduler();
@@ -325,16 +381,12 @@ public class ElasticSearchTest {
      * Test for getting requests by price offline.
      */
     @Test
-    public void searchRequestByPriceOffline() {
-        assertEquals(2+2, 4);
-    }
-
-    /**
-     * Test for getting requests by price offline.
-     */
-    @Test
     public void searchRequestByLocationOffline() {
-        assertEquals(2+2, 4);
+        Mockito.when(networkInfo.isConnected()).thenReturn(false);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
+        ArrayList<Request> loadedRequests =
+                elasticSearch.searchRequestByLocation("University of Alberta");
+        assertNull(loadedRequests);
     }
 
     /**
@@ -383,6 +435,12 @@ public class ElasticSearchTest {
         Mockito.when(networkInfo.isConnected()).thenReturn(true);
         elasticSearch.onNetworkStateChanged();
         Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
 
         ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests(user.getUsername());
         Robolectric.flushBackgroundThreadScheduler();
