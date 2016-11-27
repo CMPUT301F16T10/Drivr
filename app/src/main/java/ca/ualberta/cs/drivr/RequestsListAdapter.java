@@ -60,6 +60,8 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         public final TextView statusTextView;
         public final ImageView callImageView;
         public final ImageView emailImageView;
+        public final ImageView checkMarkImageView;
+        public final ImageView xMarkImageView;
 
         /**
          * Instantiate a new ViewHolder.
@@ -74,6 +76,9 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
             statusTextView = (TextView) itemView.findViewById(R.id.item_request_status_text);
             callImageView = (ImageView) itemView.findViewById(R.id.item_request_call_image);
             emailImageView = (ImageView) itemView.findViewById(R.id.item_request_email_image);
+            checkMarkImageView = (ImageView) itemView.findViewById(R.id.item_request_complete);
+            xMarkImageView = (ImageView) itemView.findViewById(R.id.item_request_deleted);
+
         }
     }
 
@@ -134,6 +139,11 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         final ImageView callImageView = viewHolder.callImageView;
         final ImageView emailImageView = viewHolder.emailImageView;
 
+        // Todo Hide Image Views until correct Request State
+        final ImageView checkImageView = viewHolder.checkMarkImageView;
+        final ImageView deleteImageView = viewHolder.xMarkImageView;
+
+
         // Show the other person's name
         final DriversList drivers = request.getDrivers();
         final String driverUsername = drivers.size() > 0 ? drivers.get(0).getUsername() : "No Driver Yet";
@@ -184,6 +194,14 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, "You are about to email the other person", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        checkImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, RequestCompletedActivity.class);
+                context.startActivity(intent);
             }
         });
     }
