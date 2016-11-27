@@ -18,6 +18,7 @@
 
     <!-- These settings headers are only used on tablets. -->
 
+    <!--
     <header
         android:fragment="ca.ualberta.cs.drivr.SettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
@@ -32,9 +33,11 @@
         android:fragment="ca.ualberta.cs.drivr.SettingsActivity$DataSyncPreferenceFragment"
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_data_sync" />
+    -->
+
     <header
         android:fragment="ca.ualberta.cs.drivr.SettingsActivity$DriverModePreferenceFragment"
-        android:icon="@drawable/ic_navigation_black_24dp"
+        android:icon="@drawable/ic_directions_car_black_24dp"
         android:title="Driver Mode" />
 
 </preference-headers>

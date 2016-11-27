@@ -33,6 +33,10 @@ import com.google.android.gms.wallet.fragment.WalletFragmentMode;
 import com.google.android.gms.wallet.fragment.WalletFragmentOptions;
 import com.google.android.gms.wallet.fragment.WalletFragmentStyle;
 
+
+//https://io2015codelabs.appspot.com/codelabs/android-pay#14
+
+
 public class PaymentActivity extends AppCompatActivity implements  GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 

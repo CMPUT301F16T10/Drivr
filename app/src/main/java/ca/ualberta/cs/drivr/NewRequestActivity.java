@@ -84,8 +84,31 @@ public class NewRequestActivity extends AppCompatActivity {
             destinationPlace = null;
         }
 
+
+
+        String pickupJson = getIntent().getStringExtra("PICK_UP");
+        if(pickupJson != null) {
+            Log.i(TAG, pickupJson);
+            try {
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(Uri.class, new UriSerializer())
+                        .create();
+                sourcePlace = gson.fromJson(pickupJson, ConcretePlace.class);
+            } catch (JsonSyntaxException ex) {
+                sourcePlace = null;
+            }
+        }
+
+
+
+
         // Show the destination information
         updateDestinationPlace(destinationPlace);
+
+        if(sourcePlace != null) {
+            updateSourcePlace(sourcePlace);
+            estimateFare(destinationPlace,sourcePlace);
+        }
 
         // Setup listener for selecting a new destination
         final PlaceAutocompleteFragment destinationPAF =
@@ -120,8 +143,10 @@ public class NewRequestActivity extends AppCompatActivity {
         });
 
         // Hide the source text until we put something there
-        findViewById(R.id.new_request_place_source_name).setVisibility(View.GONE);
-        findViewById(R.id.new_request_place_source_address).setVisibility(View.GONE);
+        if(sourcePlace == null) {
+            findViewById(R.id.new_request_place_source_name).setVisibility(View.GONE);
+            findViewById(R.id.new_request_place_source_address).setVisibility(View.GONE);
+        }
 
         // Setup listener for the create button
         final Button createButton =  (Button) findViewById(R.id.new_request_create_button);
@@ -238,8 +263,8 @@ public class NewRequestActivity extends AppCompatActivity {
         locationStart.setLatitude(pickUp.getLatLng().latitude);
 
         float distance = locationDest.distanceTo(locationStart);
-        distance = distance / 1000; // m to km
-        distance = distance + 3; // $3 base cost
+        distance = distance / 500; // m to km
+        distance = distance + 4; // $3 base cost
 
         String cost = "$" + String.format("%.2f", distance);
 
