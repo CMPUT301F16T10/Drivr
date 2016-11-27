@@ -236,8 +236,10 @@ public class ElasticSearch {
         }
     }
 
-    //Just commenting out the code so it can run tests. It just needs the requests from UserManager
-    // to work.
+    /**
+     * Comments.
+     * @return
+     */
     public ArrayList<Request> getUpdatedRequests() {
         UserManager userManager = UserManager.getInstance();
         if(connectivityManager.getActiveNetworkInfo().isConnected()) {

@@ -117,7 +117,7 @@ public class ElasticSearchController {
                         "\"description\": \"" + request.getDescription() + "\"," +
                         "\"fare\": " + request.getFareString() + " ," +
                         "\"date\": \"" + addedDate + "\"," +
-                        "\"km\": " + request.getKm() + "\", " +
+                        "\"km\": " + request.getKm() + " , " +
                         "\"sourceAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
                         "\"start\": [" +
                         Double.toString(request.getSourcePlace().getLatLng().longitude) + ", " +
@@ -219,7 +219,7 @@ public class ElasticSearchController {
                         "\"fare\": " + request.getFareString() + " ," +
                         "\"date\": \"" + addedDate + "\"," +
                         "\"sourceAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
-                        "\"km\": " + request.getKm() + "\", " +
+                        "\"km\": " + request.getKm() + " , " +
                         "\"start\": [" +
                         Double.toString(request.getSourcePlace().getLatLng().longitude) + ", " +
                         Double.toString(request.getSourcePlace().getLatLng().latitude) + "]," +
