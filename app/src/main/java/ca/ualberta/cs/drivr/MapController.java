@@ -20,10 +20,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -43,6 +46,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,6 +83,8 @@ public class MapController implements DirectionCallback{
 
     private UserManager userManager = UserManager.getInstance();
     private RequestsListController requestsListController;
+
+    private static final String TAG = "MainActivity";
 
     private Marker pickupMarker;
     private Marker destinationMarker;
@@ -183,7 +190,7 @@ public class MapController implements DirectionCallback{
      * @param mapMarker point on the map.
      * @param context context from activity.
      */
-    public void addPendingRequest(final LatLng mapMarker, Context context) {
+    public void addPendingRequest(final LatLng mapMarker, final Context context) {
         if (markers.size() == 0) {
             new AlertDialog.Builder(context)
                     .setTitle("Confirm Pickup Location")
@@ -215,6 +222,7 @@ public class MapController implements DirectionCallback{
                             createRequest(pickup,mapMarker);
 
 
+
                         }
                     })
                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -238,9 +246,26 @@ public class MapController implements DirectionCallback{
 
             Address pickupAddress = pickupList.get(0);
             Address destinationAddress = destinationList.get(0);
+            ConcretePlace pickupPlace = new ConcretePlace(pickupAddress);
+            ConcretePlace destinationPlace = new ConcretePlace(destinationAddress);
 
-            Request request = new Request(userManager.getUser(), new ConcretePlace(pickupAddress), new ConcretePlace(destinationAddress));
-            requestsListController.addRequest(request);
+            Gson gson = new GsonBuilder().registerTypeAdapter(Uri.class, new UriSerializer())
+                    .create();
+
+            Intent intent = new Intent(mContext, NewRequestActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            String concretePlaceJsonPick = gson.toJson(pickupPlace);
+            String concretePlaceJsonDest = gson.toJson(destinationPlace);
+
+            intent.putExtra(NewRequestActivity.EXTRA_PLACE, concretePlaceJsonDest);
+            Log.i(TAG, "Place: " + destinationPlace.getName() + ", :" + destinationPlace.getLatLng());
+
+            intent.putExtra("PICK_UP", concretePlaceJsonPick);
+            Log.i(TAG, "Place: " + pickupPlace.getName() + ", :" + pickupPlace.getLatLng());
+
+            mContext.startActivity(intent);
+
+           // Request request = new Request(userManager.getUser(), new ConcretePlace(pickupAddress), new ConcretePlace(destinationAddress));
+            //requestsListController.addRequest(request);
 
         } catch (IOException e) {
             e.printStackTrace();
