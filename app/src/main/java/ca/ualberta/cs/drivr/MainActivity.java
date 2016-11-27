@@ -46,6 +46,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.model.Direction;
@@ -236,7 +237,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         fabDriver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (userManager.getUser().getVehicleDescription().isEmpty()) {
                     /*
                     * From: http://stackoverflow.com/a/29048271
@@ -247,7 +247,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
                     final EditText edittext = new EditText(v.getContext());
                     alert.setTitle("Become a Driver!");
-                    alert.setMessage("You must enter a vehicle description to continue");
+//                    alert.setMessage("You must enter a vehicle description to continue");
+                    alert.setMessage("Drivers are require to enter vehicle information!\n\nPlease enter your vehicle's make");
+//                    alert.setMessage();
 
                     alert.setView(edittext);
 
@@ -259,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                             String vehicleDescription = edittext.getText().toString();
                             if (!vehicleDescription.isEmpty()){
                                 userManager.getUser().setVehicleDescription(vehicleDescription);
+                                userManager.notifyObservers();
 
                             }
 //                MainActivity.this.finish();
@@ -286,8 +289,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     fabRider.setVisibility(View.VISIBLE);
                     fabMenu.close(true);
                 }
-
-
             }
         });
 
