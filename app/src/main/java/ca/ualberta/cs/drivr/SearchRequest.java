@@ -30,13 +30,13 @@ public class SearchRequest {
         this.maxPricePer = maxPricePer;
         this.location = location;
         this.keyword = keyword;
-        requestList = new ArrayList<Request>();
 
     }
 
     //TODO: When searches are in place just remove the return null
     public ArrayList<Request> getRequests(Context context){
         //return requestList;
+        this.requestList = new ArrayList<Request>();
         this.context = context;
         this.connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (!keyword.isEmpty()) {
@@ -62,7 +62,17 @@ public class SearchRequest {
     private void SearchKeyword() {
 //        throw new UnsupportedOperationException();
         ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
-        requestList.addAll(elasticSearch.searchRequestByKeyword(this.keyword));
+//        ArrayList<Request> searchRequests =
+        for (Request searchRequest : elasticSearch.searchRequestByKeyword(this.keyword)) {
+            Log.i("large test", searchRequest.toString());
+            if (this.requestList.contains(searchRequest)) {
+                Log.i("Search:", "Found a duplicate");
+            } else {
+                this.requestList.add(searchRequest);
+
+            }
+        }
+//        requestList.addAll();
     }
     private void SearchExactLocation() {
         throw new UnsupportedOperationException();
@@ -73,7 +83,12 @@ public class SearchRequest {
         Location newlocation = new Location("");
         newlocation.setLongitude(this.location.getLatLng().longitude);
         newlocation.setLatitude(this.location.getLatLng().latitude);
-        requestList.addAll(elasticSearch.searchRequestByGeolocation(newlocation));
+//        requestList.addAll();
+        for (Request searchRequest : elasticSearch.searchRequestByGeolocation(newlocation)) {
+            if (!requestList.contains(searchRequest)) {
+                requestList.add(searchRequest);
+            }
+        }
     }
 
 
