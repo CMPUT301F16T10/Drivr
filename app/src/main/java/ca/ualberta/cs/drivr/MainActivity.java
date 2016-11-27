@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -262,7 +263,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                             if (!vehicleDescription.isEmpty()){
                                 userManager.getUser().setVehicleDescription(vehicleDescription);
                                 userManager.notifyObservers();
-
                             }
 //                MainActivity.this.finish();
                             dialog.dismiss();

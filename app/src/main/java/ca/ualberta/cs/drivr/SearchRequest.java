@@ -23,6 +23,7 @@ public class SearchRequest {
 
     private ConcretePlace location;
     private String keyword;
+    private boolean firstSearch;
 
     public SearchRequest(String minPrice, String maxPrice, String minPricePer, String maxPricePer,
                          ConcretePlace location, String keyword) {
@@ -32,13 +33,14 @@ public class SearchRequest {
         this.maxPricePer = maxPricePer;
         this.location = location;
         this.keyword = keyword;
-
     }
 
     public ArrayList<Request> getRequests(Context context){
         this.requestList = new ArrayList<Request>();
         this.context = context;
-        this.connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        this.connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        firstSearch = true;
         if (!keyword.isEmpty()) {
             SearchKeyword();
         }
@@ -46,8 +48,14 @@ public class SearchRequest {
             SearchExactLocation();
             SearchNearLocation();
         }
-        FilterByPrice();
-        FilterByPricePer();
+
+        if(maxPrice != null || minPrice != null) {
+            FilterByPrice();
+        }
+        if(maxPricePer != null || minPricePer != null) {
+            FilterByPricePer();
+        }
+
         return this.requestList;
     }
 
@@ -57,19 +65,26 @@ public class SearchRequest {
      */
     private void SearchKeyword() {
         ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
-        for (Request searchRequest : elasticSearch.searchRequestByKeyword(this.keyword)) {
-            boolean contains = false;
-            for(Request currentRequest: requestList) {
-                if(currentRequest.getId().equals(searchRequest.getId())) {
-                    contains = true;
-                    break;
+        ArrayList<Request> gottenRequests = elasticSearch.searchRequestByKeyword(this.keyword);
+        if(firstSearch) {
+            requestList.addAll(gottenRequests);
+            firstSearch = false;
+        } else {
+            for (int i = 0; i < requestList.size(); ++i) {
+                boolean contains = false;
+                for (Request searchRequest : gottenRequests) {
+                    if (requestList.get(i).getId().equals(searchRequest.getId())) {
+                        contains = true;
+                        break;
+                    }
                 }
-            }
 
-            if (!contains) {
-                requestList.add(searchRequest);
-            } else {
-                Log.i("Search:", "Found a duplicate"); // Just for testing.
+                if (!contains) {
+                    requestList.remove(i);
+                    --i;
+                } else {
+                    Log.i("Search:", "Search contained that request"); // Just for testing.
+                }
             }
         }
     }
@@ -80,20 +95,27 @@ public class SearchRequest {
      */
     private void SearchExactLocation() {
         ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
-        for(Request searchRequest:
-                elasticSearch.searchRequestByLocation((String) location.getAddress())) {
-            boolean contains = false;
-            for(Request currentRequest: requestList) {
-                if(currentRequest.getId().equals(searchRequest.getId())) {
-                    contains = true;
-                    break;
+        ArrayList<Request> gottenRequests =
+                elasticSearch.searchRequestByLocation((String) location.getAddress());
+        if(firstSearch) {
+            requestList.addAll(gottenRequests);
+            firstSearch = false;
+        } else {
+            for (int i = 0; i < requestList.size(); ++i) {
+                boolean contains = false;
+                for (Request searchRequest : gottenRequests) {
+                    if (requestList.get(i).getId().equals(searchRequest.getId())) {
+                        contains = true;
+                        break;
+                    }
                 }
-            }
 
-            if (!contains) {
-                requestList.add(searchRequest);
-            } else {
-                Log.i("Search:", "Found a duplicate"); // Just for testing.
+                if (!contains) {
+                    requestList.remove(i);
+                    --i;
+                } else {
+                    Log.i("Search:", "Search contained that request"); // Just for testing.
+                }
             }
         }
 
@@ -108,19 +130,45 @@ public class SearchRequest {
         Location geolocation = new Location("");
         geolocation.setLongitude(this.location.getLatLng().longitude);
         geolocation.setLatitude(this.location.getLatLng().latitude);
+
+        ArrayList<Request> gottenRequests =
+                elasticSearch.searchRequestByLocation((String) location.getAddress());
+
         for (Request searchRequest : elasticSearch.searchRequestByGeolocation(geolocation)) {
             boolean contains = false;
-            for(Request currentRequest: requestList) {
-                if(currentRequest.getId().equals(searchRequest.getId())) {
+            for(Request gottenRequest: gottenRequests) {
+                if(gottenRequest.getId().equals(searchRequest.getId())) {
                     contains = true;
                     break;
                 }
             }
 
             if (!contains) {
-                requestList.add(searchRequest);
+                gottenRequests.add(searchRequest);
             } else {
                 Log.i("Search:", "Found a duplicate"); // Just for testing.
+            }
+        }
+
+        if(firstSearch) {
+            requestList.addAll(gottenRequests);
+            firstSearch = false;
+        } else {
+            for (int i = 0; i < requestList.size(); ++i) {
+                boolean contains = false;
+                for (Request searchRequest : gottenRequests) {
+                    if (requestList.get(i).getId().equals(searchRequest.getId())) {
+                        contains = true;
+                        break;
+                    }
+                }
+
+                if (!contains) {
+                    requestList.remove(i);
+                    --i;
+                } else {
+                    Log.i("Search:", "Search contained that request"); // Just for testing.
+                }
             }
         }
     }
@@ -131,6 +179,13 @@ public class SearchRequest {
      * requestList.
      */
     private void FilterByPrice() {
+        if(minPrice == null) {
+            minPrice = "0";
+        }
+        if(maxPrice == null) {
+            maxPrice = "100000";
+        }
+
         for(int i = 0; i < requestList.size(); ++i) {
             double fare = requestList.get(i).getFare().doubleValue();
             if(fare < Double.parseDouble(minPrice) || fare > Double.parseDouble(maxPrice)) {
@@ -146,6 +201,13 @@ public class SearchRequest {
      * the maximum price per KM, and if it is remove it from requestList.
      */
     private void FilterByPricePer() {
+        if(minPricePer == null) {
+            minPrice = "0";
+        }
+        if(maxPricePer == null) {
+            maxPrice = "100000";
+        }
+
         for(int i = 0; i < requestList.size(); ++i) {
             if(requestList.get(i).getKm() == 0) {
                 continue;
