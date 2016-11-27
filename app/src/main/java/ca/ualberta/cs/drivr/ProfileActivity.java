@@ -18,6 +18,7 @@ package ca.ualberta.cs.drivr;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -42,22 +43,26 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText usernameEditText;
     private EditText phoneEditText;
     private EditText emailEditText;
+    private EditText vehicleEditText;
     private Button saveChanges;
 
     private ViewSwitcher usernameSwitch;
     private ViewSwitcher phoneSwitch;
     private ViewSwitcher emailSwitch;
     private ViewSwitcher profileNameSwitch;
+    private ViewSwitcher vehicleSwitch;
     private TextView profileNameTextView;
     private TextView usernameTextView;
     private TextView emailTextView;
     private TextView phoneTextView;
+    private TextView vehicleTextView;
 
     private User user;
     private String email;
     private String name;
     private String username;
     private String phoneNumber;
+    private String vehicleDescription;
 
     private Boolean editMode = false;
 
@@ -73,10 +78,12 @@ public class ProfileActivity extends AppCompatActivity {
         emailSwitch = (ViewSwitcher) findViewById(R.id.email_switcher);
         phoneSwitch = (ViewSwitcher) findViewById(R.id.phone_number_switcher);
         profileNameSwitch = (ViewSwitcher) findViewById(R.id.name_switcher);
+        vehicleSwitch = (ViewSwitcher) findViewById(R.id.vehicle_description_switcher);
 
         emailTextView = (TextView) findViewById(R.id.profile_email_text_view);
         phoneTextView = (TextView) findViewById(R.id.profile_phone_number_text_view);
         profileNameTextView = (TextView) findViewById(R.id.profile_name_text_view);
+        vehicleTextView = (TextView) findViewById(R.id.vehicle_description_text_view);
 
 
         // Get a reference to the content container
@@ -94,6 +101,7 @@ public class ProfileActivity extends AppCompatActivity {
         usernameEditText = (EditText) findViewById(R.id.profile_username_edit_text);
         phoneEditText = (EditText) findViewById(R.id.profile_phone_number_edit_text);
         emailEditText = (EditText) findViewById(R.id.profile_email_edit_text);
+        vehicleEditText = (EditText) findViewById(R.id.vehicle_description_edit_text);
 
 
         // Get the current user
@@ -104,6 +112,7 @@ public class ProfileActivity extends AppCompatActivity {
         email = user.getEmail();
         username = user.getUsername();
         name = user.getName();
+        vehicleDescription = user.getVehicleDescription();
 
         // Show the appropriate content based on whether the user is signed in or not
         toggleContent(username != null && !username.isEmpty());
@@ -114,6 +123,12 @@ public class ProfileActivity extends AppCompatActivity {
         phoneTextView.setText(phoneNumber);
         emailTextView.setText(email);
         profileNameTextView.setText(name);
+
+        CardView vehicleCard = (CardView) findViewById(R.id.vehicle_information_card);
+        if (!vehicleDescription.isEmpty()) {
+            vehicleTextView.setText(vehicleDescription);
+            vehicleCard.setVisibility(View.VISIBLE);
+        }
 
 
 
@@ -177,6 +192,20 @@ public class ProfileActivity extends AppCompatActivity {
                     emailEditText.setVisibility(View.GONE);
                     emailTextView.setVisibility(View.VISIBLE);
 
+                    if (!vehicleEditText.getText().toString().equals(vehicleDescription)) {
+//                        The Vehicle Description has been changed
+                        //TODO validate the new username with elastic search
+                        vehicleDescription = vehicleEditText.getText().toString();
+                        user.setVehicleDescription(vehicleDescription);
+                        vehicleTextView.setText(vehicleDescription);
+                        changed = true;
+
+                    }
+
+                    vehicleSwitch.findViewById(R.id.vehicle_description_text_view);
+                    vehicleEditText.setVisibility(View.GONE);
+                    vehicleTextView.setVisibility(View.VISIBLE);
+
                     if (!profileNameEditText.getText().toString().equals(name)) {
 //                        The Name has been changed
                         //TODO validate the new username with elastic search
@@ -229,6 +258,11 @@ public class ProfileActivity extends AppCompatActivity {
                     profileNameEditText.setText(name);
                     profileNameEditText.setVisibility(View.VISIBLE);
                     profileNameTextView.setVisibility(View.GONE);
+
+                    vehicleSwitch.findViewById(R.id.vehicle_description_edit_text);
+                    vehicleEditText.setText(vehicleDescription);
+                    vehicleEditText.setVisibility(View.VISIBLE);
+                    vehicleTextView.setVisibility(View.GONE);
 
                     editMode = true;
                     editProfileImageView.setImageResource(R.drawable.ic_check_black_24dp);

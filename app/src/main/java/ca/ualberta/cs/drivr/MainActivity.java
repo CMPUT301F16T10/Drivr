@@ -17,7 +17,9 @@
 package ca.ualberta.cs.drivr;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
@@ -29,9 +31,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 //import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+//import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -226,14 +230,63 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 }*/
             }
         });
+
+
+
         fabDriver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userManager.setUserMode(UserMode.DRIVER);
-                keywordEditText.setVisibility(View.VISIBLE);
-                fabDriver.setVisibility(View.GONE);
-                fabRider.setVisibility(View.VISIBLE);
-                fabMenu.close(true);
+
+                if (userManager.getUser().getVehicleDescription().isEmpty()) {
+                    /*
+                    * From: http://stackoverflow.com/a/29048271
+                    * Author: Syeda Zunairah
+                    * Accessed: November 29, 2016
+                    * Creates a dialog box with an edit text to get the vehicle description.
+                     */
+                    AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
+                    final EditText edittext = new EditText(v.getContext());
+                    alert.setTitle("Become a Driver!");
+                    alert.setMessage("You must enter a vehicle description to continue");
+
+                    alert.setView(edittext);
+
+                    alert.setPositiveButton("Save Description", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            //What ever you want to do with the value
+//                            Editable YouEditTextValue = edittext.getText();
+                            //OR
+                            String vehicleDescription = edittext.getText().toString();
+                            if (!vehicleDescription.isEmpty()){
+                                userManager.getUser().setVehicleDescription(vehicleDescription);
+
+                            }
+//                MainActivity.this.finish();
+                            dialog.dismiss();
+                        }
+                    });
+
+                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            // what ever you want to do with No option.
+//                dialog.cancel();
+//                MainActivity.this.finish();
+                            dialog.dismiss();
+                        }
+                    });
+
+                    AlertDialog newAlert = alert.create();
+//                    alert.show();
+                    newAlert.show();
+                }
+                if (!userManager.getUser().getVehicleDescription().isEmpty()) {
+                    userManager.setUserMode(UserMode.DRIVER);
+                    keywordEditText.setVisibility(View.VISIBLE);
+                    fabDriver.setVisibility(View.GONE);
+                    fabRider.setVisibility(View.VISIBLE);
+                    fabMenu.close(true);
+                }
+
 
             }
         });
