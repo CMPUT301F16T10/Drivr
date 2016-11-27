@@ -1200,8 +1200,6 @@ public class ElasticSearchController {
                         .build();
 
                 try {
-                    Log.i("User", addUser);
-                    Log.i("index", index.toString());
                     DocumentResult result = client.execute(index);
                     if(!result.isSucceeded())
                         Log.i("Error", "Failed to insert the user into elastic search.");
@@ -1248,17 +1246,15 @@ public class ElasticSearchController {
                         .build();
 
                 try {
-                    Log.i("User", search_string);
-                    Log.i("test", search.toString());
                     SearchResult result = client.execute(search);
                     if (result.isSucceeded()) {
-                        Log.i("uh", Integer.toString(result.getTotal()));
                         List<User> foundUsers = result
                                 .getSourceAsObjectList(User.class);
                         user = foundUsers.get(foundUsers.size()-1);
                     }
                     else {
                         Log.i("Error", "The search executed but it didn't work.");
+                        user = null;
                     }
                 }
                 catch (Exception e) {
