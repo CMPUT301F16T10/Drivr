@@ -285,6 +285,21 @@ public class MapController implements DirectionCallback{
         markers.clear();
     }
 
+    public ConcretePlace markerGeocodePlace(LatLng latLng){
+
+        try {
+            List<Address> pickupList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            Address pickupAddress = pickupList.get(0);
+            ConcretePlace pickupPlace = new ConcretePlace(pickupAddress);
+            return pickupPlace;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
 
     public void requestCenter(LatLng pickup, LatLng destination) {
 

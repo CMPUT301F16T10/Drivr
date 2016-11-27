@@ -365,7 +365,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                mapController.addPendingRequest(latLng, MainActivity.this);
+
+                if(userManager.getUserMode() == UserMode.RIDER) {
+                    mapController.addPendingRequest(latLng, MainActivity.this);
+                }
+                else{
+                    ConcretePlace place = mapController.markerGeocodePlace(latLng);
+                    Gson gson = new GsonBuilder().registerTypeAdapter(Uri.class, new UriSerializer())
+                            .create();
+
+                    Intent intent = new Intent(MainActivity.this, SearchRequestActivity.class);
+                    String concretePlaceJson = gson.toJson(place);
+                    intent.putExtra(SearchRequestActivity.EXTRA_PLACE, concretePlaceJson);
+                    intent.putExtra(SearchRequestActivity.EXTRA_KEYWORD, "");
+                    Log.i(TAG, "Place: " + place.getName() + ", :" + place.getLatLng());
+                    startActivity(intent);
+
+                }
             }
         });
 
