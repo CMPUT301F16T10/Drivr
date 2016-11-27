@@ -34,7 +34,7 @@ public class RequestCompletedActivity extends AppCompatActivity {
         ratingBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
             }
         });
 

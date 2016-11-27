@@ -73,15 +73,16 @@ public class NewRequestActivity extends AppCompatActivity {
 
         // Get the intent arguments
         String destinationJson = getIntent().getStringExtra(EXTRA_PLACE);
-        Log.i(TAG, destinationJson);
-        try {
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(Uri.class, new UriSerializer())
-                    .create();
-            destinationPlace = gson.fromJson(destinationJson, ConcretePlace.class);
-        }
-        catch (JsonSyntaxException ex) {
-            destinationPlace = null;
+        if(destinationJson != null) {
+            Log.i(TAG, destinationJson);
+            try {
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(Uri.class, new UriSerializer())
+                        .create();
+                destinationPlace = gson.fromJson(destinationJson, ConcretePlace.class);
+            } catch (JsonSyntaxException ex) {
+                destinationPlace = null;
+            }
         }
 
 
