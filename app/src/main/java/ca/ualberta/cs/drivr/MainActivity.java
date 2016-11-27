@@ -17,7 +17,9 @@
 package ca.ualberta.cs.drivr;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
@@ -42,6 +44,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.model.Direction;
@@ -230,6 +233,36 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onClick(View v) {
                 userManager.setUserMode(UserMode.DRIVER);
+
+
+                // Todo remove userName after login screen is implemented first
+                if(userManager.getUser().getVehicleDescription() == "" && userManager.getUser().getUsername() != ""){
+
+                    final EditText editText = new EditText(MainActivity.this);
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Welcome First Time Driver")
+                            .setMessage("Drivers are require to enter vehicle information!")
+                            .setMessage("Please enter your vehicle's make")
+                            .setView(editText)
+                            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+
+                                public void onClick(DialogInterface dialog, int which) {
+                                  String carMake = editText.getText().toString();
+                                    userManager.getUser().setVehicleDescription(carMake);
+                                    MockElasticSearch elasticSearch = MockElasticSearch.getInstance();
+                                    elasticSearch.updateUser(userManager.getUser());
+                                    userManager.notifyObservers();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                    // Todo reset mode?
+                                }
+                            })
+                            .show();
+                }
+
                 keywordEditText.setVisibility(View.VISIBLE);
                 fabDriver.setVisibility(View.GONE);
                 fabRider.setVisibility(View.VISIBLE);
