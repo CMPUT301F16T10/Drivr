@@ -54,6 +54,7 @@ public class ElasticSearchRequest {
         description = "";
         fare = 0;
         date = "";
+        km = 0;
         sourceAddress = "";
         start = new double[2];
         destinationAddress = "";

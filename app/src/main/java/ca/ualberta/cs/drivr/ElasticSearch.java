@@ -36,12 +36,11 @@ import java.util.ArrayList;
  * @see MainActivity
  */
 
-//TODO: Add more to how offline stuff is handled?
-
 public class ElasticSearch {
-    private ArrayList<Request> offlineRequests;
+    private ArrayList<Request> offlineUserRequests;
     private ArrayList<Request> requestsMadeOffline;
     private ArrayList<Request> offlineUpdateRequest;
+    private ArrayList<Request> offlineOpenRequests;
     private User user;
     private ConnectivityManager connectivityManager;
     private boolean newInfo;
@@ -50,9 +49,10 @@ public class ElasticSearch {
     public ElasticSearch(ConnectivityManager connectivityManager) {
         newInfo = false;
         newUser = false;
-        offlineRequests = new ArrayList<Request>();
+        offlineUserRequests = new ArrayList<Request>();
         requestsMadeOffline = new ArrayList<Request>();
         offlineUpdateRequest = new ArrayList<Request>();
+        offlineOpenRequests = new ArrayList<Request>();
         this.connectivityManager = connectivityManager;
     }
 
@@ -73,7 +73,7 @@ public class ElasticSearch {
         else {
             newInfo = true;
             requestsMadeOffline.add(request);
-            offlineRequests.add(request);
+            offlineUserRequests.add(request);
         }
     }
 
@@ -87,21 +87,69 @@ public class ElasticSearch {
      */
     public void updateRequest(Request request) {
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
-            //if(request.getDrivers().hasOnlyAcceptedDrivers()) {
-            if(false) {
-                ElasticSearchController.UpdatePendingRequest updatePendingRequest = new
-                        ElasticSearchController.UpdatePendingRequest();
-                updatePendingRequest.execute(request);
-            } else {
-                ElasticSearchController.UpdateRequest updateRequest = new
-                        ElasticSearchController.UpdateRequest();
-                updateRequest.execute(request);
+            if(request.getDrivers().hasOnlyAcceptedDrivers()) {
+                ElasticSearchController.GetRequest getRequest =
+                        new ElasticSearchController.GetRequest();
+                getRequest.execute(request.getId());
+                try {
+                    Request gottenRequest = getRequest.get();
+                    Driver driver = request.getDrivers().get(request.getDrivers().size()-1);
+                    request.getDrivers().remove(request.getDrivers().size()-1);
+                    if(gottenRequest.getDrivers().hasConfirmedDriver()) {
+                        request.setDrivers(gottenRequest.getDrivers());
+                        driver.setStatus(RequestState.DECLINED);
+                    }
+                    else if(!request.getDrivers().equals(gottenRequest.getDrivers())) {
+                        request.setDrivers(gottenRequest.getDrivers());
+                    }
+                    request.getDrivers().add(driver);
+                } catch (Exception e) {
+                    Log.i("Error", "Getting the specified request failed.");
+                }
             }
-        }
-        else {
+
+            ElasticSearchController.UpdateRequest updateRequest = new
+                    ElasticSearchController.UpdateRequest();
+            updateRequest.execute(request);
+
+            for(int i = 0; i < offlineUserRequests.size(); ++i) {
+                if(offlineUserRequests.get(i).getId().equals(request.getId())) {
+                    offlineUserRequests.remove(i);
+                    offlineUserRequests.add(i, request);
+                    break;
+                }
+            }
+        } else {
             newInfo = true;
             offlineUpdateRequest.add(request);
-            offlineRequests.add(request);
+            for(int i = 0; i < offlineUserRequests.size(); ++i) {
+                if(offlineUserRequests.get(i).getId().equals(request.getId())) {
+                    offlineUserRequests.remove(i);
+                    offlineUserRequests.add(i, request);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Here, all open requests are gotten and put into offlineOpenRequests. This is done so if the
+     * user goes offline they can still search for requests that have been stored since the last
+     * time the app updated the list.
+     */
+    public void getAllOpenRequests() {
+        if(connectivityManager.getActiveNetworkInfo().isAvailable()) {
+            ElasticSearchController.SearchForOpenRequests searchForOpenRequests =
+                    new ElasticSearchController.SearchForOpenRequests();
+            searchForOpenRequests.execute();
+            try {
+                offlineOpenRequests = searchForOpenRequests.get();
+                putUsersIntoRequests(offlineOpenRequests);
+            } catch (Exception e) {
+                Log.i("Error", "Unable to get all open requests.");
+            }
+        } else {
+            Log.i("Error", "Unable to connect to the internet");
         }
     }
 
@@ -121,15 +169,15 @@ public class ElasticSearch {
                     ElasticSearchController.SearchForRequests();
             requests.execute(username);
             try {
-                offlineRequests = putUsersIntoRequests(requests.get());
-                return offlineRequests;
+                offlineUserRequests = putUsersIntoRequests(requests.get());
+                return offlineUserRequests;
             }
             catch (Exception e) {
-                return offlineRequests;
+                return offlineUserRequests;
             }
         }
         else {
-            return offlineRequests;
+            return offlineUserRequests;
         }
     }
 
@@ -148,16 +196,15 @@ public class ElasticSearch {
                     ElasticSearchController.SearchForGeolocationRequests();
             searchRequest.execute(geolocation);
             try {
-                ArrayList<Request> requests = getPendingRequests(searchRequest.get());
-                return putUsersIntoRequests(requests);
+                return putUsersIntoRequests(searchRequest.get());
             }
             catch (Exception e) {
                 Log.i("Error", "Failed to load the requests by geolocation.");
-                return null;
+                return offlineOpenRequests;
             }
         }
         else {
-            return null;
+            return offlineOpenRequests;
         }
     }
 
@@ -176,50 +223,81 @@ public class ElasticSearch {
                     ElasticSearchController.SearchForKeywordRequests();
             searchRequest.execute(searchTerm);
             try {
-                ArrayList<Request> requests = getPendingRequests(searchRequest.get());
-                return putUsersIntoRequests(requests);
+                return putUsersIntoRequests(searchRequest.get());
             }
             catch (Exception e) {
                 Log.i("Error", "Failed to load the requests by keyword.");
-                return null;
+                ArrayList<Request> keywordRequests = new ArrayList<Request>();
+                String[] keywords = searchTerm.split("\\s+");
+                for(String keyword: keywords) {
+                    for(Request request: offlineOpenRequests) {
+                        if(request.getDescription().contains(keyword)) {
+                            keywordRequests.add(request);
+                        }
+                    }
+                }
+                return keywordRequests;
             }
         }
         else {
-            return null;
+            ArrayList<Request> keywordRequests = new ArrayList<Request>();
+            String[] keywords = searchTerm.split("\\s+");
+            for(String keyword: keywords) {
+                for(Request request: offlineOpenRequests) {
+                    if(request.getDescription().contains(keyword)) {
+                        keywordRequests.add(request);
+                    }
+                }
+            }
+            return keywordRequests;
         }
     }
 
-    //TODO
+    /**
+     * Comments.
+     *
+     * @param location The specified location the driver wants to find the locations of.
+     * @return The ArrayList of open requests with that location.
+     */
     public ArrayList<Request> searchRequestByLocation(String location) {
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
             ElasticSearchController.SearchForLocationRequests searchRequest = new
                     ElasticSearchController.SearchForLocationRequests();
             searchRequest.execute(location);
             try {
-                ArrayList<Request> requests = searchRequest.get();
-                requests = getPendingRequests(requests);
-                //Will probably remove this.
-                /* if(requests == null) {
-                    //Get location's geocoordinates here.
-                    ElasticSearchController.SearchForGeolocationRequests searchGeoRequest = new
-                            ElasticSearchController.SearchForGeolocationRequests();
-                    searchGeoRequest.execute(geolocation);
-                    try {
-                        requests = searchGeoRequest.get();
-                    } catch (Exception e) {
-                        Log.i("Error", "Failed to load the requests by geolocation.");
-                        return null;
-                    }
-                }*/
-                return putUsersIntoRequests(requests);
+                return putUsersIntoRequests(searchRequest.get());
             }
             catch (Exception e) {
                 Log.i("Error", "Failed to load the requests by location.");
-                return null;
+                ArrayList<Request> locationRequests = new ArrayList<Request>();
+                for(Request request: offlineOpenRequests) {
+                    String gottenLocation = (String) request.getSourcePlace().getAddress();
+                    if(gottenLocation.contains(location)) {
+                        locationRequests.add(request);
+                        continue;
+                    }
+                    gottenLocation = (String) request.getDestinationPlace().getAddress();
+                    if(gottenLocation.contains(location)) {
+                        locationRequests.add(request);
+                    }
+                }
+                return locationRequests;
             }
         }
         else {
-            return null;
+            ArrayList<Request> locationRequests = new ArrayList<Request>();
+            for(Request request: offlineOpenRequests) {
+                String gottenLocation = (String) request.getSourcePlace().getAddress();
+                if(gottenLocation.contains(location)) {
+                    locationRequests.add(request);
+                    continue;
+                }
+                gottenLocation = (String) request.getDestinationPlace().getAddress();
+                if(gottenLocation.contains(location)) {
+                    locationRequests.add(request);
+                }
+            }
+            return locationRequests;
         }
     }
 
@@ -229,15 +307,18 @@ public class ElasticSearch {
      */
     public void deleteRequest(String requestId) {
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
-            ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+            ElasticSearchController.DeleteRequest deleteRequest =
+                    new ElasticSearchController.DeleteRequest();
             deleteRequest.execute(requestId);
         } else {
             Log.i("Error", "Unable to connect to the internet");
         }
     }
 
-    //Just commenting out the code so it can run tests. It just needs the requests from UserManager
-    // to work.
+    /**
+     * Here, the arrayList wi
+     * @return
+     */
     public ArrayList<Request> getUpdatedRequests() {
         UserManager userManager = UserManager.getInstance();
         if(connectivityManager.getActiveNetworkInfo().isConnected()) {
@@ -249,7 +330,7 @@ public class ElasticSearch {
                 try {
                     Request gottenRequest = getRequest.get();
                     if (gottenRequest.getRequestState() != request.getRequestState()
-                            || gottenRequest.getDrivers() == request.getDrivers()) {
+                            || !gottenRequest.getDrivers().equals(request.getDrivers())) {
                         requests.add(gottenRequest);
                     }
                 } catch (Exception e) {
@@ -344,8 +425,7 @@ public class ElasticSearch {
                 Log.i("Error", "Failed to load the user.");
                 return null;
             }
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -356,7 +436,8 @@ public class ElasticSearch {
      */
     public void deleteUser(String username) {
         if (connectivityManager.getActiveNetworkInfo().isConnected()) {
-            ElasticSearchController.DeleteUser deleteUser = new ElasticSearchController.DeleteUser();
+            ElasticSearchController.DeleteUser deleteUser =
+                    new ElasticSearchController.DeleteUser();
             deleteUser.execute(username);
         } else {
             Log.i("Error", "Unable to connect to the internet");
@@ -384,14 +465,16 @@ public class ElasticSearch {
             }
 
             if (requestsMadeOffline != null) {
-                for (int i = 0; i < requestsMadeOffline.size(); i++)
+                for (int i = 0; i < requestsMadeOffline.size(); i++) {
                     saveRequest(requestsMadeOffline.get(i));
+                }
                 requestsMadeOffline = null;
             }
 
             if (offlineUpdateRequest != null) {
-                for(int i = 0; i < offlineUpdateRequest.size(); i++)
+                for(int i = 0; i < offlineUpdateRequest.size(); i++) {
                     saveRequest(offlineUpdateRequest.get(i));
+                }
                 offlineUpdateRequest = null;
             }
 
@@ -399,27 +482,9 @@ public class ElasticSearch {
         }
     }
 
-
-    /**
-     * Here, any requests that are unnecessary for the driver to see (i.e. those that are completed
-     * or cancelled) are removed from the given ArrayList of requests.
-     *
-     * @param requests The ArrayList of requests from the search.
-     * @return The updated ArrayList of requests containing only requests that can be accepted.
-     */
-    private ArrayList<Request> getPendingRequests(ArrayList<Request> requests) {
-        for(int i = 0; i < requests.size(); ++i) {
-            Request request = requests.get(i);
-            if(!request.getDrivers().isEmpty() && !request.getDrivers().hasOnlyAcceptedDrivers()) {
-                requests.remove(i);
-                --i;
-            }
-        }
-        return requests;
-    }
-
     /**
      * Here, users are gotten and added to the request.
+     *
      * @param requests The ArrayList of requests to get the users for.
      * @return The updated ArrayList of requests
      */
@@ -439,7 +504,8 @@ public class ElasticSearch {
                     requests.get(i).getDrivers().get(j).setName(temp.getName());
                     requests.get(i).getDrivers().get(j).setPhoneNumber(temp.getPhoneNumber());
                     requests.get(i).getDrivers().get(j).setEmail(temp.getEmail());
-                    requests.get(i).getDrivers().get(j).setVehicleDescription(temp.getVehicleDescription());
+                    requests.get(i).getDrivers().get(j)
+                            .setVehicleDescription(temp.getVehicleDescription());
                     requests.get(i).getDrivers().get(j).setRating(temp.getRating());
                     requests.get(i).getDrivers().get(j).setTotalRatings(temp.getTotalRatings());
                 }
