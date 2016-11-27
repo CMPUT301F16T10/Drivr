@@ -16,10 +16,15 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.net.Uri;
+import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -185,7 +190,27 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         callImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "You are about to call the other person", Toast.LENGTH_SHORT).show();
+                if (drivers.size() == 0) {
+                    Toast.makeText(context, "No driver number available at this time", Toast.LENGTH_SHORT).show();
+
+                }
+                // Start Dialer
+                else if (drivers.size() == 1) {
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    String number = drivers.get(0).getPhoneNumber();
+                    number = "tel:" + number;
+                    intent.setData(Uri.parse(number));
+                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                        return;
+                    }
+                    context.startActivity(intent);
+
+                }
+                else {
+                    //Todo add a dialog with all drivers
+                    Toast.makeText(context, "Unsupported Right now", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -193,7 +218,47 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         emailImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "You are about to email the other person", Toast.LENGTH_SHORT).show();
+                if(drivers.size() == 0) {
+                    Toast.makeText(context, "No driver email available at this time", Toast.LENGTH_SHORT).show();
+
+                }
+                //http://stackoverflow.com/questions/8701634/send-email-intent
+                else if(drivers.size() == 1) {
+
+                    Intent intent = new Intent();
+                    ComponentName emailApp = intent.resolveActivity(context.getPackageManager());
+                    ComponentName unsupportedAction = ComponentName.unflattenFromString("com.android.fallback/.Fallback");
+                    boolean hasEmailApp = emailApp != null && !emailApp.equals(unsupportedAction);
+
+                    String email = drivers.get(0).getEmail();
+                    String subject = "Drivr Request: " + request.getId();
+                    String body = "Drivr user " + drivers.get(0).getUsername();
+
+                    if (hasEmailApp) {
+                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + email));
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                        emailIntent.putExtra(Intent.EXTRA_TEXT, body);
+                        context.startActivity(Intent.createChooser(emailIntent, "Chooser Title"));
+                    }
+                    else {
+                        Toast.makeText(context, "An email account is required to use this feature", Toast.LENGTH_LONG).show();
+
+                        // Todo possibly implement to save contact info for later
+                        // http://stackoverflow.com/questions/27528236/mailto-android-unsupported-action-error
+                        /*
+                        Intent intentEmail = new Intent(ContactsContract.Intents.Insert.ACTION);
+                        intentEmail.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+                        intentEmail.putExtra(ContactsContract.Intents.Insert.EMAIL, email);
+                        context.startActivity(intentEmail); */
+
+                    }
+
+
+                }
+                else {
+                    //Todo add a dialog with all drivers
+                    Toast.makeText(context, "Unsupported Right now", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

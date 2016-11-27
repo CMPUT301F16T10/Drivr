@@ -24,6 +24,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:allowBackup="true"
@@ -75,7 +76,8 @@
             android:name=".SearchRequestsListActivity"
             android:label="Search Results" />
         <activity android:name=".PaymentActivity" />
-        <activity android:name=".RequestCompletedActivity"></activity>
+        <activity android:name=".RequestCompletedActivity">
+        </activity>
     </application>
 
 </manifest>
