@@ -30,30 +30,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <View
+    <!--<View-->
+        <!--android:background="@color/colorPrimary"-->
+        <!--android:id="@+id/request_box"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_height="72dp"/>-->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:background="@color/colorPrimary"
-        android:id="@+id/request_box"
-        android:layout_width="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_height="72dp"/>
-    <TextView
-        android:id="@+id/request_route_text"
-        android:padding="4dp"
-        android:layout_alignTop="@+id/request_box"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:text="current location to destination"/>
-    <TextView
-        android:id="@+id/request_fare_text"
-        android:padding="4dp"
-        android:layout_below="@+id/request_route_text"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:text="$12.34"/>
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/request_route_text"
+            android:padding="4dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:text="current location to destination"/>
+        <TextView
+            android:id="@+id/request_fare_text"
+            android:padding="4dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="$12.34"/>
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:background="@color/cardview_light_background"
