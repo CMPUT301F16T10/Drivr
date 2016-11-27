@@ -33,9 +33,11 @@ public class ElasticSearchRequest {
 
     private String rider;
     private ArrayList<Driver> driver;
+    private String status;
     private String description;
     private double fare;
     private String date;
+    private double km;
     private String sourceAddress;
     private double []start;
     private String destinationAddress;
@@ -88,6 +90,22 @@ public class ElasticSearchRequest {
      */
     public void setDrivers(ArrayList<Driver> driver) {
         this.driver = driver;
+    }
+
+    /**
+     * Gets the status of the request.
+     * @return The status of the request.
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * Sets the status of the request.
+     * @param status The status of the request.
+     */
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     /**
@@ -144,6 +162,22 @@ public class ElasticSearchRequest {
      */
     public double[] getStart() {
         return start;
+    }
+
+    /**
+     * Get the kilometers of the request.
+     * @return The kilometers of the request.
+     */
+    public double getKm() {
+        return km;
+    }
+
+    /**
+     * Set the kilometers of the request.
+     * @param km The kilometers of the request.
+     */
+    public void setKm(double km) {
+        this.km = km;
     }
 
     /**

@@ -72,11 +72,13 @@ public class ElasticSearchControllerTest {
         inDriver2.setUsername("driver2");
         drivers.add(inDriver2);
 
+        request.setRequestState(RequestState.ACCEPTED);
         request.setRider(user);
         request.setDrivers(drivers);
         request.setFareString("555.55");
         request.setDate(new Date());
         request.setDescription("Go to Rogers Place");
+        request.setKm(100);
 
         ConcretePlace temp = new ConcretePlace();
         temp.setLatLng(new LatLng(50, 50));
@@ -115,7 +117,7 @@ public class ElasticSearchControllerTest {
             Log.i("Error", "Failed to load the request.");
         }
 
-        Request gottenRequest = gotten.get(gotten.size()-1);
+        Request gottenRequest = gotten.get(0);
 
         ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
@@ -162,7 +164,7 @@ public class ElasticSearchControllerTest {
             Log.i("Error", "Failed to load the request.");
         }
 
-        Request gottenRequest = gotten.get(gotten.size()-1);
+        Request gottenRequest = gotten.get(0);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         String addedDate = format.format(gottenRequest.getDate());
@@ -233,7 +235,7 @@ public class ElasticSearchControllerTest {
             Log.i("Error", "Failed to load the request.");
         }
 
-        Request gottenRequest = gotten.get(gotten.size()-1);
+        Request gottenRequest = gotten.get(0);
 
         ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
@@ -272,7 +274,7 @@ public class ElasticSearchControllerTest {
             Log.i("Error", "Failed to load the request.");
         }
 
-        Request gottenRequest = gotten.get(gotten.size()-1);
+        Request gottenRequest = gotten.get(0);
 
         ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
@@ -308,7 +310,7 @@ public class ElasticSearchControllerTest {
             Log.i("Error", "Failed to load the request.");
         }
 
-        Request gottenRequest = gotten.get(gotten.size()-1);
+        Request gottenRequest = gotten.get(0);
 
         ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
