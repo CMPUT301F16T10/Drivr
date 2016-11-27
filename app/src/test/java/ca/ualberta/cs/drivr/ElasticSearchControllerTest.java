@@ -92,7 +92,7 @@ public class ElasticSearchControllerTest {
     }
 
     /**
-     * Test to make sure a request is added and gotten. Uses username search.
+     * Test to make sure a request is added and gotten. Uses request ID search.
      */
     @Test
     public void addAndGetRequest(){
@@ -106,20 +106,19 @@ public class ElasticSearchControllerTest {
             ShadowLog.v("Interrupted", "Continuing");
         }
 
-        ArrayList<Request> gotten = new ArrayList<Request>();
-        ElasticSearchController.SearchForRequests searchForRequests =
-                new ElasticSearchController.SearchForRequests();
-        searchForRequests.execute(user.getUsername());
+        Request gottenRequest = new Request();
+        ElasticSearchController.GetRequest getRequest =
+                new ElasticSearchController.GetRequest();
+        getRequest.execute(request.getId());
         Robolectric.flushBackgroundThreadScheduler();
         try {
-            gotten = searchForRequests.get();
+            gottenRequest = getRequest.get();
         } catch (Exception e) {
             Log.i("Error", "Failed to load the request.");
         }
 
-        Request gottenRequest = gotten.get(0);
-
-        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        ElasticSearchController.DeleteRequest deleteRequest =
+                new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
         Robolectric.flushBackgroundThreadScheduler();
 
@@ -166,39 +165,8 @@ public class ElasticSearchControllerTest {
 
         Request gottenRequest = gotten.get(0);
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        String addedDate = format.format(gottenRequest.getDate());
-
-        String add = "{" +
-                "\"rider\": \"" + gottenRequest.getRider().getUsername() + "\"," +
-                "\"driver\": [";
-
-        for (int i = 0; i < gottenRequest.getDrivers().size(); i++) {
-            Driver driver = gottenRequest.getDrivers().get(i);
-            add = add + "{\"username\": \"" + driver.getUsername() +
-                    "\", \"status\": \"" + driver.getStatus() + "\"";
-            if (i != gottenRequest.getDrivers().size() - 1) {
-                add += "}, ";
-            }
-        }
-
-        add += "}]," +
-                "\"description\": \"" + gottenRequest.getDescription() + "\"," +
-                "\"fare\": " + gottenRequest.getFare().toString() + "," +
-                "\"date\": \"" + addedDate + "\"," +
-                "\"startAddress\": \"" + gottenRequest.getSourcePlace().getAddress() + "\", " +
-                "\"start\": [" +
-                Double.toString(gottenRequest.getSourcePlace().getLatLng().longitude) + ", " +
-                Double.toString(gottenRequest.getSourcePlace().getLatLng().latitude) + "]," +
-                "\"endAddress\": \"" + gottenRequest.getDestinationPlace().getAddress() + "\", " +
-                "\"end\": [" +
-                Double.toString(gottenRequest.getDestinationPlace().getLatLng().longitude) +
-                ", " + Double.toString(gottenRequest.getDestinationPlace().getLatLng().latitude) +
-                "], \"id\": \"" + gottenRequest.getId() + "\"}";
-
-        ShadowLog.v("Here", add);
-
-        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        ElasticSearchController.DeleteRequest deleteRequest =
+                new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
         Robolectric.flushBackgroundThreadScheduler();
 
@@ -226,7 +194,7 @@ public class ElasticSearchControllerTest {
         ArrayList<Request> gotten = new ArrayList<Request>();
         ElasticSearchController.SearchForKeywordRequests searchForKeywordRequests =
                 new ElasticSearchController.SearchForKeywordRequests();
-        searchForKeywordRequests.execute("Rogers");
+        searchForKeywordRequests.execute("Go Rogers");
         Robolectric.flushBackgroundThreadScheduler();
 
         try {
@@ -237,7 +205,46 @@ public class ElasticSearchControllerTest {
 
         Request gottenRequest = gotten.get(0);
 
-        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
+        ElasticSearchController.DeleteRequest deleteRequest =
+                new ElasticSearchController.DeleteRequest();
+        deleteRequest.execute(request.getId());
+        Robolectric.flushBackgroundThreadScheduler();
+
+        assertEquals(request.getId(), gottenRequest.getId());
+    }
+
+
+    /**
+     * Test to make sure an open request can be gotten.
+     */
+    @Test
+    public void searchOpenRequest(){
+        ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
+        addRequest.execute(request);
+        Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
+
+        ArrayList<Request> gotten = new ArrayList<Request>();
+        ElasticSearchController.SearchForOpenRequests searchForOpenRequests =
+                new ElasticSearchController.SearchForOpenRequests();
+        searchForOpenRequests.execute("");
+        Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            gotten = searchForOpenRequests.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to load the request.");
+        }
+
+        Request gottenRequest = gotten.get(0);
+
+        ElasticSearchController.DeleteRequest deleteRequest =
+                new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
         Robolectric.flushBackgroundThreadScheduler();
 

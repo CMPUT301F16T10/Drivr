@@ -16,6 +16,9 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+
 import java.util.Observable;
 
 /**
@@ -123,6 +126,9 @@ public class UserManager extends Observable implements IUserManager {
     public void notifyObservers() {
         setChanged();
         // TODO: update everything with Elasticsearch
+        // TODO: Grab the context to be able to use ElasticSearch
+        //ElasticSearch elasticSearch = new ElasticSearch((ConnectivityManager)
+        //        context.getSystemService(Context.CONNECTIVITY_SERVICE));
         super.notifyObservers();
     }
 }
