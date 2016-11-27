@@ -36,48 +36,133 @@ public class RequestController {
     }
 
     /**
-     * Accept a item_request.
-     * @param request The item_request to accept.
+     * Determines whether a request can be accepted by the user. Requests can be accepted by a
+     * driver when the request state is pending.
+     * @param request The request
+     * @param userMode The user mode of the current user
+     * @return True when the request can be accepted, false otherwise.
+     */
+    public boolean canAcceptRequest(Request request, UserMode userMode) {
+        if (request.getRequestState() == RequestState.PENDING && userMode == UserMode.DRIVER)
+            return true;
+        return false;
+    }
+
+    /**
+     * Accept a request.
+     * @param request The request to accept.
      */
     public void acceptRequest(Request request) {
         request.setRequestState(RequestState.ACCEPTED);
     }
 
     /**
-     * Cancel a item_request.
-     * @param request The item_request to cancel.
+     * Determines whether a request can be cancelled by the user. Requests can be cancelled by a
+     * rider when the request state is pending.
+     * @param request The request
+     * @param userMode The user mode of the current user
+     * @return True when the request can be cancelled, false otherwise.
+     */
+    public boolean canCancelRequest(Request request, UserMode userMode) {
+        if (request.getRequestState() == RequestState.PENDING && userMode == UserMode.RIDER)
+            return true;
+        return false;
+    }
+
+    /**
+     * Cancel a request.
+     * @param request The request to cancel.
      */
     public void cancelRequest(Request request) {
         request.setRequestState(RequestState.CANCELLED);
     }
 
     /**
-     * Complete a item_request.
-     * @param request The item_request to complete.
+     * Determines whether a request can be completed by the user. Requests can be completed by a
+     * rider when the request state is confirmed.
+     * @param request The request
+     * @param userMode The user mode of the current user
+     * @return True when the request can be confirmed, false otherwise.
+     */
+    public boolean canCompleteRequest(Request request, UserMode userMode) {
+        if (request.getRequestState() == RequestState.CONFIRMED && userMode == UserMode.RIDER)
+            return true;
+        return false;
+    }
+
+    /**
+     * Complete a request.
+     * @param request The request to complete.
      */
     public void completeRequest(Request request) {
         request.setRequestState(RequestState.COMPLETED);
     }
 
     /**
-     * Confirm a item_request.
-     * @param request The item_request to confirm.
+     * Determines whether a request can be confirmed by the user. Requests can be confirmed by a
+     * rider when the request state is accepted by a driver.
+     * @param request The request
+     * @param userMode The user mode of the current user
+     * @return True when the request can be confirmed, false otherwise.
+     */
+    public boolean canConfirmRequest(Request request, UserMode userMode) {
+        if (request.getRequestState() == RequestState.ACCEPTED && userMode == UserMode.RIDER)
+            return true;
+        return false;
+    }
+
+    /**
+     * Confirm a request.
+     * @param request The request to confirm.
      */
     public void confirmRequest(Request request) {
         request.setRequestState(RequestState.CONFIRMED);
     }
 
     /**
-     * Decline a item_request.
-     * @param request The item_request to decline.
+     * Determines whether a request can be declined by the user. Requests can be declined by a
+     * rider when the request state is accepted by a driver.
+     * @param request The request
+     * @param userMode The user mode of the current user
+     * @return True when the request can be declined, false otherwise.
+     */
+    public boolean canDeclineRequest(Request request, UserMode userMode) {
+        if (request.getRequestState() == RequestState.ACCEPTED && userMode == UserMode.RIDER)
+            return true;
+        return false;
+    }
+
+    /**
+     * Decline a request.
+     * @param request The request to decline.
      */
     public void declineRequest(Request request) {
         request.setRequestState(RequestState.DECLINED);
     }
 
     /**
-     * Delete a item_request from from the manager.
-     * @param request The item_request to delete.
+     * Determines whether a request can be deleted by the user. Requests can be deleted by a
+     * rider when the request is pending, cancelled, declined, or completed. A request can be
+     * deleted by a driver when the request is cancelled, declined, or completed.
+     * @param request The request
+     * @param userMode The user mode of the current user
+     * @return True when the request can be declined, false otherwise.
+     */
+    public boolean canDeleteRequest(Request request, UserMode userMode) {
+        // For riders and drivers => we don't care about user mode
+        if (request.getRequestState() == RequestState.CANCELLED
+                || request.getRequestState() == RequestState.DECLINED
+                || request.getRequestState() == RequestState.COMPLETED)
+            return true;
+        // Just for riders
+        if (request.getRequestState() == RequestState.PENDING && userMode == UserMode.RIDER)
+            return true;
+        return false;
+    }
+
+    /**
+     * Delete a request from from the manager.
+     * @param request The request to delete.
      */
     public void deleteRequest(Request request) {
         userManager.getRequestsList().remove(request);

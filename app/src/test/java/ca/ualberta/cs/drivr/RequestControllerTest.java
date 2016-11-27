@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -29,6 +30,7 @@ import static org.junit.Assert.assertEquals;
 public class RequestControllerTest {
 
     private MockUserManager mockUserManager;
+    private RequestController requestController;
     private Request request1;
     private Request request2;
     private Request request3;
@@ -37,6 +39,7 @@ public class RequestControllerTest {
     @Before
     public void setup() {
         mockUserManager = new MockUserManager();
+        requestController = new RequestController(mockUserManager);
         mockUserManager.setRequestsList(new RequestsList());
         request1 = new Request();
         request1.setRequestState(RequestState.PENDING);
@@ -49,6 +52,17 @@ public class RequestControllerTest {
         mockUserManager.getRequestsList().add(request3);
     }
 
+    @Test
+    public void canAcceptRequest() {
+        Request request = new Request();
+        request.setRequestState(RequestState.ACCEPTED);
+        assertFalse(requestController.canAcceptRequest(request, UserMode.RIDER));
+        assertFalse(requestController.canAcceptRequest(request, UserMode.DRIVER));
+        request.setRequestState(RequestState.PENDING);
+        assertFalse(requestController.canAcceptRequest(request, UserMode.RIDER));
+        assertTrue(requestController.canAcceptRequest(request, UserMode.DRIVER));
+    }
+
     /**
      * UC 15 Driver Receives Payment
      * US 05.01.01 As a Driver, I want to Accept a Request I agree with and Accept that
@@ -56,9 +70,19 @@ public class RequestControllerTest {
      */
     @Test
     public void acceptRequest() {
-        RequestController requestController = new RequestController(mockUserManager);
         requestController.acceptRequest(request2);
         assertEquals(RequestState.ACCEPTED, request2.getRequestState());
+    }
+
+    @Test
+    public void canConfirmRequest() {
+        Request request = new Request();
+        request.setRequestState(RequestState.PENDING);
+        assertFalse(requestController.canConfirmRequest(request, UserMode.RIDER));
+        assertFalse(requestController.canConfirmRequest(request, UserMode.DRIVER));
+        request.setRequestState(RequestState.ACCEPTED);
+        assertTrue(requestController.canConfirmRequest(request, UserMode.RIDER));
+        assertFalse(requestController.canConfirmRequest(request, UserMode.DRIVER));
     }
 
     /**
@@ -70,9 +94,19 @@ public class RequestControllerTest {
      */
     @Test
     public void confirmRequest() {
-        RequestController requestController = new RequestController(mockUserManager);
         requestController.confirmRequest(request2);
         assertEquals(RequestState.CONFIRMED, request2.getRequestState());
+    }
+
+    @Test
+    public void canCancelRequest() {
+        Request request = new Request();
+        request.setRequestState(RequestState.PENDING);
+        assertTrue(requestController.canCancelRequest(request, UserMode.RIDER));
+        assertFalse(requestController.canCancelRequest(request, UserMode.DRIVER));
+        request.setRequestState(RequestState.ACCEPTED);
+        assertFalse(requestController.canCancelRequest(request, UserMode.RIDER));
+        assertFalse(requestController.canCancelRequest(request, UserMode.DRIVER));
     }
 
     /**
@@ -81,9 +115,19 @@ public class RequestControllerTest {
      */
     @Test
     public void cancelRequest() {
-        RequestController requestController = new RequestController(mockUserManager);
         requestController.cancelRequest(request2);
         assertEquals(RequestState.CANCELLED, request2.getRequestState());
+    }
+
+    @Test
+    public void canCompleteRequest() {
+        Request request = new Request();
+        request.setRequestState(RequestState.PENDING);
+        assertFalse(requestController.canCompleteRequest(request, UserMode.RIDER));
+        assertFalse(requestController.canCompleteRequest(request, UserMode.DRIVER));
+        request.setRequestState(RequestState.CONFIRMED);
+        assertTrue(requestController.canCompleteRequest(request, UserMode.RIDER));
+        assertFalse(requestController.canCompleteRequest(request, UserMode.DRIVER));
     }
 
     /**
@@ -93,21 +137,58 @@ public class RequestControllerTest {
      */
     @Test
     public void completeRequest() {
-        RequestController requestController = new RequestController(mockUserManager);
         requestController.completeRequest(request2);
         assertEquals(RequestState.COMPLETED, request2.getRequestState());
     }
 
     @Test
+    public void canDeclineRequest() {
+        Request request = new Request();
+        request.setRequestState(RequestState.PENDING);
+        assertFalse(requestController.canDeclineRequest(request, UserMode.RIDER));
+        assertFalse(requestController.canDeclineRequest(request, UserMode.DRIVER));
+        request.setRequestState(RequestState.ACCEPTED);
+        assertTrue(requestController.canDeclineRequest(request, UserMode.RIDER));
+        assertFalse(requestController.canDeclineRequest(request, UserMode.DRIVER));
+    }
+
+    @Test
     public void declineRequest() {
-        RequestController requestController = new RequestController(mockUserManager);
         requestController.declineRequest(request2);
         assertEquals(RequestState.DECLINED, request2.getRequestState());
     }
 
     @Test
+    public void canDeleteRequest() {
+        Request request = new Request();
+        request.setRequestState(RequestState.CANCELLED);
+        assertTrue(requestController.canDeleteRequest(request, UserMode.RIDER));
+        assertTrue(requestController.canDeleteRequest(request, UserMode.DRIVER));
+
+        request.setRequestState(RequestState.DECLINED);
+        assertTrue(requestController.canDeleteRequest(request, UserMode.RIDER));
+        assertTrue(requestController.canDeleteRequest(request, UserMode.DRIVER));
+
+        request.setRequestState(RequestState.COMPLETED);
+        assertTrue(requestController.canDeleteRequest(request, UserMode.RIDER));
+        assertTrue(requestController.canDeleteRequest(request, UserMode.DRIVER));
+
+        request.setRequestState(RequestState.PENDING);
+        assertTrue(requestController.canDeleteRequest(request, UserMode.RIDER));
+        assertFalse(requestController.canDeleteRequest(request, UserMode.DRIVER));
+
+        request.setRequestState(RequestState.ACCEPTED);
+        assertFalse(requestController.canDeleteRequest(request, UserMode.RIDER));
+        assertFalse(requestController.canDeleteRequest(request, UserMode.DRIVER));
+
+        request.setRequestState(RequestState.CONFIRMED);
+        assertFalse(requestController.canDeleteRequest(request, UserMode.RIDER));
+        assertFalse(requestController.canDeleteRequest(request, UserMode.DRIVER));
+
+    }
+
+    @Test
     public void deleteRequest() {
-        RequestController requestController = new RequestController(mockUserManager);
         requestController.deleteRequest(request2);
         assertFalse(mockUserManager.getRequestsList().has(request2));
     }
@@ -119,7 +200,6 @@ public class RequestControllerTest {
      */
     @Test
     public void acceptRequestOffline() {
-        RequestController requestController = new RequestController(mockUserManager);
         requestController.acceptRequest(request3);
         assertEquals(RequestState.ACCEPTED, request3.getRequestState());
     }
