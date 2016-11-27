@@ -107,7 +107,10 @@ public class SearchRequestActivity extends AppCompatActivity {
         keyword = getIntent().getStringExtra(EXTRA_KEYWORD);
         final EditText keywordEditText = (EditText) findViewById(R.id.keyword_search_edit_text);
         if (!keyword.isEmpty()) {
-            keywordEditText.setText(keyword);
+//            keywordEditText.setText(keyword);
+            TextView textView = (TextView) findViewById(R.id.search_keyword_name);
+            textView.setText(keyword);
+
         }
 
 //        keywordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {

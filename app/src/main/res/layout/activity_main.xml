@@ -62,9 +62,24 @@
         <!--//    Accessed: November 10, 2016-->
         <!--//    add support for vector drawables in older versions of android-->
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/main_driver_mode"
+            fab:fab_label="Enter Driver mode"
+            fab:fab_colorNormal="@color/colorAccent"
+            android:src="@drawable/fab_driver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/main_rider_mode"
+            fab:fab_label="Enter Rider mode"
+            fab:fab_colorNormal="@color/colorAccent"
+            android:src="@drawable/fab_rider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/main_fab_login"
             fab:fab_label="Login"
             fab:fab_colorNormal="@color/colorAccent"
+            android:src="@drawable/fab_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
