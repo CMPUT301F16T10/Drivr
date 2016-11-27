@@ -40,6 +40,7 @@ public class Request {
     private ConcretePlace destination;
     private Boolean synced;
     private String id;
+    private double km;
 
     /**
      * Instantiates a new item_request.
@@ -55,6 +56,7 @@ public class Request {
         destination = new ConcretePlace();
         synced = false;
         id = "";
+        km = 1;
     }
 
 
@@ -285,6 +287,22 @@ public class Request {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * Get the kilometers of the request.
+     * @return The kilometers of the request.
+     */
+    public double getKm() {
+        return km;
+    }
+
+    /**
+     * Set the kilometers of the request.
+     * @param km The kilometers of the request.
+     */
+    public void setKm(double km) {
+        this.km = km;
     }
 
     /**

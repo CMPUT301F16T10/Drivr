@@ -20,6 +20,7 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
@@ -35,8 +36,7 @@ import java.util.ArrayList;
  * @see MainActivity
  */
 
-//TODO: Sort requests by date added (could do in ESC)
-//TODO: Add more to how offline stuff is handled? (Meets use cases, but for searching beyond own requests it won't do much right now)
+//TODO: Add more to how offline stuff is handled?
 
 public class ElasticSearch {
     private ArrayList<Request> offlineRequests;
@@ -236,6 +236,34 @@ public class ElasticSearch {
         }
     }
 
+    //Just commenting out the code so it can run tests. It just needs the requests from UserManager
+    // to work.
+    public ArrayList<Request> getUpdatedRequests(UserManager userManager) {
+        return null;
+        /* if(connectivityManager.getActiveNetworkInfo().isConnected()) {
+            ArrayList<Request> requests = new ArrayList<Request>();
+            ElasticSearchController.GetRequest getRequest =
+                    new ElasticSearchController.GetRequest();
+            for (Request request : userManager.getRequests()) {
+                getRequest.execute(request.getId());
+                try {
+                    Request gottenRequest = getRequest.get();
+                    if (gottenRequest.getRequestState() != request.getRequestState()
+                            || gottenRequest.getDrivers() == request.getDrivers()) {
+                        requests.add(gottenRequest);
+                    }
+                } catch (Exception e) {
+                    Log.i("Error", "Failed to load a request by ID.");
+                    return null;
+                }
+            }
+            return requests;
+        } else {
+            Log.i("Error", "Unable to connect to the internet");
+            return null;
+        } */
+    }
+
     /**
      * Here, the requests for a given keyword are gotten by first checking if there's anything
      * offline that needs to be saved. Next, if the user is connected to the internet, it will first
@@ -395,7 +423,6 @@ public class ElasticSearch {
      * @param requests The ArrayList of requests to get the users for.
      * @return The updated ArrayList of requests
      */
-    //TODO: This works, it's just some ugly code. Should add a method in DriversList that sets a driver. That'd make this a bit nicer.
     private ArrayList<Request> putUsersIntoRequests(ArrayList<Request> requests) {
         User temp;
 
