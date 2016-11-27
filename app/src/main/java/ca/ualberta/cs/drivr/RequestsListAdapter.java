@@ -151,8 +151,12 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
 
         // Show the other person's name
         final DriversList drivers = request.getDrivers();
-        final String driverUsername = drivers.size() > 0 ? drivers.get(0).getUsername() : "No Driver Yet";
-        otherUserNameTextView.setText(driverUsername);
+
+        final String driverUsername = drivers.size() == 1 ? drivers.get(0).getUsername(): "No Driver Yet";
+
+        final String multipleDrivers = "Multiple Drivers Accepted";
+
+        otherUserNameTextView.setText(drivers.size() > 1 ? multipleDrivers : driverUsername);
 
         // If the request has a description, show it. Otherwise, hide te description
         if (Strings.isNullOrEmpty(request.getDescription()))
@@ -165,6 +169,17 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
 
         // Show the route
         routeTextView.setText(request.getRoute());
+
+        // Driver User
+        otherUserNameTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // there exists drivers
+                if(otherUserNameTextView.getText() != "No Driver Yet") {
+                    //Todo
+                }
+            }
+        });
 
         routeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,6 +281,9 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, RequestCompletedActivity.class);
+
+
+
                 context.startActivity(intent);
             }
         });

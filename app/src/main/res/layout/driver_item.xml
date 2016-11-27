@@ -1,0 +1,137 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cardview_dark_background"
+        android:padding="4dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="4dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/item_request_other_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:padding="4dp"
+                    android:layout_marginRight="36dp"
+                    android:text="Driver Name"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ratingBar2"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/item_request_complete" />
+
+
+                <ImageView
+                    android:id="@+id/item_request_call_image"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:padding="4dp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/ic_call_black_24dp" />
+
+                <ImageView
+                    android:id="@+id/item_request_email_image"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:padding="4dp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/ic_email_black_24dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toStartOf="@+id/item_request_call_image" />
+
+                <ImageView
+                    android:id="@+id/item_request_complete"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:padding="4dp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/ic_check_black_24dp"
+                    android:layout_alignBottom="@+id/item_request_other_user_name"
+                    android:layout_toStartOf="@+id/item_request_email_image"
+                    android:layout_marginEnd="38dp" />
+                <ImageView
+                    android:id="@+id/item_request_deleted"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:padding="4dp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/ic_x_mark"
+                    android:layout_alignParentTop="true"
+                    android:layout_toStartOf="@+id/item_request_email_image" />
+
+
+
+            </RelativeLayout>
+
+            <!--
+            Using the LinearLayout to provide two equal width width TextViews was modified from
+            URL: http://stackoverflow.com/a/20000701
+            Author: yoah
+            Date accessed: November 10, 2016
+            -->
+            <!--
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="4dp"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/accept_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="4dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Accept"
+                    android:gravity="center"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:id="@+id/decline_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="4dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Decline"
+                    android:gravity="center"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+            -->
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+
+</RelativeLayout>
