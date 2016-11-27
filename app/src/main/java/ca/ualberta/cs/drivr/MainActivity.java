@@ -17,7 +17,9 @@
 package ca.ualberta.cs.drivr;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -263,6 +265,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                             if (!vehicleDescription.isEmpty()){
                                 userManager.getUser().setVehicleDescription(vehicleDescription);
                                 userManager.notifyObservers();
+                                userManager.setUserMode(UserMode.DRIVER);
+                                keywordEditText.setVisibility(View.VISIBLE);
+                                fabDriver.setVisibility(View.GONE);
+                                fabRider.setVisibility(View.VISIBLE);
+                                fabMenu.close(true);
                             }
 //                MainActivity.this.finish();
                             dialog.dismiss();
@@ -350,6 +357,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 startActivity(intent);
             }
         });
+        setNotificationAlarm(context);
     }
 
     @Override
@@ -508,4 +516,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnectionSuspended(int i) { }
+
+    private void setNotificationAlarm(Context context) {
+        Log.d("ME", "Alarm setup");
+        Intent intent = new Intent(context.getApplicationContext() , NotificationReceiver.class);
+        PendingIntent pendingIntent  = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 , pendingIntent);
+        Log.d("ME", "Alarm started");
+    }
 }

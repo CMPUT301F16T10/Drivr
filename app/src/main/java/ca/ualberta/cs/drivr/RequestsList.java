@@ -52,6 +52,14 @@ public class RequestsList {
         requestsList.remove(request);
     }
 
+    public void removeProper(Request request) {
+        for (Request existingRequest : requestsList) {
+            if (existingRequest.getId().equals(request.getId())) {
+                requestsList.remove(existingRequest);
+            }
+        }
+    }
+
     /**
      * Test if the list has a item_request.
      * @param request The item_request to check.
@@ -59,6 +67,15 @@ public class RequestsList {
      */
     public Boolean has(Request request) {
         return requestsList.contains(request);
+    }
+
+    public Boolean hasProper(Request request) {
+        for (Request existingRequest : requestsList) {
+            if (existingRequest.getId().equals(request.getId())) {
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
     }
 
     /**
