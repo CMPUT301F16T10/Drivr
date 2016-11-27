@@ -89,9 +89,28 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
-                addRequest.execute(request);
+
+                RequestState state = request.getRequestState();
+                if (state.equals(RequestState.CREATED)) {
+                    request.setRequestState(RequestState.PENDING);
+                    RequestsListController requestsListController = new RequestsListController(UserManager.getInstance());
+                    requestsListController.addRequest(request);
+                    UserManager.getInstance().notifyObservers();
+                    ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
+                    addRequest.execute(request);
+                }
+                else if (state.equals(RequestState.PENDING) && UserManager.getInstance().getUserMode().equals(UserMode.DRIVER)) {
+                    request.addDriver((Driver) UserManager.getInstance().getUser());
+//                    request.setRequestState(RequestState.ACCEPTED);
+                    ElasticSearchController.UpdatePendingRequest update = new ElasticSearchController.UpdatePendingRequest();
+                    update.execute(request);
+                }
+
+                Log.i("Request State:", request.getRequestState().toString());
                 finish();
+
+//                RequestState state = request.getRequestState();
+//                RequestState.
             }
         });
 
