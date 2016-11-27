@@ -228,7 +228,8 @@ public class NewRequestActivity extends AppCompatActivity {
 
         //userManager.getRequestsList().add(request);
         //userManager.notifyObservers();
-        requestsListController.addRequest(request);
+        Log.i(TAG + "kjdfgkjdfhkhj", request.getRequestState().toString());
+//        requestsListController.addRequest(request);
 
         finish();
     }

@@ -20,6 +20,8 @@ package ca.ualberta.cs.drivr;
  * An enum that tracks the states or requests.
  */
 public enum RequestState {
+    /** A item_request has not yet been made by the rider */
+    CREATED,
     /** A item_request made the by a rider but not yet accepted by a driver. */
     PENDING,
 
