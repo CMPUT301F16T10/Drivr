@@ -67,7 +67,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-
         <activity android:name=".NewRequestActivity" />
         <activity
             android:name=".SearchRequestActivity"
@@ -75,8 +74,8 @@
         <activity
             android:name=".SearchRequestsListActivity"
             android:label="Search Results" />
-
-        <activity android:name=".PaymentActivity"></activity>
+        <activity android:name=".PaymentActivity" />
+        <activity android:name=".RequestCompletedActivity"></activity>
     </application>
 
 </manifest>
