@@ -42,7 +42,7 @@ public class SearchRequest {
         if (!keyword.isEmpty()) {
             SearchKeyword();
         }
-        if (!location.getAddress().toString().isEmpty()) {
+        if (location != null) {
             SearchNearLocation();
         }
         return this.requestList;
@@ -69,7 +69,7 @@ public class SearchRequest {
     }
     //TODO: Get geolocation for location, use that in ElasticSearch SearchForGeolocationRequests
     private void SearchNearLocation() {
-        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);\
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         Location newlocation = new Location("");
         newlocation.setLongitude(this.location.getLatLng().longitude);
         newlocation.setLatitude(this.location.getLatLng().latitude);

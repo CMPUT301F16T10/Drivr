@@ -33,15 +33,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.model.Direction;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -75,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private PlaceAutocompleteFragment autocompleteFragment;
     private GoogleMap mMap;
     private SupportMapFragment mFragment;
+    private EditText keywordEditText;
     private Context context;
     private UserManager userManager = UserManager.getInstance();
     LatLng test = new LatLng(53.5232, -113.5263);
@@ -157,19 +163,49 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         });
 
         // Using the floating action button menu system
+        final FloatingActionMenu fabMenu = (FloatingActionMenu) findViewById(R.id.main_fab_menu);
         FloatingActionButton fabSettings = (FloatingActionButton) findViewById(R.id.fabSettings);
         FloatingActionButton fabRequests = (FloatingActionButton) findViewById(R.id.main_fab_requests);
         FloatingActionButton fabProfile = (FloatingActionButton) findViewById(R.id.main_fab_profile);
         FloatingActionButton fabHistory = (FloatingActionButton) findViewById(R.id.main_fah_history);
         FloatingActionButton fabLogin = (FloatingActionButton) findViewById(R.id.main_fab_login);
+        final FloatingActionButton fabDriver = (FloatingActionButton) findViewById(R.id.main_driver_mode);
+        final FloatingActionButton fabRider = (FloatingActionButton) findViewById(R.id.main_rider_mode);
 
         /*
         Change between user and driver mode. Will probably be replaced with an option in settings.
         For now the visibility of this is set to gone because we should not have too many FABs.
         Having too many FABs may cause confusion and rendering issues on small screens.
         */
+        keywordEditText = (EditText) findViewById(R.id.main_keyword_edit_text);
         FloatingActionButton fabMode = (FloatingActionButton) findViewById(R.id.main_fab_mode);
         fabMode.setVisibility(View.GONE);
+        if (userManager.getUserMode().equals(UserMode.RIDER)) {
+            fabRider.setVisibility(View.GONE);
+            keywordEditText.setVisibility(View.GONE);
+        } else {
+            fabDriver.setVisibility(View.GONE);
+            keywordEditText.setVisibility(View.VISIBLE);
+        }
+
+        keywordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                    TextView textView = (TextView) findViewById(R.id.search_keyword_name);
+//                    textView.setText(keywordEditText.getText().toString());
+                    Intent intent = new Intent(MainActivity.this, SearchRequestActivity.class);
+//                    String concretePlaceJson = gson.toJson(concretePlace);
+                    intent.putExtra(SearchRequestActivity.EXTRA_PLACE, "");
+                    intent.putExtra(SearchRequestActivity.EXTRA_KEYWORD, keywordEditText.getText().toString());
+//                    Log.i(TAG, "Place: " + place.getName() + ", :" + place.getLatLng());
+                    keywordEditText.setText("");
+                    keywordEditText.clearFocus();
+                    startActivity(intent);
+                }
+                return true;
+            }
+        });
 
         fabMode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,11 +226,34 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 }*/
             }
         });
+        fabDriver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userManager.setUserMode(UserMode.DRIVER);
+                keywordEditText.setVisibility(View.VISIBLE);
+                fabDriver.setVisibility(View.GONE);
+                fabRider.setVisibility(View.VISIBLE);
+                fabMenu.close(true);
+
+            }
+        });
+
+        fabRider.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userManager.setUserMode(UserMode.RIDER);
+                keywordEditText.setVisibility(View.GONE);
+                fabRider.setVisibility(View.GONE);
+                fabDriver.setVisibility(View.VISIBLE);
+                fabMenu.close(true);
+            }
+        });
 
         fabLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                fabMenu.close(true);
                 startActivity(intent);
             }
         });
@@ -204,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             public void onClick(View v) {
                 Log.i(TAG, "clicked settings fab");
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                fabMenu.close(true);
                 startActivity(intent);
             }
         });
@@ -213,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             public void onClick(View v) {
                 Log.i(TAG, "clicked profile fab");
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                fabMenu.close(true);
                 startActivity(intent);
             }
         });
@@ -221,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             public void onClick(View v) {
                 Log.i(TAG, "clicked history fab");
                 Intent intent = new Intent(MainActivity.this, RequestHistoryActivity.class);
+                fabMenu.close(true);
                 startActivity(intent);
             }
         });
@@ -230,6 +292,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             public void onClick(View v) {
                 Log.i(TAG, "clicked requests fab");
                 Intent intent = new Intent(MainActivity.this, RequestsListActivity.class);
+                fabMenu.close(true);
                 startActivity(intent);
             }
         });

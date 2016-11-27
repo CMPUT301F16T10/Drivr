@@ -22,4 +22,4 @@ https://medium.com/@chrisbanes/appcompat-v23-2-age-of-the-vectors-91cbafa87c88#.
 This is needed because clans' FAB and FAM don't support AppCompat's app:srcCompat parameter *yet*
 -->
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/ic_explore_black_24dp" />
+    android:drawable="@drawable/ic_face_black_24dp" />
