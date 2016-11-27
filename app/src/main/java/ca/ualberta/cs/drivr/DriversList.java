@@ -172,7 +172,6 @@ public class DriversList implements Iterable<Driver> {
         return false;
     }
 
-
     /**
      * Test whether the collection has only accepted drivers.
      * @return True if all drivers have an accepted state, false otherwise.
@@ -215,5 +214,31 @@ public class DriversList implements Iterable<Driver> {
         public ConfirmedDriverAlreadyExistsException(String message) { super(message); }
         public ConfirmedDriverAlreadyExistsException(Throwable cause) { super(cause); }
         public ConfirmedDriverAlreadyExistsException(String message, Throwable cause) { super(message, cause); }
+    }
+
+    /**
+     * Compares two ArrayLists of Drivers to see if they're equal. If they are, it returns true.
+     * Else, it returns false.
+     *
+     * @param driversComp The ArrayList of Drivers to compare to this ArrayList of Drivers
+     * @return True if equal, false if not
+     */
+    public boolean equals(DriversList driversComp) {
+        boolean isEqual = false;
+        for(int i = 0; i < drivers.size(); ++i) {
+            for(int j = 0; j < driversComp.size(); ++j) {
+                if(driversComp.get(j).getStatus() == drivers.get(i).getStatus()
+                        && driversComp.get(j).getUsername().equals(drivers.get(i).getUsername())) {
+                    isEqual = true;
+                    break;
+                }
+            }
+
+            if(!isEqual) {
+                return false;
+            }
+            isEqual = false;
+        }
+        return true;
     }
 }

@@ -36,7 +36,6 @@ import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
-import io.searchbox.core.Update;
 
 /**
  * In ElasticSearchController, the actual calls to ElasticSearch are done. This requires the use of
@@ -56,8 +55,6 @@ import io.searchbox.core.Update;
  * @see ElasticSearchRequest
  */
 
-//TODO: Fix updating request for drivers accepting requests + test it. (Want to just add in their acceptance, not potentially overwrite over anybody else)
-
 public class ElasticSearchController {
     private static JestDroidClient client;
 
@@ -67,7 +64,7 @@ public class ElasticSearchController {
      * getting the ID where it's stored, appending it to the end of the add query and then replacing
      * the query we just added with the new query including the ID.
      */
-    public static class AddRequest extends  AsyncTask<Request, Void, Void> {
+    public static class AddRequest extends AsyncTask<Request, Void, Void> {
 
         /**
          * Add query:
@@ -117,7 +114,7 @@ public class ElasticSearchController {
                         "\"description\": \"" + request.getDescription() + "\"," +
                         "\"fare\": " + request.getFareString() + " ," +
                         "\"date\": \"" + addedDate + "\"," +
-                        "\"km\": " + request.getKm() + "\", " +
+                        "\"km\": " + request.getKm() + " , " +
                         "\"sourceAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
                         "\"start\": [" +
                         Double.toString(request.getSourcePlace().getLatLng().longitude) + ", " +
@@ -138,7 +135,7 @@ public class ElasticSearchController {
                         request.setId(result.getId());
                         add += ", \"id\": \"" + request.getId() + "\" }";
                         index = new Index.Builder(add)
-                                .index("drivrtestzone")
+                                .index("drivr")
                                 .type("requests")
                                 .id(request.getId())
                                 .build();
@@ -150,7 +147,8 @@ public class ElasticSearchController {
                             }
                         }
                         catch (Exception e) {
-                            Log.i("Error", "The application failed to build and send the requests.");
+                            Log.i("Error", "The application failed to build and send the " +
+                                    "requests.");
                         }
                     }
                     else {
@@ -219,7 +217,7 @@ public class ElasticSearchController {
                         "\"fare\": " + request.getFareString() + " ," +
                         "\"date\": \"" + addedDate + "\"," +
                         "\"sourceAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
-                        "\"km\": " + request.getKm() + "\", " +
+                        "\"km\": " + request.getKm() + " , " +
                         "\"start\": [" +
                         Double.toString(request.getSourcePlace().getLatLng().longitude) + ", " +
                         Double.toString(request.getSourcePlace().getLatLng().latitude) + "]," +
@@ -249,65 +247,20 @@ public class ElasticSearchController {
         }
     }
 
-
     /**
-     * Here, a request that is pending is updated.
+     * Here, all open requests will be gotten from ElasticSearch.
      */
-    //TODO
-    public static class UpdatePendingRequest extends AsyncTask<Request, Void, Void> {
-
-        /**
-         * Add query:
-         * {
-         *     "username": "username", (from last driver in DriverList)
-         * }
-         *
-         * @param requests The request given by the user.
-         * @return null
-         */
-        @Override
-        protected Void doInBackground(Request... requests) {
-            verifySettings();
-            for (Request request: requests) {
-                Driver driver = request.getDrivers().get(request.getDrivers().size()-1);
-                String add = "{\"doc\": {\"driver\": [{\"username\": \"" + driver.getUsername() +
-                        "\", \"status\": \"" + driver.getStatus() + "\"}]}}";
-
-                Update update = new Update.Builder(add)
-                        .index("drivr")
-                        .type("requests")
-                        .id(request.getId())
-                        .build();
-
-                try {
-                    DocumentResult result = client.execute(update);
-                    if(!result.isSucceeded())
-                        Log.i("Error", "Failed to insert the request into elastic search.");
-                }
-                catch (Exception e) {
-                    Log.i("Error", "The application failed to build and send the requests.");
-                }
-
-            }
-            return null;
-        }
-    }
-
-    /**
-     * Here, all the requests that have the description containing the keyword given by the user
-     * will be gotten.
-     */
-    public static class SearchForKeywordRequests
+    public static class SearchForOpenRequests
             extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
-         * Search query:
+         * First search query:
          * {
          *     "from": 0, "size": 10000, "query":
          *     {
          *         "match":
          *         {
-         *             "description": "keyword" (given by user)
+         *             "status": "Accepted"
          *         }
          *     },
          *     "sort":
@@ -319,21 +272,65 @@ public class ElasticSearchController {
          *     }]
          * }
          *
-         * @param keywords The keyword specified by the user
+         *
+         * Second search query:
+         * {
+         *     "from": 0, "size": 10000, "query":
+         *     {
+         *         "match":
+         *         {
+         *             "status": "Pending"
+         *         }
+         *     },
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
+         * }
+         *
+         * @param nothings Mandatory blank string.
          * @return The ArrayList of matching requests
          */
         @Override
-        protected ArrayList<Request> doInBackground(String... keywords) {
+        protected ArrayList<Request> doInBackground(String... nothings) {
             verifySettings();
             ArrayList<Request> requests = new ArrayList<Request>();
             ArrayList<ElasticSearchRequest> tempRequests = new ArrayList<ElasticSearchRequest>();
-            for (String keyword: keywords) {
+            for (String nothing: nothings) {
                 String search_string = "{\"from\": 0, \"size\": 10000, "
-                        + "\"query\": {\"match\": {\"description\": \""
-                        + keyword + "\"}}, " +
+                        + "\"query\": {\"match\": {\"status\": \"Accepted\"}}, " +
                         "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
 
                 Search search = new Search.Builder(search_string)
+                        .addIndex("drivr")
+                        .addType("requests")
+                        .build();
+
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()) {
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
+                        tempRequests.clear();
+                    }
+                    else {
+                        Log.i("Error", "The search executed but it didn't work.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Executing search for requests by keyword failed.");
+                }
+
+                search_string = "{\"from\": 0, \"size\": 10000, "
+                        + "\"query\": {\"match\": {\"status\": \"pending\"}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
+
+                search = new Search.Builder(search_string)
                         .addIndex("drivr")
                         .addType("requests")
                         .build();
@@ -360,21 +357,33 @@ public class ElasticSearchController {
     }
 
     /**
-     * Here, the program will get take in the specified geolocation from the user, search within a
-     * 5 km radius for requests where the start and destination locations are within that range and
-     * return the gotten requests.
+     * Here, all the open requests that have the description containing the keyword given by the
+     * user will be gotten.
      */
-    public static class SearchForGeolocationRequests
-            extends AsyncTask<Location, Void, ArrayList<Request>> {
+    public static class SearchForKeywordRequests
+            extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
          * First search query:
          * {
-         *     "from": 0, "size": 10000, "filter": {
-         *        "geo_distance":
+         *     "from": 0, "size": 10000, "query":
+         *     {
+         *         "filtered":
          *         {
-         *             "distance": "5km",
-         *             "start": [geolocation Longitude, geolocation Latitude]
+         *             "query":
+         *             {
+         *                 "match":
+         *                 {
+         *                     "description": "keyword" (given by user)
+         *                 },
+         *             },
+         *             "filter":
+         *             {
+         *                 "term":
+         *                 {
+         *                     "status": "accepted"
+         *                 }
+         *             }
          *         }
          *     },
          *     "sort":
@@ -388,13 +397,207 @@ public class ElasticSearchController {
          *
          * Second search query:
          * {
-         *     "from": 0, "size": 10000, "filter": {
+         *     "from": 0, "size": 10000, "query":
+         *     {
+         *         "filtered":
+         *         {
+         *             "query":
+         *             {
+         *                 "match":
+         *                 {
+         *                     "description": "keyword" (given by user)
+         *                 },
+         *             },
+         *             "filter":
+         *             {
+         *                 "term":
+         *                 {
+         *                     "status": "pending"
+         *                 }
+         *             }
+         *         }
+         *     },
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
+         * }
+         *
+         * @param keywords The keyword specified by the user
+         * @return The ArrayList of matching requests
+         */
+        @Override
+        protected ArrayList<Request> doInBackground(String... keywords) {
+            verifySettings();
+            ArrayList<Request> requests = new ArrayList<Request>();
+            ArrayList<ElasticSearchRequest> tempRequests = new ArrayList<ElasticSearchRequest>();
+            for (String keyword: keywords) {
+                String search_string = "{\"from\": 0, \"size\": 10000, \"query\": " +
+                        "{\"filtered\": {\"query\": {\"match\": " +
+                        "{\"description\": \"" + keyword + "\"}}, " +
+                        "\"filter\": {\"term\": {\"status\": \"accepted\"}}}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
+
+                Search search = new Search.Builder(search_string)
+                        .addIndex("drivr")
+                        .addType("requests")
+                        .build();
+
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()) {
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
+                        tempRequests.clear();
+                    }
+                    else {
+                        Log.i("Error", "The search executed but it didn't work.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Executing search for requests by keyword failed.");
+                }
+
+                search_string = "{\"from\": 0, \"size\": 10000, \"query\": " +
+                        "{\"filtered\": {\"query\": {\"match\": " +
+                        "{\"description\": \"" + keyword + "\"}}, " +
+                        "\"filter\": {\"term\": {\"status\": \"pending\"}}}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
+
+                search = new Search.Builder(search_string)
+                        .addIndex("drivr")
+                        .addType("requests")
+                        .build();
+
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()) {
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
+                    }
+                    else {
+                        Log.i("Error", "The search executed but it didn't work.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Executing search for requests by keyword failed.");
+                }
+            }
+            return requests;
+        }
+    }
+
+    /**
+     * Here, the program will get take in the specified geolocation from the user, search within a
+     * 5 km radius for open requests where the start and destination locations are within that range
+     * and return the gotten requests.
+     */
+    public static class SearchForGeolocationRequests
+            extends AsyncTask<Location, Void, ArrayList<Request>> {
+
+        /**
+         * First search query:
+         * {
+         *     "from": 0, "size": 10000, "filter":
+         *     {
+         *        "geo_distance":
+         *         {
+         *             "distance": "5km",
+         *             "start": [geolocation Longitude, geolocation Latitude]
+         *         }
+         *     },
+         *     "query":
+         *     {
+         *         "match":
+         *         {
+         *             "status": "Accepted"
+         *         }
+         *     }
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
+         * }
+         *
+         * Second search query:
+         * {
+         *     "from": 0, "size": 10000, "filter":
+         *     {
+         *        "geo_distance":
+         *         {
+         *             "distance": "5km",
+         *             "start": [geolocation Longitude, geolocation Latitude]
+         *         }
+         *     },
+         *     "query":
+         *     {
+         *         "match":
+         *         {
+         *             "status": "Pending"
+         *         }
+         *     }
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
+         * }
+         *
+         * Third search query:
+         * {
+         *     "from": 0, "size": 10000, "filter":
+         *     {
          *        "geo_distance":
          *         {
          *             "distance": "5km",
          *             "end": [geolocation Longitude, geolocation Latitude]
          *         }
          *     },
+         *     "query":
+         *     {
+         *         "match":
+         *         {
+         *             "status": "Accepted"
+         *         }
+         *     }
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
+         * }
+         *
+         * Fourth search query:
+         * {
+         *     "from": 0, "size": 10000, "filter":
+         *     {
+         *        "geo_distance":
+         *         {
+         *             "distance": "5km",
+         *             "end": [geolocation Longitude, geolocation Latitude]
+         *         }
+         *     },
+         *     "query":
+         *     {
+         *         "match":
+         *         {
+         *             "status": "Pending"
+         *         }
+         *     }
          *     "sort":
          *     [{
          *         "date":
@@ -418,6 +621,7 @@ public class ElasticSearchController {
                         + "{ \"distance\": \"5km\", \"start\": ["
                         + Double.toString(geolocation.getLongitude()) + ", "
                         + Double.toString(geolocation.getLatitude()) + "]}}, " +
+                        "\"query\": {\"match\": {\"status\": \"Accepted\"}}, " +
                         "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
 
                 Search search = new Search.Builder(search_string)
@@ -442,12 +646,72 @@ public class ElasticSearchController {
                     Log.i("Error", "Executing search for requests by geolocation failed.");
                 }
 
+                search_string = "{\"from\": 0, \"size\": 10000, \"filter\": "
+                        + "{ \"geo_distance\": "
+                        + "{ \"distance\": \"5km\", \"start\": ["
+                        + Double.toString(geolocation.getLongitude()) + ", "
+                        + Double.toString(geolocation.getLatitude()) + "]}}, " +
+                        "\"query\": {\"match\": {\"status\": \"Pending\"}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
+
+                search = new Search.Builder(search_string)
+                        .addIndex("drivr")
+                        .addType("requests")
+                        .build();
+
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()) {
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
+                        tempRequests.clear();
+                    }
+                    else {
+                        Log.i("Error", "The search executed but it didn't work.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Executing search for requests by geolocation failed.");
+                }
 
                 search_string = "{\"from\": 0, \"size\": 10000, \"filter\": "
                         + "{ \"geo_distance\": "
                         + "{ \"distance\": \"5km\", \"end\": ["
                         + Double.toString(geolocation.getLongitude()) + ", "
                         + Double.toString(geolocation.getLatitude()) + "]}}, " +
+                        "\"query\": {\"match\": {\"status\": \"Accepted\"}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
+
+                search = new Search.Builder(search_string)
+                        .addIndex("drivr")
+                        .addType("requests")
+                        .build();
+
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()) {
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
+                        tempRequests.clear();
+                    }
+                    else {
+                        Log.i("Error", "The search executed but it didn't work.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Executing search for requests by geolocation failed.");
+                }
+
+                search_string = "{\"from\": 0, \"size\": 10000, \"filter\": "
+                        + "{ \"geo_distance\": "
+                        + "{ \"distance\": \"5km\", \"end\": ["
+                        + Double.toString(geolocation.getLongitude()) + ", "
+                        + Double.toString(geolocation.getLatitude()) + "]}}, " +
+                        "\"query\": {\"match\": {\"status\": \"Pending\"}}, " +
                         "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
 
                 search = new Search.Builder(search_string)
@@ -476,7 +740,8 @@ public class ElasticSearchController {
     }
 
     /**
-     * Here, the requests associated to a specific location are returned.
+     * Here, the open requests associated to a specific location are gotten from ElasticSearch
+     * and returned.
      */
     public static class SearchForLocationRequests
             extends AsyncTask<String, Void, ArrayList<Request>> {
@@ -486,9 +751,22 @@ public class ElasticSearchController {
          * {
          *     "from": 0, "size": 10000, "query":
          *     {
-         *         "match":
+         *         "filtered":
          *         {
-         *             "sourceAddress": "location" (given by user)
+         *             "query":
+         *             {
+         *                 "match":
+         *                 {
+         *                     "sourceAddress": "keyword" (given by user)
+         *                 },
+         *             },
+         *             "filter":
+         *             {
+         *                 "term":
+         *                 {
+         *                     "status": "accepted"
+         *                 }
+         *             }
          *         }
          *     },
          *     "sort":
@@ -500,12 +778,88 @@ public class ElasticSearchController {
          *     }]
          * }
          *
+         * Second search query:
          * {
          *     "from": 0, "size": 10000, "query":
          *     {
-         *         "match":
+         *         "filtered":
          *         {
-         *             "destinationAddress": "location" (given by user)
+         *             "query":
+         *             {
+         *                 "match":
+         *                 {
+         *                     "sourceAddress": "keyword" (given by user)
+         *                 },
+         *             },
+         *             "filter":
+         *             {
+         *                 "term":
+         *                 {
+         *                     "status": "pending"
+         *                 }
+         *             }
+         *         }
+         *     },
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
+         * }
+         *
+         * Third search query:
+         * {
+         *     "from": 0, "size": 10000, "query":
+         *     {
+         *         "filtered":
+         *         {
+         *             "query":
+         *             {
+         *                 "match":
+         *                 {
+         *                     "destinationAddress": "keyword" (given by user)
+         *                 },
+         *             },
+         *             "filter":
+         *             {
+         *                 "term":
+         *                 {
+         *                     "status": "accepted"
+         *                 }
+         *             }
+         *         }
+         *     },
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
+         * }
+         *
+         * Fourth search query:
+         * {
+         *     "from": 0, "size": 10000, "query":
+         *     {
+         *         "filtered":
+         *         {
+         *             "query":
+         *             {
+         *                 "match":
+         *                 {
+         *                     "destinationAddress": "keyword" (given by user)
+         *                 },
+         *             },
+         *             "filter":
+         *             {
+         *                 "term":
+         *                 {
+         *                     "status": "pending"
+         *                 }
+         *             }
          *         }
          *     },
          *     "sort":
@@ -526,9 +880,10 @@ public class ElasticSearchController {
             ArrayList<Request> requests = new ArrayList<Request>();
             ArrayList<ElasticSearchRequest> tempRequests = new ArrayList<ElasticSearchRequest>();
             for (String location: locations) {
-                String search_string = "{\"from\": 0, \"size\": 10000, "
-                        + "\"query\": {\"match\": " +
+                String search_string = "{\"from\": 0, \"size\": 10000, \"query\": " +
+                        "{\"filtered\": {\"query\": {\"match\": " +
                         "{\"sourceAddress\": \"" + location + "\"}}, " +
+                        "\"filter\": {\"term\": {\"status\": \"accepted\"}}}}, " +
                         "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
 
                 Search search = new Search.Builder(search_string)
@@ -553,10 +908,67 @@ public class ElasticSearchController {
                     Log.i("Error", "Executing search for requests by location failed.");
                 }
 
-                search_string = "{\"from\": 0, \"size\": 10000, "
-                        + "\"query\": {\"match\": " +
+                search_string = "{\"from\": 0, \"size\": 10000, \"query\": " +
+                        "{\"filtered\": {\"query\": {\"match\": " +
+                        "{\"sourceAddress\": \"" + location + "\"}}, " +
+                        "\"filter\": {\"term\": {\"status\": \"pending\"}}}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
+
+                search = new Search.Builder(search_string)
+                        .addIndex("drivr")
+                        .addType("requests")
+                        .build();
+
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()) {
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
+                        tempRequests.clear();
+                    }
+                    else {
+                        Log.i("Error", "The search executed but it didn't work.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Executing search for requests by location failed.");
+                }
+
+                search_string = "{\"from\": 0, \"size\": 10000, \"query\": " +
+                        "{\"filtered\": {\"query\": {\"match\": " +
                         "{\"destinationAddress\": \"" + location + "\"}}, " +
-                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";;
+                        "\"filter\": {\"term\": {\"status\": \"accepted\"}}}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
+
+                search = new Search.Builder(search_string)
+                        .addIndex("drivr")
+                        .addType("requests")
+                        .build();
+
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()) {
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
+                        tempRequests.clear();
+                    }
+                    else {
+                        Log.i("Error", "The search executed but it didn't work.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Executing search for requests by location failed.");
+                }
+
+                search_string = "{\"from\": 0, \"size\": 10000, \"query\": " +
+                        "{\"filtered\": {\"query\": {\"match\": " +
+                        "{\"destinationAddress\": \"" + location + "\"}}, " +
+                        "\"filter\": {\"term\": {\"status\": \"pending\"}}}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
 
                 search = new Search.Builder(search_string)
                         .addIndex("drivr")
@@ -941,7 +1353,7 @@ public class ElasticSearchController {
      * @param tempRequests The requests gotten from ElasticSearch.
      */
     private static void addRequests(ArrayList<Request> requests,
-                                   ArrayList<ElasticSearchRequest> tempRequests) {
+                                    ArrayList<ElasticSearchRequest> tempRequests) {
         boolean repeat = false;
 
         for (int i = 0; i < tempRequests.size(); i++) {
