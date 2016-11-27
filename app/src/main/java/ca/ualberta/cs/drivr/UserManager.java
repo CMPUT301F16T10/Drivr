@@ -122,6 +122,7 @@ public class UserManager extends Observable implements IUserManager {
     @Override
     public void notifyObservers() {
         setChanged();
+        // TODO: update everything with Elasticsearch
         super.notifyObservers();
     }
 }

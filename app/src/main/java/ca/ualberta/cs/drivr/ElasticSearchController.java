@@ -56,7 +56,6 @@ import io.searchbox.core.Update;
  * @see ElasticSearchRequest
  */
 
-//TODO: Fix adding/getting requests if we're putting in a new Fare/KM variable
 //TODO: Fix updating request for drivers accepting requests + test it. (Want to just add in their acceptance, not potentially overwrite over anybody else)
 
 public class ElasticSearchController {
@@ -78,9 +77,11 @@ public class ElasticSearchController {
          *         "username": "username", (in Request Driver)
          *         "status": "status" (in Request Driver)
          *     }, ...],
+         *     "status": "status", (in Request)
          *     "description": "description", (in Request)
          *     "fare": fare, (in Request)
          *     "date": "date", (in Request)
+         *     "km": km (in Request)
          *     "sourceAddress": "sourceAddress", (in Request SourcePlace)
          *     "start": [ startLongitude, startLatitude], (in Request SourcePlace)
          *     "destinationAddress": "destinationAddress", (in Request DestinationPlace)
@@ -112,9 +113,11 @@ public class ElasticSearchController {
                 }
 
                 add += "]," +
+                        "\"status\": \"" + request.getRequestState().toString() + "\"," +
                         "\"description\": \"" + request.getDescription() + "\"," +
                         "\"fare\": " + request.getFareString() + " ," +
                         "\"date\": \"" + addedDate + "\"," +
+                        "\"km\": " + request.getKm() + "\", " +
                         "\"sourceAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
                         "\"start\": [" +
                         Double.toString(request.getSourcePlace().getLatLng().longitude) + ", " +
@@ -176,9 +179,11 @@ public class ElasticSearchController {
          *         "username": "username", (in Request.Driver)
          *         "status": "status" (in Request.Driver)
          *     }, ...],
+         *     "status": "status", (in Request)
          *     "description": "description" (in Request)
          *     "fare": fare (in Request)
          *     "date": "date" (in Request)
+         *     "km": km (in Request)
          *     "sourceAddress": "sourceAddress", (in Request SourcePlace)
          *     "start": [ startLongitude, startLatitude], (in Request SourcePlace)
          *     "destinationAddress": "destinationAddress", (in Request DestinationPlace)
@@ -209,10 +214,12 @@ public class ElasticSearchController {
                 }
 
                 add += "]," +
+                        "\"status\": \"" + request.getRequestState().toString() + "\"," +
                         "\"description\": \"" + request.getDescription() + "\"," +
                         "\"fare\": " + request.getFareString() + " ," +
                         "\"date\": \"" + addedDate + "\"," +
                         "\"sourceAddress\": \"" + request.getSourcePlace().getAddress() + "\", " +
+                        "\"km\": " + request.getKm() + "\", " +
                         "\"start\": [" +
                         Double.toString(request.getSourcePlace().getLatLng().longitude) + ", " +
                         Double.toString(request.getSourcePlace().getLatLng().latitude) + "]," +
@@ -290,7 +297,8 @@ public class ElasticSearchController {
      * Here, all the requests that have the description containing the keyword given by the user
      * will be gotten.
      */
-    public static class SearchForKeywordRequests extends AsyncTask<String, Void, ArrayList<Request>> {
+    public static class SearchForKeywordRequests
+            extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
          * Search query:
@@ -301,7 +309,14 @@ public class ElasticSearchController {
          *         {
          *             "description": "keyword" (given by user)
          *         }
-         *     }
+         *     },
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
          * }
          *
          * @param keywords The keyword specified by the user
@@ -315,7 +330,8 @@ public class ElasticSearchController {
             for (String keyword: keywords) {
                 String search_string = "{\"from\": 0, \"size\": 10000, "
                         + "\"query\": {\"match\": {\"description\": \""
-                        + keyword + "\"}}}";
+                        + keyword + "\"}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
 
                 Search search = new Search.Builder(search_string)
                         .addIndex("drivr")
@@ -335,7 +351,7 @@ public class ElasticSearchController {
                     }
                 }
                 catch (Exception e) {
-                    Log.i("Error", "Executing the get user method failed.");
+                    Log.i("Error", "Executing search for requests by keyword failed.");
                 }
 
             }
@@ -345,21 +361,47 @@ public class ElasticSearchController {
 
     /**
      * Here, the program will get take in the specified geolocation from the user, search within a
-     * 5 km radius for requests where the start locations are within that range and return the
-     * gotten requests.
+     * 5 km radius for requests where the start and destination locations are within that range and
+     * return the gotten requests.
      */
-    public static class SearchForGeolocationRequests extends AsyncTask<Location, Void, ArrayList<Request>> {
+    public static class SearchForGeolocationRequests
+            extends AsyncTask<Location, Void, ArrayList<Request>> {
 
         /**
-         * Search query:
+         * First search query:
          * {
          *     "from": 0, "size": 10000, "filter": {
          *        "geo_distance":
          *         {
          *             "distance": "5km",
-         *             "start": [geolocation Longitude, geolocationLatitude]
+         *             "start": [geolocation Longitude, geolocation Latitude]
          *         }
-         *     }
+         *     },
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
+         * }
+         *
+         * Second search query:
+         * {
+         *     "from": 0, "size": 10000, "filter": {
+         *        "geo_distance":
+         *         {
+         *             "distance": "5km",
+         *             "end": [geolocation Longitude, geolocation Latitude]
+         *         }
+         *     },
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
          * }
          *
          * @param geolocations The location given by the user.
@@ -375,10 +417,40 @@ public class ElasticSearchController {
                         + "{ \"geo_distance\": "
                         + "{ \"distance\": \"5km\", \"start\": ["
                         + Double.toString(geolocation.getLongitude()) + ", "
-                        + Double.toString(geolocation.getLatitude())
-                        + "]}}}";
+                        + Double.toString(geolocation.getLatitude()) + "]}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
 
                 Search search = new Search.Builder(search_string)
+                        .addIndex("drivr")
+                        .addType("requests")
+                        .build();
+
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()) {
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
+                        tempRequests.clear();
+                    }
+                    else {
+                        Log.i("Error", "The search executed but it didn't work.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Executing search for requests by geolocation failed.");
+                }
+
+
+                search_string = "{\"from\": 0, \"size\": 10000, \"filter\": "
+                        + "{ \"geo_distance\": "
+                        + "{ \"distance\": \"5km\", \"end\": ["
+                        + Double.toString(geolocation.getLongitude()) + ", "
+                        + Double.toString(geolocation.getLatitude()) + "]}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
+
+                search = new Search.Builder(search_string)
                         .addIndex("drivr")
                         .addType("requests")
                         .build();
@@ -396,30 +468,57 @@ public class ElasticSearchController {
                     }
                 }
                 catch (Exception e) {
-                    Log.i("Error", "Executing the get user method failed.");
+                    Log.i("Error", "Executing search for requests by geolocation failed.");
                 }
             }
             return requests;
         }
     }
 
-    //TODO: Only searches for exact source location, could expand to exact destination location
-    public static class SearchForLocationRequests extends AsyncTask<String, Void, ArrayList<Request>> {
+    /**
+     * Here, the requests associated to a specific location are returned.
+     */
+    public static class SearchForLocationRequests
+            extends AsyncTask<String, Void, ArrayList<Request>> {
 
         /**
-         * Search query:
+         * First search query:
          * {
          *     "from": 0, "size": 10000, "query":
          *     {
          *         "match":
          *         {
-         *             "sourceLocation": "location" (given by user)
+         *             "sourceAddress": "location" (given by user)
          *         }
-         *     }
+         *     },
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
          * }
          *
-         * @param locations
-         * @return
+         * {
+         *     "from": 0, "size": 10000, "query":
+         *     {
+         *         "match":
+         *         {
+         *             "destinationAddress": "location" (given by user)
+         *         }
+         *     },
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
+         * }
+         *
+         * @param locations The location given by the user.
+         * @return The ArrayList of requests containing that location.
          */
         @Override
         protected ArrayList<Request> doInBackground(String... locations) {
@@ -429,10 +528,37 @@ public class ElasticSearchController {
             for (String location: locations) {
                 String search_string = "{\"from\": 0, \"size\": 10000, "
                         + "\"query\": {\"match\": " +
-                        "{\"sourceAddress\": \"" + location +
-                        "\"}}}";
+                        "{\"sourceAddress\": \"" + location + "\"}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
 
                 Search search = new Search.Builder(search_string)
+                        .addIndex("drivr")
+                        .addType("requests")
+                        .build();
+
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()) {
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
+                        tempRequests.clear();
+                    }
+                    else {
+                        Log.i("Error", "The search executed but it didn't work.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Executing search for requests by location failed.");
+                }
+
+                search_string = "{\"from\": 0, \"size\": 10000, "
+                        + "\"query\": {\"match\": " +
+                        "{\"destinationAddress\": \"" + location + "\"}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";;
+
+                search = new Search.Builder(search_string)
                         .addIndex("drivr")
                         .addType("requests")
                         .build();
@@ -450,7 +576,7 @@ public class ElasticSearchController {
                     }
                 }
                 catch (Exception e) {
-                    Log.i("Error", "Executing search for requests failed.");
+                    Log.i("Error", "Executing search for requests by location failed.");
                 }
             }
             return requests;
@@ -473,7 +599,14 @@ public class ElasticSearchController {
          *         {
          *             "rider": "username" (given by user)
          *         }
-         *     }
+         *     },
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
          * }
          *
          * Second search query:
@@ -484,7 +617,14 @@ public class ElasticSearchController {
          *         {
          *             "driver.username": "username" (given by user)
          *         }
-         *     }
+         *     },
+         *     "sort":
+         *     [{
+         *         "date":
+         *         {
+         *             "order": "desc"
+         *         }
+         *     }]
          * }
          *
          * @param usernames The username given by the user.
@@ -498,8 +638,8 @@ public class ElasticSearchController {
             for (String username: usernames) {
                 String search_string = "{\"from\": 0, \"size\": 10000, "
                         + "\"query\": {\"match\": " +
-                        "{\"rider\": \"" + username +
-                        "\"}}}";
+                        "{\"rider\": \"" + username + "\"}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
 
                 Search search = new Search.Builder(search_string)
                         .addIndex("drivr")
@@ -526,8 +666,8 @@ public class ElasticSearchController {
 
                 search_string = "{\"from\": 0, \"size\": 10000, "
                         + "\"query\": {\"match\": " +
-                        "{\"driver.username\": \"" + username +
-                        "\"}}}";
+                        "{\"driver.username\": \"" + username + "\"}}, " +
+                        "\"sort\": [{\"date\": {\"order\": \"desc\"}}]}";
 
                 search = new Search.Builder(search_string)
                         .addIndex("drivr")
@@ -552,6 +692,62 @@ public class ElasticSearchController {
             }
 
             return requests;
+        }
+    }
+
+    /**
+     * Here, we get a specified request by searching with the request ID and returning it when we
+     * find it.
+     */
+    public static class GetRequest extends AsyncTask<String, Void, Request> {
+
+        /**
+         * Search query:
+         * {
+         *     "query":
+         *     {
+         *         "match":
+         *         {
+         *             "id": "id" (given by user)
+         *         }
+         *     }
+         * }
+         * @param ids Request to be gotten by ID.
+         * @return The request matching the given ID.
+         */
+        @Override
+        protected Request doInBackground(String... ids) {
+            verifySettings();
+            ArrayList<Request> requests = new ArrayList<Request>();
+            ArrayList<ElasticSearchRequest> tempRequests = new ArrayList<ElasticSearchRequest>();
+            for(String id: ids) {
+                String search_string = "{\"query\": {\"match\": "
+                        + "{\"id\": \"" + id + "\" }}}";
+
+                Search search = new Search.Builder(search_string)
+                        .addIndex("drivr")
+                        .addType("requests")
+                        .build();
+
+                try {
+                    SearchResult result = client.execute(search);
+                    if (result.isSucceeded()) {
+                        List<ElasticSearchRequest> foundRequests = result
+                                .getSourceAsObjectList(ElasticSearchRequest.class);
+                        tempRequests.addAll(foundRequests);
+                        addRequests(requests, tempRequests);
+                    }
+                    else {
+                        Log.i("Error", "The search executed but it didn't work.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Executing search for request by ID failed.");
+                    return null;
+                }
+            }
+
+            return requests.get(0);
         }
     }
 
@@ -668,6 +864,10 @@ public class ElasticSearchController {
      */
     public static class DeleteUser extends AsyncTask<String, Void, Void> {
 
+        /**
+         * @param ids The user to be deleted.
+         * @return null
+         */
         @Override
         protected Void doInBackground(String... ids) {
             verifySettings();
@@ -693,6 +893,10 @@ public class ElasticSearchController {
      */
     public static class DeleteRequest extends AsyncTask<String, Void, Void> {
 
+        /**
+         * @param ids The user to be deleted.
+         * @return null
+         */
         @Override
         protected Void doInBackground(String... ids) {
             verifySettings();
@@ -738,8 +942,23 @@ public class ElasticSearchController {
      */
     private static void addRequests(ArrayList<Request> requests,
                                    ArrayList<ElasticSearchRequest> tempRequests) {
+        boolean repeat = false;
+
         for (int i = 0; i < tempRequests.size(); i++) {
             ElasticSearchRequest gottenRequest = tempRequests.get(i);
+
+            for(int j = 0; j < requests.size(); j++) {
+                if(gottenRequest.getId().equals(requests.get(j).getId())) {
+                    repeat = true;
+                    break;
+                }
+            }
+
+            if(repeat) {
+                repeat = false;
+                continue;
+            }
+
             Request request = new Request();
 
             User tempUser = new User();
@@ -756,9 +975,11 @@ public class ElasticSearchController {
                 date = new Date();
             }
 
-            request.setDate(date);
+            request.setRequestState(RequestState.valueOf(gottenRequest.getStatus().toUpperCase()));
             request.setDescription(gottenRequest.getDescription());
+            request.setDate(date);
             request.setFare(new BigDecimal(gottenRequest.getFare()));
+            request.setKm(gottenRequest.getKm());
             request.setId(gottenRequest.getId());
 
             ConcretePlace temp = new ConcretePlace();

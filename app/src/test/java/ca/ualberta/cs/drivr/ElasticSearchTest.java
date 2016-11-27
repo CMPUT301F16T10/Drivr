@@ -75,11 +75,13 @@ public class ElasticSearchTest {
         inDriver.setUsername("tiegan");
         drivers.add(inDriver);
 
+        request.setRequestState(RequestState.ACCEPTED);
         request.setRider(user);
         request.setDrivers(drivers);
         request.setFareString("555.55");
         request.setDate(new Date());
         request.setDescription("Go to Rogers Place");
+        request.setKm(100);
 
         ConcretePlace temp = new ConcretePlace();
         temp.setLatLng(new LatLng(50, 50));
@@ -114,7 +116,7 @@ public class ElasticSearchTest {
         ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests(user.getUsername());
         Robolectric.flushBackgroundThreadScheduler();
 
-        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        Request loadedRequest = loadedRequests.get(0);
 
         ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
@@ -152,7 +154,7 @@ public class ElasticSearchTest {
         ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests(user.getUsername());
         Robolectric.flushBackgroundThreadScheduler();
 
-        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        Request loadedRequest = loadedRequests.get(0);
 
         ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
@@ -191,7 +193,7 @@ public class ElasticSearchTest {
         deleteRequest.execute(request.getId());
         Robolectric.flushBackgroundThreadScheduler();
 
-        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        Request loadedRequest = loadedRequests.get(0);
         assertEquals(request.getId(), loadedRequest.getId());
     }
 
@@ -218,7 +220,7 @@ public class ElasticSearchTest {
         deleteRequest.execute(request.getId());
         Robolectric.flushBackgroundThreadScheduler();
 
-        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        Request loadedRequest = loadedRequests.get(0);
         assertEquals(request.getId(), loadedRequest.getId());
     }
 
@@ -245,7 +247,7 @@ public class ElasticSearchTest {
         deleteRequest.execute(request.getId());
         Robolectric.flushBackgroundThreadScheduler();
 
-        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        Request loadedRequest = loadedRequests.get(0);
         assertEquals(request.getId(), loadedRequest.getId());
     }
 
@@ -446,7 +448,7 @@ public class ElasticSearchTest {
         ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests(user.getUsername());
         Robolectric.flushBackgroundThreadScheduler();
 
-        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        Request loadedRequest = loadedRequests.get(0);
 
         ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
         deleteRequest.execute(request.getId());
