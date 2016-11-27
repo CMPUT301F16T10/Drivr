@@ -22,6 +22,7 @@ import android.location.Address;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -47,7 +48,9 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
     private Place destinationPlace;
 
     private TextView acceptButton;
+    private TextView declineButton;
 
+    private static final String TAG = "RequestActivity";
     /**
      * Used as a key for passing a request into this activity as an extra to an intent.
      */
@@ -60,6 +63,8 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         routeText = (TextView) findViewById(R.id.request_route_text);
         fareText = (TextView) findViewById(R.id.request_fare_text);
         acceptButton = (TextView) findViewById(R.id.request_accept_text);
+        declineButton = (TextView) findViewById(R.id.request_decline_text);
+
         // map = findViewById(R.id.request_map_fragment);
 
         String requestString = getIntent().getStringExtra(EXTRA_REQUEST);
@@ -86,6 +91,28 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
             public void onClick(View v) {
                 ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
                 addRequest.execute(request);
+                finish();
+            }
+        });
+
+        declineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RequestActivity.this, NewRequestActivity.class);
+
+                Gson gson = new GsonBuilder().registerTypeAdapter(Uri.class, new UriSerializer())
+                        .create();
+
+                String concretePlaceJsonPick = gson.toJson(sourcePlace);
+                String concretePlaceJsonDest = gson.toJson(destinationPlace);
+
+                intent.putExtra(NewRequestActivity.EXTRA_PLACE, concretePlaceJsonDest);
+                Log.i(TAG, "Place: " + destinationPlace.getName() + ", :" + destinationPlace.getLatLng());
+
+                intent.putExtra("PICK_UP", concretePlaceJsonPick);
+                Log.i(TAG, "Place: " + sourcePlace.getName() + ", :" + sourcePlace.getLatLng());
+
+                startActivity(intent);
                 finish();
             }
         });

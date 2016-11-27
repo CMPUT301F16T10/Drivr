@@ -54,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 /**
  * Created by justin on 09/11/16.
@@ -85,6 +86,8 @@ public class MapController implements DirectionCallback{
     private RequestsListController requestsListController;
 
     private static final String TAG = "MainActivity";
+
+    private int color = Color.RED;
 
     private Marker pickupMarker;
     private Marker destinationMarker;
@@ -217,7 +220,8 @@ public class MapController implements DirectionCallback{
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             addDestination(mapMarker);
-                            markers.add(mapMarker);
+                            //markers.add(mapMarker);
+                            markers.clear();
                             addRequestOnMap(pickup,mapMarker);
                             createRequest(pickup,mapMarker);
 
@@ -261,6 +265,7 @@ public class MapController implements DirectionCallback{
 
             intent.putExtra("PICK_UP", concretePlaceJsonPick);
             Log.i(TAG, "Place: " + pickupPlace.getName() + ", :" + pickupPlace.getLatLng());
+
 
             mContext.startActivity(intent);
 
@@ -317,7 +322,10 @@ public class MapController implements DirectionCallback{
             map.addMarker(new MarkerOptions().position(destinationLatLng).title("Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
             ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
-            map.addPolyline(DirectionConverter.createPolyline(mContext,directionPositionList,3, Color.RED));
+            map.addPolyline(DirectionConverter.createPolyline(mContext,directionPositionList,3, color));
+            Random rnd = new Random();
+
+            color = Color.argb(255,rnd.nextInt(256),rnd.nextInt(256),rnd.nextInt(256));
         }
     }
 
