@@ -222,9 +222,10 @@ public class MapController implements DirectionCallback{
                             addDestination(mapMarker);
                             //markers.add(mapMarker);
                             markers.clear();
-                            addRequestOnMap(pickup,mapMarker);
-                            createRequest(pickup,mapMarker);
+                            //addRequestOnMap(pickup,mapMarker);
 
+                            createRequest(pickup,mapMarker);
+                            map.clear();
 
 
                         }
