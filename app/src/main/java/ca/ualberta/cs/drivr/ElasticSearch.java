@@ -238,13 +238,13 @@ public class ElasticSearch {
 
     //Just commenting out the code so it can run tests. It just needs the requests from UserManager
     // to work.
-    public ArrayList<Request> getUpdatedRequests(UserManager userManager) {
-        return null;
-        /* if(connectivityManager.getActiveNetworkInfo().isConnected()) {
+    public ArrayList<Request> getUpdatedRequests() {
+        UserManager userManager = UserManager.getInstance();
+        if(connectivityManager.getActiveNetworkInfo().isConnected()) {
             ArrayList<Request> requests = new ArrayList<Request>();
             ElasticSearchController.GetRequest getRequest =
                     new ElasticSearchController.GetRequest();
-            for (Request request : userManager.getRequests()) {
+            for (Request request : userManager.getRequestsList().getRequests()) {
                 getRequest.execute(request.getId());
                 try {
                     Request gottenRequest = getRequest.get();
@@ -261,7 +261,7 @@ public class ElasticSearch {
         } else {
             Log.i("Error", "Unable to connect to the internet");
             return null;
-        } */
+        }
     }
 
     /**
