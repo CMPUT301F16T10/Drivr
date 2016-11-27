@@ -76,6 +76,11 @@
             android:label="Search Results" />
         <activity android:name=".PaymentActivity" />
         <activity android:name=".RequestCompletedActivity"></activity>
+        <receiver
+            android:name=".NotificationReceiver"
+            android:enabled="true"
+            android:exported="false" >
+        </receiver>
     </application>
 
 </manifest>

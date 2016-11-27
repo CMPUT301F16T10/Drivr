@@ -46,6 +46,8 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
     private MapController mapController;
     private Place sourcePlace;
     private Place destinationPlace;
+    private UserManager userManager = UserManager.getInstance();
+    private User user = userManager.getUser();
 
     private TextView acceptButton;
     private TextView declineButton;
@@ -90,6 +92,8 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
             @Override
             public void onClick(View v) {
 
+
+
                 RequestState state = request.getRequestState();
                 if (state.equals(RequestState.CREATED)) {
                     request.setRequestState(RequestState.PENDING);
@@ -99,12 +103,23 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
                     ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
                     addRequest.execute(request);
                 }
-                else if (state.equals(RequestState.PENDING) && UserManager.getInstance().getUserMode().equals(UserMode.DRIVER)) {
-                    request.addDriver((Driver) UserManager.getInstance().getUser());
-//                    request.setRequestState(RequestState.ACCEPTED);
-                    ElasticSearchController.UpdatePendingRequest update = new ElasticSearchController.UpdatePendingRequest();
-                    update.execute(request);
+                RequestController requestController = new RequestController(userManager);
+                if (requestController.canAcceptRequest(request, userManager.getUserMode())) {
+                    Log.i(TAG, "attempting to accept request");
+                    requestController.acceptRequest(request, getApplicationContext());
                 }
+                else if (requestController.canConfirmRequest(request, userManager.getUserMode())) {
+                    requestController.confirmRequest(request);
+                }
+                else if (requestController.canCompleteRequest(request, userManager.getUserMode())) {
+                    requestController.completeRequest(request);
+                }
+//                else if (state.equals(RequestState.PENDING) && UserManager.getInstance().getUserMode().equals(UserMode.DRIVER)) {
+//                    request.addDriver((Driver) UserManager.getInstance().getUser());
+////                    request.setRequestState(RequestState.ACCEPTED);
+////                    ElasticSearchController.UpdatePendingRequest update = new ElasticSearchController.UpdatePendingRequest();
+////                    update.execute(request);
+//                }
 
                 Log.i("Request State:", request.getRequestState().toString());
                 finish();

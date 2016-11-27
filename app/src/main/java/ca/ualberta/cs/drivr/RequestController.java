@@ -16,6 +16,9 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+
 /**
  * A controller for modifying requests.
  * @see Request
@@ -52,8 +55,12 @@ public class RequestController {
      * Accept a request.
      * @param request The request to accept.
      */
-    public void acceptRequest(Request request) {
+    public void acceptRequest(Request request, Context context) {
+        ElasticSearch elasticSearch = new ElasticSearch((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        elasticSearch.updateRequest(request);
         request.setRequestState(RequestState.ACCEPTED);
+        UserManager.getInstance().getRequestsList().add(request);
+        UserManager.getInstance().notifyObservers();
     }
 
     /**
@@ -96,6 +103,7 @@ public class RequestController {
      */
     public void completeRequest(Request request) {
         request.setRequestState(RequestState.COMPLETED);
+        userManager.notify();
     }
 
     /**
