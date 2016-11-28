@@ -149,7 +149,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo.clickOnButton("Save Description");
     }
 
-    public void login(){
+    public void loginDriver(){
         View fabButton = solo.getView(R.id.forTesting);
         solo.clickOnView(fabButton);
 
@@ -163,6 +163,59 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         View signButton = solo.getView(R.id.sign_in_button);
 
         solo.clickOnView(signButton);
+
+    }
+    public void loginRider(){
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
+
+        View loginButton = solo.getView(R.id.main_fab_login);
+        solo.waitForView(loginButton);
+
+        solo.clickOnView(loginButton);
+
+        solo.enterText(solo.getEditText("Username"), "JustinRider");
+
+        View signButton = solo.getView(R.id.sign_in_button);
+
+        solo.clickOnView(signButton);
+
+    }
+    public void createDriver(){
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
+
+        View loginButton = solo.getView(R.id.main_fab_login);
+        solo.waitForView(loginButton);
+
+        solo.clickOnView(solo.getView(R.id.login_sign_up_text));
+        solo.enterText(solo.getEditText("Username"), "JustinRider");
+        solo.enterText(solo.getEditText("Name"), "Justin");
+        solo.enterText(solo.getEditText("Email Address"), "j@gmail.com");
+        solo.enterText(solo.getEditText("Phone Number"), "1234567890");
+
+        solo.clickOnView(solo.getView(R.id.sign_up_button));
+
+    }
+
+    public void createRider(){
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
+
+        View loginButton = solo.getView(R.id.main_fab_login);
+        solo.waitForView(loginButton);
+
+        solo.clickOnView(solo.getView(R.id.login_sign_up_text));
+        solo.enterText(solo.getEditText("Username"), "JustinDriver");
+        solo.enterText(solo.getEditText("Name"), "Justin");
+        solo.enterText(solo.getEditText("Email Address"), "j@gmail.com");
+        solo.enterText(solo.getEditText("Phone Number"), "1234567890");
+
+        solo.clickOnView(solo.getView(R.id.sign_up_button));
+
+    }
+
+    public void acceptRequest(){
 
     }
 
@@ -207,7 +260,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     public void testViewSearchRequests(){
 
         int fragmentId = R.id.main_map;
-
+        createDriver();
+        loginDriver();
         enterDriverMode();
 
         View view = solo.getView(fragmentId);
@@ -228,8 +282,11 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     public void testViewGeoLocations(){
 
+        createDriver();
+        createRider();
+        loginRider();
+        testCreateRequestByMapLocation();
         testViewSearchRequests();
-
         View address = solo.getView(R.id.item_request_route_text);
         solo.clickOnView(address);
         solo.waitForActivity(RequestActivity.class);
@@ -244,8 +301,16 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     public void testViewDriverRequests(){
 
-        login();
-        //enterDriverMode();
+        createDriver();
+        createRider();
+
+        // Create Request
+        loginRider();
+        testCreateRequestByMapLocation();
+
+        loginDriver();
+        enterDriverMode();
+        acceptRequest();
 
         View fabButton = solo.getView(R.id.forTesting);
         solo.clickOnView(fabButton);

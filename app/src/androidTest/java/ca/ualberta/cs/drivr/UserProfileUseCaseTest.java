@@ -92,13 +92,11 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
         * Accessed: November 27, 2016
         * More compact way of Interacting with EditText
         */
-        solo.enterText((EditText) solo.getView(R.id.login_username), "aaaaa");
-        solo.enterText((EditText) solo.getView (R.id.login_name), "aaaaa");
-        solo.enterText((EditText) solo.getView (R.id.login_email), "aaaa@");
-        solo.enterText((EditText) solo.getView (R.id.login_phone), "1112223333");
+        solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
+        solo.enterText((EditText) solo.getView (R.id.login_name), "Daniel");
+        solo.enterText((EditText) solo.getView (R.id.login_email), "Daniel@google.com");
+        solo.enterText((EditText) solo.getView (R.id.login_phone), "7801234567");
         solo.clickOnButton ("Sign Up");
-        solo.goBack();
-
     }
 
     /*
@@ -119,7 +117,7 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
         solo.clickOnView(login);
         solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
 
-        solo.enterText((EditText) solo.getView(R.id.login_username), "aaaaa");
+        solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
         solo.clickOnText("Sign In");
 
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
@@ -134,12 +132,11 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
         solo.clearEditText((EditText) solo.getView (R.id.profile_name_edit_text));
         solo.clearEditText((EditText) solo.getView (R.id.profile_email_edit_text));
         solo.clearEditText((EditText) solo.getView (R.id.profile_phone_number_edit_text));
-        solo.enterText((EditText) solo.getView(R.id.profile_username_edit_text), "aaaab");
-        solo.enterText((EditText) solo.getView (R.id.profile_name_edit_text), "aaaab");
-        solo.enterText((EditText) solo.getView (R.id.profile_email_edit_text), "aaaab@");
-        solo.enterText((EditText) solo.getView (R.id.profile_phone_number_edit_text), "1112233333");
+        solo.enterText((EditText) solo.getView(R.id.profile_username_edit_text), "DanielL");
+        solo.enterText((EditText) solo.getView (R.id.profile_name_edit_text), "DanielL");
+        solo.enterText((EditText) solo.getView (R.id.profile_email_edit_text), "DanielL@google.com");
+        solo.enterText((EditText) solo.getView (R.id.profile_phone_number_edit_text), "7801234567");
         solo.clickOnView(editProfile);
-        solo.goBack();
     }
 
 
@@ -147,39 +144,38 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
     * 03.04.01:
     *   "As a driver, in my profile I can provide details about the vehicle I drive."
     */
-//    public void testSwitchDriver() {
-//        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-//        int[] location = new int[2];
-//        View view = solo.getView(R.id.forTesting);
-//        view.getLocationOnScreen(location);
-//        int x= location[0];
-//        int y= location[1];
-//
-//        solo.clickOnScreen(x,y);
-//        View login = getActivity().findViewById(R.id.main_fab_login);
-//        solo.clickOnView(login);
-//        solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
-//        solo.enterText((EditText) solo.getView(R.id.login_username), "aaaaa");
-//        solo.clickOnText("Sign In");
-//        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-//
-//        solo.clickOnScreen(x,y);
-//        View driverMode = getActivity().findViewById(R.id.main_driver_mode);
-//        solo.clickOnView(driverMode);
-//
-//        solo.enterText((EditText) solo.getView(R.id.main_keyword_edit_text), "123123123");
-//        solo.clickOnText("Save Description");
-//        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-//
-//        solo.clickOnScreen(x, y);
-//        View profile = getActivity().findViewById(R.id.main_fab_profile);
-//        solo.clickOnView(profile);
-//        View editProfile = solo.getView(R.id.profile_edit_icon);
-//        solo.clickOnView(editProfile);
-//
-//        solo.clearEditText((EditText) solo.getView(R.id.vehicle_description_edit_text));
-//        solo.enterText((EditText) solo.getView (R.id.vehicle_description_edit_text), "Super old Toyota 1995");
-//        solo.goBack();
-//    }
+    public void testSwitchDriver() {
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+        int[] location = new int[2];
+        View view = solo.getView(R.id.forTesting);
+        view.getLocationOnScreen(location);
+        int x= location[0];
+        int y= location[1];
+
+        solo.clickOnScreen(x,y);
+        View login = getActivity().findViewById(R.id.main_fab_login);
+        solo.clickOnView(login);
+        solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.login_username), "aaaaa");
+        solo.clickOnText("Sign In");
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+
+        solo.clickOnScreen(x,y);
+        View driverMode = getActivity().findViewById(R.id.main_driver_mode);
+        solo.clickOnView(driverMode);
+
+        solo.enterText((EditText) solo.getView(R.id.main_keyword_edit_text), "123123123");
+        solo.clickOnText("Save Description");
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+
+        solo.clickOnScreen(x, y);
+        View profile = getActivity().findViewById(R.id.main_fab_profile);
+        solo.clickOnView(profile);
+        View editProfile = solo.getView(R.id.profile_edit_icon);
+        solo.clickOnView(editProfile);
+
+        solo.clearEditText((EditText) solo.getView(R.id.vehicle_description_edit_text));
+        solo.enterText((EditText) solo.getView (R.id.vehicle_description_edit_text), "Test Change vehicle description");
+    }
 }
 
