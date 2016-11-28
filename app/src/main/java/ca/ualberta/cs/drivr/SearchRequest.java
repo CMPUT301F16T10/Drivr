@@ -97,7 +97,7 @@ public class SearchRequest {
             SearchLocation();
             firstSearch = false;
         }
-
+        
         if(maxPrice != "MAX" || minPrice != "0") {
             FilterByPrice();
             firstSearch = false;

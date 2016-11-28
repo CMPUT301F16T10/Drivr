@@ -222,19 +222,22 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         otherUserNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String otherUsername = otherUserNameTextView.getText().toString();
                 // there exists drivers
-                if(otherUserNameTextView.getText() != "No Driver Yet") {
-                    if(otherUserNameTextView.getText() != "Multiple Drivers Accepted") {
+                if(otherUsername != "No Driver Yet") {
+                    if(otherUsername != "Multiple Drivers Accepted") {
                         Gson gson = new GsonBuilder()
                                 .registerTypeAdapter(Uri.class, new UriSerializer())
                                 .create();
-                        Driver driver = drivers.get(0);
 
-                        String driverString = gson.toJson(driver, Driver.class);
+
+                        ElasticSearch elasticSearch = new ElasticSearch(UserManager.getInstance().getConnectivityManager());
+                        User user = elasticSearch.loadUser(otherUsername);
+
+                        String driverString = gson.toJson(user, User.class);
                         Intent intent = new Intent(context, DriverProfileActivity.class);
                         intent.putExtra(DriverProfileActivity.DRIVER, driverString);
                         context.startActivity(intent);
-
                     }
                     else {
                         Intent intent = new Intent(context, DisplayDriverListActivity.class);
@@ -281,7 +284,13 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
                 // Start Dialer
                 else if (drivers.size() == 1) {
                     Intent intent = new Intent(Intent.ACTION_CALL);
-                    String number = drivers.get(0).getPhoneNumber();
+                    String number;
+                    if (UserManager.getInstance().getUserMode().equals(UserMode.RIDER)) {
+                        number = drivers.get(0).getPhoneNumber();
+                    }
+                    else {
+                        number = request.getRider().getPhoneNumber();
+                    }
                     number = "tel:" + number;
                     intent.setData(Uri.parse(number));
                     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -319,8 +328,14 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
                     ComponentName emailApp = intent.resolveActivity(context.getPackageManager());
                     ComponentName unsupportedAction = ComponentName.unflattenFromString("com.android.fallback/.Fallback");
                     boolean hasEmailApp = emailApp != null && !emailApp.equals(unsupportedAction);
+                    String email;
 
-                    String email = drivers.get(0).getEmail();
+                    if (UserManager.getInstance().getUserMode().equals(UserMode.RIDER)) {
+                        email = drivers.get(0).getEmail();
+                    }
+                    else {
+                        email = request.getRider().getEmail();
+                    }
                     String subject = "Drivr Request: " + request.getId();
                     String body = "Drivr user " + drivers.get(0).getUsername();
 
@@ -331,15 +346,21 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
                         context.startActivity(Intent.createChooser(emailIntent, "Chooser Title"));
                     }
                     else {
-                        Toast.makeText(context, "An email account is required to use this feature", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(context, "An email account is required to use this feature", Toast.LENGTH_LONG).show();
 
                         // Todo possibly implement to save contact info for later
                         // http://stackoverflow.com/questions/27528236/mailto-android-unsupported-action-error
-                        /*
-                        Intent intentEmail = new Intent(ContactsContract.Intents.Insert.ACTION);
-                        intentEmail.setType(ContactsContract.RawContacts.CONTENT_TYPE);
-                        intentEmail.putExtra(ContactsContract.Intents.Insert.EMAIL, email);
-                        context.startActivity(intentEmail); */
+
+//                        Intent intentEmail = new Intent(ContactsContract.Intents.Insert.ACTION);
+//                        intentEmail.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+//                        intentEmail.putExtra(ContactsContract.Intents.Insert.EMAIL, email);
+//                        context.startActivity(intentEmail);
+
+                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                "mailto",email, null));
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+                        emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+                        context.startActivity(Intent.createChooser(emailIntent, "Send email..."));
                     }
                 }
                 else {
