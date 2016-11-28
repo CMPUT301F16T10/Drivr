@@ -182,6 +182,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         final FloatingActionButton fabDriver = (FloatingActionButton) findViewById(R.id.main_driver_mode);
         final FloatingActionButton fabRider = (FloatingActionButton) findViewById(R.id.main_rider_mode);
 
+        // Hide the settings FAB
+        fabSettings.setVisibility(View.GONE);
+
         /*
         Change between user and driver mode. Will probably be replaced with an option in settings.
         For now the visibility of this is set to gone because we should not have too many FABs.
@@ -248,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     * Author: Syeda Zunairah
                     * Accessed: November 29, 2016
                     * Creates a dialog box with an edit text to get the vehicle description.
-                     */
+                    */
                     AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
                     final EditText edittext = new EditText(v.getContext());
                     alert.setTitle("Become a Driver!");
@@ -362,6 +365,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
         setNotificationAlarm(context);
+    }
+
+    /*
+    Hides the 3 dot overflow menu in the action bar.
+
+    From: http://stackoverflow.com/a/25651938
+    Author: nyx
+    Accessed: November 28, 2016
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_settings);
+        item.setVisible(false);
+        super.onPrepareOptionsMenu(menu);
+        return true;
     }
 
     @Override
