@@ -65,30 +65,41 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
     * 03.01.01:
     *   "As a user, I want a profile with a unique username and my contact information."
     */
-//    Test works but didn't want to create a "new user" every time. So it's just commented out
-//    public void testAddingNewUser() {
-//        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-//
-//        int[] location = new int[2];
-//        View view = solo.getView(R.id.forTesting);
-//        view.getLocationOnScreen(location);
-//        int x= location[0];
-//        int y= location[1];
-//        solo.clickOnScreen(x,y);
-//        View login = getActivity().findViewById(R.id.main_fab_login);
-//        solo.clickOnView(login);
-//        solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
-//
-//        TextView signup = (TextView)solo.getView(R.id.login_sign_up_text);
-//        solo.clickOnView(signup);
-//
-//        solo.enterText((EditText) solo.getView(R.id.login_username), "aaaaa");
-//        solo.enterText((EditText) solo.getView (R.id.login_name), "aaaaa");
-//        solo.enterText((EditText) solo.getView (R.id.login_email), "aaaa@");
-//        solo.enterText((EditText) solo.getView (R.id.login_phone), "1112223333");
-//        solo.clickOnButton ("Sign Up");
-//
-//    }
+    public void testAddingNewUser() {
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+
+        /*
+        * From: http://stackoverflow.com/a/17805597
+        * Author: Rudolf Coutinho
+        * Accessed: November 27, 2016
+        * Finding coordinates for a view for all size screens
+        */
+        int[] location = new int[2];
+        View view = solo.getView(R.id.forTesting);
+        view.getLocationOnScreen(location);
+        int x= location[0];
+        int y= location[1];
+        solo.clickOnScreen(x,y);
+        View login = getActivity().findViewById(R.id.main_fab_login);
+        solo.clickOnView(login);
+        solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
+
+        TextView signup = (TextView)solo.getView(R.id.login_sign_up_text);
+        solo.clickOnView(signup);
+        
+        /*
+        * From: http://stackoverflow.com/a/18993980
+        * Author: mlchen850622
+        * Accessed: November 27, 2016
+        * More compact way of Interacting with EditText
+        */
+        solo.enterText((EditText) solo.getView(R.id.login_username), "aaaaa");
+        solo.enterText((EditText) solo.getView (R.id.login_name), "aaaaa");
+        solo.enterText((EditText) solo.getView (R.id.login_email), "aaaa@");
+        solo.enterText((EditText) solo.getView (R.id.login_phone), "1112223333");
+        solo.clickOnButton ("Sign Up");
+
+    }
 
     /*
     * 03.02.01:
@@ -96,12 +107,14 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
     */
     public void testEditUser() {
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+
         int[] location = new int[2];
         View view = solo.getView(R.id.forTesting);
         view.getLocationOnScreen(location);
         int x= location[0];
         int y= location[1];
         solo.clickOnScreen(x,y);
+
         View login = getActivity().findViewById(R.id.main_fab_login);
         solo.clickOnView(login);
         solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
@@ -116,6 +129,7 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
 
         View editProfile = solo.getView(R.id.profile_edit_icon);
         solo.clickOnView(editProfile);
+
         solo.clearEditText((EditText) solo.getView(R.id.profile_username_edit_text));
         solo.clearEditText((EditText) solo.getView (R.id.profile_name_edit_text));
         solo.clearEditText((EditText) solo.getView (R.id.profile_email_edit_text));
