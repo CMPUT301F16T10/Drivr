@@ -30,16 +30,8 @@ import com.robotium.solo.Solo;
 public class RequestsUseCaseTests extends ActivityInstrumentationTestCase2<MainActivity>{
 
     /*
-    * US 01.01.01
-    *   As a rider, I want to request rides between two locations.
-    * US 01.02.01
-    *   As a rider, I want to see current requests I have open.
     * US 01.03.01
     *   As a rider, I want to be notified if my request is accepted.
-    * US 01.04.01
-    *   As a rider, I want to cancel requests.
-    * US 01.05.01
-    *   As a rider, I want to be able to phone or email the driver who accepted a request.
     * US 01.06.01
     *   As a rider, I want an estimate of a fair fare to offer to drivers.
     * US 01.07.01
@@ -66,6 +58,7 @@ public class RequestsUseCaseTests extends ActivityInstrumentationTestCase2<MainA
     }
 
     /*
+    * UC 1 SpecifyRequestLocations
     * US 01.01.01
     *   As a rider, I want to request rides between two locations.
     */
@@ -90,39 +83,20 @@ public class RequestsUseCaseTests extends ActivityInstrumentationTestCase2<MainA
 
 
     /*
+    * UC 4 RiderCancelsRequests
     * US 01.04.01
     *   As a rider, I want to cancel requests.
     */
 
-    public void cancelRequest () {
-        login();
-        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+    public void testCancelRequest () {
+        testCreateRequest();
+        solo.assertCurrentActivity("Expected RequestActivity", RequestActivity.class);
         View historyView = solo.getView(R.id.main_fah_history);
         View fabButton = solo.getView(R.id.forTesting);
         solo.clickOnView(fabButton);
         solo.waitForView(historyView);
         solo.clickOnView(historyView);
         solo.assertCurrentActivity("Expected RequestHistoryActivity", RequestHistoryActivity.class);
-
-    }
-
-
-    public void login(){
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
-        View login = getActivity().findViewById(R.id.main_fab_login);
-        solo.clickOnView(login);
-        solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
-
-        TextView signup = (TextView)solo.getView(R.id.login_sign_up_text);
-        solo.clickOnView(signup);
-        solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
-        solo.enterText((EditText) solo.getView (R.id.login_name), "Daniel");
-        solo.enterText((EditText) solo.getView (R.id.login_email), "Daniel@google.com");
-        solo.enterText((EditText) solo.getView (R.id.login_phone), "7801234567");
-        solo.clickOnButton ("Sign Up");
-        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-
     }
 
 }

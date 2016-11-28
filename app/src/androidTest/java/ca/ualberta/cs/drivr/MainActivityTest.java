@@ -321,7 +321,33 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
-
+    /*
+   * UC 1 SpecifyRequestLocations
+   * US 01.01.01
+   *   As a rider, I want to request rides between two locations.
+   *
+   * UC 6 EstimateFare
+   * US 01.06.01
+   *   As a rider, I want an estimate of a fair fare to offer to drivers.
+   */
+    public void testCreateRequest () {
+        solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
+        solo.clickOnText("Sign In");
+        /*
+        * Not actually selecting the buttons, just selecting the area on the map where the buttons
+        * would be
+        */
+        View profileView = solo.getView(R.id.main_fab_profile);
+        View historyView = solo.getView(R.id.main_fah_history);
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+        solo.clickOnView(profileView);
+        solo.clickOnText("Yes");
+        solo.clickOnView(historyView);
+        solo.clickOnText("Yes");
+        solo.assertCurrentActivity("Expected RequestsActivity", NewRequestActivity.class);
+        solo.scrollDown();
+        solo.clickOnButton("Create");
+    }
 
     /* UC 2 RiderViewRequests
     *   As a rider, I want to see current requests I have open.
