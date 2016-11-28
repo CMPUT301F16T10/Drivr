@@ -372,7 +372,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     /**
-     *
      * UC 5 ContactDriver
      * Note Error may Happen, but test works
      */
@@ -397,6 +396,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     
 
     /*
+    * UC 14 EditProfile
     * 03.02.01:
     *   "As a user, I want to edit the contact information in my profile."
     */
@@ -423,6 +423,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     /*
+    * Uc 16 AddVehicleInfo
     * 03.04.01:
     *  "As a driver, in my profile I can provide details about the vehicle I drive."
     */
