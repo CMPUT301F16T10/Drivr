@@ -1,14 +1,10 @@
 package ca.ualberta.cs.drivr;
 
-import android.app.IntentService;
 import android.app.NotificationManager;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -44,23 +40,33 @@ public class NotificationReceiver extends BroadcastReceiver{
     public void alarmManagerCallback() {
         Log.i("NotificationReceiver:", "notificationCallback");
         RequestsList requestList = userManager.getRequestsList();
+        Log.i("NotificationReceiver:", "got requests list");
 //        requestList.has()
-        ArrayList<Request> oldRequestList = userManager.getRequestsList().getRequests();
+        //ArrayList<Request> oldRequestList = userManager.getRequestsList().getRequests();
         ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
-        ArrayList<Request> updatedRequests = elasticSearch.getUpdatedRequests();
+        Log.i("NotificationReceiver:", "created new ElasticSearch");
+        ArrayList<Request> updatedRequests = elasticSearch.loadUserRequests(UserManager.getInstance().getUser().getUsername());
+        Log.i("NotificationReceiver:", "got update requests");
+        if (updatedRequests == null)
+            return;
         for (Request request : updatedRequests) {
             //TODO remove || TRUE
             Log.i("NotificationReceiver:", "updated requests");
-            if (requestList.hasProper(request)) {
-                requestList.removeProper(request);
-                requestList.add(request);
-                //There should be a notification right here
-                createNotification();
+            if (requestList.hasById(request)) {
+                Request oldRequest = requestList.getById(request.getId());
+                if (oldRequest.getRequestState() != request.getRequestState()) {
+                    requestList.removeProper(request);
+                    requestList.add(request);
+                    userManager.notifyObservers();
+                    //There should be a notification right here
+                    createNotification();
+                }
             }
         }
 //        this.stopSelf();
 //        createNotification();
     }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         this.connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -69,6 +75,7 @@ public class NotificationReceiver extends BroadcastReceiver{
         alarmManagerCallback();
 
     }
+
     private void createNotification() {
         Log.i("NOTIFICATION: ", "Created notification");
         NotificationManager mNM;
@@ -81,6 +88,7 @@ public class NotificationReceiver extends BroadcastReceiver{
                         .setContentText("something has happened to your request");
 //        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNM.notify(1, notification.build());
+        Log.i("NotificationReceiver", "Created notification and placed in the notification tray.");
     }
 
 //    @Nullable

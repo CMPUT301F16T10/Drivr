@@ -317,38 +317,6 @@ public class ElasticSearch {
     }
 
     /**
-     * Here, the arrayList wi
-     * @return
-     */
-    public ArrayList<Request> getUpdatedRequests() {
-        UserManager userManager = UserManager.getInstance();
-        if(connectivityManager.getActiveNetworkInfo().isConnected()) {
-            ArrayList<Request> requests = new ArrayList<Request>();
-            ElasticSearchController.GetRequest getRequest =
-                    new ElasticSearchController.GetRequest();
-            for (Request request : userManager.getRequestsList().getRequests()) {
-                if (getRequest.getStatus().equals(AsyncTask.Status.FINISHED)) {
-                    getRequest.execute(request.getId());
-                }
-                try {
-                    Request gottenRequest = getRequest.get();
-                    if (gottenRequest.getRequestState() != request.getRequestState()
-                            || !gottenRequest.getDrivers().equals(request.getDrivers())) {
-                        requests.add(gottenRequest);
-                    }
-                } catch (Exception e) {
-                    Log.i("Error", "Failed to load a request by ID.");
-                    return null;
-                }
-            }
-            return requests;
-        } else {
-            Log.i("Error", "Unable to connect to the internet");
-            return null;
-        }
-    }
-
-    /**
      * Here, the requests for a given keyword are gotten by first checking if there's anything
      * offline that needs to be saved. Next, if the user is connected to the internet, it will first
      * check to see if the username already exists in ElasticSearch by using GetUser in the

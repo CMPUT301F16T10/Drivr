@@ -53,11 +53,25 @@ public class RequestsList {
     }
 
     public void removeProper(Request request) {
+        // Make a list of requests to remove and remove them in a separate loop. This is because we
+        // cannot modify a collection while we are iterating over it.
+        ArrayList<Request> requestsToRemove = new ArrayList<>();
+        for (Request existingRequest : requestsList) {
+            if (existingRequest.getId().equals(request.getId())) {
+                requestsToRemove.add(existingRequest);
+            }
+        }
+        for (Request requestToRemove : requestsToRemove)
+            requestsList.remove(requestToRemove);
+
+        /*
+        Old version
         for (Request existingRequest : requestsList) {
             if (existingRequest.getId().equals(request.getId())) {
                 requestsList.remove(existingRequest);
             }
         }
+        */
     }
 
     /**
@@ -69,7 +83,12 @@ public class RequestsList {
         return requestsList.contains(request);
     }
 
-    public Boolean hasProper(Request request) {
+    /**
+     * Determine if a request exists by ID.
+     * @param request The request to check the ID against.
+     * @return True if exists, false otherwise.
+     */
+    public Boolean hasById(Request request) {
         for (Request existingRequest : requestsList) {
             if (existingRequest.getId().equals(request.getId())) {
                 return Boolean.TRUE;
@@ -86,6 +105,18 @@ public class RequestsList {
         return requestsList.size();
     }
 
+    /**
+     * Gets a request by the ID.
+     * @param id The ID of the request.
+     * @return The request or null if the ID does not exist.
+     */
+    public Request getById(String id) {
+        for (Request request: requestsList) {
+            if (request.getId().equals(id))
+                return request;
+        }
+        return null;
+    }
 
     /**
      * Get a the list of all requests.
