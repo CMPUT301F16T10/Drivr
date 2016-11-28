@@ -65,38 +65,15 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
     *   "As a user, I want a profile with a unique username and my contact information."
     */
     public void testAddingNewUser() {
-        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-
-        /*
-        * From: http://stackoverflow.com/a/17805597
-        * Author: Rudolf Coutinho
-        * Accessed: November 27, 2016
-        * Finding coordinates for a view for all size screens
-        */
-        int[] location = new int[2];
-        View view = solo.getView(R.id.forTesting);
-        view.getLocationOnScreen(location);
-        int x= location[0];
-        int y= location[1];
-        solo.clickOnScreen(x,y);
-        View login = getActivity().findViewById(R.id.main_fab_login);
-        solo.clickOnView(login);
         solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
-
         TextView signup = (TextView)solo.getView(R.id.login_sign_up_text);
         solo.clickOnView(signup);
-
-        /*
-        * From: http://stackoverflow.com/a/18993980
-        * Author: mlchen850622
-        * Accessed: November 27, 2016
-        * More compact way of Interacting with EditText
-        */
         solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
         solo.enterText((EditText) solo.getView (R.id.login_name), "Daniel");
         solo.enterText((EditText) solo.getView (R.id.login_email), "Daniel@google.com");
         solo.enterText((EditText) solo.getView (R.id.login_phone), "7801234567");
         solo.clickOnButton ("Sign Up");
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
     }
 
     /*
@@ -104,15 +81,12 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
     *   "As a user, I want to edit the contact information in my profile."
     */
     public void testEditUser() {
+
+        login();
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
 
-        int[] location = new int[2];
-        View view = solo.getView(R.id.forTesting);
-        view.getLocationOnScreen(location);
-        int x= location[0];
-        int y= location[1];
-        solo.clickOnScreen(x,y);
-
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
         View login = getActivity().findViewById(R.id.main_fab_login);
         solo.clickOnView(login);
         solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
@@ -121,7 +95,7 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
         solo.clickOnText("Sign In");
 
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-        solo.clickOnScreen(x,y);
+        solo.clickOnView(fabButton);
         View profile = getActivity().findViewById(R.id.main_fab_profile);
         solo.clickOnView(profile);
 
@@ -140,42 +114,39 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
     }
 
 
-   /*
-    * 03.04.01:
-    *   "As a driver, in my profile I can provide details about the vehicle I drive."
-    */
-    public void testSwitchDriver() {
-        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-        int[] location = new int[2];
-        View view = solo.getView(R.id.forTesting);
-        view.getLocationOnScreen(location);
-        int x= location[0];
-        int y= location[1];
+//   /*
+//    * 03.04.01:
+//    *   "As a driver, in my profile I can provide details about the vehicle I drive."
+//    */
+//    public void testSwitchDriver() {
+//        login();
+//        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+//        View fabButton = solo.getView(R.id.forTesting);
+//        solo.clickOnView(fabButton);
+//        View driverMode = solo.getView(R.id.main_driver_mode);
+//        solo.waitForView(driverMode);
+//        solo.clickOnView(driverMode);
+//
+//        solo.waitForDialogToOpen();
+//        solo.enterText((EditText) AlertDialog, "123123123");
+//        solo.clickOnText("Save Description");
+//        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+//
+//        solo.clickOnView(fabButton);
+//        View profile = solo.getView(R.id.main_fab_profile);
+//        solo.clickOnView(profile);
+//        View editProfile = solo.getView(R.id.profile_edit_icon);
+//        solo.clickOnView(editProfile);
+//
+//        solo.clearEditText((EditText) solo.getView(R.id.vehicle_description_edit_text));
+//        solo.enterText((EditText) solo.getView (R.id.vehicle_description_edit_text), "Test Change vehicle description");
+//    }
 
-        solo.clickOnScreen(x,y);
-        View login = getActivity().findViewById(R.id.main_fab_login);
-        solo.clickOnView(login);
+    public void login(){
         solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.login_username), "aaaaa");
+        solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
         solo.clickOnText("Sign In");
-        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-
-        solo.clickOnScreen(x,y);
-        View driverMode = getActivity().findViewById(R.id.main_driver_mode);
-        solo.clickOnView(driverMode);
-
-        solo.enterText((EditText) solo.getView(R.id.main_keyword_edit_text), "123123123");
-        solo.clickOnText("Save Description");
-        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-
-        solo.clickOnScreen(x, y);
-        View profile = getActivity().findViewById(R.id.main_fab_profile);
-        solo.clickOnView(profile);
-        View editProfile = solo.getView(R.id.profile_edit_icon);
-        solo.clickOnView(editProfile);
-
-        solo.clearEditText((EditText) solo.getView(R.id.vehicle_description_edit_text));
-        solo.enterText((EditText) solo.getView (R.id.vehicle_description_edit_text), "Test Change vehicle description");
     }
+
 }
 
