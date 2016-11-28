@@ -27,17 +27,16 @@ package ca.ualberta.cs.drivr;
 public class Driver extends User {
 
     /**
-     * The state of the driver. Needs to be a string so ElasticSearch can copy the status into
-     * Driver.
+     * The state of the driver.
      */
-    private String status;
+    private RequestState status;
 
     /**
      * Constructor for Driver.
      */
     public Driver() {
         super();
-        status = RequestState.PENDING.toString();
+        status = RequestState.PENDING;
     }
 
     /**
@@ -46,7 +45,7 @@ public class Driver extends User {
      */
     public Driver(User user) {
         super(user);
-        status = RequestState.PENDING.toString();
+        status = RequestState.PENDING;
     }
 
     /**
@@ -55,7 +54,7 @@ public class Driver extends User {
      */
     public Driver(Driver other) {
         this((User) other);
-        status = other.getStatus().toString();
+        status = other.getStatus();
     }
 
     /**
@@ -63,7 +62,7 @@ public class Driver extends User {
      * @return The driver's status.
      */
     public RequestState getStatus() {
-        return RequestState.valueOf(status.toUpperCase());
+        return status;
     }
 
     /**
@@ -71,7 +70,7 @@ public class Driver extends User {
      * @param status A status in String form.
      */
     public void setStatus(String status) {
-        this.status = status;
+        this.status = RequestState.valueOf(status.toUpperCase());
     }
 
     /**
@@ -79,6 +78,6 @@ public class Driver extends User {
      * @param status A status in RequestState form.
      */
     public void setStatus(RequestState status) {
-        this.status = status.toString();
+        this.status = status;
     }
 }
