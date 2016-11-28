@@ -176,7 +176,21 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
             public void onClick(View v) {
                 // there exists drivers
                 if(otherUserNameTextView.getText() != "No Driver Yet") {
-                    //Todo
+                    if(otherUserNameTextView.getText() != "Multiple Drivers Accepted") {
+                        Gson gson = new GsonBuilder()
+                                .registerTypeAdapter(Uri.class, new UriSerializer())
+                                .create();
+                        Driver driver = drivers.get(0);
+
+                        String driverString = gson.toJson(driver, Driver.class);
+                        Intent intent = new Intent(context, DriverProfileActivity.class);
+                        intent.putExtra(DriverProfileActivity.DRIVER, driverString);
+                        context.startActivity(intent);
+
+                    }
+                    else {
+                        // todo open dialog for multiple drivers
+                    }
                 }
             }
         });
@@ -201,6 +215,8 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
 
         // Show the status text
         statusTextView.setText(request.getRequestState().toString());
+
+
 
         // Add a listener to the call image
         callImageView.setOnClickListener(new View.OnClickListener() {

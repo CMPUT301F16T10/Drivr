@@ -29,6 +29,8 @@ public class RequestsListActivity extends AppCompatActivity {
 
     private UserManager userManager = UserManager.getInstance();
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
