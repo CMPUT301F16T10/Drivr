@@ -44,6 +44,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A list adapter for rendering requests in a requests list recycler view.
@@ -56,6 +59,26 @@ import java.util.ArrayList;
  * </ul>
  */
 public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapter.ViewHolder> {
+
+    /**
+     * The context ot display the data.
+     */
+    private final Context context;
+
+    /**
+     * All requests.
+     */
+    private final ArrayList<Request> requests;
+
+    /**
+     * The requests to display.
+     */
+    private final ArrayList<Request> requestsToDisplay;
+
+    /**
+     * The user manager.
+     */
+    private final UserManager userManager;
 
     /**
      * A class for storing subviews of a view.
@@ -94,23 +117,15 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
     }
 
     /**
-     * The context ot display the data.
-     */
-    private final Context context;
-
-    /**
-     * The requests to display.
-     */
-    private final ArrayList<Request> requests;
-
-    /**
      * Instantiate a new RequestListAdapter.
      * @param context The context to display the the requests
      * @param requests The requests
      */
-    public RequestsListAdapter(Context context, ArrayList<Request> requests) {
+    public RequestsListAdapter(Context context, ArrayList<Request> requests, UserManager userManager) {
         this.context = context;
         this.requests = requests;
+        this.requestsToDisplay = new ArrayList<>(requests);
+        this.userManager = userManager;
     }
 
     /**
@@ -127,11 +142,19 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         // Inflate the custom layout
         View requestView = inflater.inflate(R.layout.item_request, parent, false);
 
-
-
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(requestView);
         return viewHolder;
+    }
+
+    public void filter(RequestState... statesArray) {
+        ArrayList<RequestState> states = new ArrayList<>(Arrays.asList(statesArray));
+        requestsToDisplay.clear();
+        for (Request request : requests) {
+            if (states.contains(request.getRequestState()))
+                requestsToDisplay.add(request);
+        }
+        notifyDataSetChanged();
     }
 
     /**
@@ -141,10 +164,8 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
      */
     @Override
     public void onBindViewHolder(RequestsListAdapter.ViewHolder viewHolder, int position) {
-        final Request request = requests.get(position);
-
-
-
+        //final Request request = requests.get(position);
+        final Request request = requestsToDisplay.get(position);
 
         // Get the views to update
         final TextView otherUserNameTextView = viewHolder.otherUserNameTextView;
@@ -154,7 +175,6 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         final TextView statusTextView = viewHolder.statusTextView;
         final ImageView callImageView = viewHolder.callImageView;
         final ImageView emailImageView = viewHolder.emailImageView;
-
         final ImageView checkImageView = viewHolder.checkMarkImageView;
         final ImageView deleteImageView = viewHolder.xMarkImageView;
 
@@ -240,8 +260,6 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         // Show the status text
         statusTextView.setText(request.getRequestState().toString());
 
-
-
         // Add a listener to the call image
         callImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -312,10 +330,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
                         intentEmail.setType(ContactsContract.RawContacts.CONTENT_TYPE);
                         intentEmail.putExtra(ContactsContract.Intents.Insert.EMAIL, email);
                         context.startActivity(intentEmail); */
-
                     }
-
-
                 }
                 else {
                     Intent intent = new Intent(context, DisplayDriverListActivity.class);
@@ -334,7 +349,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, RequestCompletedActivity.class);
-
+                intent.putExtra(RequestCompletedActivity.REQUEST_ID_EXTRA, request.getId());
                 context.startActivity(intent);
             }
         });
@@ -355,6 +370,6 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
      */
     @Override
     public int getItemCount() {
-        return requests.size();
+        return requestsToDisplay.size();
     }
 }

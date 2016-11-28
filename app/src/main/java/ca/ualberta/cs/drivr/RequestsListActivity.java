@@ -28,8 +28,7 @@ import android.support.v7.widget.RecyclerView;
 public class RequestsListActivity extends AppCompatActivity {
 
     private UserManager userManager = UserManager.getInstance();
-
-
+    private RequestsListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +37,21 @@ public class RequestsListActivity extends AppCompatActivity {
 
         // Setup the RecyclerView
         RecyclerView requestsListRecyclerView = (RecyclerView) findViewById(R.id.requests_list_recycler);
-        RequestsListAdapter adapter = new RequestsListAdapter(this, userManager.getRequestsList().getRequests());
+        adapter = new RequestsListAdapter(this, userManager.getRequestsList().getRequests(), userManager);
         requestsListRecyclerView.setAdapter(adapter);
         requestsListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public Request getRequest(int position) { throw new UnsupportedOperationException(); }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.filter(RequestState.PENDING, RequestState.ACCEPTED, RequestState.CONFIRMED);
+    }
 
-    public RequestsList getRequestsList() { throw new UnsupportedOperationException(); }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.filter(RequestState.PENDING, RequestState.ACCEPTED, RequestState.CONFIRMED);
+    }
+
 }

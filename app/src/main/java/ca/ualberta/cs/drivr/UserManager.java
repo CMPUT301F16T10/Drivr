@@ -42,6 +42,11 @@ public class UserManager extends Observable implements IUserManager {
     private RequestsList requestsList;
 
     /**
+     * A connectivity manager instance.
+     */
+    private ConnectivityManager connectivityManager;
+
+    /**
      * A singleton instance.
      */
     private static final UserManager instance = new UserManager();
@@ -115,6 +120,22 @@ public class UserManager extends Observable implements IUserManager {
     @Override
     public void setUserMode(UserMode userMode) {
         this.userMode = userMode;
+    }
+
+    /**
+     * Get the connectivity manager.
+     * @return The connectivity manager.
+     */
+    public ConnectivityManager getConnectivityManager() {
+        return connectivityManager;
+    }
+
+    /**
+     * Set the connectivity manager.
+     * @param connectivityManager The connectivity manager.
+     */
+    public void setConnectivityManager(ConnectivityManager connectivityManager) {
+        this.connectivityManager = connectivityManager;
     }
 
     /**
