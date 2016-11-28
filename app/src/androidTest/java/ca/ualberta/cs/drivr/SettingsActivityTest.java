@@ -46,30 +46,4 @@ public class SettingsActivityTest extends ActivityInstrumentationTestCase2<Setti
         solo.finishOpenedActivities();
     }
 
-    public void testChangeUserMode() {
-        solo.assertCurrentActivity("Expected SettingsActivity", SettingsActivity.class);
-        // Guarantee the current user mode is rider
-        if (solo.waitForText("Rider", 1, 100))
-            solo.clickOnButton("Change user mode");
-
-        assertTrue(solo.waitForText("Rider"));
-        solo.clickOnButton("Change user mode");
-        assertTrue(solo.waitForText("Driver"));
-        solo.clickOnButton("Change user mode");
-        assertTrue(solo.waitForText("Rider"));
-    }
-
-    public void testChangeMapUnits() {
-        solo.assertCurrentActivity("Expected SettingsActivity", SettingsActivity.class);
-        // Guarantee the current map units are metric
-        if (solo.waitForText("Metric", 1, 100))
-            solo.clickOnButton("Change map units");
-
-        assertTrue(solo.waitForText("Metric"));
-        solo.clickOnButton("Change map units");
-        assertTrue(solo.waitForText("Imperial"));
-        solo.clickOnButton("Change map units");
-        assertTrue(solo.waitForText("Metric"));
-    }
-
 }

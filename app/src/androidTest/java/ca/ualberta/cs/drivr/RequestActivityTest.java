@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
  * Created by adam on 2016-10-12.
  */
 
-public class RequestActivityTest extends ActivityInstrumentationTestCase2<RequestActivity> {
+public class RequestActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private Solo solo;
 
@@ -38,7 +38,7 @@ public class RequestActivityTest extends ActivityInstrumentationTestCase2<Reques
 
 
     public RequestActivityTest() {
-        super(ca.ualberta.cs.drivr.RequestActivity.class);
+        super(ca.ualberta.cs.drivr.MainActivity.class);
     }
 
     @Override
@@ -51,26 +51,5 @@ public class RequestActivityTest extends ActivityInstrumentationTestCase2<Reques
         solo.finishOpenedActivities();
     }
 
-    /**
-     * UC 24 Driver View Locations
-     * US 10.02.01 As a Driver, I want to view start and end Geo-locations on a map for a Request.
-     */
-
-    /*public void testViewSourceLocationOnMap() {
-        solo.assertCurrentActivity("Expected RequestActivity", RequestActivity.class);
-        solo.clickOnText("Source");
-
-        final String source = solo.getText("Source").getText().toString();
-        // We want 2 occurrences: one in the text view and one on the map
-        assertTrue(solo.waitForText(source, 2, 3000));
-    }
-
-    public void testViewDestinationLocationOnMap() {
-        solo.assertCurrentActivity("Expected RequestActivity", RequestActivity.class);
-        solo.clickOnText("Destination Location");
-        final String destination = solo.getText("Destination Location").getText().toString();
-        // We want 2 occurrences: one in the text view and one on the map
-        assertTrue(solo.waitForText(destination, 2, 3000));
-    } */
 
 }
