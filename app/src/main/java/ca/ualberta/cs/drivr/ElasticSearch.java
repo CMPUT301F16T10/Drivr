@@ -233,14 +233,16 @@ public class ElasticSearch {
         for(String keyword: keywords) {
             if (first) {
                 for (int i = 0; i < offlineOpenRequests.size(); ++i) {
-                    if (offlineOpenRequests.get(i).getDescription().contains(keyword)) {
+                    String description = offlineOpenRequests.get(i).getDescription().toLowerCase();
+                    if (description.contains(keyword.toLowerCase())) {
                         keywordRequests.add(offlineOpenRequests.get(i));
                     }
                 }
                 first = false;
             } else {
                 for (int i = 0; i < keywordRequests.size(); ++i) {
-                    if (!keywordRequests.get(i).getDescription().contains(keyword)) {
+                    String description = keywordRequests.get(i).getDescription().toLowerCase();
+                    if (!description.contains(keyword.toLowerCase())) {
                         keywordRequests.remove(i);
                         --i;
                     }

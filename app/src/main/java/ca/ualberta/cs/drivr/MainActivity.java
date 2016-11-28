@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     /*
     https://github.com/Clans/FloatingActionButton/issues/273
-    Author: gwilli on GitHub
+    Author: gwilli on GitHub`
     Accessed: November 10, 2016
 
     Add support for vector drawables in older versions of android
@@ -122,10 +122,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         /**
          * This calls the login activity a the beginning if there is no local user stored
          */
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        if (userManager.getUser() == null) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+
 //        startActivityForResult(intent, 1);
 //        onActivityResult(1, "result", 0);
         // Looks better without Blue Bar
@@ -266,6 +269,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     */
                     AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
                     final EditText edittext = new EditText(v.getContext());
+                    edittext.setText("Vechicle Make");
+                    edittext.clearComposingText();
                     alert.setTitle("Become a Driver!");
 //                    alert.setMessage("You must enter a vehicle description to continue");
                     alert.setMessage("Drivers are require to enter vehicle information!\n\nPlease enter your vehicle's make");

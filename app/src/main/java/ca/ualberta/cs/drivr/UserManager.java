@@ -18,13 +18,27 @@ package ca.ualberta.cs.drivr;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Observable;
 
 /**
  * A (singleton) model class for providing access to application data.
  */
 public class UserManager extends Observable implements IUserManager {
+
+    private static final String SAVE_FILENAME_USER = "UserManager.User.dat";
+    private static final String SAVE_FILENAME_REQUESTS = "UserManager.RequestsList.dat";
 
     /**
      * The current user.
@@ -49,13 +63,83 @@ public class UserManager extends Observable implements IUserManager {
     /**
      * A singleton instance.
      */
-    private static final UserManager instance = new UserManager();
+    private static UserManager instance;
+
+    private static void loadUser() {
+        try {
+            if (instance == null)
+                instance = new UserManager();
+            FileInputStream fis = App.getContext().openFileInput(SAVE_FILENAME_USER);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Uri.class, new UriSerializer())
+                    .create();
+            instance.user = gson.fromJson(in, User.class);
+            if (instance == null)
+                throw new FileNotFoundException();
+        }
+        catch (FileNotFoundException e) {
+            instance.user = new User();
+        }
+    }
+
+    private static void loadRequests() {
+        try {
+            if (instance == null)
+                instance = new UserManager();
+            FileInputStream fis = App.getContext().openFileInput(SAVE_FILENAME_REQUESTS);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Uri.class, new UriSerializer())
+                    .create();
+            instance.requestsList = gson.fromJson(in, RequestsList.class);
+            if (instance == null)
+                throw new FileNotFoundException();
+        }
+        catch (FileNotFoundException e) {
+            instance.requestsList = new RequestsList();
+        }
+    }
+
+    private static void saveUser() {
+        try {
+            FileOutputStream fos = App.getContext().openFileOutput(SAVE_FILENAME_USER, 0);
+            OutputStreamWriter writer = new OutputStreamWriter(fos);
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Uri.class, new UriSerializer())
+                    .create();
+            gson.toJson(instance.user, writer);
+            writer.flush();
+        }
+        catch (IOException e) {
+            // Do nothing
+        }
+    }
+
+    private static void saveRequests() {
+        try {
+            FileOutputStream fos = App.getContext().openFileOutput(SAVE_FILENAME_REQUESTS, 0);
+            OutputStreamWriter writer = new OutputStreamWriter(fos);
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Uri.class, new UriSerializer())
+                    .create();
+            gson.toJson(instance.requestsList, writer);
+            writer.flush();
+        }
+        catch (IOException e) {
+            // Do nothing
+        }
+    }
 
     /**
      * Get access to the singleton instance.
      * @return The singleton instance.
      */
     public static UserManager getInstance() {
+        if (instance == null) {
+            loadUser();
+            loadRequests();
+        }
         return instance;
     }
 
@@ -146,10 +230,8 @@ public class UserManager extends Observable implements IUserManager {
     @Override
     public void notifyObservers() {
         setChanged();
-        // TODO: update everything with Elasticsearch
-        // TODO: Grab the context to be able to use ElasticSearch
-        //ElasticSearch elasticSearch = new ElasticSearch((ConnectivityManager)
-        //        context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        saveUser();
+        saveRequests();
         super.notifyObservers();
     }
 }

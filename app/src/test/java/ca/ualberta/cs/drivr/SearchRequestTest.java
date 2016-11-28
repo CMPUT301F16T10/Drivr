@@ -40,6 +40,7 @@ import static junit.framework.Assert.assertEquals;
  * Tests for the methods in the SearchRequests class.
  *
  * @author Tiegan Bonowicz
+ * @see SearchRequest
  */
 
 @RunWith(RobolectricTestRunner.class)

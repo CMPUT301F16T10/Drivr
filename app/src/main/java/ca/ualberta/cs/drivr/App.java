@@ -16,34 +16,23 @@
 
 package ca.ualberta.cs.drivr;
 
-import android.test.ActivityInstrumentationTestCase2;
-
-import com.robotium.solo.Solo;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import android.app.Application;
+import android.content.Context;
 
 /**
- * Created by adam on 2016-10-12.
+ * Created by adam on 2016-11-28.
  */
 
-public class SettingsActivityTest extends ActivityInstrumentationTestCase2<SettingsActivity> {
+public class App extends Application {
 
-    private Solo solo;
+    private static App context = null;
 
-    public SettingsActivityTest() {
-        super(ca.ualberta.cs.drivr.SettingsActivity.class);
+    public void onCreate() {
+        super.onCreate();
+        context = this;
     }
 
-    @Override
-    public void setUp() throws Exception {
-        solo = new Solo(getInstrumentation(), getActivity());
+    public static Context getContext() {
+        return context;
     }
-
-    @Override
-    public void tearDown() throws Exception {
-        solo.finishOpenedActivities();
-    }
-
 }

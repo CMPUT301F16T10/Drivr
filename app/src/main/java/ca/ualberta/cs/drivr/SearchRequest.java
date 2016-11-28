@@ -19,6 +19,7 @@ package ca.ualberta.cs.drivr;
 import android.content.Context;
 import android.location.Location;
 import android.net.ConnectivityManager;
+
 import java.util.ArrayList;
 
 /**
@@ -64,16 +65,8 @@ public class SearchRequest {
     public SearchRequest(String minPrice, String maxPrice, String minPricePer, String maxPricePer,
                          ConcretePlace location, String keyword) {
         this.minPrice = minPrice;
-        if (maxPrice.equals("MAX")) {
-            this.maxPrice = "99999999";
-        } else {
-            this.maxPrice = maxPrice;
-        }
-        if (maxPricePer.equals("MAX")) {
-            this.maxPricePer = "9999";
-        } else {
-            this.maxPricePer = maxPricePer;
-        }
+        this.maxPrice = maxPrice;
+        this.maxPricePer = maxPricePer;
         this.minPricePer = minPricePer;
         this.location = location;
         this.keyword = keyword;
@@ -103,11 +96,12 @@ public class SearchRequest {
             firstSearch = false;
         }
 
-        if(maxPrice != null || minPrice != null) {
+
+        if(!maxPrice.equals("MAX") || !minPrice.equals("0")) {
             FilterByPrice();
             firstSearch = false;
         }
-        if(maxPricePer != null || minPricePer != null) {
+        if(!maxPricePer.equals("MAX") || !minPricePer.equals("0")) {
             FilterByPricePer();
         }
 
@@ -167,10 +161,7 @@ public class SearchRequest {
      * price.
      */
     private void FilterByPrice() {
-        if(minPrice == null) {
-            minPrice = "0";
-        }
-        if(maxPrice == null) {
+        if(maxPrice.equals("MAX")) {
             maxPrice = "100000";
         }
 
@@ -197,11 +188,8 @@ public class SearchRequest {
      * price per KM.
      */
     private void FilterByPricePer() {
-        if(minPricePer == null) {
-            minPrice = "0";
-        }
-        if(maxPricePer == null) {
-            maxPrice = "100000";
+        if(maxPricePer.equals("MAX")) {
+            maxPricePer = "100000";
         }
 
         if(firstSearch) {

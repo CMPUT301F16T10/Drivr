@@ -16,6 +16,7 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.content.Intent;
 import android.graphics.PointF;
 import android.support.test.filters.MediumTest;
 import android.test.ActivityInstrumentationTestCase2;
@@ -25,6 +26,7 @@ import android.widget.EditText;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.robotium.solo.Solo;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -48,6 +50,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     @Override
     public void setUp() throws Exception {
         solo = new Solo(getInstrumentation(), getActivity());
+
     }
 
     @Override
@@ -129,81 +132,61 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
-    public void enterDriverMode(){
-        int fragmentId = R.id.main_map;
-        solo.waitForFragmentById (fragmentId);
-        SupportMapFragment mFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.main_map);
 
-        solo.waitForView(mFragment);
+        UserManager userManager = UserManager.getInstance();
 
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
+        public void enterDriverMode() {
+            int fragmentId = R.id.main_map;
+            solo.waitForFragmentById(fragmentId);
+            SupportMapFragment mFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.main_map);
 
-        View driverButton = solo.getView(R.id.main_driver_mode);
-        solo.waitForView(driverButton);
+            solo.waitForView(mFragment);
 
-        solo.clickOnView(driverButton);
+            View fabButton = solo.getView(R.id.forTesting);
+            solo.clickOnView(fabButton);
 
-        solo.waitForDialogToOpen();
-        solo.enterText(solo.getEditText(""), "Car");
-        solo.clickOnButton("Save Description");
-    }
+            View driverButton = solo.getView(R.id.main_driver_mode);
+            solo.waitForView(driverButton);
 
-    public void loginDriver(){
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
+            solo.clickOnView(driverButton);
 
-        View loginButton = solo.getView(R.id.main_fab_login);
-        solo.waitForView(loginButton);
 
-        solo.clickOnView(loginButton);
+            if (userManager.getUser().getVehicleDescription().isEmpty()) {
 
-        solo.enterText(solo.getEditText("Username"), "JustinDriver");
+                solo.waitForDialogToOpen();
+                solo.enterText(solo.getEditText(""), "Car");
+                solo.clickOnButton("Save Description");
+            }
+        }
 
-        View signButton = solo.getView(R.id.sign_in_button);
 
-        solo.clickOnView(signButton);
 
-    }
+        public void loginDriver() {
+
+            solo.enterText(solo.getEditText("Username"), "JustinDriver");
+
+            View signButton = solo.getView(R.id.sign_in_button);
+
+            solo.clickOnView(signButton);
+        }
+
+
     public void loginRider(){
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
 
-        View loginButton = solo.getView(R.id.main_fab_login);
-        solo.waitForView(loginButton);
 
-        solo.clickOnView(loginButton);
+            solo.enterText(solo.getEditText("Username"), "JustinRider");
 
-        solo.enterText(solo.getEditText("Username"), "JustinRider");
+            View signButton = solo.getView(R.id.sign_in_button);
 
-        View signButton = solo.getView(R.id.sign_in_button);
+            solo.clickOnView(signButton);
 
-        solo.clickOnView(signButton);
+        }
+        public void createDriver(){
+            View fabButton = solo.getView(R.id.forTesting);
+            solo.clickOnView(fabButton);
 
-    }
-    public void createDriver(){
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
-
-        View loginButton = solo.getView(R.id.main_fab_login);
-        solo.waitForView(loginButton);
-
-        solo.clickOnView(solo.getView(R.id.login_sign_up_text));
-        solo.enterText(solo.getEditText("Username"), "JustinRider");
-        solo.enterText(solo.getEditText("Name"), "Justin");
-        solo.enterText(solo.getEditText("Email Address"), "j@gmail.com");
-        solo.enterText(solo.getEditText("Phone Number"), "1234567890");
-
-        solo.clickOnView(solo.getView(R.id.sign_up_button));
-
-    }
-
-    public void createRider(){
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
-
-        View loginButton = solo.getView(R.id.main_fab_login);
-        solo.waitForView(loginButton);
+            View loginButton = solo.getView(R.id.main_fab_login);
+            solo.waitForView(loginButton);
 
         solo.clickOnView(solo.getView(R.id.login_sign_up_text));
         solo.enterText(solo.getEditText("Username"), "JustinDriver");
@@ -211,20 +194,53 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo.enterText(solo.getEditText("Email Address"), "j@gmail.com");
         solo.enterText(solo.getEditText("Phone Number"), "1234567890");
 
-        solo.clickOnView(solo.getView(R.id.sign_up_button));
+            solo.clickOnView(solo.getView(R.id.login_sign_up_text));
+            solo.enterText(solo.getEditText("Username"), "JustinRider");
+            solo.enterText(solo.getEditText("Name"), "Justin");
+            solo.enterText(solo.getEditText("Email Address"), "j@gmail.com");
+            solo.enterText(solo.getEditText("Phone Number"), "1234567890");
 
-    }
 
-    public void acceptRequest(){
+            solo.clickOnView(solo.getView(R.id.sign_up_button));
 
-    }
+        }
 
-    /**
-     * UC 30 SpecifyGeoLocations
-     *
-     */
+
+    public void createRider(){;
+
+            View loginButton = solo.getView(R.id.main_fab_login);
+            solo.waitForView(loginButton);
+
+      //  View loginButton = solo.getView(R.id.main_fab_login);
+       // solo.waitForView(loginButton);
+
+        solo.clickOnView(solo.getView(R.id.login_sign_up_text));
+        solo.enterText(solo.getEditText("Username"), "JustinRider");
+        solo.enterText(solo.getEditText("Name"), "Justin");
+        solo.enterText(solo.getEditText("Email Address"), "j@gmail.com");
+        solo.enterText(solo.getEditText("Phone Number"), "1234567890");
+            solo.clickOnView(solo.getView(R.id.login_sign_up_text));
+            solo.enterText(solo.getEditText("Username"), "JustinDriver");
+            solo.enterText(solo.getEditText("Name"), "Justin");
+            solo.enterText(solo.getEditText("Email Address"), "j@gmail.com");
+            solo.enterText(solo.getEditText("Phone Number"), "1234567890");
+
+            solo.clickOnView(solo.getView(R.id.sign_up_button));
+        }
+
+        public void acceptRequest(){
+
+        }
+
+        /**
+         * UC 30 SpecifyGeoLocations
+         * UC 6 Estimate Fair Cost
+         *
+         */
     public void testCreateRequestByMapLocation(){
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+
+        loginRider();
 
         int fragmentId = R.id.main_map;
 
@@ -250,8 +266,37 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         View acceptButton = solo.getView(R.id.request_accept_text);
         //assertTrue(solo.searchText("No Driver Yet"));
+        solo.waitForText("Going from 11410");
+        solo.waitForText("12.66");
 
 
+    }
+
+    /**
+     *
+     * UC 15 ShowUserInformation
+     * US 03.03.01 As a User, I want to, when a username is presented for a thing, retrieve and show its contact information.
+     */
+
+    public void testViewProfile(){
+        loginRider();
+        solo.clickOnView(solo.getView(R.id.forTesting));
+        solo.clickOnView(solo.getView(R.id.main_fab_requests));
+        solo.clickOnText("JustinDriver");
+        solo.waitForActivity(DriverProfileActivity.class);
+
+    }
+
+    /**
+     * UC 4 RiderCancelsRequest
+     * US 01.04.01 As a Rider, I want to cancel Requests.
+     */
+    public void testCancelRequest(){
+        testCreateRequestByMapLocation();
+        solo.clickOnView(solo.getView(R.id.request_accept_text));
+        solo.clickOnView(solo.getView(R.id.forTesting));
+        solo.clickOnView(solo.getView(R.id.main_fab_requests));
+        solo.clickOnView(solo.getView(R.id.item_request_deleted));
     }
 
     /**
@@ -260,7 +305,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     public void testViewSearchRequests(){
 
         int fragmentId = R.id.main_map;
-        createDriver();
+        //createDriver();
         loginDriver();
         enterDriverMode();
 
@@ -272,7 +317,32 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         View viewButton = solo.getView(R.id.request_search_button);
         solo.clickOnView(viewButton);
 
+        solo.waitForText("JustinRider");
 
+    }
+
+
+
+    /* UC 2 RiderViewRequests
+    *   As a rider, I want to see current requests I have open.
+    *
+    */
+
+    public void testRiderCurrentRequests(){
+        //createRider();
+
+        loginRider();
+        //testCreateRequestByMapLocation();
+
+        solo.clickOnView(solo.getView(R.id.forTesting));
+        View requestButton = solo.getView(R.id.main_fab_requests);
+        solo.clickOnView(requestButton);
+
+        solo.waitForView(requestButton);
+
+
+        solo.waitForActivity(RequestsListActivity.class);
+        solo.waitForText("JustinDriver");
     }
 
     /**
@@ -282,14 +352,23 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     public void testViewGeoLocations(){
 
-        createDriver();
-        createRider();
+
         loginRider();
-        testCreateRequestByMapLocation();
-        testViewSearchRequests();
+        //testCreateRequestByMapLocation();
+        enterDriverMode();
+
+
+        solo.clickOnView(solo.getView(R.id.forTesting));
+        View viewButton = solo.getView(R.id.main_fab_requests);
+        solo.clickOnView(viewButton);
+
+        //testViewSearchRequests();
+
         View address = solo.getView(R.id.item_request_route_text);
         solo.clickOnView(address);
+
         solo.waitForActivity(RequestActivity.class);
+        solo.waitForText("Edmonton");
 
     }
 
@@ -301,16 +380,16 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     public void testViewDriverRequests(){
 
-        createDriver();
-        createRider();
+        //createRider();
+        //createDriver();
 
         // Create Request
-        loginRider();
-        testCreateRequestByMapLocation();
+        //loginRider();
+        //testCreateRequestByMapLocation();
 
         loginDriver();
         enterDriverMode();
-        acceptRequest();
+        //acceptRequest();
 
         View fabButton = solo.getView(R.id.forTesting);
         solo.clickOnView(fabButton);
@@ -324,7 +403,32 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
+    /**
+     * UC 5 ContactDriver
+     * Note Error may Happen, but test works
+     */
+
+    public void testPhoneDriver(){
+
+        loginDriver();
+        solo.clickOnView(solo.getView(R.id.forTesting));
+        View requestButton = solo.getView(R.id.main_fab_requests);
+        solo.waitForView(requestButton);
+        solo.clickOnView(requestButton);
+
+        solo.waitForActivity(RequestsListActivity.class);
+        solo.waitForText("Edmonton");
+
+        solo.clickOnView(solo.getView(R.id.item_request_call_image));
+        solo.waitForText("1234567890");
+
+
+    }
+
+
+
     /*
+    * UC 14 EditProfile
     * 03.02.01:
     *   "As a user, I want to edit the contact information in my profile."
     */
@@ -332,21 +436,14 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
         solo.clickOnText("Sign In");
-
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-
         View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
-        View login = getActivity().findViewById(R.id.main_fab_login);
-
         solo.clickOnView(fabButton);
         View profile = getActivity().findViewById(R.id.main_fab_profile);
         solo.clickOnView(profile);
-
         View editProfile = solo.getView(R.id.profile_edit_icon);
         solo.clickOnView(editProfile);
 
-        solo.clearEditText((EditText) solo.getView(R.id.profile_username_edit_text));
         solo.clearEditText((EditText) solo.getView (R.id.profile_name_edit_text));
         solo.clearEditText((EditText) solo.getView (R.id.profile_email_edit_text));
         solo.clearEditText((EditText) solo.getView (R.id.profile_phone_number_edit_text));
@@ -357,6 +454,21 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo.clickOnView(editProfile);
     }
 
+    /*
+    * Uc 16 AddVehicleInfo
+    * 03.04.01:
+    *  "As a driver, in my profile I can provide details about the vehicle I drive."
+    */
 
+    public void testDriverSwitch() {
+        solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
+        solo.clickOnText("Sign In");
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
+
+        View driverMode = solo.getView(R.id.main_driver_mode);
+        solo.clickOnView(driverMode);
+
+    }
 
 }
