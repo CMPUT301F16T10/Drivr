@@ -266,6 +266,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     */
                     AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
                     final EditText edittext = new EditText(v.getContext());
+                    edittext.setText("Vechicle Make");
+                    edittext.clearComposingText();
                     alert.setTitle("Become a Driver!");
 //                    alert.setMessage("You must enter a vehicle description to continue");
                     alert.setMessage("Drivers are require to enter vehicle information!\n\nPlease enter your vehicle's make");
