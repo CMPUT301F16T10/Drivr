@@ -62,7 +62,6 @@
         <!--* Allows the user profile to switch between textViews and EditText views where editing personal information.-->
 
         <ViewSwitcher
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/name_switcher">

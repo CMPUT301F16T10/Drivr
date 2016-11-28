@@ -120,4 +120,15 @@
 
     </com.github.clans.fab.FloatingActionMenu>
 
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/forTesting"
+        fab:fab_label="Fro Testing Use"
+        fab:fab_colorNormal="@color/colorAccent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_anchor="@+id/main_fab_menu"
+        app:layout_anchorGravity="bottom|right"
+        android:layout_gravity="top|left"/>
+
 </android.support.design.widget.CoordinatorLayout>
