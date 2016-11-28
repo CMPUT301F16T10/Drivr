@@ -519,10 +519,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private void setNotificationAlarm(Context context) {
         Log.d("ME", "Alarm setup");
-        Intent intent = new Intent(context.getApplicationContext() , NotificationReceiver.class);
-        PendingIntent pendingIntent  = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        Intent intent = new Intent(getApplicationContext() , NotificationReceiver.class);
+        PendingIntent pendingIntent  = PendingIntent.getBroadcast(context, 0, intent, 0);
+//        PendingIntent pI = PendingIntent.getService()
 
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager am = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        am.cancel(pendingIntent);
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 , pendingIntent);
         Log.d("ME", "Alarm started");
     }

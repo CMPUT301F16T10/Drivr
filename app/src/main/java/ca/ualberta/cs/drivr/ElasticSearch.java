@@ -18,6 +18,7 @@ package ca.ualberta.cs.drivr;
 
 import android.location.Location;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.math.BigDecimal;
@@ -326,7 +327,9 @@ public class ElasticSearch {
             ElasticSearchController.GetRequest getRequest =
                     new ElasticSearchController.GetRequest();
             for (Request request : userManager.getRequestsList().getRequests()) {
-                getRequest.execute(request.getId());
+                if (getRequest.getStatus().equals(AsyncTask.Status.FINISHED)) {
+                    getRequest.execute(request.getId());
+                }
                 try {
                     Request gottenRequest = getRequest.get();
                     if (gottenRequest.getRequestState() != request.getRequestState()
