@@ -55,7 +55,6 @@ public class SearchRequestsListActivity extends AppCompatActivity {
         }
         catch (JsonSyntaxException ex) {
             Log.i(TAG, "json error");
-//                SearchRequest searchRequest = null;
         }
 
         adapter = new RequestsListAdapter(this, searchRequest.getRequests(getApplicationContext()), userManager);

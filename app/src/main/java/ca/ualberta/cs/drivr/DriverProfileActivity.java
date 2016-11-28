@@ -69,22 +69,6 @@ public class DriverProfileActivity extends AppCompatActivity {
         driverRatingView = (RatingBar) findViewById(R.id.ratingBar_DriverProfile);
         vehicleInformationCard = findViewById(R.id.vehicle_information_card);
 
-        /*
-        driverRatingView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                String avgRating = Float.toString(ratings) + " out of " + Integer.toString(driver.getTotalRatings()) + " ratings";
-                Toast toast = new Toast(getApplicationContext());
-                toast.makeText(getApplicationContext(), avgRating, Toast.LENGTH_LONG).setGravity(Gravity.CENTER, 0,0);
-                toast.show();
-
-                return false;
-
-            }
-        });
-        */
-
         profileNameTextView.setText(name);
         usernameTextView.setText(username);
         emailTextView.setText(email);

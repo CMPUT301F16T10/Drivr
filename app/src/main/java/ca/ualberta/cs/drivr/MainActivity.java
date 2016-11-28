@@ -129,11 +129,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             startActivity(intent);
         }
 
-//        startActivityForResult(intent, 1);
-//        onActivityResult(1, "result", 0);
-        // Looks better without Blue Bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -220,13 +216,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                    TextView textView = (TextView) findViewById(R.id.search_keyword_name);
-//                    textView.setText(keywordEditText.getText().toString());
                     Intent intent = new Intent(MainActivity.this, SearchRequestActivity.class);
-//                    String concretePlaceJson = gson.toJson(concretePlace);
                     intent.putExtra(SearchRequestActivity.EXTRA_PLACE, "");
                     intent.putExtra(SearchRequestActivity.EXTRA_KEYWORD, keywordEditText.getText().toString());
-//                    Log.i(TAG, "Place: " + place.getName() + ", :" + place.getLatLng());
                     keywordEditText.setText("");
                     keywordEditText.clearFocus();
                     startActivity(intent);
@@ -272,17 +264,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     edittext.setText("Vechicle Make");
                     edittext.clearComposingText();
                     alert.setTitle("Become a Driver!");
-//                    alert.setMessage("You must enter a vehicle description to continue");
                     alert.setMessage("Drivers are require to enter vehicle information!\n\nPlease enter your vehicle's make");
-//                    alert.setMessage();
 
                     alert.setView(edittext);
 
                     alert.setPositiveButton("Save Description", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            //What ever you want to do with the value
-//                            Editable YouEditTextValue = edittext.getText();
-                            //OR
                             String vehicleDescription = edittext.getText().toString();
                             if (!vehicleDescription.isEmpty()){
                                 userManager.getUser().setVehicleDescription(vehicleDescription);
@@ -295,22 +282,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                                 fabRider.setVisibility(View.VISIBLE);
                                 fabMenu.close(true);
                             }
-//                MainActivity.this.finish();
                             dialog.dismiss();
                         }
                     });
 
                     alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            // what ever you want to do with No option.
-//                dialog.cancel();
-//                MainActivity.this.finish();
                             dialog.dismiss();
                         }
                     });
 
                     AlertDialog newAlert = alert.create();
-//                    alert.show();
                     newAlert.show();
                 }
                 if (!userManager.getUser().getVehicleDescription().isEmpty()) {
@@ -558,7 +540,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         Log.d("ME", "Alarm setup");
         Intent intent = new Intent(getApplicationContext() , NotificationReceiver.class);
         PendingIntent pendingIntent  = PendingIntent.getBroadcast(context, 0, intent, 0);
-//        PendingIntent pI = PendingIntent.getService()
 
         AlarmManager am = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         am.cancel(pendingIntent);

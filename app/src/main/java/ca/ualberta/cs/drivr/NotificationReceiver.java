@@ -16,27 +16,6 @@ public class NotificationReceiver extends BroadcastReceiver{
     private UserManager userManager = UserManager.getInstance();
     private Context context;
 
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
-     */
-//    public NotificationReceiver() {
-//        super("CheckNotifications");
-//    }
-//    public Notification(Context context) {
-//        this.context = context;
-//        this.connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-//    }
-
-
-//    @Override
-//    protected void onHandleIntent(Intent intent) {
-//        Log.i("NotificationReceiver:", "abcd");
-//        alarmManagerCallback();
-//    }
-
-
     public void alarmManagerCallback() {
         Log.i("NotificationReceiver:", "alarmManagerCallback");
         RequestsList requestList = userManager.getRequestsList();
@@ -77,14 +56,8 @@ public class NotificationReceiver extends BroadcastReceiver{
                         .setSmallIcon(R.drawable.ic_explore_black_24dp)
                         .setContentTitle("Request has updated")
                         .setContentText("something has happened to your request");
-//        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNM.notify(1, notification.build());
         Log.i("NotificationReceiver", "Created notification and placed in the notification tray.");
     }
 
-//    @Nullable
-//    @Override
-//    public IBinder onBind(Intent intent) {
-//        return null;
-//    }
 }

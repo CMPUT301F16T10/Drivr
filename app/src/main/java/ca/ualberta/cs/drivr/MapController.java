@@ -299,7 +299,6 @@ public class MapController implements DirectionCallback{
      */
 
     public ConcretePlace markerGeocodePlace(LatLng latLng){
-
         try {
             List<Address> pickupList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             Address pickupAddress = pickupList.get(0);
@@ -318,17 +317,12 @@ public class MapController implements DirectionCallback{
      * @param pickup point
      * @param destination point
      */
-
     public void requestCenter(LatLng pickup, LatLng destination) {
-
-
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(pickup);
         builder.include(destination);
 
         final LatLngBounds bounds = builder.build();
-
-
         final CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds,0);
         final CameraUpdate cameraUpdate1 = CameraUpdateFactory.zoomOut();
 
@@ -340,11 +334,7 @@ public class MapController implements DirectionCallback{
                 map.animateCamera(cameraUpdate1);
             }
         });
-
-
     }
-
-
 
     /**
      * Queries a route with google direction api to the map
