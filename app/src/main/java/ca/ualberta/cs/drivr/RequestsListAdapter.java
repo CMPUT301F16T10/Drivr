@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
@@ -163,9 +164,12 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
      * @param position
      */
     @Override
-    public void onBindViewHolder(RequestsListAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final RequestsListAdapter.ViewHolder viewHolder, final int position) {
         //final Request request = requests.get(position);
         final Request request = requestsToDisplay.get(position);
+//        viewHolder.getAdapterPosition();
+//        notifyItemRemoved(viewHolder.getAdapterPosition());
+
 
         // Get the views to update
         final TextView otherUserNameTextView = viewHolder.otherUserNameTextView;
@@ -359,6 +363,30 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
             // Todo Delete the Request
             @Override
             public void onClick(View v) {
+                v.getContext();
+                ElasticSearch elasticSearch = new ElasticSearch((ConnectivityManager)v.getContext().getSystemService(Context.CONNECTIVITY_SERVICE));
+                elasticSearch.deleteRequest(request.getId());
+                UserManager userManager = UserManager.getInstance();
+                userManager.getRequestsList().removeById(request);
+                userManager.notifyObservers();
+                requestsToDisplay.remove(request);
+//                v.invalidate();
+//                notifyDataSetChanged();
+//                notifyItemRangeRemoved(position, 1);
+                notifyItemRemoved(viewHolder.getAdapterPosition());
+//                notifyItemRemoved(v.g);
+//                notifyItemRemoved(viewHolder.getAdapterPosition());
+//                if(context instanceof RequestsListActivity) {
+//                    ((RequestsListActivity) context).invalidateRequests();
+//                }
+//                viewHolder.
+
+//                Toast toast = new Toast();
+//                toast.setText("Clicked delete");
+//                toast.show();
+////                v.getContext()
+//                Toast.makeText(context, "clicked delete", Toast.LENGTH_SHORT).show();
+
 
             }
         });

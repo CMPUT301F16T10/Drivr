@@ -20,6 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.AdapterDataObserver;
+import android.util.Log;
 
 /**
  * An activity that shows a list of currently active requests.
@@ -29,6 +31,8 @@ public class RequestsListActivity extends AppCompatActivity {
 
     private UserManager userManager = UserManager.getInstance();
     private RequestsListAdapter adapter;
+    private RecyclerView requestsListRecyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +40,24 @@ public class RequestsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_requests_list);
 
         // Setup the RecyclerView
-        RecyclerView requestsListRecyclerView = (RecyclerView) findViewById(R.id.requests_list_recycler);
+        requestsListRecyclerView = (RecyclerView) findViewById(R.id.requests_list_recycler);
         adapter = new RequestsListAdapter(this, userManager.getRequestsList().getRequests(), userManager);
+        adapter.registerAdapterDataObserver(new AdapterDataObserver() {
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                requestsListRecyclerView.invalidate();
+//                invalidateRequests();
+//                adapter.getItemId(positionStart);
+//                Log.i(this.toString(), "invalidate");
+//                adapter.notifyDataSetChanged();
+//                requestsListRecyclerView.removeAllViews();
+//                requestsListRecyclerView.invalidate();
+//                adapter.notifyItemRangeRemoved();
+//                requestsListRecyclerView.setAdapter(adapter);
+            }
+
+        });
         requestsListRecyclerView.setAdapter(adapter);
         requestsListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -46,12 +66,23 @@ public class RequestsListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         adapter.filter(RequestState.PENDING, RequestState.ACCEPTED, RequestState.CONFIRMED);
+        invalidateRequests();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         adapter.filter(RequestState.PENDING, RequestState.ACCEPTED, RequestState.CONFIRMED);
+        invalidateRequests();
     }
+
+    public void invalidateRequests() {
+        Log.i("test", "trying to invalidate");
+        requestsListRecyclerView.invalidate();
+    }
+
+
+
+
 
 }
