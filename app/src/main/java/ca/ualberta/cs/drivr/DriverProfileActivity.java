@@ -6,9 +6,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.google.gson.Gson;
@@ -31,6 +34,8 @@ public class DriverProfileActivity extends AppCompatActivity {
     private String username;
     private String phoneNumber;
     private String vehicleDescription;
+    private float ratings;
+
 
 
     public static final String DRIVER = "ca.ualberta.cs.drivr.RequestActivity.EXTRA_REQUEST";
@@ -56,6 +61,7 @@ public class DriverProfileActivity extends AppCompatActivity {
         username = driver.getUsername();
         phoneNumber = driver.getPhoneNumber();
         vehicleDescription = driver.getVehicleDescription();
+        ratings = driver.getRating();
 
 
         usernameTextView = (TextView) findViewById(R.id.profile_username_text_view);
@@ -65,7 +71,21 @@ public class DriverProfileActivity extends AppCompatActivity {
         vehicleTextView = (TextView) findViewById(R.id.vehicle_description_text_view);
 
         driverRatingView = (RatingBar) findViewById(R.id.ratingBar_DriverProfile);
-        driverRatingView.setNumStars(driver.getTotalRatings());
+        driverRatingView.setRating(ratings);
+
+        driverRatingView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                String avgRating = Float.toString(ratings) + " out of " + Integer.toString(driver.getTotalRatings()) + " ratings";
+                Toast toast = new Toast(getApplicationContext());
+                toast.makeText(getApplicationContext(), avgRating, Toast.LENGTH_LONG).setGravity(Gravity.CENTER, 0,0);
+                toast.show();
+
+                return false;
+
+            }
+        });
 
         profileNameTextView.setText(name);
         usernameTextView.setText(username);

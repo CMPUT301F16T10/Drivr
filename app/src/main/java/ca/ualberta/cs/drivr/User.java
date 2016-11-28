@@ -28,7 +28,7 @@ public class User {
     private String phoneNumber;
     private String email;
     private String vehicleDescription;
-    private double rating;
+    private float rating;
     private int totalRatings;
 
     /**
@@ -140,7 +140,7 @@ public class User {
      * Get the driver's rating.
      * @return The rating.
      */
-    public double getRating() {
+    public float getRating() {
         return rating;
     }
     
@@ -148,7 +148,7 @@ public class User {
      * Get the driver's rating.
      * @param rating The rating.
      */
-    public void setRating(double rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
@@ -175,7 +175,7 @@ public class User {
      * 
      * @param rating The rating given to the driver.
      */
-    public void changeRating(double rating) {
+    public void changeRating(float rating) {
         this.rating *= totalRatings;
         totalRatings++;
         this.rating += rating;
