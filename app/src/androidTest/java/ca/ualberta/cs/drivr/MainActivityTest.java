@@ -16,6 +16,7 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.content.Intent;
 import android.graphics.PointF;
 import android.support.test.filters.MediumTest;
 import android.test.ActivityInstrumentationTestCase2;
@@ -369,6 +370,31 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo.waitForText("Edmonton");
 
     }
+
+    /**
+     *
+     * UC 5 ContactDriver
+     * Note Error may Happen, but test works
+     */
+
+    public void testPhoneDriver(){
+
+        loginDriver();
+        solo.clickOnView(solo.getView(R.id.forTesting));
+        View requestButton = solo.getView(R.id.main_fab_requests);
+        solo.waitForView(requestButton);
+        solo.clickOnView(requestButton);
+
+        solo.waitForActivity(RequestsListActivity.class);
+        solo.waitForText("Edmonton");
+
+        solo.clickOnView(solo.getView(R.id.item_request_call_image));
+        solo.waitForText("1234567890");
+
+
+    }
+
+    
 
     /*
     * 03.02.01:
