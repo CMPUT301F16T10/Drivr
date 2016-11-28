@@ -20,7 +20,6 @@ package ca.ualberta.cs.drivr;
  * A data class for storing user information.
  */
 
-//TODO: I've just put everything in here to keep things simple, but we could just put the new things related to Drivers in the Driver class.
 public class User {
 
     private String name;
