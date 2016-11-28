@@ -162,9 +162,10 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
+    /**
+     * UC 21 ViewRequestAddresses
+     */
     public void testViewSearchRequests(){
-
-        // make a request
 
         int fragmentId = R.id.main_map;
 
@@ -195,5 +196,21 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
 
     }
+
+    /**
+     * UC 31 ViewGeoLocations
+     * Driver can we request on a map
+     *
+     */
+    public void testViewGeoLocations(){
+
+        testViewSearchRequests();
+
+        View address = solo.getView(R.id.item_request_route_text);
+        solo.clickOnView(address);
+        solo.waitForActivity(RequestActivity.class);
+
+    }
+
 
 }
