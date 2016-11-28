@@ -38,19 +38,13 @@ public class NotificationReceiver extends BroadcastReceiver{
 
 
     public void alarmManagerCallback() {
-        Log.i("NotificationReceiver:", "notificationCallback");
+        Log.i("NotificationReceiver:", "alarmManagerCallback");
         RequestsList requestList = userManager.getRequestsList();
-        Log.i("NotificationReceiver:", "got requests list");
-//        requestList.has()
-        //ArrayList<Request> oldRequestList = userManager.getRequestsList().getRequests();
         ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
-        Log.i("NotificationReceiver:", "created new ElasticSearch");
         ArrayList<Request> updatedRequests = elasticSearch.loadUserRequests(UserManager.getInstance().getUser().getUsername());
-        Log.i("NotificationReceiver:", "got update requests");
         if (updatedRequests == null)
             return;
         for (Request request : updatedRequests) {
-            //TODO remove || TRUE
             Log.i("NotificationReceiver:", "updated requests");
             if (requestList.hasById(request)) {
                 Request oldRequest = requestList.getById(request.getId());
@@ -58,28 +52,25 @@ public class NotificationReceiver extends BroadcastReceiver{
                     requestList.removeById(request);
                     requestList.add(request);
                     userManager.notifyObservers();
-                    //There should be a notification right here
                     createNotification();
                 }
             }
         }
-//        this.stopSelf();
-//        createNotification();
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         this.connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         this.context = context;
-        Log.i("NotificationReceiver:", "updsdfsadfsadfs");
+        Log.i("NotificationReceiver:", "onReceive");
         alarmManagerCallback();
 
     }
 
     private void createNotification() {
-        Log.i("NOTIFICATION: ", "Created notification");
+        Log.i("NotificationReceiver ", "createNotification");
         NotificationManager mNM;
-        mNM = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNM = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         // Set the icon, scrolling text and timestamp
         NotificationCompat.Builder notification =
                 new NotificationCompat.Builder(context)

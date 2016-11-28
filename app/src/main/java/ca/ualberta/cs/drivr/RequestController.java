@@ -105,7 +105,7 @@ public class RequestController {
      * Complete a request.
      * @param request The request to complete.
      */
-    public void completeRequest(Request request) {
+    public void completeRequest(Request request, Context context) {
         request.setRequestState(RequestState.COMPLETED);
         userManager.notify();
     }
@@ -127,8 +127,16 @@ public class RequestController {
      * Confirm a request.
      * @param request The request to confirm.
      */
-    public void confirmRequest(Request request) {
-        request.setRequestState(RequestState.CONFIRMED);
+    public void confirmRequest(Request request, Context context) {
+        //request.setRequestState(RequestState.CONFIRMED);
+
+        ElasticSearch elasticSearch = new ElasticSearch((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        if (request.getRequestState() == RequestState.ACCEPTED)
+            request.setRequestState(RequestState.CONFIRMED);
+        elasticSearch.updateRequest(request);
+        UserManager.getInstance().getRequestsList().removeById(request);
+        UserManager.getInstance().getRequestsList().add(request);
+        UserManager.getInstance().notifyObservers();
     }
 
     /**
