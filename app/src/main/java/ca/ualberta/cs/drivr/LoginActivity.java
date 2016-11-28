@@ -461,6 +461,7 @@ public class LoginActivity extends AppCompatActivity {
                 user.setName(name);
                 user.setPhoneNumber(phone);
                 user.setUsername(username);
+                userManager.getRequestsList().clear();
                 userManager.notifyObservers();
                 finish();
             } else {
