@@ -222,19 +222,22 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         otherUserNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String otherUsername = otherUserNameTextView.getText().toString();
                 // there exists drivers
-                if(otherUserNameTextView.getText() != "No Driver Yet") {
-                    if(otherUserNameTextView.getText() != "Multiple Drivers Accepted") {
+                if(otherUsername != "No Driver Yet") {
+                    if(otherUsername != "Multiple Drivers Accepted") {
                         Gson gson = new GsonBuilder()
                                 .registerTypeAdapter(Uri.class, new UriSerializer())
                                 .create();
-                        Driver driver = drivers.get(0);
 
-                        String driverString = gson.toJson(driver, Driver.class);
+
+                        ElasticSearch elasticSearch = new ElasticSearch(UserManager.getInstance().getConnectivityManager());
+                        User user = elasticSearch.loadUser(otherUsername);
+
+                        String driverString = gson.toJson(user, User.class);
                         Intent intent = new Intent(context, DriverProfileActivity.class);
                         intent.putExtra(DriverProfileActivity.DRIVER, driverString);
                         context.startActivity(intent);
-
                     }
                     else {
                         Intent intent = new Intent(context, DisplayDriverListActivity.class);
