@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     /*
     https://github.com/Clans/FloatingActionButton/issues/273
-    Author: gwilli on GitHub
+    Author: gwilli on GitHub`
     Accessed: November 10, 2016
 
     Add support for vector drawables in older versions of android

@@ -70,6 +70,12 @@ public class RequestsUseCaseTests extends ActivityInstrumentationTestCase2<MainA
     *   As a rider, I want to request rides between two locations.
     */
     public void testCreateRequest () {
+        solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
+        solo.clickOnText("Sign In");
+        /*
+        * Not actually selecting the buttons, just selecting the area on the map where the buttons
+        * would be
+        */
         View profileView = solo.getView(R.id.main_fab_profile);
         View historyView = solo.getView(R.id.main_fah_history);
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
@@ -77,24 +83,11 @@ public class RequestsUseCaseTests extends ActivityInstrumentationTestCase2<MainA
         solo.clickOnText("Yes");
         solo.clickOnView(historyView);
         solo.clickOnText("Yes");
-        solo.assertCurrentActivity("Expected RequestsActivity", RequestActivity.class);
+        solo.assertCurrentActivity("Expected RequestsActivity", NewRequestActivity.class);
+        solo.scrollDown();
+        solo.clickOnButton("Create");
     }
 
-    /*
-    * US 01.02.01
-    *   As a rider, I want to see current requests I have open.
-    */
-    public void testRequestHistory () {
-        login();
-        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-        View historyView = solo.getView(R.id.main_fah_history);
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
-        solo.waitForView(historyView);
-        solo.clickOnView(historyView);
-        solo.assertCurrentActivity("Expected RequestHistoryActivity", RequestHistoryActivity.class);
-
-    }
 
     /*
     * US 01.04.01

@@ -129,101 +129,100 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
-    public void enterDriverMode(){
-        int fragmentId = R.id.main_map;
-        solo.waitForFragmentById (fragmentId);
-        SupportMapFragment mFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.main_map);
+        public void enterDriverMode(){
+            int fragmentId = R.id.main_map;
+            solo.waitForFragmentById (fragmentId);
+            SupportMapFragment mFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.main_map);
 
-        solo.waitForView(mFragment);
+            solo.waitForView(mFragment);
 
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
+            View fabButton = solo.getView(R.id.forTesting);
+            solo.clickOnView(fabButton);
 
-        View driverButton = solo.getView(R.id.main_driver_mode);
-        solo.waitForView(driverButton);
+            View driverButton = solo.getView(R.id.main_driver_mode);
+            solo.waitForView(driverButton);
 
-        solo.clickOnView(driverButton);
+            solo.clickOnView(driverButton);
 
-        solo.waitForDialogToOpen();
-        solo.enterText(solo.getEditText(""), "Car");
-        solo.clickOnButton("Save Description");
-    }
+            solo.waitForDialogToOpen();
+            solo.enterText(solo.getEditText(""), "Car");
+            solo.clickOnButton("Save Description");
+        }
 
-    public void loginDriver(){
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
+        public void loginDriver(){
+            View fabButton = solo.getView(R.id.forTesting);
+            solo.clickOnView(fabButton);
 
-        View loginButton = solo.getView(R.id.main_fab_login);
-        solo.waitForView(loginButton);
+            View loginButton = solo.getView(R.id.main_fab_login);
+            solo.waitForView(loginButton);
 
-        solo.clickOnView(loginButton);
+            solo.clickOnView(loginButton);
 
-        solo.enterText(solo.getEditText("Username"), "JustinDriver");
+            solo.enterText(solo.getEditText("Username"), "JustinDriver");
 
-        View signButton = solo.getView(R.id.sign_in_button);
+            View signButton = solo.getView(R.id.sign_in_button);
 
-        solo.clickOnView(signButton);
+            solo.clickOnView(signButton);
 
-    }
-    public void loginRider(){
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
+        }
+        public void loginRider(){
+            View fabButton = solo.getView(R.id.forTesting);
+            solo.clickOnView(fabButton);
 
-        View loginButton = solo.getView(R.id.main_fab_login);
-        solo.waitForView(loginButton);
+            View loginButton = solo.getView(R.id.main_fab_login);
+            solo.waitForView(loginButton);
 
-        solo.clickOnView(loginButton);
+            solo.clickOnView(loginButton);
 
-        solo.enterText(solo.getEditText("Username"), "JustinRider");
+            solo.enterText(solo.getEditText("Username"), "JustinRider");
 
-        View signButton = solo.getView(R.id.sign_in_button);
+            View signButton = solo.getView(R.id.sign_in_button);
 
-        solo.clickOnView(signButton);
+            solo.clickOnView(signButton);
 
-    }
-    public void createDriver(){
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
+        }
+        public void createDriver(){
+            View fabButton = solo.getView(R.id.forTesting);
+            solo.clickOnView(fabButton);
 
-        View loginButton = solo.getView(R.id.main_fab_login);
-        solo.waitForView(loginButton);
+            View loginButton = solo.getView(R.id.main_fab_login);
+            solo.waitForView(loginButton);
 
-        solo.clickOnView(solo.getView(R.id.login_sign_up_text));
-        solo.enterText(solo.getEditText("Username"), "JustinRider");
-        solo.enterText(solo.getEditText("Name"), "Justin");
-        solo.enterText(solo.getEditText("Email Address"), "j@gmail.com");
-        solo.enterText(solo.getEditText("Phone Number"), "1234567890");
+            solo.clickOnView(solo.getView(R.id.login_sign_up_text));
+            solo.enterText(solo.getEditText("Username"), "JustinRider");
+            solo.enterText(solo.getEditText("Name"), "Justin");
+            solo.enterText(solo.getEditText("Email Address"), "j@gmail.com");
+            solo.enterText(solo.getEditText("Phone Number"), "1234567890");
 
-        solo.clickOnView(solo.getView(R.id.sign_up_button));
+            solo.clickOnView(solo.getView(R.id.sign_up_button));
 
-    }
+        }
 
-    public void createRider(){
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
+        public void createRider(){
+            View fabButton = solo.getView(R.id.forTesting);
+            solo.clickOnView(fabButton);
 
+            View loginButton = solo.getView(R.id.main_fab_login);
+            solo.waitForView(loginButton);
 
-        View loginButton = solo.getView(R.id.main_fab_login);
-        solo.waitForView(loginButton);
+            solo.clickOnView(solo.getView(R.id.login_sign_up_text));
+            solo.enterText(solo.getEditText("Username"), "JustinDriver");
+            solo.enterText(solo.getEditText("Name"), "Justin");
+            solo.enterText(solo.getEditText("Email Address"), "j@gmail.com");
+            solo.enterText(solo.getEditText("Phone Number"), "1234567890");
 
-        solo.clickOnView(solo.getView(R.id.login_sign_up_text));
-        solo.enterText(solo.getEditText("Username"), "JustinDriver");
-        solo.enterText(solo.getEditText("Name"), "Justin");
-        solo.enterText(solo.getEditText("Email Address"), "j@gmail.com");
-        solo.enterText(solo.getEditText("Phone Number"), "1234567890");
+            solo.clickOnView(solo.getView(R.id.sign_up_button));
 
-        solo.clickOnView(solo.getView(R.id.sign_up_button));
+        }
 
-    }
+        public void acceptRequest(){
 
-    public void acceptRequest(){
+        }
 
-    }
-
-    /**
-     * UC 30 SpecifyGeoLocations // UC 1 Create Request between two locations
-     *
-     */
+        /**
+         * UC 30 SpecifyGeoLocations
+         *
+         */
     public void testCreateRequestByMapLocation(){
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
 
@@ -275,27 +274,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
 
     }
-
-    /* UC 2 RiderViewRequests
-    *   As a rider, I want to see current requests I have open.
-    *
-    */
-
-    public void testRiderCurrentRequests(){
-        createRider();
-        loginRider();
-        testCreateRequestByMapLocation();
-        View requestButton = solo.getView(R.id.main_fab_requests);
-        solo.waitForView(requestButton);
-        solo.clickOnView(requestButton);
-
-        solo.waitForActivity(RequestsListActivity.class);
-        solo.waitForText("No Driver");
-    }
-
-    /**
-     * UC
-     */
 
     /**
      * UC 31 ViewGeoLocations
@@ -354,17 +332,11 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
         solo.clickOnText("Sign In");
-
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-
         View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
-        View login = getActivity().findViewById(R.id.main_fab_login);
-
         solo.clickOnView(fabButton);
         View profile = getActivity().findViewById(R.id.main_fab_profile);
         solo.clickOnView(profile);
-
         View editProfile = solo.getView(R.id.profile_edit_icon);
         solo.clickOnView(editProfile);
 
@@ -379,6 +351,20 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo.clickOnView(editProfile);
     }
 
+    /*
+    * 03.04.01:
+    *  "As a driver, in my profile I can provide details about the vehicle I drive."
+    */
 
+    public void testDriverSwitch() {
+        solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
+        solo.clickOnText("Sign In");
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
+
+        View driverMode = solo.getView(R.id.main_driver_mode);
+        solo.clickOnView(driverMode);
+
+    }
 
 }
