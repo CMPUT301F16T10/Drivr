@@ -97,7 +97,6 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         public final ImageView checkMarkImageView;
         public final ImageView xMarkImageView;
 
-
         /**
          * Instantiate a new ViewHolder.
          * @param itemView The view of the lsit item.
@@ -113,7 +112,6 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
             emailImageView = (ImageView) itemView.findViewById(R.id.item_request_email_image);
             checkMarkImageView = (ImageView) itemView.findViewById(R.id.item_request_complete);
             xMarkImageView = (ImageView) itemView.findViewById(R.id.item_request_deleted);
-
         }
     }
 
@@ -165,11 +163,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
      */
     @Override
     public void onBindViewHolder(final RequestsListAdapter.ViewHolder viewHolder, final int position) {
-        //final Request request = requests.get(position);
         final Request request = requestsToDisplay.get(position);
-//        viewHolder.getAdapterPosition();
-//        notifyItemRemoved(viewHolder.getAdapterPosition());
-
 
         // Get the views to update
         final TextView otherUserNameTextView = viewHolder.otherUserNameTextView;
@@ -262,10 +256,6 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
                 Intent intent = new Intent(context, RequestActivity.class);
                 intent.putExtra("UniqueID","From_RequestListActivity");
                 intent.putExtra(RequestActivity.EXTRA_REQUEST, requestString);
-                // TODO startActivityForResult() confirm if user presses accept or deny
-                // startActivityForResult(intent, );
-//                startActivity(intent);
-//                startActivity
                 context.startActivity(intent);
             }
         });
@@ -346,16 +336,6 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
                         context.startActivity(Intent.createChooser(emailIntent, "Chooser Title"));
                     }
                     else {
-//                        Toast.makeText(context, "An email account is required to use this feature", Toast.LENGTH_LONG).show();
-
-                        // Todo possibly implement to save contact info for later
-                        // http://stackoverflow.com/questions/27528236/mailto-android-unsupported-action-error
-
-//                        Intent intentEmail = new Intent(ContactsContract.Intents.Insert.ACTION);
-//                        intentEmail.setType(ContactsContract.RawContacts.CONTENT_TYPE);
-//                        intentEmail.putExtra(ContactsContract.Intents.Insert.EMAIL, email);
-//                        context.startActivity(intentEmail);
-
                         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                                 "mailto",email, null));
                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
@@ -397,24 +377,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
                 userManager.getRequestsList().removeById(request);
                 userManager.notifyObservers();
                 requestsToDisplay.remove(request);
-//                v.invalidate();
-//                notifyDataSetChanged();
-//                notifyItemRangeRemoved(position, 1);
                 notifyItemRemoved(viewHolder.getAdapterPosition());
-//                notifyItemRemoved(v.g);
-//                notifyItemRemoved(viewHolder.getAdapterPosition());
-//                if(context instanceof RequestsListActivity) {
-//                    ((RequestsListActivity) context).invalidateRequests();
-//                }
-//                viewHolder.
-
-//                Toast toast = new Toast();
-//                toast.setText("Clicked delete");
-//                toast.show();
-////                v.getContext()
-//                Toast.makeText(context, "clicked delete", Toast.LENGTH_SHORT).show();
-
-
             }
         });
     }

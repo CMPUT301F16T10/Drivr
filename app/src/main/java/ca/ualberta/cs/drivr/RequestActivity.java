@@ -121,12 +121,6 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
                 else if (requestController.canCompleteRequest(request, userManager.getUserMode())) {
                     requestController.completeRequest(request, getApplicationContext());
                 }
-//                else if (state.equals(RequestState.PENDING) && UserManager.getInstance().getUserMode().equals(UserMode.DRIVER)) {
-//                    request.addDriver((Driver) UserManager.getInstance().getUser());
-////                    request.setRequestState(RequestState.ACCEPTED);
-////                    ElasticSearchController.UpdatePendingRequest update = new ElasticSearchController.UpdatePendingRequest();
-////                    update.execute(request);
-//                }
 
                 Intent intent = new Intent(RequestActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

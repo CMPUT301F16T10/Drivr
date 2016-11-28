@@ -56,10 +56,6 @@ public class SearchRequestActivity extends AppCompatActivity {
 
     private UserManager userManager = UserManager.getInstance();
 
-//    private RequestsListController requestsListController;
-
-//    private ConcretePlace destinationPlace;
-//    private ConcretePlace sourcePlace;
     private ConcretePlace searchPlace;
     private String fareString;
 

@@ -160,18 +160,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-        /*
-         if(userManager.getUser() != null) {
-            signInButton.setVisibility(View.GONE);
-            loginUsername.setVisibility(View.GONE);
-            signUpText.setVisibility(View.GONE);
-
-            logoutButton.setVisibility(View.VISIBLE);
-
-        } */
-
-
     }
 
     private boolean mayRequestContacts() {
@@ -387,7 +375,7 @@ public class LoginActivity extends AppCompatActivity {
             user = elasticSearch.loadUser(username);
             Boolean actualBool;
 
-            if(user == null) {
+            if (user == null) {
                 actualBool = false;
             } else {
                 actualBool = true;
@@ -404,8 +392,6 @@ public class LoginActivity extends AppCompatActivity {
                 userManager.notifyObservers();
                 finish();
             } else {
-                // mPasswordView.setError(getString(R.string.error_incorrect_password));
-                // mPasswordView.requestFocus();
                 loginUsername.setError("Username does not exist");
                 loginUsername.requestFocus();
             }
@@ -437,7 +423,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-
             newUser = new User();
             newUser.setName(name);
             newUser.setUsername(username);
@@ -466,8 +451,6 @@ public class LoginActivity extends AppCompatActivity {
                 userManager.getRequestsList().clear();
                 userManager.notifyObservers();
                 finish();
-
-
             } else {
                 loginUsername.setError("Username already taken");
                 loginUsername.requestFocus();
