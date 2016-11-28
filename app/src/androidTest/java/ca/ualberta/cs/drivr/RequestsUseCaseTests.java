@@ -18,6 +18,8 @@ package ca.ualberta.cs.drivr;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.robotium.solo.Solo;
 
@@ -69,33 +71,44 @@ public class RequestsUseCaseTests extends ActivityInstrumentationTestCase2<MainA
     */
     public void testCreateRequest () {
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-        int[] location = new int[2];
-        View view = solo.getView(R.id.content_main);
-        view.getLocationOnScreen(location);
-        int x= location[0];
-        int y= location[1];
-        solo.clickOnScreen(x,y);
-        solo.clickOnScreen(x+1, y+1);
-        solo.goBack();
+        solo.clickOnScreen(50, 50);
+        solo.clickOnScreen(51, 51);
+        solo.assertCurrentActivity("Expected RequestsActivity", RequestActivity.class);
     }
 
     /*
     * US 01.02.01
-    *   As a rider, I want to request rides between two locations.
+    *   As a rider, I want to see current requests I have open.
     */
     public void testRequestHistory () {
+        login();
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-        int[] location = new int[2];
-        View view = solo.getView(R.id.forTesting);
-        view.getLocationOnScreen(location);
-        int x= location[0];
-        int y= location[1];
-        solo.clickOnScreen(x,y);
+        View historyView = solo.getView(R.id.main_fah_history);
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
+        View login = getActivity().findViewById(R.id.main_fab_login);
+        solo.waitForView(historyView);
+        solo.clickOnView(historyView);
+        solo.assertCurrentActivity("Expected RequestHistoryActivity", RequestHistoryActivity.class);
 
+    }
+
+    public void login(){
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
         View login = getActivity().findViewById(R.id.main_fab_login);
         solo.clickOnView(login);
-        solo.assertCurrentActivity("Expected requests list activity", RequestsListActivity.class);
-        solo.goBack();
+        solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
+
+        TextView signup = (TextView)solo.getView(R.id.login_sign_up_text);
+        solo.clickOnView(signup);
+        solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
+        solo.enterText((EditText) solo.getView (R.id.login_name), "Daniel");
+        solo.enterText((EditText) solo.getView (R.id.login_email), "Daniel@google.com");
+        solo.enterText((EditText) solo.getView (R.id.login_phone), "7801234567");
+        solo.clickOnButton ("Sign Up");
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+
     }
 
 }
