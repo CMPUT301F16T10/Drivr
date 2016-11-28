@@ -217,8 +217,10 @@ public class ProfileActivity extends AppCompatActivity {
                     }
 
                     if (changed) {
-                        MockElasticSearch elasticSearch = MockElasticSearch.getInstance();
-                        elasticSearch.updateUser(user);
+//                        MockElasticSearch elasticSearch = MockElasticSearch.getInstance();
+                        ElasticSearch elasticSearch = new ElasticSearch(userManager.getConnectivityManager());
+                        elasticSearch.updateUser(userManager.getUser());
+//                        elasticSearch.updateUser(user);
                         userManager.notifyObservers();
                     }
                     profileNameSwitch.findViewById(R.id.profile_name_text_view);
