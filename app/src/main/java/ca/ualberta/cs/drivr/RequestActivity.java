@@ -68,12 +68,15 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         // map = findViewById(R.id.request_map_fragment);
 
         String requestString = getIntent().getStringExtra(EXTRA_REQUEST);
+        String id = getIntent().getExtras().getString("UniqueID");
+
 //        Gson gson = new Gson();
 //        ConcretePlace concretePlace = new ConcretePlace(place);
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Uri.class, new UriSerializer())
                 .create();
         final Request request = gson.fromJson(requestString, Request.class);
+
         sourcePlace = request.getSourcePlace();
         destinationPlace = request.getDestinationPlace();
 
@@ -83,6 +86,13 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         // TODO make a map with these points and the route between them
         mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.request_map_fragment);
         mapFragment.getMapAsync(this);
+
+        if(id.equals("From_RequestListActivity")) {
+            acceptButton.setVisibility(View.INVISIBLE);
+            declineButton.setVisibility(View.INVISIBLE);
+            routeText.setVisibility(View.GONE);
+
+        }
 
 
         mContext = getApplicationContext();

@@ -189,6 +189,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
                         .create();
                 String requestString = gson.toJson(request, Request.class);
                 Intent intent = new Intent(context, RequestActivity.class);
+                intent.putExtra("UniqueID","From_RequestListActivity");
                 intent.putExtra(RequestActivity.EXTRA_REQUEST, requestString);
                 // TODO startActivityForResult() confirm if user presses accept or deny
                 // startActivityForResult(intent, );

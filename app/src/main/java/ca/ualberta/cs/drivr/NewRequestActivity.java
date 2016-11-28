@@ -222,6 +222,7 @@ public class NewRequestActivity extends AppCompatActivity {
         String requestString = gson.toJson(request, Request.class);
         Intent intent = new Intent(NewRequestActivity.this, RequestActivity.class);
         intent.putExtra(RequestActivity.EXTRA_REQUEST, requestString);
+        intent.putExtra("UniqueID","From_NewRequestActivity");
         // TODO startActivityForResult() confirm if user presses accept or deny
         // startActivityForResult(intent, );
         startActivity(intent);
