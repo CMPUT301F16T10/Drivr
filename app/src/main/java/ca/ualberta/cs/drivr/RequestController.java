@@ -57,8 +57,12 @@ public class RequestController {
      */
     public void acceptRequest(Request request, Context context) {
         ElasticSearch elasticSearch = new ElasticSearch((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        if (request.getRequestState() == RequestState.PENDING)
+            request.setRequestState(RequestState.ACCEPTED);
+        Driver driver = new Driver(userManager.getUser());
+        driver.setStatus(RequestState.ACCEPTED);
+        request.addDriver(driver);
         elasticSearch.updateRequest(request);
-        request.setRequestState(RequestState.ACCEPTED);
         UserManager.getInstance().getRequestsList().add(request);
         UserManager.getInstance().notifyObservers();
     }
