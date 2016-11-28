@@ -39,8 +39,8 @@ public class User {
         phoneNumber = "";
         email = "";
         vehicleDescription = "";
-        rating = 0;
-        totalRatings = 0;
+        rating = 5;
+        totalRatings = 1;
     }
 
     /**
