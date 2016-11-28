@@ -202,6 +202,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         View fabButton = solo.getView(R.id.forTesting);
         solo.clickOnView(fabButton);
 
+
         View loginButton = solo.getView(R.id.main_fab_login);
         solo.waitForView(loginButton);
 
@@ -220,7 +221,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     /**
-     * UC 30 SpecifyGeoLocations
+     * UC 30 SpecifyGeoLocations // UC 1 Create Request between two locations
      *
      */
     public void testCreateRequestByMapLocation(){
@@ -274,6 +275,27 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
 
     }
+
+    /* UC 2 RiderViewRequests
+    *   As a rider, I want to see current requests I have open.
+    *
+    */
+
+    public void testRiderCurrentRequests(){
+        createRider();
+        loginRider();
+        testCreateRequestByMapLocation();
+        View requestButton = solo.getView(R.id.main_fab_requests);
+        solo.waitForView(requestButton);
+        solo.clickOnView(requestButton);
+
+        solo.waitForActivity(RequestsListActivity.class);
+        solo.waitForText("No Driver");
+    }
+
+    /**
+     * UC
+     */
 
     /**
      * UC 31 ViewGeoLocations

@@ -16,6 +16,8 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.test.InstrumentationTestCase;
 
 import com.robotium.solo.Solo;
@@ -78,25 +80,36 @@ public class RequestsListActivityTest extends ActivityInstrumentationTestCase2<R
      * UC 5 Rider Contacts Driver
      * US 01.05.01 As a Rider, I want to be able to phone or email the Driver who Accepted a Request.
      */
+    /*
     public void testCallDriver() {
         solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
-        ListView listView = (ListView)solo.getView("pending requests");
-        View view = listView.getChildAt(0);
-        Button callButton = (Button) view.findViewById(0 /* Call driver button */);
-        solo.clickOnView(callButton);
-        assertFalse(solo.getCurrentActivity() instanceof RequestsListActivity);
-        solo.goBack();
+
+
+        User user = new User();
+        user.setName("TEST USER");
+        Driver driver = new Driver();
+        driver.setName("TEST DRIVER");
+        Request request = new Request();
+        request.addDriver(driver);
+        RequestsList requestsList = new RequestsList();
+        requestsList.add(request);
+        UserManager userManager = UserManager.getInstance();
+        userManager.setUser(user);
+        userManager.setRequestsList(requestsList);
+
     }
+
 
     public void testEmailDriver() {
         solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
         ListView listView = (ListView)solo.getView("pending requests");
         View view = listView.getChildAt(0);
-        Button emailButton = (Button) view.findViewById(0 /* Email driver button */);
+        Button emailButton = (Button) view.findViewById(0);
         solo.clickOnView(emailButton);
         assertFalse(solo.getCurrentActivity() instanceof RequestsListActivity);
         solo.goBack();
     }
 
+    */
 }
 
