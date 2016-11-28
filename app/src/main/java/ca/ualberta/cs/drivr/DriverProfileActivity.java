@@ -19,6 +19,10 @@ import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/**
+ *
+ * Display Driver Activity when given a Driver object
+ */
 public class DriverProfileActivity extends AppCompatActivity {
 
 
@@ -54,6 +58,7 @@ public class DriverProfileActivity extends AppCompatActivity {
 
         final Driver driver = gson.fromJson(requestString, Driver.class);
 
+        // Initialize and set up Views
         name = driver.getName();
         email = driver.getEmail();
         username = driver.getUsername();
