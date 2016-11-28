@@ -194,11 +194,17 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         // Show the other person's name
         final DriversList drivers = request.getDrivers();
 
-        final String driverUsername = drivers.size() == 1 ? drivers.get(0).getUsername(): "No Driver Yet";
 
-        final String multipleDrivers = "Multiple Drivers Accepted";
+        // Get the username of the other user
+        if (userManager.getUserMode() == UserMode.RIDER) {
+            final String multipleDrivers = "Multiple Drivers Accepted";
+            final String driverUsername = drivers.size() == 1 ? drivers.get(0).getUsername(): "No Driver Yet";
+            otherUserNameTextView.setText(drivers.size() > 1 ? multipleDrivers : driverUsername);
+        }
+        else {
+            otherUserNameTextView.setText(request.getRider().getUsername());
+        }
 
-        otherUserNameTextView.setText(drivers.size() > 1 ? multipleDrivers : driverUsername);
 
         // If the request has a description, show it. Otherwise, hide te description
         if (Strings.isNullOrEmpty(request.getDescription()))

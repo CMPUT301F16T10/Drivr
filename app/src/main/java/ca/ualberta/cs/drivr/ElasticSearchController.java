@@ -1009,6 +1009,8 @@ public class ElasticSearchController {
         if (client == null) {
             DroidClientConfig.Builder builder = new DroidClientConfig
                     .Builder("http://cmput301.softwareprocess.es:8080/");
+            //DroidClientConfig.Builder builder = new DroidClientConfig
+            //        .Builder("http://172.28.79.122:9200/");
             DroidClientConfig config = builder.build();
 
             JestClientFactory factory = new JestClientFactory();
