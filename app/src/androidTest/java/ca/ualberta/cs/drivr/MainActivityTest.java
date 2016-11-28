@@ -162,4 +162,38 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
+    public void testViewSearchRequests(){
+
+        // make a request
+
+        int fragmentId = R.id.main_map;
+
+        solo.waitForFragmentById (fragmentId);
+        SupportMapFragment mFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.main_map);
+
+        solo.waitForView(mFragment);
+
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
+
+        View driverButton = solo.getView(R.id.main_driver_mode);
+        solo.waitForView(driverButton);
+
+        solo.clickOnView(driverButton);
+
+        solo.waitForDialogToOpen();
+        solo.enterText(solo.getEditText(""), "Car");
+        solo.clickOnButton("Save Description");
+
+        View view = solo.getView(fragmentId);
+        solo.clickOnView(view);
+
+        solo.scrollDown();
+
+        View viewButton = solo.getView(R.id.request_search_button);
+        solo.clickOnView(viewButton);
+
+
+    }
+
 }
