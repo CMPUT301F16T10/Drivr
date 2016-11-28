@@ -234,13 +234,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
                         context.startActivity(intent);
                     }
                     else {
-                        Intent intent = new Intent(context, DisplayDriverListActivity.class);
-                        Gson gson = new GsonBuilder()
-                                .registerTypeAdapter(Uri.class, new UriSerializer())
-                                .create();
-                        String requestString = gson.toJson(request, Request.class);
-                        intent.putExtra("REQUEST", requestString);
-                        context.startActivity(intent);
+                        startMultipleDriverIntent(request);
                     }
                 }
             }
@@ -292,13 +286,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
                 }
                 else {
 
-                    Intent intent = new Intent(context, DisplayDriverListActivity.class);
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(Uri.class, new UriSerializer())
-                            .create();
-                    String requestString = gson.toJson(request, Request.class);
-                    intent.putExtra("REQUEST", requestString);
-                    context.startActivity(intent);
+                    startMultipleDriverIntent(request);
                 }
             }
         });
@@ -344,13 +332,8 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
                     }
                 }
                 else {
-                    Intent intent = new Intent(context, DisplayDriverListActivity.class);
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(Uri.class, new UriSerializer())
-                            .create();
-                    String requestString = gson.toJson(request, Request.class);
-                    intent.putExtra("REQUEST", requestString);
-                    context.startActivity(intent);
+                    startMultipleDriverIntent(request);
+
                 }
             }
         });
@@ -389,5 +372,16 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
     @Override
     public int getItemCount() {
         return requestsToDisplay.size();
+    }
+
+    public void startMultipleDriverIntent(Request request){
+        Intent intent = new Intent(context, DisplayDriverListActivity.class);
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Uri.class, new UriSerializer())
+                .create();
+        String requestString = gson.toJson(request, Request.class);
+        intent.putExtra("REQUEST", requestString);
+        context.startActivity(intent);
+
     }
 }

@@ -10,6 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+
+/**
+ * An Activity to Display Multiple Drivers that accepted a Request
+ */
 public class DisplayDriverListActivity extends Activity {
 
     private UserManager userManager = UserManager.getInstance();
