@@ -66,8 +66,8 @@ public class SearchRequest {
                          ConcretePlace location, String keyword) {
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
-        this.maxPricePer = maxPricePer;
         this.minPricePer = minPricePer;
+        this.maxPricePer = maxPricePer;
         this.location = location;
         this.keyword = keyword;
     }
@@ -95,7 +95,6 @@ public class SearchRequest {
             SearchLocation();
             firstSearch = false;
         }
-
 
         if(!maxPrice.equals("MAX") || !minPrice.equals("0")) {
             FilterByPrice();
