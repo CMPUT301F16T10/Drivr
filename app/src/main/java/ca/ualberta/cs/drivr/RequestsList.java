@@ -45,6 +45,13 @@ public class RequestsList {
     }
 
     /**
+     * Clears all requests from the collection.
+     */
+    public void clear() {
+        requestsList.clear();
+    }
+
+    /**
      * Removes a item_request from the list if it exists.
      * @param request The item_request to remove.
      */
@@ -52,7 +59,11 @@ public class RequestsList {
         requestsList.remove(request);
     }
 
-    public void removeProper(Request request) {
+    /**
+     * Remove a requests by the ID.
+     * @param request The request to use the ID from.
+     */
+    public void removeById(Request request) {
         // Make a list of requests to remove and remove them in a separate loop. This is because we
         // cannot modify a collection while we are iterating over it.
         ArrayList<Request> requestsToRemove = new ArrayList<>();
