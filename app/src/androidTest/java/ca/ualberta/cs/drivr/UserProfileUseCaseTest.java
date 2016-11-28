@@ -16,13 +16,12 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.app.AlertDialog;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.robotium.solo.Solo;
 
 /**
@@ -86,7 +85,7 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
 
         TextView signup = (TextView)solo.getView(R.id.login_sign_up_text);
         solo.clickOnView(signup);
-        
+
         /*
         * From: http://stackoverflow.com/a/18993980
         * Author: mlchen850622
@@ -98,6 +97,7 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
         solo.enterText((EditText) solo.getView (R.id.login_email), "aaaa@");
         solo.enterText((EditText) solo.getView (R.id.login_phone), "1112223333");
         solo.clickOnButton ("Sign Up");
+        solo.goBack();
 
     }
 
@@ -139,6 +139,7 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
         solo.enterText((EditText) solo.getView (R.id.profile_email_edit_text), "aaaab@");
         solo.enterText((EditText) solo.getView (R.id.profile_phone_number_edit_text), "1112233333");
         solo.clickOnView(editProfile);
+        solo.goBack();
     }
 
 
@@ -146,18 +147,39 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
     * 03.04.01:
     *   "As a driver, in my profile I can provide details about the vehicle I drive."
     */
-    public void testSwitchDriver() {
-        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-        int[] location = new int[2];
-        View view = solo.getView(R.id.forTesting);
-        view.getLocationOnScreen(location);
-        int x= location[0];
-        int y= location[1];
-        solo.clickOnScreen(x,y);
-        View driverMode = getActivity().findViewById(R.id.main_driver_mode);
-        solo.clickOnView(driverMode);
-        solo.enterText((EditText) solo.getView(R.id.main_keyword_edit_text), "aaaaa");
-        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-    }
+//    public void testSwitchDriver() {
+//        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+//        int[] location = new int[2];
+//        View view = solo.getView(R.id.forTesting);
+//        view.getLocationOnScreen(location);
+//        int x= location[0];
+//        int y= location[1];
+//
+//        solo.clickOnScreen(x,y);
+//        View login = getActivity().findViewById(R.id.main_fab_login);
+//        solo.clickOnView(login);
+//        solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
+//        solo.enterText((EditText) solo.getView(R.id.login_username), "aaaaa");
+//        solo.clickOnText("Sign In");
+//        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+//
+//        solo.clickOnScreen(x,y);
+//        View driverMode = getActivity().findViewById(R.id.main_driver_mode);
+//        solo.clickOnView(driverMode);
+//
+//        solo.enterText((EditText) solo.getView(R.id.main_keyword_edit_text), "123123123");
+//        solo.clickOnText("Save Description");
+//        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+//
+//        solo.clickOnScreen(x, y);
+//        View profile = getActivity().findViewById(R.id.main_fab_profile);
+//        solo.clickOnView(profile);
+//        View editProfile = solo.getView(R.id.profile_edit_icon);
+//        solo.clickOnView(editProfile);
+//
+//        solo.clearEditText((EditText) solo.getView(R.id.vehicle_description_edit_text));
+//        solo.enterText((EditText) solo.getView (R.id.vehicle_description_edit_text), "Super old Toyota 1995");
+//        solo.goBack();
+//    }
 }
 
