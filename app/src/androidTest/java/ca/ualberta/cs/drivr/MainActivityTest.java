@@ -16,9 +16,16 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.graphics.PointF;
+import android.support.test.filters.MediumTest;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
 
+import com.google.android.gms.maps.SupportMapFragment;
 import com.robotium.solo.Solo;
+
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by adam on 2016-10-12.
@@ -101,20 +108,56 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
+    @MediumTest
+    public void testFragment () {
+
+        int fragmentId = R.id.main_map;
+
+        solo.waitForFragmentById (fragmentId);
+        SupportMapFragment mFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.main_map);
+
+        solo.waitForView(mFragment);
+        View view = solo.getView(fragmentId);
+        solo.clickOnView(view);
+
+        solo.waitForDialogToOpen();
+        solo.waitForText("Yes");
+        solo.clickOnButton("Yes");
+
+
+    }
+
+    /**
+     * UC 30 SpecifyGeoLocations
+     *
+     */
     public void testCreateRequestByMapLocation(){
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-        solo.clickOnScreen(100, 100);
-        ;
+
+        int fragmentId = R.id.main_map;
+
+        solo.waitForFragmentById (fragmentId);
+        SupportMapFragment mFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.main_map);
+
+        solo.waitForView(mFragment);
+        View view = solo.getView(fragmentId);
+        solo.clickOnView(view);
+
         solo.waitForDialogToOpen();
         solo.clickOnButton("Yes");
-        solo.clickOnScreen(100,100);
+
+        view.scrollTo(100,100);
+
+        solo.clickOnView(view);
+        solo.waitForDialogToOpen();
         solo.clickOnButton("Yes");
         solo.scrollDown();
-        solo.clickOnButton("CREATE");
-        solo.clickOnButton("Accept");
-        solo.clickOnButton("Plus button");
-        solo.clickOnButton("Requests");
-        assertTrue(solo.searchText("No Driver Yet"));
+
+        View viewButton = solo.getView(R.id.new_request_create_button);
+        solo.clickOnView(viewButton);
+
+        View acceptButton = solo.getView(R.id.request_accept_text);
+        //assertTrue(solo.searchText("No Driver Yet"));
 
 
     }
