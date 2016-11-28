@@ -98,5 +98,25 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         final String source = solo.getText("Source").getText().toString();
         // We want 2 occurrences: one in the text view and one on the map
         assertTrue(solo.waitForText(source, 2, 3000));
+
     }
+
+    public void testCreateRequestByMapLocation(){
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+        solo.clickOnScreen(100, 100);
+        ;
+        solo.waitForDialogToOpen();
+        solo.clickOnButton("Yes");
+        solo.clickOnScreen(100,100);
+        solo.clickOnButton("Yes");
+        solo.scrollDown();
+        solo.clickOnButton("CREATE");
+        solo.clickOnButton("Accept");
+        solo.clickOnButton("Plus button");
+        solo.clickOnButton("Requests");
+        assertTrue(solo.searchText("No Driver Yet"));
+
+
+    }
+
 }

@@ -257,17 +257,8 @@ public class NewRequestActivity extends AppCompatActivity {
      */
     private void estimateFare(Place dest, Place pickUp) {
 
-        Location locationDest = new Location("Dest");
-        locationDest.setLongitude(dest.getLatLng().longitude);
-        locationDest.setLatitude(dest.getLatLng().latitude);
-
-        Location locationStart = new Location("Start");
-        locationStart.setLongitude(pickUp.getLatLng().longitude);
-        locationStart.setLatitude(pickUp.getLatLng().latitude);
-
-        float distance = locationDest.distanceTo(locationStart);
-        distance = distance / 500; // m to km
-        distance = distance + 4; // $3 base cost
+        EstimatedPriceCalculator estimatedPriceCalculator = new EstimatedPriceCalculator();
+        float distance = estimatedPriceCalculator.estimateFare(dest,pickUp);
 
         String cost = "$" + String.format("%.2f", distance);
 

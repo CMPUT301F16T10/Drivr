@@ -35,6 +35,7 @@ import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Step;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -112,7 +113,7 @@ public class MapController implements DirectionCallback{
         gpsTracker = new GPSTracker(context);
         // Initialize location
 
-        myLocation = gpsTracker.getMyLocation();
+        myLocation = gpsTracker.getLocation();
         myLatitude = myLocation.getLatitude();
         myLongitude = myLocation.getLongitude();
 
@@ -237,22 +238,20 @@ public class MapController implements DirectionCallback{
                     })
                     .show();
         }
-        else {
-            // Delete
-            //map.clear();
-            //markers.clear();
-        }
+
     }
 
-    public void createRequest(LatLng pickupLatlng, LatLng destinationLatLng){
-        try {
-            List<Address> pickupList = geocoder.getFromLocation(pickupLatlng.latitude, pickupLatlng.longitude, 1);
-            List<Address> destinationList = geocoder.getFromLocation(destinationLatLng.latitude, destinationLatLng.longitude, 1);
+    /**
+     * Passing in two points, json them to new request activity
+     * @param pickupLatlng LatLng point
+     * @param destinationLatLng LatLng point
+     */
 
-            Address pickupAddress = pickupList.get(0);
-            Address destinationAddress = destinationList.get(0);
-            ConcretePlace pickupPlace = new ConcretePlace(pickupAddress);
-            ConcretePlace destinationPlace = new ConcretePlace(destinationAddress);
+    public void createRequest(LatLng pickupLatlng, LatLng destinationLatLng){
+
+
+            ConcretePlace pickupPlace = markerGeocodePlace(pickupLatlng);
+            ConcretePlace destinationPlace = markerGeocodePlace(destinationLatLng);
 
             Gson gson = new GsonBuilder().registerTypeAdapter(Uri.class, new UriSerializer())
                     .create();
@@ -273,18 +272,13 @@ public class MapController implements DirectionCallback{
            // Request request = new Request(userManager.getUser(), new ConcretePlace(pickupAddress), new ConcretePlace(destinationAddress));
             //requestsListController.addRequest(request);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
+
     /**
-     * Clears the Map and allow another request
+     * Passing in a point it geocodes it into a concrete place
+     * @param latLng point
      */
-    public void clearMap(){
-        map.clear();
-        markers.clear();
-    }
 
     public ConcretePlace markerGeocodePlace(LatLng latLng){
 
@@ -301,6 +295,11 @@ public class MapController implements DirectionCallback{
 
     }
 
+    /**
+     * Passing in a two points, creates a bound and move map to include them on screen
+     * @param pickup point
+     * @param destination point
+     */
 
     public void requestCenter(LatLng pickup, LatLng destination) {
 
@@ -326,6 +325,8 @@ public class MapController implements DirectionCallback{
 
 
     }
+
+
 
     /**
      * Queries a route with google direction api to the map

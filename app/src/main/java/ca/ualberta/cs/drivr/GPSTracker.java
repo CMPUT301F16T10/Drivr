@@ -45,7 +45,6 @@ public class GPSTracker implements LocationListener {
     private boolean canGetLocation = false;
 
     Location myLocation;
-    // get
     Location location;
 
     double myLatitude;
@@ -136,14 +135,6 @@ public class GPSTracker implements LocationListener {
                 locationManger.removeUpdates(GPSTracker.this);
             }
         }
-    }
-
-    /**
-     * Get users Location object.
-     * @return returns user current Location.
-     */
-    public Location getMyLocation() {
-        return myLocation;
     }
 
     /**
