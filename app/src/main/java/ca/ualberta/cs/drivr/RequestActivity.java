@@ -46,6 +46,8 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
     private MapController mapController;
     private Place sourcePlace;
     private Place destinationPlace;
+    private UserManager userManager = UserManager.getInstance();
+    private User user = userManager.getUser();
 
     private TextView acceptButton;
     private TextView declineButton;
@@ -68,15 +70,12 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         // map = findViewById(R.id.request_map_fragment);
 
         String requestString = getIntent().getStringExtra(EXTRA_REQUEST);
-        String id = getIntent().getExtras().getString("UniqueID");
-
 //        Gson gson = new Gson();
 //        ConcretePlace concretePlace = new ConcretePlace(place);
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Uri.class, new UriSerializer())
                 .create();
         final Request request = gson.fromJson(requestString, Request.class);
-
         sourcePlace = request.getSourcePlace();
         destinationPlace = request.getDestinationPlace();
 
@@ -87,21 +86,46 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.request_map_fragment);
         mapFragment.getMapAsync(this);
 
-        if(id.equals("From_RequestListActivity")) {
-            acceptButton.setVisibility(View.INVISIBLE);
-            declineButton.setVisibility(View.INVISIBLE);
-            routeText.setVisibility(View.GONE);
-
-        }
-
 
         mContext = getApplicationContext();
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
-                addRequest.execute(request);
+
+
+
+                RequestState state = request.getRequestState();
+                if (state.equals(RequestState.CREATED)) {
+                    request.setRequestState(RequestState.PENDING);
+                    RequestsListController requestsListController = new RequestsListController(UserManager.getInstance());
+                    requestsListController.addRequest(request);
+                    UserManager.getInstance().notifyObservers();
+                    ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
+                    addRequest.execute(request);
+                }
+                RequestController requestController = new RequestController(userManager);
+                if (requestController.canAcceptRequest(request, userManager.getUserMode())) {
+                    Log.i(TAG, "attempting to accept request");
+                    requestController.acceptRequest(request, getApplicationContext());
+                }
+                else if (requestController.canConfirmRequest(request, userManager.getUserMode())) {
+                    requestController.confirmRequest(request, getApplicationContext());
+                }
+                else if (requestController.canCompleteRequest(request, userManager.getUserMode())) {
+                    requestController.completeRequest(request, getApplicationContext());
+                }
+//                else if (state.equals(RequestState.PENDING) && UserManager.getInstance().getUserMode().equals(UserMode.DRIVER)) {
+//                    request.addDriver((Driver) UserManager.getInstance().getUser());
+////                    request.setRequestState(RequestState.ACCEPTED);
+////                    ElasticSearchController.UpdatePendingRequest update = new ElasticSearchController.UpdatePendingRequest();
+////                    update.execute(request);
+//                }
+
+                Log.i("Request State:", request.getRequestState().toString());
                 finish();
+
+//                RequestState state = request.getRequestState();
+//                RequestState.
             }
         });
 

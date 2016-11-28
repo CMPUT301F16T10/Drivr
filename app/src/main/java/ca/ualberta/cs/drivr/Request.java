@@ -51,7 +51,7 @@ public class Request {
         description = "";
         setDate(new Date());
         setFare(new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP));
-        requestState = RequestState.PENDING;
+        requestState = RequestState.CREATED;
         source = new ConcretePlace();
         destination = new ConcretePlace();
         synced = false;

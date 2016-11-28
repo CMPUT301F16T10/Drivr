@@ -18,6 +18,7 @@ package ca.ualberta.cs.drivr;
 
 import android.location.Location;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.math.BigDecimal;
@@ -312,36 +313,6 @@ public class ElasticSearch {
             deleteRequest.execute(requestId);
         } else {
             Log.i("Error", "Unable to connect to the internet");
-        }
-    }
-
-    /**
-     * Here, the arrayList wi
-     * @return
-     */
-    public ArrayList<Request> getUpdatedRequests() {
-        UserManager userManager = UserManager.getInstance();
-        if(connectivityManager.getActiveNetworkInfo().isConnected()) {
-            ArrayList<Request> requests = new ArrayList<Request>();
-            ElasticSearchController.GetRequest getRequest =
-                    new ElasticSearchController.GetRequest();
-            for (Request request : userManager.getRequestsList().getRequests()) {
-                getRequest.execute(request.getId());
-                try {
-                    Request gottenRequest = getRequest.get();
-                    if (gottenRequest.getRequestState() != request.getRequestState()
-                            || !gottenRequest.getDrivers().equals(request.getDrivers())) {
-                        requests.add(gottenRequest);
-                    }
-                } catch (Exception e) {
-                    Log.i("Error", "Failed to load a request by ID.");
-                    return null;
-                }
-            }
-            return requests;
-        } else {
-            Log.i("Error", "Unable to connect to the internet");
-            return null;
         }
     }
 

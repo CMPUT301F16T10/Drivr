@@ -45,6 +45,20 @@ public class User {
     }
 
     /**
+     * Copy constructor.
+     * @param other The user to copy
+     */
+    public User(User other) {
+        name = other.getName();
+        username = other.getUsername();
+        phoneNumber = other.getPhoneNumber();
+        email = other.getEmail();
+        vehicleDescription = other.getVehicleDescription();
+        rating = other.getRating();
+        totalRatings = other.getTotalRatings();
+    }
+
+    /**
      * Instantiate a new User.
      * @param name The name of the user.
      * @param username The username of the user.

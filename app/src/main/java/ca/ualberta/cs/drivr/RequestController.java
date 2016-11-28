@@ -16,6 +16,9 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+
 /**
  * A controller for modifying requests.
  * @see Request
@@ -52,8 +55,16 @@ public class RequestController {
      * Accept a request.
      * @param request The request to accept.
      */
-    public void acceptRequest(Request request) {
-        request.setRequestState(RequestState.ACCEPTED);
+    public void acceptRequest(Request request, Context context) {
+        ElasticSearch elasticSearch = new ElasticSearch((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        if (request.getRequestState() == RequestState.PENDING)
+            request.setRequestState(RequestState.ACCEPTED);
+        Driver driver = new Driver(userManager.getUser());
+        driver.setStatus(RequestState.ACCEPTED);
+        request.addDriver(driver);
+        elasticSearch.updateRequest(request);
+        UserManager.getInstance().getRequestsList().add(request);
+        UserManager.getInstance().notifyObservers();
     }
 
     /**
@@ -94,8 +105,9 @@ public class RequestController {
      * Complete a request.
      * @param request The request to complete.
      */
-    public void completeRequest(Request request) {
+    public void completeRequest(Request request, Context context) {
         request.setRequestState(RequestState.COMPLETED);
+        userManager.notify();
     }
 
     /**
@@ -115,8 +127,16 @@ public class RequestController {
      * Confirm a request.
      * @param request The request to confirm.
      */
-    public void confirmRequest(Request request) {
-        request.setRequestState(RequestState.CONFIRMED);
+    public void confirmRequest(Request request, Context context) {
+        //request.setRequestState(RequestState.CONFIRMED);
+
+        ElasticSearch elasticSearch = new ElasticSearch((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        if (request.getRequestState() == RequestState.ACCEPTED)
+            request.setRequestState(RequestState.CONFIRMED);
+        elasticSearch.updateRequest(request);
+        UserManager.getInstance().getRequestsList().removeById(request);
+        UserManager.getInstance().getRequestsList().add(request);
+        UserManager.getInstance().notifyObservers();
     }
 
     /**
