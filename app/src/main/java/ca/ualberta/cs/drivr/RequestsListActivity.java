@@ -33,7 +33,6 @@ public class RequestsListActivity extends AppCompatActivity {
     private RequestsListAdapter adapter;
     private RecyclerView requestsListRecyclerView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
