@@ -78,7 +78,7 @@
                     android:layout_height="36dp"
                     android:padding="4dp"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/ic_x_mark"
+                    app:srcCompat="@drawable/ic_person_black_24dp"
                     android:layout_alignParentTop="true"
                     android:layout_toStartOf="@+id/item_request_email_image" />
 
