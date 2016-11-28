@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         /**
          * This calls the login activity a the beginning if there is no local user stored
          */
-        if (userManager.getUser() == null) {
+        if (userManager.getUser().getUsername().isEmpty()) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
