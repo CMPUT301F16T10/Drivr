@@ -232,7 +232,7 @@ public class NewRequestActivity extends AppCompatActivity {
         Log.i(TAG + "kjdfgkjdfhkhj", request.getRequestState().toString());
 //        requestsListController.addRequest(request);
 
-        finish();
+//        finish();
     }
 
     /**

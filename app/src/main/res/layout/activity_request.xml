@@ -83,7 +83,8 @@
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="?android:attr/listDivider" />
+            android:background="?android:attr/listDivider"
+            android:id="@+id/request_button_divider" />
 
         <TextView
             android:id="@+id/request_decline_text"

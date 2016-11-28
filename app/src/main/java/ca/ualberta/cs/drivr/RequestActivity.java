@@ -38,8 +38,6 @@ import com.google.gson.GsonBuilder;
  */
 public class RequestActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private TextView routeText;
-    private TextView fareText;
     private GoogleMap map;
     private SupportMapFragment mapFragment;
     private Context mContext;
@@ -49,8 +47,11 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
     private UserManager userManager = UserManager.getInstance();
     private User user = userManager.getUser();
 
+    private TextView routeText;
+    private TextView fareText;
     private TextView acceptButton;
     private TextView declineButton;
+    private View buttonSeparator;
 
     private static final String TAG = "RequestActivity";
     /**
@@ -62,10 +63,16 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
+
+        // Get context
+        mContext = getApplicationContext();
+
+        // Get views
         routeText = (TextView) findViewById(R.id.request_route_text);
         fareText = (TextView) findViewById(R.id.request_fare_text);
         acceptButton = (TextView) findViewById(R.id.request_accept_text);
         declineButton = (TextView) findViewById(R.id.request_decline_text);
+        buttonSeparator = findViewById(R.id.request_button_divider);
 
         // map = findViewById(R.id.request_map_fragment);
 
@@ -86,13 +93,13 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
         mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.request_map_fragment);
         mapFragment.getMapAsync(this);
 
+        Log.i("RequestActivity", "HIT");
 
-        mContext = getApplicationContext();
+        setupAcceptAndDeclineButtons(request.getRequestState(), userManager.getUserMode());
+
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
 
                 RequestState state = request.getRequestState();
                 if (state.equals(RequestState.CREATED)) {
@@ -121,43 +128,63 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
 ////                    update.execute(request);
 //                }
 
-                Log.i("Request State:", request.getRequestState().toString());
-                finish();
+                Intent intent = new Intent(RequestActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
 
-//                RequestState state = request.getRequestState();
-//                RequestState.
+                Log.i("Request State:", request.getRequestState().toString());
             }
         });
 
         declineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RequestActivity.this, NewRequestActivity.class);
-
-                Gson gson = new GsonBuilder().registerTypeAdapter(Uri.class, new UriSerializer())
-                        .create();
-
-                String concretePlaceJsonPick = gson.toJson(sourcePlace);
-                String concretePlaceJsonDest = gson.toJson(destinationPlace);
-
-                intent.putExtra(NewRequestActivity.EXTRA_PLACE, concretePlaceJsonDest);
-                Log.i(TAG, "Place: " + destinationPlace.getName() + ", :" + destinationPlace.getLatLng());
-
-                intent.putExtra("PICK_UP", concretePlaceJsonPick);
-                Log.i(TAG, "Place: " + sourcePlace.getName() + ", :" + sourcePlace.getLatLng());
-
-                startActivity(intent);
                 finish();
             }
         });
+    }
 
+    private void hideAcceptAndDeclineButtons() {
+        acceptButton.setVisibility(View.GONE);
+        declineButton.setVisibility(View.GONE);
+        buttonSeparator.setVisibility(View.GONE);
+    }
+
+    private void setupAcceptAndDeclineButtons(RequestState state, UserMode userMode) {
+        switch (state) {
+            case CREATED:
+                acceptButton.setText("Create");
+                declineButton.setText("Cancel");
+                break;
+            case PENDING:
+                if (userMode == UserMode.DRIVER) {
+                    acceptButton.setText("Accept");
+                    declineButton.setText("Cancel");
+                }
+                else {
+                    hideAcceptAndDeclineButtons();
+                }
+                break;
+            case ACCEPTED:
+                if (userMode == UserMode.RIDER) {
+                    acceptButton.setText("Confirm");
+                    declineButton.setText("Decline");
+                }
+                else {
+                    hideAcceptAndDeclineButtons();
+                }
+                break;
+            default:
+                hideAcceptAndDeclineButtons();
+                break;
+        }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         final MapController mapController = new MapController(map,mContext);
-        if(sourcePlace != null && destinationPlace != null) {
+        if (sourcePlace != null && destinationPlace != null) {
             mapController.addRequestOnMap(sourcePlace.getLatLng(), destinationPlace.getLatLng());
             mapController.requestCenter(sourcePlace.getLatLng(),destinationPlace.getLatLng());
         }

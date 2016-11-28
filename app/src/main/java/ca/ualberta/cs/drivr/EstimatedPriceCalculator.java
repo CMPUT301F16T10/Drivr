@@ -13,7 +13,6 @@ public class EstimatedPriceCalculator {
     }
 
     public float estimateFare(Place dest, Place pickUp) {
-
         Location locationDest = new Location("Dest");
         locationDest.setLongitude(dest.getLatLng().longitude);
         locationDest.setLatitude(dest.getLatLng().latitude);
