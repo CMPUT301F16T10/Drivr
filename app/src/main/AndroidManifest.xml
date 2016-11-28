@@ -81,7 +81,6 @@
         <activity
             android:name=".SearchRequestsListActivity"
             android:label="Search Results" />
-        <activity android:name=".PaymentActivity" />
         <activity android:name=".RequestCompletedActivity" />
         <receiver
             android:name=".NotificationReceiver"

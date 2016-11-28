@@ -21,9 +21,18 @@ import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
+
 /**
- * Created by justin on 27/11/16.
+ * A list adapter for rendering requests in a requests list recycler view.
+ *
+ * This is modified from:
+ * <ul>
+ *     <li>From: https://guides.codepath.com/android/using-the-recyclerview</li>
+ *     <li>Author: CodePath</li>
+ *     <li>Date accessed: November 10, 2016</li>
+ * </ul>
  */
+
 public class DriverListAdapter extends RecyclerView.Adapter<DriverListAdapter.ViewHolder> {
 
     /**
