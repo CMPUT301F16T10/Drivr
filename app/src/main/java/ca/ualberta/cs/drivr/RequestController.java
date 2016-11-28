@@ -128,8 +128,6 @@ public class RequestController {
      * @param request The request to confirm.
      */
     public void confirmRequest(Request request, Context context) {
-        //request.setRequestState(RequestState.CONFIRMED);
-
         ElasticSearch elasticSearch = new ElasticSearch((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         if (request.getRequestState() == RequestState.ACCEPTED)
             request.setRequestState(RequestState.CONFIRMED);

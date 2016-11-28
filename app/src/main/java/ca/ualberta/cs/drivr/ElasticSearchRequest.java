@@ -39,9 +39,9 @@ public class ElasticSearchRequest {
     private String date;
     private double km;
     private String sourceAddress;
-    private double []start;
+    private double[] start;
     private String destinationAddress;
-    private double []end;
+    private double[] end;
     @JestId
     private String id;
 

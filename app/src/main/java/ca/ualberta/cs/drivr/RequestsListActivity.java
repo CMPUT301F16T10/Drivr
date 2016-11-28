@@ -46,14 +46,6 @@ public class RequestsListActivity extends AppCompatActivity {
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 super.onItemRangeRemoved(positionStart, itemCount);
                 requestsListRecyclerView.invalidate();
-//                invalidateRequests();
-//                adapter.getItemId(positionStart);
-//                Log.i(this.toString(), "invalidate");
-//                adapter.notifyDataSetChanged();
-//                requestsListRecyclerView.removeAllViews();
-//                requestsListRecyclerView.invalidate();
-//                adapter.notifyItemRangeRemoved();
-//                requestsListRecyclerView.setAdapter(adapter);
             }
 
         });

@@ -9,8 +9,7 @@ import com.google.android.gms.location.places.Place;
  */
 public class EstimatedPriceCalculator {
 
-    public EstimatedPriceCalculator() {
-    }
+    public EstimatedPriceCalculator() {}
 
     public float estimateFare(Place dest, Place pickUp) {
         Location locationDest = new Location("Dest");
