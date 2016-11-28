@@ -20,6 +20,7 @@ import android.graphics.PointF;
 import android.support.test.filters.MediumTest;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.SupportMapFragment;
 import com.robotium.solo.Solo;
@@ -127,6 +128,43 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
+    public void enterDriverMode(){
+        int fragmentId = R.id.main_map;
+        solo.waitForFragmentById (fragmentId);
+        SupportMapFragment mFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.main_map);
+
+        solo.waitForView(mFragment);
+
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
+
+        View driverButton = solo.getView(R.id.main_driver_mode);
+        solo.waitForView(driverButton);
+
+        solo.clickOnView(driverButton);
+
+        solo.waitForDialogToOpen();
+        solo.enterText(solo.getEditText(""), "Car");
+        solo.clickOnButton("Save Description");
+    }
+
+    public void login(){
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
+
+        View loginButton = solo.getView(R.id.main_fab_login);
+        solo.waitForView(loginButton);
+
+        solo.clickOnView(loginButton);
+
+        solo.enterText(solo.getEditText("Username"), "JustinDriver");
+
+        View signButton = solo.getView(R.id.sign_in_button);
+
+        solo.clickOnView(signButton);
+
+    }
+
     /**
      * UC 30 SpecifyGeoLocations
      *
@@ -169,22 +207,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         int fragmentId = R.id.main_map;
 
-        solo.waitForFragmentById (fragmentId);
-        SupportMapFragment mFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.main_map);
-
-        solo.waitForView(mFragment);
-
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
-
-        View driverButton = solo.getView(R.id.main_driver_mode);
-        solo.waitForView(driverButton);
-
-        solo.clickOnView(driverButton);
-
-        solo.waitForDialogToOpen();
-        solo.enterText(solo.getEditText(""), "Car");
-        solo.clickOnButton("Save Description");
+        enterDriverMode();
 
         View view = solo.getView(fragmentId);
         solo.clickOnView(view);
@@ -209,6 +232,29 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         View address = solo.getView(R.id.item_request_route_text);
         solo.clickOnView(address);
         solo.waitForActivity(RequestActivity.class);
+
+    }
+
+    /**
+     *
+     * UC 23 ViewDriverRequests
+     * US 05.02.01 As a Driver, I want to view a list of things I have Accepted that are Pending, each Request with its description, and locations.
+     */
+
+    public void testViewDriverRequests(){
+
+        login();
+        //enterDriverMode();
+
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
+
+        View requestButton = solo.getView(R.id.main_fab_requests);
+        solo.waitForView(requestButton);
+        solo.clickOnView(requestButton);
+
+        solo.waitForActivity(RequestsListActivity.class);
+        solo.waitForText("Edmonton");
 
     }
 
