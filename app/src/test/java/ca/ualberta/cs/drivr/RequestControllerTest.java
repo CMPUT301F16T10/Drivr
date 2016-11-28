@@ -65,18 +65,6 @@ public class RequestControllerTest {
         assertTrue(requestController.canAcceptRequest(request, UserMode.DRIVER));
     }
 
-    /**
-     * UC 15 Driver Receives Payment
-     * US 05.01.01 As a Driver, I want to Accept a Request I agree with and Accept that
-     * offered payment upon completion.
-     */
-    /*
-    @Test
-    public void acceptRequest() {
-        requestController.acceptRequest(request2,context);
-        assertEquals(RequestState.ACCEPTED, request2.getRequestState());
-    } */
-
     @Test
     public void canConfirmRequest() {
         Request request = new Request();
@@ -99,16 +87,6 @@ public class RequestControllerTest {
         assertFalse(requestController.canCancelRequest(request, UserMode.DRIVER));
     }
 
-    /**
-     * UC 4 Rider Cancels Requests
-     * US 01.04.01 As a Rider, I want to cancel Requests.
-     */
-    /* @Test
-    public void cancelRequest() {
-        requestController.cancelRequest(request2);
-        assertEquals(RequestState.CANCELLED, request2.getRequestState());
-    } */
-
     @Test
     public void canCompleteRequest() {
         Request request = new Request();
@@ -120,16 +98,6 @@ public class RequestControllerTest {
         assertFalse(requestController.canCompleteRequest(request, UserMode.DRIVER));
     }
 
-    /**
-     * UC 7 Rider Confirms And Pays
-     * US 01.07.01 As a Rider, I want to Confirm the completion of a Request and enable payment.
-     * Testing for Completed item_request
-     */
-   /* @Test
-    public void completeRequest() {
-        requestController.completeRequest(request2);
-        assertEquals(RequestState.COMPLETED, request2.getRequestState());
-    }*/
 
     @Test
     public void canDeclineRequest() {

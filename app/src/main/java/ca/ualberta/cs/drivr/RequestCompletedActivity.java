@@ -41,6 +41,11 @@ public class RequestCompletedActivity extends AppCompatActivity {
         profileTextView = (TextView) findViewById(R.id.completed_driver_username_text_view);
         finishButton = (Button) findViewById(R.id.finish_button);
 
+        Request request = userManager.getRequestsList().getById(requestId);
+        Driver driver = request.getDrivers().size() > 0 ? request.getDrivers().get(0) : null;
+
+        profileTextView.setText(driver.getUsername());
+
         ratingBar.setOnClickListener(new View.OnClickListener() {
 
             // Todo Update Rating

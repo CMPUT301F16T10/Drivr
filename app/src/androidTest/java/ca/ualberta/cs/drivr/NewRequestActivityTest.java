@@ -40,33 +40,6 @@ public class NewRequestActivityTest extends ActivityInstrumentationTestCase2<New
         solo.finishOpenedActivities();
     }
 
-    public void testGeoLocationSearch(){
-        solo.assertCurrentActivity("Expected NewRequestActivity", NewRequestActivity.class);
 
 
-
-            /*LatLng pickupLatLng = new LatLng(53.5232,113.5263);
-            LatLng destinationLatLng = new LatLng(53.5232,114.5263);
-
-            Locale locale = new Locale("en","CA");
-
-            Address pickupAddress = new Address(locale);
-            pickupAddress.setLongitude(113.5263);
-            pickupAddress.setLatitude(53.5232);
-
-            Address destinationAddress =  new Address(locale);
-            destinationAddress.setLongitude(114.5263);
-             destinationAddress.setLatitude(53.5232);
-
-            ConcretePlace sourcePlace = new ConcretePlace(pickupAddress);
-            ConcretePlace destinationPlace = new ConcretePlace(destinationAddress); */
-
-
-            solo.clickOnButton("CREATE");
-
-
-
-
-
-    }
 }

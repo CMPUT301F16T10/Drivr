@@ -163,6 +163,14 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         public void loginDriver() {
 
+            if(userManager.getUser().getUsername().isEmpty()) {
+                View fabButton = solo.getView(R.id.forTesting);
+                solo.clickOnView(fabButton);
+
+                View loginButton = solo.getView(R.id.main_fab_login);
+                solo.clickOnView(loginButton);
+            }
+
             solo.enterText(solo.getEditText("Username"), "JustinDriver");
 
             View signButton = solo.getView(R.id.sign_in_button);
@@ -173,6 +181,13 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     public void loginRider(){
 
+            if(userManager.getUser().getUsername().isEmpty()) {
+                View fabButton = solo.getView(R.id.forTesting);
+                solo.clickOnView(fabButton);
+
+                View loginButton = solo.getView(R.id.main_fab_login);
+                solo.clickOnView(loginButton);
+            }
 
             solo.enterText(solo.getEditText("Username"), "JustinRider");
 
