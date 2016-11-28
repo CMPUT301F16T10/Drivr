@@ -20,6 +20,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
@@ -400,7 +401,10 @@ public class LoginActivity extends AppCompatActivity {
                 for (Request request : elasticSearch.loadUserRequests(username))
                     userManager.getRequestsList().add(request);
                 userManager.notifyObservers();
-                finish();
+//                finish();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             } else {
                 // mPasswordView.setError(getString(R.string.error_incorrect_password));
                 // mPasswordView.requestFocus();
@@ -462,7 +466,10 @@ public class LoginActivity extends AppCompatActivity {
                 user.setPhoneNumber(phone);
                 user.setUsername(username);
                 userManager.notifyObservers();
-                finish();
+//                finish();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             } else {
                 loginUsername.setError("Username already taken");
                 loginUsername.requestFocus();
