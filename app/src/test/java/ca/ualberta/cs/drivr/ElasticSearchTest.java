@@ -98,6 +98,16 @@ public class ElasticSearchTest {
 
     /**
      * Test for adding a request online and searching for it.
+     *
+     * Use Case 1 - US 01.01.01
+     * As a rider, I want to request rides between two locations.
+     *
+     * Use Case 2 - US 01.02.01
+     * As a rider, I want to see current requests I have open.
+     *
+     * Use Case 23 - US 05.02.01
+     * As a driver, I want to view a list of things I have accepted that are pending, each request
+     * with its description, and locations.
      */
     @Test
     public void addAndGetRequestOnline(){
@@ -126,6 +136,27 @@ public class ElasticSearchTest {
 
     /**
      * Test for updating a request online and searching for it.
+     *
+     * Use Case 2 - US 01.02.01
+     * As a rider, I want to see current requests I have open.
+     *
+     * Use Case 4 - US 01.04.01
+     * As a rider, I want to cancel requests.
+     *
+     * Use Case 7 - US 01.07.01
+     * As a rider, I want to confirm the completion of a request and enable payment.
+     *
+     * Use Case 8 - US 01.08.01
+     * As a rider, I want to confirm a driver's acceptance. This allows us to choose from a list of
+     * acceptances if more than 1 driver accepts simultaneously.
+     *
+     * Use Case 22 - US 05.01.01
+     * As a driver,  I want to accept a request I agree with and accept that offered payment upon
+     * completion.
+     *
+     * Use Case 23 - US 05.02.01
+     * As a driver, I want to view a list of things I have accepted that are pending, each request
+     * with its description, and locations.
      */
     @Test
     public void updateAndSearchRequestOnline(){
@@ -165,7 +196,39 @@ public class ElasticSearchTest {
     }
 
     /**
+     * Tests to see if it can search for an open request online.
+     */
+    @Test
+    public void getOpenRequestsOnline() {
+        Mockito.when(networkInfo.isConnected()).thenReturn(true);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
+        elasticSearch.saveRequest(request);
+        Robolectric.flushBackgroundThreadScheduler();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            ShadowLog.v("Interrupted", "Continuing");
+        }
+
+        ArrayList<Request> loadedRequests = elasticSearch.getOpenRequests();
+        Robolectric.flushBackgroundThreadScheduler();
+
+        elasticSearch.deleteRequest(request.getId());
+        Robolectric.flushBackgroundThreadScheduler();
+
+        Request loadedRequest = loadedRequests.get(0);
+        assertEquals(request.getId(), loadedRequest.getId());
+    }
+
+    /**
      * Test for searching for a request online based on location.
+     *
+     * Use Case 17 - US 04.01.01
+     * As a driver, I want to browse and search for open requests by geo-location.
+     *
+     * Use Case 21 - US 04.05.01 (added 2016-11-14)
+     * As a driver, I should be able to search by address or nearby an address.
      */
     @Test
     public void searchRequestByGeolocationOnline(){
@@ -196,6 +259,9 @@ public class ElasticSearchTest {
 
     /**
      * Test for searching for a request online based on a keyword.
+     *
+     * Use Case 18 - US 04.02.01
+     * As a driver, I want to browse and search for open requests by keyword.
      */
     @Test
     public void searchRequestByKeywordOnline(){
@@ -210,33 +276,7 @@ public class ElasticSearchTest {
             ShadowLog.v("Interrupted", "Continuing");
         }
 
-        ArrayList<Request> loadedRequests = elasticSearch.searchRequestByKeyword("Rogers");
-        Robolectric.flushBackgroundThreadScheduler();
-
-        elasticSearch.deleteRequest(request.getId());
-        Robolectric.flushBackgroundThreadScheduler();
-
-        Request loadedRequest = loadedRequests.get(0);
-        assertEquals(request.getId(), loadedRequest.getId());
-    }
-
-    /**
-     * Test for searching a request by given address location online.
-     */
-    @Test
-    public void searchRequestByLocationOnline() {
-        Mockito.when(networkInfo.isConnected()).thenReturn(true);
-        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
-        elasticSearch.saveRequest(request);
-        Robolectric.flushBackgroundThreadScheduler();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            ShadowLog.v("Interrupted", "Continuing");
-        }
-
-        ArrayList<Request> loadedRequests = elasticSearch.searchRequestByLocation("University of Alberta");
+        ArrayList<Request> loadedRequests = elasticSearch.searchRequestByKeyword("Go Rogers");
         Robolectric.flushBackgroundThreadScheduler();
 
         elasticSearch.deleteRequest(request.getId());
@@ -250,6 +290,13 @@ public class ElasticSearchTest {
      * Test for saving a user online and searching for it.
      *
      * This test should fail if the test case is already in ElasticSearch.
+     *
+     * Use Case 13 - US 03.01.01
+     * As a user, I want a profile with a unique username and my contact information.
+     *
+     * Use Case 15 - US 03.03.01
+     * As a user, I want to, when a username is presented for a thing, retrieve and show its
+     * contact information.
      */
     @Test
     public void saveAndSearchUserOnline(){
@@ -275,6 +322,16 @@ public class ElasticSearchTest {
 
     /**
      * Test for updating a user online and searching for it.
+     *
+     * Use Case 13 - US 03.01.01
+     * As a user, I want a profile with a unique username and my contact information.
+     *
+     * Use Case 14 - US 03.02.01
+     * As a user, I want to edit the contact information in my profile.
+     *
+     * Use Case 15 - US 03.03.01
+     * As a user, I want to, when a username is presented for a thing, retrieve and show its
+     * contact information.
      */
     @Test
     public void updateAndSearchUserOnline(){
@@ -311,6 +368,9 @@ public class ElasticSearchTest {
     // OFFLINE TESTS
     /**
      * Test for adding a request offline.
+     *
+     * Use Case 28 - US 08.03.01
+     * As a rider, I want to make requests that will be sent once I get connectivity again.
      */
     @Test
     public void addRequestOffline(){
@@ -325,6 +385,12 @@ public class ElasticSearchTest {
 
     /**
      * Test for updating a request offline.
+     *
+     * Use Case 28 - US 08.03.01
+     * As a rider, I want to make requests that will be sent once I get connectivity again.
+     *
+     * Use Case 29 - US 08.04.01
+     * As a driver, I want to accept requests that will be sent once I get connectivity again.
      */
     @Test
     public void updateRequestOffline(){
@@ -332,12 +398,18 @@ public class ElasticSearchTest {
         ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         elasticSearch.updateRequest(request);
         ArrayList<Request> loadedRequests = elasticSearch.loadUserRequests(user.getUsername());
-        Request loadedRequest = loadedRequests.get(loadedRequests.size()-1);
+        Request loadedRequest = loadedRequests.get(0);
         assertEquals(request.getRider(), loadedRequest.getRider());
     }
 
     /**
      * Test for getting requests associated to a user offline.
+     *
+     * Use Case 26 - US 08.01.01
+     * As an driver, I want to see requests that I already accepted while offline.
+     *
+     * Use Case 27 - US 08.02.01
+     * As a rider, I want to see requests that I have made while offline.
      */
     @Test
     public void loadRequestsOffline(){
@@ -348,7 +420,21 @@ public class ElasticSearchTest {
     }
 
     /**
+     * Tests for getting open requests offline.
+     */
+    @Test
+    public void getOpenRequestsOffline(){
+        Mockito.when(networkInfo.isConnected()).thenReturn(false);
+        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
+        ArrayList<Request> loadedRequests = elasticSearch.getOpenRequests();
+        assertEquals(loadedRequests.size(), 0);
+    }
+
+    /**
      * Test for getting requests by a geolocation offline.
+     *
+     * Use Case 29 - US 08.04.01
+     * As a driver, I want to accept requests that will be sent once I get connectivity again.
      */
     @Test
     public void searchRequestByGeolocationOffline(){
@@ -359,34 +445,27 @@ public class ElasticSearchTest {
         location.setLongitude(50);
 
         ArrayList<Request> loadedRequests = elasticSearch.searchRequestByGeolocation(location);
-        assertNull(loadedRequests);
+        assertEquals(loadedRequests.size(), 0);
     }
 
     /**
      * Test for getting requests by a keyword offline.
+     *
+     * Use Case 29 - US 08.04.01
+     * As a driver, I want to accept requests that will be sent once I get connectivity again.
      */
     @Test
     public void searchRequestByKeywordOffline(){
         Mockito.when(networkInfo.isConnected()).thenReturn(false);
         ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
         ArrayList<Request> loadedRequests = elasticSearch.searchRequestByKeyword("hi");
-        assertNull(loadedRequests);
-    }
-
-    /**
-     * Test for getting requests by price offline.
-     */
-    @Test
-    public void searchRequestByLocationOffline() {
-        Mockito.when(networkInfo.isConnected()).thenReturn(false);
-        ElasticSearch elasticSearch = new ElasticSearch(connectivityManager);
-        ArrayList<Request> loadedRequests =
-                elasticSearch.searchRequestByLocation("University of Alberta");
-        assertNull(loadedRequests);
+        assertEquals(loadedRequests.size(), 0);
     }
 
     /**
      * Test for saving a user offline.
+     *
+     * User Story 8 - not a use case, but still helpful
      */
     @Test
     public void saveUserOffline(){
@@ -398,6 +477,8 @@ public class ElasticSearchTest {
 
     /**
      * Test for updating a user offline.
+     *
+     * User Story 8 - not a use case, but still helpful
      */
     @Test
     public void updateUserOffline(){
@@ -409,6 +490,8 @@ public class ElasticSearchTest {
 
     /**
      * Test for getting a user offline.
+     *
+     * User Story 8 - not a use case, but still helpful
      */
     @Test
     public void gettingUserOffline(){
@@ -421,6 +504,39 @@ public class ElasticSearchTest {
     // OFFLINE TO ONLINE TEST
     /**
      * Test for making sure anything added offline gets uploaded online once connected again.
+     *
+     * Use Case 1 - US 01.01.01
+     * As a rider, I want to request rides between two locations.
+     *
+     * Use Case 2 - US 01.02.01
+     * As a rider, I want to see current requests I have open.
+     *
+     * Use Case 4 - US 01.04.01
+     * As a rider, I want to cancel requests.
+     *
+     * Use Case 7 - US 01.07.01
+     * As a rider, I want to confirm the completion of a request and enable payment.
+     *
+     * Use Case 8 - US 01.08.01
+     * As a rider, I want to confirm a driver's acceptance. This allows us to choose from a list of
+     * acceptances if more than 1 driver accepts simultaneously.
+     *
+     * Use Case 13 - US 03.01.01
+     * As a user, I want a profile with a unique username and my contact information.
+     *
+     * Use Case 15 - US 03.03.01
+     * As a user, I want to, when a username is presented for a thing, retrieve and show its
+     * contact information.
+     *
+     * Use Case 22 - US 05.01.01
+     * As a driver, I want to accept a request I agree with and accept that offered payment upon
+     * completion.
+     *
+     * Use Case 28 - US 08.03.01
+     * As a rider, I want to make requests that will be sent once I get connectivity again.
+     *
+     * Use Case 29 - US 08.04.01
+     * As a driver, I want to accept requests that will be sent once I get connectivity again.
      */
     @Test
     public void onNetworkStateChanged(){

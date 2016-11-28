@@ -29,7 +29,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLog;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -93,6 +92,9 @@ public class ElasticSearchControllerTest {
 
     /**
      * Test to make sure a request is added and gotten. Uses request ID search.
+     *
+     * Use Case 1 - US 01.01.01
+     * As a rider, I want to request rides between two locations.
      */
     @Test
     public void addAndGetRequest(){
@@ -127,6 +129,27 @@ public class ElasticSearchControllerTest {
 
     /**
      * Test to make sure a request is updated and gotten. Uses username search.
+     *
+     * Use Case 2 - US 01.02.01
+     * As a rider, I want to see current requests I have open.
+     *
+     * Use Case 4 - US 01.04.01
+     * As a rider, I want to cancel requests.
+     *
+     * Use Case 7 - US 01.07.01
+     * As a rider, I want to confirm the completion of a request and enable payment.
+     *
+     * Use Case 8 - US 01.08.01
+     * As a rider, I want to confirm a driver's acceptance. This allows us to choose from a list of
+     * acceptances if more than 1 driver accepts simultaneously.
+     *
+     * Use Case 22 - US 05.01.01
+     * As a driver,  I want to accept a request I agree with and accept that offered payment upon
+     * completion.
+     *
+     * Use Case 23 - US 05.02.01
+     * As a driver, I want to view a list of things I have accepted that are pending, each request
+     * with its description, and locations.
      */
     @Test
     public void updateAndGetRequest(){
@@ -152,9 +175,9 @@ public class ElasticSearchControllerTest {
         }
 
         ArrayList<Request> gotten = new ArrayList<Request>();
-        ElasticSearchController.SearchForRequests searchForRequests =
-                new ElasticSearchController.SearchForRequests();
-        searchForRequests.execute(user.getUsername());
+        ElasticSearchController.SearchForUserRequests searchForRequests =
+                new ElasticSearchController.SearchForUserRequests();
+        searchForRequests.execute("driver1");
         Robolectric.flushBackgroundThreadScheduler();
 
         try {
@@ -176,46 +199,12 @@ public class ElasticSearchControllerTest {
         request.setDescription("Go to Rogers Place");
     }
 
-    /**
-     * Test to make sure a request can be gotten with a keyword.
-     */
-    @Test
-    public void searchRequestWithKeyword(){
-        ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
-        addRequest.execute(request);
-        Robolectric.flushBackgroundThreadScheduler();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            ShadowLog.v("Interrupted", "Continuing");
-        }
-
-        ArrayList<Request> gotten = new ArrayList<Request>();
-        ElasticSearchController.SearchForKeywordRequests searchForKeywordRequests =
-                new ElasticSearchController.SearchForKeywordRequests();
-        searchForKeywordRequests.execute("Go Rogers");
-        Robolectric.flushBackgroundThreadScheduler();
-
-        try {
-            gotten = searchForKeywordRequests.get();
-        } catch (Exception e) {
-            Log.i("Error", "Failed to load the request.");
-        }
-
-        Request gottenRequest = gotten.get(0);
-
-        ElasticSearchController.DeleteRequest deleteRequest =
-                new ElasticSearchController.DeleteRequest();
-        deleteRequest.execute(request.getId());
-        Robolectric.flushBackgroundThreadScheduler();
-
-        assertEquals(request.getId(), gottenRequest.getId());
-    }
-
 
     /**
      * Test to make sure an open request can be gotten.
+     *
+     * Use Case 18 - US 04.02.01
+     * As a driver, I want to browse and search for open requests by keyword.
      */
     @Test
     public void searchOpenRequest(){
@@ -253,6 +242,12 @@ public class ElasticSearchControllerTest {
 
     /**
      * Test to make sure a request can be gotten with a geolocation.
+     *
+     * Use Case 17 - US 04.01.01
+     * As a driver, I want to browse and search for open requests by geo-location.
+     *
+     * Use Case 21 - US 04.05.01 (added 2016-11-14)
+     * As a driver, I should be able to search by address or nearby an address.
      */
     @Test
     public void searchRequestWithGeolocation(){
@@ -291,43 +286,14 @@ public class ElasticSearchControllerTest {
     }
 
     /**
-     * Test to make sure a request can be gotten by address location.
-     */
-    @Test
-    public void searchRequestWithLocation() {
-        ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
-        addRequest.execute(request);
-        Robolectric.flushBackgroundThreadScheduler();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            ShadowLog.v("Interrupted", "Continuing");
-        }
-
-        ArrayList<Request> gotten = new ArrayList<Request>();
-        ElasticSearchController.SearchForLocationRequests searchForLocationRequests =
-                new ElasticSearchController.SearchForLocationRequests();
-        searchForLocationRequests.execute("University of Alberta");
-        Robolectric.flushBackgroundThreadScheduler();
-
-        try {
-            gotten = searchForLocationRequests.get();
-        } catch (Exception e) {
-            Log.i("Error", "Failed to load the request.");
-        }
-
-        Request gottenRequest = gotten.get(0);
-
-        ElasticSearchController.DeleteRequest deleteRequest = new ElasticSearchController.DeleteRequest();
-        deleteRequest.execute(request.getId());
-        Robolectric.flushBackgroundThreadScheduler();
-
-        assertEquals(request.getId(), gottenRequest.getId());
-    }
-
-    /**
      * Test to make sure a user is added and can be gotten.
+     *
+     * Use Case 13 - US 03.01.01
+     * As a user, I want a profile with a unique username and my contact information.
+     *
+     * Use Case 15 - US 03.03.01
+     * As a user, I want to, when a username is presented for a thing, retrieve and show its
+     * contact information.
      */
     @Test
     public void addAndSearchUser(){
@@ -363,6 +329,16 @@ public class ElasticSearchControllerTest {
 
     /**
      * Test to make sure updating a user and searching for it works.
+     *
+     * Use Case 13 - US 03.01.01
+     * As a user, I want a profile with a unique username and my contact information.
+     *
+     * Use Case 14 - US 03.02.01
+     * As a user, I want to edit the contact information in my profile.
+     *
+     * Use Case 15 - US 03.03.01
+     * As a user, I want to, when a username is presented for a thing, retrieve and show its
+     * contact information.
      */
     @Test
     public void updateAndSearchUser(){
