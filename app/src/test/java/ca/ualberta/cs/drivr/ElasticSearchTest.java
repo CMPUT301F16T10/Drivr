@@ -189,6 +189,8 @@ public class ElasticSearchTest {
         elasticSearch.deleteRequest(request.getId());
         Robolectric.flushBackgroundThreadScheduler();
 
+        ShadowLog.v("Here", loadedRequest.getDrivers().get(0).getStatus().toString());
+
         assertEquals(loadedRequest.getDescription(), request.getDescription());
         assertEquals(request.getId(), loadedRequest.getId());
 
