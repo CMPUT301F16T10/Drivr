@@ -17,6 +17,7 @@
 package ca.ualberta.cs.drivr;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -110,12 +111,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         userManager.setConnectivityManager((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE));
 
+        /**
+         * This calls the login activity a the beginning if there is no local user stored
+         */
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+//        startActivityForResult(intent, 1);
+//        onActivityResult(1, "result", 0);
         // Looks better without Blue Bar
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -460,9 +472,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
             }
-        }
-        else if (resultCode == RESULT_CANCELED){
-            // Do nothing
         }
     }
 

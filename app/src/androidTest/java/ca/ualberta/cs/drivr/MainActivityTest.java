@@ -346,5 +346,39 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
+    /*
+    * 03.02.01:
+    *   "As a user, I want to edit the contact information in my profile."
+    */
+    public void testEditUser() {
+
+        solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
+        solo.clickOnText("Sign In");
+
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
+        View login = getActivity().findViewById(R.id.main_fab_login);
+
+        solo.clickOnView(fabButton);
+        View profile = getActivity().findViewById(R.id.main_fab_profile);
+        solo.clickOnView(profile);
+
+        View editProfile = solo.getView(R.id.profile_edit_icon);
+        solo.clickOnView(editProfile);
+
+        solo.clearEditText((EditText) solo.getView(R.id.profile_username_edit_text));
+        solo.clearEditText((EditText) solo.getView (R.id.profile_name_edit_text));
+        solo.clearEditText((EditText) solo.getView (R.id.profile_email_edit_text));
+        solo.clearEditText((EditText) solo.getView (R.id.profile_phone_number_edit_text));
+        solo.enterText((EditText) solo.getView(R.id.profile_username_edit_text), "DanielL");
+        solo.enterText((EditText) solo.getView (R.id.profile_name_edit_text), "DanielL");
+        solo.enterText((EditText) solo.getView (R.id.profile_email_edit_text), "DanielL@google.com");
+        solo.enterText((EditText) solo.getView (R.id.profile_phone_number_edit_text), "7801234567");
+        solo.clickOnView(editProfile);
+    }
+
+
 
 }

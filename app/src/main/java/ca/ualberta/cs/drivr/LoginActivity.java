@@ -19,6 +19,7 @@ package ca.ualberta.cs.drivr;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -401,10 +402,7 @@ public class LoginActivity extends AppCompatActivity {
                 for (Request request : elasticSearch.loadUserRequests(username))
                     userManager.getRequestsList().add(request);
                 userManager.notifyObservers();
-//                finish();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                finish();
             } else {
                 // mPasswordView.setError(getString(R.string.error_incorrect_password));
                 // mPasswordView.requestFocus();
@@ -467,10 +465,9 @@ public class LoginActivity extends AppCompatActivity {
                 user.setUsername(username);
                 userManager.getRequestsList().clear();
                 userManager.notifyObservers();
-//                finish();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                finish();
+
+
             } else {
                 loginUsername.setError("Username already taken");
                 loginUsername.requestFocus();
