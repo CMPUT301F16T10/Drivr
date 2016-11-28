@@ -43,6 +43,7 @@ import static junit.framework.Assert.assertNull;
  * Tests for the methods in the ElasticSearch class.
  *
  * @author Tiegan Bonowicz
+ * @see ElasticSearch
  */
 
 @RunWith(RobolectricTestRunner.class)

@@ -19,6 +19,7 @@ package ca.ualberta.cs.drivr;
 import android.content.Context;
 import android.location.Location;
 import android.net.ConnectivityManager;
+
 import java.util.ArrayList;
 
 /**
@@ -95,13 +96,13 @@ public class SearchRequest {
             firstSearch = false;
         }
 
-//        if(maxPrice != null || minPrice != null) {
-//            FilterByPrice();
-//            firstSearch = false;
-//        }
-//        if(maxPricePer != null || minPricePer != null) {
-//            FilterByPricePer();
-//        }
+        if(!maxPrice.equals("MAX") || !minPrice.equals("0")) {
+            FilterByPrice();
+            firstSearch = false;
+        }
+        if(!maxPricePer.equals("MAX") || !minPricePer.equals("0")) {
+            FilterByPricePer();
+        }
 
         return requestList;
     }
@@ -159,10 +160,7 @@ public class SearchRequest {
      * price.
      */
     private void FilterByPrice() {
-        if(minPrice == null) {
-            minPrice = "0";
-        }
-        if(maxPrice == null) {
+        if(maxPrice.equals("MAX")) {
             maxPrice = "100000";
         }
 
@@ -189,11 +187,8 @@ public class SearchRequest {
      * price per KM.
      */
     private void FilterByPricePer() {
-        if(minPricePer == null) {
-            minPrice = "0";
-        }
-        if(maxPricePer == null) {
-            maxPrice = "100000";
+        if(maxPricePer.equals("MAX")) {
+            maxPricePer = "100000";
         }
 
         if(firstSearch) {
