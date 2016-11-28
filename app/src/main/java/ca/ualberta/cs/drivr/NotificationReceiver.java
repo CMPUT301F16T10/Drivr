@@ -55,7 +55,7 @@ public class NotificationReceiver extends BroadcastReceiver{
             if (requestList.hasById(request)) {
                 Request oldRequest = requestList.getById(request.getId());
                 if (oldRequest.getRequestState() != request.getRequestState()) {
-                    requestList.removeProper(request);
+                    requestList.removeById(request);
                     requestList.add(request);
                     userManager.notifyObservers();
                     //There should be a notification right here
