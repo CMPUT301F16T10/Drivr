@@ -234,6 +234,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         /**
          * UC 30 SpecifyGeoLocations
+         * UC 6 Estimate Fair Cost
          *
          */
     public void testCreateRequestByMapLocation(){
@@ -265,8 +266,37 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         View acceptButton = solo.getView(R.id.request_accept_text);
         //assertTrue(solo.searchText("No Driver Yet"));
+        solo.waitForText("Going from 11410");
+        solo.waitForText("12.66");
 
 
+    }
+
+    /**
+     *
+     * UC 15 ShowUserInformation
+     * US 03.03.01 As a User, I want to, when a username is presented for a thing, retrieve and show its contact information.
+     */
+
+    public void testViewProfile(){
+        loginRider();
+        solo.clickOnView(solo.getView(R.id.forTesting));
+        solo.clickOnView(solo.getView(R.id.main_fab_requests));
+        solo.clickOnText("JustinDriver");
+        solo.waitForActivity(DriverProfileActivity.class);
+
+    }
+
+    /**
+     * UC 4 RiderCancelsRequest
+     * US 01.04.01 As a Rider, I want to cancel Requests.
+     */
+    public void testCancelRequest(){
+        testCreateRequestByMapLocation();
+        solo.clickOnView(solo.getView(R.id.request_accept_text));
+        solo.clickOnView(solo.getView(R.id.forTesting));
+        solo.clickOnView(solo.getView(R.id.main_fab_requests));
+        solo.clickOnView(solo.getView(R.id.item_request_deleted));
     }
 
     /**
@@ -290,6 +320,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         solo.waitForText("JustinRider");
 
     }
+
+
 
     /* UC 2 RiderViewRequests
     *   As a rider, I want to see current requests I have open.
@@ -394,7 +426,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
-    
+
 
     /*
     * 03.02.01:
