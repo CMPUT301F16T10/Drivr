@@ -16,6 +16,9 @@
 
 package ca.ualberta.cs.drivr;
 
+import android.content.Context;
+import android.content.Intent;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +37,6 @@ public class RequestControllerTest {
     private Request request1;
     private Request request2;
     private Request request3;
-
 
     @Before
     public void setup() {

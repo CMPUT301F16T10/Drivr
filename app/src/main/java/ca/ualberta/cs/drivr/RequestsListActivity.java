@@ -29,6 +29,7 @@ public class RequestsListActivity extends AppCompatActivity {
 
     private UserManager userManager = UserManager.getInstance();
     private RequestsListAdapter adapter;
+    private RecyclerView requestsListRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class RequestsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_requests_list);
 
         // Setup the RecyclerView
-        RecyclerView requestsListRecyclerView = (RecyclerView) findViewById(R.id.requests_list_recycler);
+        requestsListRecyclerView = (RecyclerView) findViewById(R.id.requests_list_recycler);
         adapter = new RequestsListAdapter(this, userManager.getRequestsList().getRequests(), userManager);
         requestsListRecyclerView.setAdapter(adapter);
         requestsListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -46,12 +47,14 @@ public class RequestsListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         adapter.filter(RequestState.PENDING, RequestState.ACCEPTED, RequestState.CONFIRMED);
+        requestsListRecyclerView.invalidate();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         adapter.filter(RequestState.PENDING, RequestState.ACCEPTED, RequestState.CONFIRMED);
+        requestsListRecyclerView.invalidate();
     }
 
 }
