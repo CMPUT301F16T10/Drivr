@@ -70,9 +70,13 @@ public class RequestsUseCaseTests extends ActivityInstrumentationTestCase2<MainA
     *   As a rider, I want to request rides between two locations.
     */
     public void testCreateRequest () {
+        View profileView = solo.getView(R.id.main_fab_profile);
+        View historyView = solo.getView(R.id.main_fah_history);
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-        solo.clickOnScreen(50, 50);
-        solo.clickOnScreen(51, 51);
+        solo.clickOnView(profileView);
+        solo.clickOnText("Yes");
+        solo.clickOnView(historyView);
+        solo.clickOnText("Yes");
         solo.assertCurrentActivity("Expected RequestsActivity", RequestActivity.class);
     }
 
@@ -86,12 +90,29 @@ public class RequestsUseCaseTests extends ActivityInstrumentationTestCase2<MainA
         View historyView = solo.getView(R.id.main_fah_history);
         View fabButton = solo.getView(R.id.forTesting);
         solo.clickOnView(fabButton);
-        View login = getActivity().findViewById(R.id.main_fab_login);
         solo.waitForView(historyView);
         solo.clickOnView(historyView);
         solo.assertCurrentActivity("Expected RequestHistoryActivity", RequestHistoryActivity.class);
 
     }
+
+    /*
+    * US 01.04.01
+    *   As a rider, I want to cancel requests.
+    */
+
+    public void cancelRequest () {
+        login();
+        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
+        View historyView = solo.getView(R.id.main_fah_history);
+        View fabButton = solo.getView(R.id.forTesting);
+        solo.clickOnView(fabButton);
+        solo.waitForView(historyView);
+        solo.clickOnView(historyView);
+        solo.assertCurrentActivity("Expected RequestHistoryActivity", RequestHistoryActivity.class);
+
+    }
+
 
     public void login(){
         View fabButton = solo.getView(R.id.forTesting);
