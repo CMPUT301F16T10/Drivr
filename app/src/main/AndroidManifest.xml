@@ -47,6 +47,9 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
+            android:name=".DriverProfileActivity"
+            android:label="User Profile" />
+        <activity
             android:name=".ProfileActivity"
             android:label="Profile" />
         <activity android:name=".RequestActivity"
