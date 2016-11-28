@@ -340,7 +340,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         View editProfile = solo.getView(R.id.profile_edit_icon);
         solo.clickOnView(editProfile);
 
-        solo.clearEditText((EditText) solo.getView(R.id.profile_username_edit_text));
         solo.clearEditText((EditText) solo.getView (R.id.profile_name_edit_text));
         solo.clearEditText((EditText) solo.getView (R.id.profile_email_edit_text));
         solo.clearEditText((EditText) solo.getView (R.id.profile_phone_number_edit_text));
