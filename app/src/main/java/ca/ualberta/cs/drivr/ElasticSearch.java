@@ -515,6 +515,22 @@ public class ElasticSearch {
         return requests;
     }
 
+    public ArrayList<Request> getOpenRequests() {
+        if(offlineOpenRequests.size() == 0) {
+            if(connectivityManager.getActiveNetworkInfo().isConnected()) {
+                ElasticSearchController.SearchForOpenRequests searchForOpenRequests =
+                        new ElasticSearchController.SearchForOpenRequests();
+                searchForOpenRequests.execute("");
+                try {
+                    offlineOpenRequests = searchForOpenRequests.get();
+                } catch (Exception e) {
+                    Log.i("Error", "Failed to get all open requests");
+                }
+            }
+        }
+        return offlineOpenRequests;
+    }
+
     /**
      * Used solely for testing.
      *

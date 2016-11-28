@@ -154,7 +154,7 @@ public class ElasticSearchControllerTest {
         ArrayList<Request> gotten = new ArrayList<Request>();
         ElasticSearchController.SearchForRequests searchForRequests =
                 new ElasticSearchController.SearchForRequests();
-        searchForRequests.execute(user.getUsername());
+        searchForRequests.execute("driver1");
         Robolectric.flushBackgroundThreadScheduler();
 
         try {
