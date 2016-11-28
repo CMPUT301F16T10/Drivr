@@ -28,7 +28,7 @@ import com.robotium.solo.Solo;
  * Created by Daniel on 2016-11-27.
  */
 
-public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginActivity> {
    /*
     * Testing for user stories related to user profiles
     *
@@ -46,8 +46,8 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
 
     private Solo solo;
 
-    public UserProfileUseCaseTest() {
-        super(ca.ualberta.cs.drivr.MainActivity.class);
+    public LoginActivityTest() {
+        super(ca.ualberta.cs.drivr.LoginActivity.class);
     }
 
     @Override
@@ -73,45 +73,8 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
         solo.enterText((EditText) solo.getView (R.id.login_email), "Daniel@google.com");
         solo.enterText((EditText) solo.getView (R.id.login_phone), "7801234567");
         solo.clickOnButton ("Sign Up");
-        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
     }
 
-    /*
-    * 03.02.01:
-    *   "As a user, I want to edit the contact information in my profile."
-    */
-    public void testEditUser() {
-
-        login();
-        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-
-        View fabButton = solo.getView(R.id.forTesting);
-        solo.clickOnView(fabButton);
-        View login = getActivity().findViewById(R.id.main_fab_login);
-        solo.clickOnView(login);
-        solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
-
-        solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
-        solo.clickOnText("Sign In");
-
-        solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-        solo.clickOnView(fabButton);
-        View profile = getActivity().findViewById(R.id.main_fab_profile);
-        solo.clickOnView(profile);
-
-        View editProfile = solo.getView(R.id.profile_edit_icon);
-        solo.clickOnView(editProfile);
-
-        solo.clearEditText((EditText) solo.getView(R.id.profile_username_edit_text));
-        solo.clearEditText((EditText) solo.getView (R.id.profile_name_edit_text));
-        solo.clearEditText((EditText) solo.getView (R.id.profile_email_edit_text));
-        solo.clearEditText((EditText) solo.getView (R.id.profile_phone_number_edit_text));
-        solo.enterText((EditText) solo.getView(R.id.profile_username_edit_text), "DanielL");
-        solo.enterText((EditText) solo.getView (R.id.profile_name_edit_text), "DanielL");
-        solo.enterText((EditText) solo.getView (R.id.profile_email_edit_text), "DanielL@google.com");
-        solo.enterText((EditText) solo.getView (R.id.profile_phone_number_edit_text), "7801234567");
-        solo.clickOnView(editProfile);
-    }
 
 
 //   /*
@@ -142,11 +105,6 @@ public class UserProfileUseCaseTest extends ActivityInstrumentationTestCase2<Mai
 //        solo.enterText((EditText) solo.getView (R.id.vehicle_description_edit_text), "Test Change vehicle description");
 //    }
 
-    public void login(){
-        solo.assertCurrentActivity("Expected LoginActivity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.login_username), "Daniel");
-        solo.clickOnText("Sign In");
-    }
 
 }
 
