@@ -152,7 +152,7 @@ public class ElasticSearch {
      * @return The ArrayList of matching requests
      */
     public ArrayList<Request> loadUserRequests(String username) {
-        if (connectivityManager.getActiveNetworkInfo().isConnected()) {
+        if (connectivityManager.getActiveNetworkInfo() != null) {
             ElasticSearchController.SearchForUserRequests requests = new
                     ElasticSearchController.SearchForUserRequests();
             requests.execute(username);

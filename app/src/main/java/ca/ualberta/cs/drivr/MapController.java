@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Network;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
@@ -225,7 +226,24 @@ public class MapController implements DirectionCallback{
                             markers.clear();
                             //addRequestOnMap(pickup,mapMarker);
 
-                            createRequest(pickup,mapMarker);
+                            if (UserManager.getInstance().getConnectivityManager().getActiveNetworkInfo() == null) {
+                                Request request = new Request();
+                                request.setRequestState(RequestState.PENDING);
+                                ConcretePlace dest = new ConcretePlace();
+                                dest.setLatLng(destinationLatLng);
+                                ConcretePlace start = new ConcretePlace();
+                                start.setLatLng(pickupLatlng);
+                                request.setDestinationPlace(dest);
+                                request.setSourcePlace(start);
+                                request.setRider(UserManager.getInstance().getUser());
+//                                request.set
+                                requestsListController.addRequest(request);
+                                UserManager.getInstance().notifyObservers();
+                                ElasticSearchController.AddRequest addRequest = new ElasticSearchController.AddRequest();
+                                addRequest.execute(request);
+
+                            } else {
+                            createRequest(pickup,mapMarker);}
                             map.clear();
 
 

@@ -64,9 +64,17 @@ public class SearchRequest {
     public SearchRequest(String minPrice, String maxPrice, String minPricePer, String maxPricePer,
                          ConcretePlace location, String keyword) {
         this.minPrice = minPrice;
-        this.maxPrice = maxPrice;
+        if (maxPrice.equals("MAX")) {
+            this.maxPrice = "99999999";
+        } else {
+            this.maxPrice = maxPrice;
+        }
+        if (maxPricePer.equals("MAX")) {
+            this.maxPricePer = "9999";
+        } else {
+            this.maxPricePer = maxPricePer;
+        }
         this.minPricePer = minPricePer;
-        this.maxPricePer = maxPricePer;
         this.location = location;
         this.keyword = keyword;
     }
@@ -95,13 +103,13 @@ public class SearchRequest {
             firstSearch = false;
         }
 
-//        if(maxPrice != null || minPrice != null) {
-//            FilterByPrice();
-//            firstSearch = false;
-//        }
-//        if(maxPricePer != null || minPricePer != null) {
-//            FilterByPricePer();
-//        }
+        if(maxPrice != null || minPrice != null) {
+            FilterByPrice();
+            firstSearch = false;
+        }
+        if(maxPricePer != null || minPricePer != null) {
+            FilterByPricePer();
+        }
 
         return requestList;
     }
