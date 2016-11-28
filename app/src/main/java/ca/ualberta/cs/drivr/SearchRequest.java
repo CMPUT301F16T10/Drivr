@@ -95,13 +95,13 @@ public class SearchRequest {
             firstSearch = false;
         }
 
-        if(maxPrice != null || minPrice != null) {
-            FilterByPrice();
-            firstSearch = false;
-        }
-        if(maxPricePer != null || minPricePer != null) {
-            FilterByPricePer();
-        }
+//        if(maxPrice != null || minPrice != null) {
+//            FilterByPrice();
+//            firstSearch = false;
+//        }
+//        if(maxPricePer != null || minPricePer != null) {
+//            FilterByPricePer();
+//        }
 
         return requestList;
     }
