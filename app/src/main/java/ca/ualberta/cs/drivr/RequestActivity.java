@@ -109,10 +109,10 @@ public class RequestActivity extends AppCompatActivity implements OnMapReadyCall
                     requestController.acceptRequest(request, getApplicationContext());
                 }
                 else if (requestController.canConfirmRequest(request, userManager.getUserMode())) {
-                    requestController.confirmRequest(request);
+                    requestController.confirmRequest(request, getApplicationContext());
                 }
                 else if (requestController.canCompleteRequest(request, userManager.getUserMode())) {
-                    requestController.completeRequest(request);
+                    requestController.completeRequest(request, getApplicationContext());
                 }
 //                else if (state.equals(RequestState.PENDING) && UserManager.getInstance().getUserMode().equals(UserMode.DRIVER)) {
 //                    request.addDriver((Driver) UserManager.getInstance().getUser());
