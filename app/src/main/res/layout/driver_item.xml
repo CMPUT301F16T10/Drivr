@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/item_request_other_user_name"
+                    android:id="@+id/item_request_drivers_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
@@ -36,14 +36,14 @@
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/ratingBar2"
+                    android:id="@+id/multiple_driver_bar"
                     style="?android:attr/ratingBarStyleSmall"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@+id/item_request_complete" />
+                    android:layout_centerHorizontal="true" />
 
 
                 <ImageView
-                    android:id="@+id/item_request_call_image"
+                    android:id="@+id/item_request_call_driver"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
@@ -53,34 +53,33 @@
                     app:srcCompat="@drawable/ic_call_black_24dp" />
 
                 <ImageView
-                    android:id="@+id/item_request_email_image"
+                    android:id="@+id/item_request_email_driver"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:padding="4dp"
                     android:scaleType="fitXY"
                     app:srcCompat="@drawable/ic_email_black_24dp"
                     android:layout_alignParentTop="true"
-                    android:layout_toStartOf="@+id/item_request_call_image" />
+                    android:layout_toStartOf="@+id/item_request_call_driver" />
 
                 <ImageView
-                    android:id="@+id/item_request_complete"
+                    android:id="@+id/item_request_accepted"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:padding="4dp"
                     android:scaleType="fitXY"
                     app:srcCompat="@drawable/ic_check_black_24dp"
-                    android:layout_alignBottom="@+id/item_request_other_user_name"
-                    android:layout_toStartOf="@+id/item_request_email_image"
-                    android:layout_marginEnd="38dp" />
+                    android:layout_alignTop="@+id/multiple_driver_bar"
+                    android:layout_toStartOf="@+id/item_request_email_driver" />
                 <ImageView
-                    android:id="@+id/item_request_deleted"
+                    android:id="@+id/item_request_profile_view"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:padding="4dp"
                     android:scaleType="fitXY"
                     app:srcCompat="@drawable/ic_person_black_24dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_toStartOf="@+id/item_request_email_image" />
+                    android:layout_alignTop="@+id/multiple_driver_bar"
+                    android:layout_toEndOf="@+id/multiple_driver_bar" />
 
 
 
