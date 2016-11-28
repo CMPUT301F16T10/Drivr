@@ -17,6 +17,7 @@
 package ca.ualberta.cs.drivr;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,10 @@ import android.location.Address;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +72,7 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         public final ImageView emailImageView;
         public final ImageView checkMarkImageView;
         public final ImageView xMarkImageView;
+
 
         /**
          * Instantiate a new ViewHolder.
@@ -121,6 +127,8 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         // Inflate the custom layout
         View requestView = inflater.inflate(R.layout.item_request, parent, false);
 
+
+
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(requestView);
         return viewHolder;
@@ -134,6 +142,9 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
     @Override
     public void onBindViewHolder(RequestsListAdapter.ViewHolder viewHolder, int position) {
         final Request request = requests.get(position);
+
+
+
 
         // Get the views to update
         final TextView otherUserNameTextView = viewHolder.otherUserNameTextView;
@@ -189,7 +200,13 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
 
                     }
                     else {
-                        // todo open dialog for multiple drivers
+                        Intent intent = new Intent(context, DisplayDriverListActivity.class);
+                        Gson gson = new GsonBuilder()
+                                .registerTypeAdapter(Uri.class, new UriSerializer())
+                                .create();
+                        String requestString = gson.toJson(request, Request.class);
+                        intent.putExtra("REQUEST", requestString);
+                        context.startActivity(intent);
                     }
                 }
             }
@@ -240,8 +257,14 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
 
                 }
                 else {
-                    //Todo add a dialog with all drivers
-                    Toast.makeText(context, "Unsupported Right now", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(context, DisplayDriverListActivity.class);
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(Uri.class, new UriSerializer())
+                            .create();
+                    String requestString = gson.toJson(request, Request.class);
+                    intent.putExtra("REQUEST", requestString);
+                    context.startActivity(intent);
                 }
             }
         });
@@ -288,8 +311,13 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
 
                 }
                 else {
-                    //Todo add a dialog with all drivers
-                    Toast.makeText(context, "Unsupported Right now", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, DisplayDriverListActivity.class);
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(Uri.class, new UriSerializer())
+                            .create();
+                    String requestString = gson.toJson(request, Request.class);
+                    intent.putExtra("REQUEST", requestString);
+                    context.startActivity(intent);
                 }
             }
         });
