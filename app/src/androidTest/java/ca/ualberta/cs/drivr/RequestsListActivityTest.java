@@ -55,7 +55,7 @@ public class RequestsListActivityTest extends ActivityInstrumentationTestCase2<R
      * UC 9 User Request Status
      * US 02.01.01 As a User, I want to see the status of a Request that I am involved in
      */
-    public void testClickOnRequest() {
+/*    public void testClickOnRequest() {
         solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
         final Request request = getActivity().getRequest(0);
         solo.clickInList(0);
@@ -70,9 +70,9 @@ public class RequestsListActivityTest extends ActivityInstrumentationTestCase2<R
         final int initialRequestsListSize = requestsList.size();
         Request request = getActivity().getRequest(0);
         View listItem = ((ListView) solo.getView("Requests list")).getChildAt(0);
-        solo.clickOnButton(0 /* ID of delete button */);
+        solo.clickOnButton(0 *//* ID of delete button *//*);
         assertEquals(initialRequestsListSize - 1, requestsList.size());
-    }
+    }*/
 
     /**
      * UC 5 Rider Contacts Driver

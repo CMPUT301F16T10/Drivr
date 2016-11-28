@@ -57,32 +57,33 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     public void testOpenSettingsActivity() {
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-        solo.clickOnButton("Plus button");
-        solo.clickOnButton("Settings");
+
+        solo.clickOnView( solo.getView(R.id.forTesting));
+        solo.clickOnView(solo.getView(R.id.fabSettings));
         solo.assertCurrentActivity("Expected SettingsActivity", SettingsActivity.class);
         solo.goBack();
     }
 
     public void testOpenProfileActivity() {
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-        solo.clickOnButton("Plus button");
-        solo.clickOnButton("Profile");
+        solo.clickOnView( solo.getView(R.id.forTesting));
+        solo.clickOnView(solo.getView(R.id.main_fab_profile));
         solo.assertCurrentActivity("Expected ProfileActivity", ProfileActivity.class);
         solo.goBack();
     }
 
     public void testOpenRequestHistoryActivity() {
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-        solo.clickOnButton("Plus button");
-        solo.clickOnButton("Request History");
+        solo.clickOnView( solo.getView(R.id.forTesting));
+        solo.clickOnView(solo.getView(R.id.main_fah_history));
         solo.assertCurrentActivity("Expected RequestHistoryActivity", RequestHistoryActivity.class);
         solo.goBack();
     }
 
     public void testOpenRequestsListActivity() {
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
-        solo.clickOnButton("Plus button");
-        solo.clickOnButton("Requests");
+        solo.clickOnView( solo.getView(R.id.forTesting));
+        solo.clickOnView(solo.getView(R.id.main_fab_requests));
         solo.assertCurrentActivity("Expected RequestsListActivity", RequestsListActivity.class);
         solo.goBack();
     }
@@ -100,14 +101,14 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * Requests by Geo-location.
      */
 
-    public void searchRequestsByGeolocation() {
+    /*public void searchRequestsByGeolocation() {
         solo.assertCurrentActivity("Expected MainActivity", MainActivity.class);
         solo.clickOnText("Source");
         final String source = solo.getText("Source").getText().toString();
         // We want 2 occurrences: one in the text view and one on the map
         assertTrue(solo.waitForText(source, 2, 3000));
 
-    }
+    }*/
 
     @MediumTest
     public void testFragment () {
