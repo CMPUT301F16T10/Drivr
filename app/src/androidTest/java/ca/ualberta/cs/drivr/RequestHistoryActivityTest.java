@@ -49,23 +49,6 @@ public class RequestHistoryActivityTest extends ActivityInstrumentationTestCase2
         solo.finishOpenedActivities();
     }
 
- /*   public void testClickOnRequest() {
-        solo.assertCurrentActivity("Expected RequestHistoryActivity", RequestHistoryActivity.class);
-        final Request request = getActivity().getRequest(0);
-        solo.clickInList(0);
-        solo.assertCurrentActivity("Expected RequestActivity", RequestActivity.class);
-        assertTrue(solo.waitForText(request.getDestinationPlace().toString()));
-        solo.goBack();
-    }
 
-    public void testDeleteRequest() {
-        solo.assertCurrentActivity("Expected RequestHistoryActivity", RequestHistoryActivity.class);
-        final RequestsList requestsList = getActivity().getRequestsList();
-        final int initialRequestsListSize = requestsList.size();
-        Request request = getActivity().getRequest(0);
-        View listItem = ((ListView) solo.getView("Requests list")).getChildAt(0);
-        solo.clickOnButton(0 *//* ID of delete button *//*);
-        assertEquals(initialRequestsListSize - 1, requestsList.size());
-    }*/
 
 }
