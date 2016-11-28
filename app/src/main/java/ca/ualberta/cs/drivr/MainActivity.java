@@ -268,6 +268,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                                 userManager.getUser().setVehicleDescription(vehicleDescription);
                                 userManager.notifyObservers();
                                 userManager.setUserMode(UserMode.DRIVER);
+                                ElasticSearch elasticSearch = new ElasticSearch(userManager.getConnectivityManager());
+                                elasticSearch.updateUser(userManager.getUser());
                                 keywordEditText.setVisibility(View.VISIBLE);
                                 fabDriver.setVisibility(View.GONE);
                                 fabRider.setVisibility(View.VISIBLE);
