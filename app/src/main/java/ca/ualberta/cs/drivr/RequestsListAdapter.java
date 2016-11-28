@@ -155,10 +155,17 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
         final ImageView callImageView = viewHolder.callImageView;
         final ImageView emailImageView = viewHolder.emailImageView;
 
-        // Todo Hide Image Views until correct Request State
         final ImageView checkImageView = viewHolder.checkMarkImageView;
         final ImageView deleteImageView = viewHolder.xMarkImageView;
 
+        // Todo Hide Image Views until correct Request State
+        if(request.getRequestState() != RequestState.CONFIRMED) {
+           checkImageView.setVisibility(View.INVISIBLE);
+        }
+
+        if(request.getRequestState() != RequestState.PENDING) {
+           deleteImageView.setVisibility(View.INVISIBLE);
+        }
 
         // Show the other person's name
         final DriversList drivers = request.getDrivers();
@@ -322,14 +329,22 @@ public class RequestsListAdapter extends RecyclerView.Adapter<RequestsListAdapte
             }
         });
 
+        // Complete The Request
         checkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, RequestCompletedActivity.class);
 
-
-
                 context.startActivity(intent);
+            }
+        });
+
+        deleteImageView.setOnClickListener(new View.OnClickListener() {
+
+            // Todo Delete the Request
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
