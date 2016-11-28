@@ -65,10 +65,12 @@ public class SearchRequestActivity extends AppCompatActivity {
 
     private RangeBar priceRangeBar;
     private RangeBar pricePerRangeBar;
-    private String minPrice;
-    private String maxPrice;
-    private String minPricePer;
-    private String maxPricePer;
+    private TextView priceTextView;
+    private TextView pricPerTextView;
+    private String minPrice = "0";
+    private String maxPrice = "MAX";
+    private String minPricePer = "0";
+    private String maxPricePer = "MAX";
     private String keyword;
 
     /**
@@ -156,23 +158,27 @@ public class SearchRequestActivity extends AppCompatActivity {
         pricePerRangeBar = (RangeBar) findViewById(R.id.priceper_rangebar);
 
 
+        priceTextView = (TextView) findViewById(R.id.price_range_text);
+        priceTextView.setText("Find Requests between $" + minPrice + " and $" +maxPrice);
         priceRangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
             @Override
             public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
                 minPrice = leftPinValue;
                 maxPrice = rightPinValue;
-                TextView textView = (TextView) findViewById(R.id.price_range_text);
-                textView.setText("Find Requests between $" + minPrice + " and $" +maxPrice);
+//                TextView textView = (TextView) findViewById(R.id.price_range_text);
+                priceTextView.setText("Find Requests between $" + minPrice + " and $" +maxPrice);
             }
         });
 
+        pricPerTextView = (TextView) findViewById(R.id.priceper_range_text);
+        pricPerTextView.setText("Find Requests between $" + minPricePer + " and $" + maxPricePer + " per KM");
         pricePerRangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
             @Override
             public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
                 minPricePer = leftPinValue;
                 maxPricePer = rightPinValue;
-                TextView textView = (TextView) findViewById(R.id.priceper_range_text);
-                textView.setText("Find Requests between $" + minPrice + " and $" +maxPricePer + " per KM");
+//                TextView textView = (TextView) findViewById(R.id.priceper_range_text);
+                pricPerTextView.setText("Find Requests between $" + minPricePer + " and $" + maxPricePer + " per KM");
             }
         });
 
@@ -250,6 +256,7 @@ public class SearchRequestActivity extends AppCompatActivity {
 //    }
 
     private void searchRequest() {
+//        Log.i(TAG, minPricePer);
         SearchRequest searchRequest = new SearchRequest(minPrice, maxPrice, minPricePer, maxPricePer, searchPlace, keyword);
 
 
